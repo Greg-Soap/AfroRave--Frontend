@@ -28,7 +28,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: hsla(0, 0%, 6%, 1);
   --primary-foreground: (0, 0%, 100%, 1);
-  --secondary: oklch(0.97 0 0);
+  --secondary: hsla(352, 65%, 37%, 1);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -133,5 +133,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply px-[1rem] md:px-[2rem];
   }
 }
