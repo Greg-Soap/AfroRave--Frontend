@@ -1,23 +1,31 @@
 import { Link } from "react-router-dom";
-import partyImage from "@/assets/landing-page/party.png";
+import clsx from "clsx";
+import bolt from "@/assets/landing-page/bolt.png";
 
 export default function OwnTheStage() {
   return (
-    <section className="container flex flex-col gap-10 py-[75px]">
-      <DetailsBlock {...details[0]} />
-
-      <div className="flex items-center gap-[50px]">
-        <img
-          src={partyImage}
-          alt="Concert"
-          width={813}
-          height={469}
-          className="rounded-[10px] max-w-1/2"
-        />
-        <DetailsBlock {...details[1]} />
+    <section className="flex flex-col gap-10 py-[75px]">
+      <div className="container w-full">
+        <DetailsBlock {...details[0]} />
       </div>
 
-      <DetailsBlock {...details[2]} />
+      <div className="relative max-w-[1536px] px-[1rem] py-10 md:px-[2rem] flex items-center justify-end gap-[50px] bg-[url(assets/landing-page/section-bg.png)] bg-cover bg-center">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
+
+        <DetailsBlock {...details[1]} isSecond />
+      </div>
+
+      <div className="container w-full flex items-center gap-[30px]">
+        <DetailsBlock {...details[2]} />
+
+        <img
+          src={bolt}
+          alt="BOLT"
+          width={644}
+          height={756}
+          className="max-w-1/2 h-auto opacity-40"
+        />
+      </div>
 
       <Link to="/" className="self-center underline text-[50px]">
         LEARN MORE
@@ -26,20 +34,44 @@ export default function OwnTheStage() {
   );
 }
 
-function DetailsBlock({ title, href, linkName, details }: IDetails) {
+function DetailsBlock({
+  title,
+  href,
+  linkName,
+  details,
+  isSecond = false,
+}: IDetailsBlockProps) {
   return (
-    <div className="max-w-1/2 flex flex-col gap-3.5">
+    <div
+      className={clsx("max-w-1/2 flex flex-col", {
+        "items-center gap-0.5 z-10": isSecond,
+        "gap-3.5": !isSecond,
+      })}
+    >
       <div className="flex flex-wrap items-center text-[45px] gap-x-3.5">
-        <span>{title} </span>
-        <Link
-          to={href}
-          className="w-[200px] h-10 bg-secondary text-[15px] font-light uppercase rounded-[10px] flex items-center justify-center"
-        >
-          {linkName}
-        </Link>
+        <span className={isSecond ? "text-center" : "text-left"}>{title}</span>
+        {!isSecond && <LinkToAuth href={href} linkName={linkName} />}
       </div>
-      <p className="text-[30px] uppercase">{details}</p>
+      <p
+        className={clsx("text-[30px] uppercase", {
+          "text-center mb-2": isSecond,
+        })}
+      >
+        {details}
+      </p>
+      {isSecond && <LinkToAuth href={href} linkName={linkName} />}
     </div>
+  );
+}
+
+function LinkToAuth({ href, linkName }: { href: string; linkName: string }) {
+  return (
+    <Link
+      to={href}
+      className="w-[200px] h-10 bg-secondary text-[15px] font-light uppercase rounded-[10px] flex items-center justify-center"
+    >
+      {linkName}
+    </Link>
   );
 }
 
@@ -72,4 +104,8 @@ interface IDetails {
   href: string;
   linkName: string;
   details: string;
+}
+
+interface IDetailsBlockProps extends IDetails {
+  isSecond?: boolean;
 }

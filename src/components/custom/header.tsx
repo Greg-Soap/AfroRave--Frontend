@@ -5,8 +5,8 @@ import logo from "@/assets/landing-page/logo.png";
 
 export default function Header() {
   return (
-    <header className="max-w-[1536px] w-full fixed top-0 self-center ml-auto z-50 bg-black/25 px-[2rem]">
-      <nav className="flex items-center justify-between">
+    <header className="w-full fixed top-0 flex justify-center z-50 bg-black/25 backdrop-blur-sm px-[2rem]">
+      <nav className="max-w-[1536px] w-full flex items-center justify-between">
         <Link to="/">
           <img
             src={logo}

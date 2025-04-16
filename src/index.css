@@ -20,14 +20,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
-  --background: hsla(0, 0%, 12%, 1);
+  --background: hsl(0, 0%, 12%);
   --foreground: hsla(0, 0%, 100%, 1);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: hsla(0, 0%, 6%, 1);
-  --primary-foreground: (0, 0%, 100%, 1);
+  --primary-foreground: hsl(0, 0%, 100%, 1);
   --secondary: hsla(352, 65%, 37%, 1);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
