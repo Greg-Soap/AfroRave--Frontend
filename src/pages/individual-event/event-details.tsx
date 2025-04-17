@@ -17,7 +17,7 @@ export default function EventDetails({ event }: { event: IEvents }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#1f1f1f] via-[#1f1f1f]/10 to-transparent backdrop-blur-xs" />
       </div>
 
-      <div className="container w-full flex flex-col gap-10 -mt-[250px] z-10">
+      <div className="container w-full flex flex-col gap-16 -mt-[250px] z-10">
         <div className="flex flex-col gap-10">
           <img
             src={event.image}
