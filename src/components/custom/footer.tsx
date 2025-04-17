@@ -51,7 +51,7 @@ export default function Footer() {
       <div className="max-w-[1536px]  w-full flex items-center gap-5 justify-end px-[2rem]">
         {socials.map((item) => (
           <Link key={item.alt} to={item.href}>
-            <img src={item.icon} alt={item.alt} className="w-auto h-10" />
+            <img src={item.icon} alt={item.alt} className="w-10 h-auto" />
           </Link>
         ))}
       </div>
