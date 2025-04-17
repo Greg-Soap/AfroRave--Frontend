@@ -1,17 +1,4 @@
 import { Link } from "react-router-dom";
-import firstSocialPost from "@/assets/landing-page/s1.png";
-import secondSocialPost from "@/assets/landing-page/s2.png";
-import thirdSocialPost from "@/assets/landing-page/s3.png";
-import fourthSocialPost from "@/assets/landing-page/s4.png";
-import fifthSocialPost from "@/assets/landing-page/s5.png";
-import sixthSocialPost from "@/assets/landing-page/s6.png";
-import seventhSocialPost from "@/assets/landing-page/s7.png";
-import eigthSocialPost from "@/assets/landing-page/s8.png";
-import ninthSocialPost from "@/assets/landing-page/s9.png";
-import tenthSocialPost from "@/assets/landing-page/s10.png";
-import eleventhSocialPost from "@/assets/landing-page/s11.png";
-import twelvthSocialPost from "@/assets/landing-page/s2.png";
-import thirteenthSocialPost from "@/assets/landing-page/s4.png";
 import clsx from "clsx";
 
 export default function Socials() {
@@ -44,18 +31,18 @@ export default function Socials() {
 }
 
 const social_posts: { image: string; alt: string; href: string }[] = [
-  { image: firstSocialPost, alt: "Rema", href: "/" },
-  { image: secondSocialPost, alt: "Ragga", href: "/" },
-  { image: thirdSocialPost, alt: "Logo", href: "/" },
-  { image: fourthSocialPost, alt: "Logo", href: "/" },
-  { image: fifthSocialPost, alt: "Logo", href: "/" },
-  { image: sixthSocialPost, alt: "Logo", href: "/" },
-  { image: seventhSocialPost, alt: "Logo", href: "/" },
-  { image: eigthSocialPost, alt: "Logo", href: "/" },
-  { image: ninthSocialPost, alt: "Logo", href: "/" },
-  { image: tenthSocialPost, alt: "Logo", href: "/" },
-  { image: eleventhSocialPost, alt: "Logo", href: "/" },
-  { image: twelvthSocialPost, alt: "Logo", href: "/" },
-  { image: thirteenthSocialPost, alt: "Logo", href: "/" },
-  { image: thirdSocialPost, alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s1.png", alt: "Rema", href: "/" },
+  { image: "/assets/landing-page/s2.png", alt: "Ragga", href: "/" },
+  { image: "/assets/landing-page/s3.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s4.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s5.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s6.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s7.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s8.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s9.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s10.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s11.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s12.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s13.png", alt: "Logo", href: "/" },
+  { image: "/assets/landing-page/s3.png", alt: "Logo", href: "/" },
 ];

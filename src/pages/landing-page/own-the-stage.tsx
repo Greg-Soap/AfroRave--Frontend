@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import bolt from "@/assets/landing-page/bolt.png";
 
 export default function OwnTheStage() {
   return (
@@ -19,7 +18,7 @@ export default function OwnTheStage() {
         <DetailsBlock {...details[2]} />
 
         <img
-          src={bolt}
+          src="/assets/landing-page/bolt.png"
           alt="BOLT"
           width={644}
           height={756}

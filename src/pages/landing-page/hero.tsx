@@ -6,7 +6,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import carouselImage from "@/assets/landing-page/c1.png";
 
 export default function Hero() {
   return (
@@ -35,7 +34,7 @@ function CarouselCards() {
   return (
     <CarouselItem className="w-full h-[615px] flex flex-col items-center justify-center">
       <img
-        src={carouselImage}
+        src="/assets/landing-page/c1.png"
         alt="Rave"
         className="w-full h-full opacity-70"
       />

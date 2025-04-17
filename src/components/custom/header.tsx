@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Search, Menu } from "lucide-react";
 import { Button } from "../ui/button";
-import logo from "@/assets/landing-page/logo.png";
 
 export default function Header() {
   return (
@@ -9,7 +8,7 @@ export default function Header() {
       <nav className="max-w-[1536px] w-full flex items-center justify-between">
         <Link to="/">
           <img
-            src={logo}
+            src="/assets/landing-page/logo.png"
             alt="Logo"
             width={282}
             height={202}

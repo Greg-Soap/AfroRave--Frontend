@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
 import { Separator } from "../ui/separator";
-import ARLogo from "@/assets/landing-page/AR.png";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { InputTypeField } from "./form-fields";
-import Instagram from "@/assets/landing-page/insta.png";
-import X from "@/assets/landing-page/X.png";
-import Tiktok from "@/assets/landing-page/tiktok.png";
-import Youtube from "@/assets/landing-page/yt.png";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Provide a valid email address" }),
@@ -20,7 +15,12 @@ export default function Footer() {
   return (
     <footer className="w-full flex flex-col items-center gap-7 pt-[50px] pb-5 bg-primary font-input-mono">
       <div className="max-w-[1536px] w-full flex flex-col items-center gap-5 px-[2rem]">
-        <img src={ARLogo} alt="AR" width={139} height={55} />
+        <img
+          src="/assets/landing-page/AR.png"
+          alt="AR"
+          width={139}
+          height={55}
+        />
 
         <NewsLetterForm />
 
@@ -136,10 +136,10 @@ const footer_links: IFooterLinks[] = [
 ];
 
 const socials: ISocials[] = [
-  { href: "/", icon: Instagram, alt: "Instagram" },
-  { href: "/", icon: X, alt: "X" },
-  { href: "/", icon: Tiktok, alt: "TikTok" },
-  { href: "/", icon: Youtube, alt: "Youtube" },
+  { href: "/", icon: "/assets/landing-page/insta.png", alt: "Instagram" },
+  { href: "/", icon: "/assets/landing-page/X.png", alt: "X" },
+  { href: "/", icon: "/assets/landing-page/tiktok.png", alt: "TikTok" },
+  { href: "/", icon: "/assets/landing-page/yt.png", alt: "Youtube" },
 ];
 
 interface IFooterLinks {
