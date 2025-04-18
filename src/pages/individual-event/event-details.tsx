@@ -3,6 +3,7 @@ import type { IEvents } from "@/data/events";
 import { formatNaira } from "@/utils/format-price";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import Cart from "../cart";
 
 export default function EventDetails({ event }: { event: IEvents }) {
   return (
@@ -83,7 +84,6 @@ export default function EventDetails({ event }: { event: IEvents }) {
         </div>
 
         {/**Tickets */}
-
         <div className="flex flex-col gap-7">
           <BlockName name="tickets" />
 
@@ -92,6 +92,8 @@ export default function EventDetails({ event }: { event: IEvents }) {
               <TicketCard key={item.name} {...item} />
             ))}
           </div>
+
+          <Cart event={event} />
         </div>
 
         {/**Location */}
@@ -149,7 +151,10 @@ function TicketCard({ name, price }: { name: string; price: number }) {
       <p className="font-bold">{name}</p>
       <p>{formatNaira(price)}</p>
 
-      <Button className="absolute top-0 right-0 w-[67px] bg-[#5BAE0D] hover:bg-[#5BAE0D]/80 rounded-l-none rounded-br-none">
+      <Button
+        variant="green"
+        className="absolute top-0 right-0 w-[67px] rounded-l-none rounded-br-none"
+      >
         <Plus color="var(--foreground)" size={18} />
       </Button>
     </div>
