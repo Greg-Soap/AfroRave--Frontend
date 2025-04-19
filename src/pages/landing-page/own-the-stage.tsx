@@ -43,12 +43,18 @@ function DetailsBlock({
   return (
     <div
       className={clsx("max-w-1/2 flex flex-col", {
-        "items-center gap-0.5 z-10": isSecond,
-        "gap-3.5": !isSecond,
+        "items-center z-10": isSecond,
       })}
     >
-      <div className="flex flex-wrap items-center text-[45px] gap-x-3.5">
-        <span className={isSecond ? "text-center" : "text-left"}>{title}</span>
+      <div className="flex flex-wrap items-center text-[40px] leading-[88px] gap-x-3.5">
+        <span
+          className={clsx("text-[40px] leading-[88px]", {
+            "text-center": isSecond,
+            "text-left": !isSecond,
+          })}
+        >
+          {title}
+        </span>
         {!isSecond && <LinkToAuth href={href} linkName={linkName} />}
       </div>
       <p

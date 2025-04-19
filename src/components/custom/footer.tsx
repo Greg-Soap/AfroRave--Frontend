@@ -24,15 +24,12 @@ export default function Footer() {
 
         <NewsLetterForm />
 
-        <div className="w-full flex items-center gap-2.5">
+        <div className="w-full flex items-center gap-2.5 h-5">
           <Link to="/" className="font-semilight">
             Privacy Policy
           </Link>
 
-          <Separator
-            orientation="vertical"
-            className="min-w-[1px] h-full bg-white"
-          />
+          <Separator orientation="vertical" className="h-full bg-white" />
 
           <Link to="/" className="font-semilight">
             Terms and Conditions
