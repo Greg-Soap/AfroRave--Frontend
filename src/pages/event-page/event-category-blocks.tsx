@@ -1,51 +1,63 @@
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  CustomSelect,
+  type ICustomSelectProps,
+} from "@/components/custom/custom-select";
 import { CalendarDays, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { type IEvents, events } from "@/data/events";
+import clsx from "clsx";
 
 export default function EventCategoryBlocks() {
   return (
-    <section className="max-w-[1536px] w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-16 mt-36 pb-16">
-      <div className="flex items-center gap-3.5">
-        <Select>
-          <SelectTrigger className="w-[244px] min-h-[62px] rounded-[21px] border-white font-input-mono text-foreground text-xl">
-            <SelectValue placeholder="Theme" />
-          </SelectTrigger>
-          <SelectContent className="font-input-mono">
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+    <section className="max-w-[1536px] w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-20 mt-36 pb-16">
+      <CategoryBlock name="Trending" data={events} />
 
       <div className="flex flex-col gap-10">
-        <CategoryBlock name="Trending" data={events} />
+        <div className="flex items-center gap-3 overflow-x-scroll scrollbar-none">
+          <CustomSelect
+            placeholder={category_list.placeholder}
+            defaultValue={category_list.placeholder}
+            width={category_list.width}
+            items={category_list.items}
+          />
 
-        <CategoryBlock name="Concerts and Festivals" data={events} />
+          <CustomSelect
+            placeholder={date_list.placeholder}
+            defaultValue={date_list.placeholder}
+            items={date_list.items}
+          />
+        </div>
 
-        <CategoryBlock name="Sports" data={events} />
-
-        <CategoryBlock name="Art and Culture" data={events} />
-
-        <CategoryBlock name="Comedy" data={events} />
+        <CategoryBlock data={events} displayType="grid" />
       </div>
     </section>
   );
 }
 
-function CategoryBlock({ name, data }: { name: string; data: IEvents[] }) {
+function CategoryBlock({
+  name,
+  data,
+  displayType = "flex",
+}: {
+  name?: string;
+  data: IEvents[];
+  displayType?: "flex" | "grid";
+}) {
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      className={clsx("flex flex-col gap-6", {
+        "pr-[1rem] md:pr-[2rem]": displayType === "grid",
+      })}
+    >
       <p className="text-xl font-bold font-input-mono">{name}</p>
 
-      <div className="flex gap-7 pr-7 overflow-x-scroll scrollbar-none">
+      <div
+        className={clsx("gap-7", {
+          "flex pr-7 overflow-x-scroll scrollbar-none": displayType === "flex",
+          "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4":
+            displayType === "grid",
+        })}
+      >
         {data.map((item) => (
           <EventCard
             key={item.id}
@@ -94,6 +106,40 @@ function EventCard({
     </Link>
   );
 }
+
+const category_list: ICustomSelectProps = {
+  width: 368,
+  defaultValue: "sports",
+  placeholder: "Select Category",
+  items: [
+    { value: "concerts-and-festivals", label: "Concerts & Festivals" },
+    { value: "arts-and-performance", label: "Arts & Performance" },
+    { value: "children", label: "Children" },
+    { value: "sports", label: "Sports" },
+    { value: "career-and-business", label: "Career & Business" },
+    { value: "comedy", label: "Comedy" },
+    { value: "culture-and-religion", label: "Culture & Religion" },
+  ],
+};
+
+const date_list: ICustomSelectProps = {
+  defaultValue: "jan",
+  placeholder: "Select Date",
+  items: [
+    { value: "jan", label: "January" },
+    { value: "feb", label: "February" },
+    { value: "mar", label: "March" },
+    { value: "apr", label: "April" },
+    { value: "may", label: "May" },
+    { value: "jun", label: "June" },
+    { value: "jul", label: "July" },
+    { value: "aug", label: "August" },
+    { value: "sep", label: "September" },
+    { value: "oct", label: "October" },
+    { value: "nov", label: "November" },
+    { value: "dec", label: "December" },
+  ],
+};
 
 interface IEventCardProps {
   id: number;

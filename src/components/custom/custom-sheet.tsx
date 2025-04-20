@@ -41,6 +41,7 @@ export default function CustomSheet({
   title,
   description,
   trigger,
+  triggerClassName = "",
   contentClassName = "",
   children,
   hasNav = false,
@@ -55,7 +56,9 @@ export default function CustomSheet({
 
   return (
     <Sheet open={open ? open : internalOpen} onOpenChange={handleOpenChange}>
-      {trigger && <SheetTrigger>{trigger}</SheetTrigger>}
+      {trigger && (
+        <SheetTrigger className={triggerClassName}>{trigger}</SheetTrigger>
+      )}
       <SheetContent
         side={side}
         className={cn(
@@ -114,6 +117,7 @@ interface CustomSheetProps extends SheetVariantProps {
   setOpen?: (open: boolean) => void;
   side?: "top" | "right" | "bottom" | "left";
   trigger?: ReactNode;
+  triggerClassName?: string;
   title: string;
   description: string;
   children: ReactNode;

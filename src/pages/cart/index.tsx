@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { formatNaira } from "@/utils/format-price";
 import { ShoppingCart } from "lucide-react";
 import TicketPurchaseContainer from "./ticket-purchase-ctn";
@@ -15,6 +14,7 @@ export default function Cart({ event }: { event: IEvents }) {
       title="Your Shopping Cart"
       description="Review and manage your ticket purchases before checkout"
       contentClassName="pt-[150px]"
+      triggerClassName="flex items-center gap-5 w-full md:w-[378px] h-fit py-4 px-6 bg-[#5BAE0D] hover:bg-[#5BAE0D]/80 rounded-sm"
       trigger={<SheetTrigger />}
       navChildren={<NavLogo />}
     >
@@ -27,13 +27,9 @@ export default function Cart({ event }: { event: IEvents }) {
 
 export function SheetTrigger() {
   return (
-    <Button
-      variant="green"
-      type="button"
-      className="flex items-center gap-5 w-[378px] h-fit py-4 px-6"
-    >
+    <>
       <ShoppingCart size={57} color="var(--foreground)" className="size-8" />
       <span className="text-xl font-sf-pro-display">{formatNaira(73350)}</span>
-    </Button>
+    </>
   );
 }

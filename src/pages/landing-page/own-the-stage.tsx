@@ -14,7 +14,7 @@ export default function OwnTheStage() {
         <DetailsBlock {...details[1]} isSecond />
       </div>
 
-      <div className="container w-full flex items-center gap-[30px]">
+      <div className="container w-full flex max-lg:flex-col lg:items-center gap-[30px]">
         <DetailsBlock {...details[2]} />
 
         <img
@@ -22,11 +22,14 @@ export default function OwnTheStage() {
           alt="BOLT"
           width={644}
           height={756}
-          className="max-w-1/2 h-auto opacity-40"
+          className="max-w-1/2 h-auto opacity-40 max-lg:self-center"
         />
       </div>
 
-      <Link to="/" className="self-center underline text-[50px]">
+      <Link
+        to="/"
+        className="self-center underline text-[30px] md:text-[40px] lg:text-[50px]"
+      >
         LEARN MORE
       </Link>
     </section>
@@ -42,25 +45,31 @@ function DetailsBlock({
 }: IDetailsBlockProps) {
   return (
     <div
-      className={clsx("max-w-1/2 flex flex-col", {
+      className={clsx("md:max-w-2/3 lg:max-w-1/2 flex flex-col max-md:gap-5", {
         "items-center z-10": isSecond,
       })}
     >
-      <div className="flex flex-wrap items-center text-[40px] leading-[88px] gap-x-3.5">
+      <div className="flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2">
         <span
-          className={clsx("text-[40px] leading-[88px]", {
-            "text-center": isSecond,
-            "text-left": !isSecond,
-          })}
+          className={clsx(
+            "max-md:max-w-2/3 text-2xl md:text-[30px] leading-normal lg:text-[40px] lg:leading-[88px] max-md:text-center",
+            {
+              "text-center": isSecond,
+              "text-left": !isSecond,
+            }
+          )}
         >
           {title}
         </span>
         {!isSecond && <LinkToAuth href={href} linkName={linkName} />}
       </div>
       <p
-        className={clsx("text-[30px] uppercase", {
-          "text-center mb-2": isSecond,
-        })}
+        className={clsx(
+          "md:text-2xl lg:text-[30px] uppercase max-md:text-center",
+          {
+            "text-center mb-2": isSecond,
+          }
+        )}
       >
         {details}
       </p>

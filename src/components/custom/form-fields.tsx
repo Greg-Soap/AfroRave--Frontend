@@ -28,16 +28,18 @@ export function InputTypeField<T extends object>({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className={`text-xl font-[275] ${className}`}>
+        <FormItem className="flex flex-col max-md:gap-2.5">
+          <FormLabel
+            className={`text-xl font-[275] max-md:text-center ${className}`}
+          >
             {label}
           </FormLabel>
           <FormControl>
-            <div className="flex items-center gap-5">
+            <div className="flex max-md:flex-col md:items-center gap-5">
               <Input
                 placeholder={placeholder}
                 {...field}
-                className="max-w-[321px] h-[43px] rounded-[4px] text-[15px] font-light text-primary-foreground"
+                className="md:max-w-[321px] h-[43px] rounded-[4px] text-[15px] font-light text-primary-foreground"
               />
 
               {submitButton}

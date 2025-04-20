@@ -12,13 +12,13 @@ export default function EventDetails({ event }: { event: IEvents }) {
         <img
           src={event.thumbnail}
           alt={event.event_name}
-          className="w-full h-auto"
+          className="w-full min-h-[400px] xl:h-auto"
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-[#1f1f1f] via-[#1f1f1f]/10 to-transparent backdrop-blur-xs" />
       </div>
 
-      <div className="container w-full flex flex-col gap-16 -mt-[250px] z-10">
+      <div className="container w-full flex flex-col gap-16 -mt-[200px] xl:-mt-[250px] z-10">
         <div className="flex flex-col gap-10">
           <img
             src={event.image}
@@ -27,18 +27,22 @@ export default function EventDetails({ event }: { event: IEvents }) {
           />
 
           <div className="flex flex-col gap-2.5">
-            <p className="text-[40px] uppercase">{event.event_name}</p>
+            <p className="text-2xl md:text-[30px] lg:text-[40px] uppercase">
+              {event.event_name}
+            </p>
 
             <div className="flex flex-col gap-0.5 font-sf-pro-display font-[200]">
-              <p className=" text-[32px]">{event.event_location}</p>
-              <p className="text-xl">{event.event_date}</p>
+              <p className="text-lg md:text-2xl lg:text-[32px]">
+                {event.event_location}
+              </p>
+              <p className="md:text-xl">{event.event_date}</p>
             </div>
           </div>
         </div>
 
         {/**Event Description */}
         <div className="flex flex-col gap-7">
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-0 md:gap-1.5">
             <BlockName name="description" />
 
             <div className="flex items-center gap-3">
@@ -47,23 +51,23 @@ export default function EventDetails({ event }: { event: IEvents }) {
                 alt="Rated 18"
                 width={36}
                 height={36}
-                className="rounded-full"
+                className="rounded-full max-md:size-6"
               />
 
-              <p className="text-xl font-light font-sf-compact">
+              <p className="md:text-xl font-light font-sf-compact">
                 {event.event_time.start_time} - {event.event_time.end_time}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-1.5 font-sf-pro-rounded max-w-2/3">
+          <div className="flex flex-col gap-1.5 font-sf-pro-rounded md:max-w-2/3">
             {event.description.map((item) => (
-              <p key={item} className="text-xl font-light">
+              <p key={item} className="md:text-xl font-light">
                 {item}
               </p>
             ))}
 
-            <div className="flex flex-col gap-0.5 text-xl font-light">
+            <div className="flex flex-col gap-0.5 md:text-xl font-light">
               <p>Artist Lineup Includes:</p>
               <ul className="flex flex-col gap-0.5">
                 {event.artist_lineup.map((item) => (
@@ -101,7 +105,7 @@ export default function EventDetails({ event }: { event: IEvents }) {
           <BlockName name="location" className="underline" />
 
           <div className="flex flex-col gap-4">
-            <div className="flex w-[722px] h-[452px] rounded-[4px] border border-white" />
+            <div className="flex w-full md:w-2/3 lg:w-[722px] h-[452px] rounded-[4px] border border-white" />
 
             <p className="text-xl font-[200] font-sf-pro-display">
               {event.event_location}
@@ -142,12 +146,16 @@ function BlockName({
   name: string;
   className?: string;
 }) {
-  return <p className={`text-4xl uppercase ${className}`}>{name}</p>;
+  return (
+    <p className={`text-xl md:text-[26px] lg:text-4xl uppercase ${className}`}>
+      {name}
+    </p>
+  );
 }
 
 function TicketCard({ name, price }: { name: string; price: number }) {
   return (
-    <div className="relative flex flex-col w-[378px] h-[81px] rounded-[10px] bg-[#686868] px-5 py-2.5 text-xl font-sf-pro-display">
+    <div className="relative flex flex-col w-full md:w-[378px] h-[81px] rounded-[10px] bg-[#686868] px-5 py-2.5 text-xl font-sf-pro-display">
       <p className="font-bold">{name}</p>
       <p>{formatNaira(price)}</p>
 

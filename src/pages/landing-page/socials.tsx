@@ -4,16 +4,19 @@ import clsx from "clsx";
 export default function Socials() {
   return (
     <section className="max-w-[1536px] w-full flex flex-col gap-10 pt-[75px]">
-      <p className="container font-input-mono font-bold text-[30px]">Socials</p>
+      <p className="container font-input-mono font-bold text-2xl md:text-[30px]">
+        Socials
+      </p>
 
       <div className="flex flex-col">
-        <div className="grid grid-cols-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
           {social_posts.map((item, index) => (
             <Link
               key={item.alt}
               to={item.href}
               className={clsx("w-full overflow-hidden", {
-                "col-span-2 row-span-2 h-[550px]": index === 1 || index === 10,
+                "md:col-span-2 md:row-span-2 h-[275px] md:h-[550px]":
+                  index === 1 || index === 10,
                 "h-[275px]": index !== 1 && index !== 10,
               })}
             >
