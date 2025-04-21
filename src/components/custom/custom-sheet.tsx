@@ -14,6 +14,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import { formatNaira } from "@/utils/format-price";
 import { Button } from "../ui/button";
+import clsx from "clsx";
 
 const SHEET_SIZES = {
   default: "max-w-fit",
@@ -21,7 +22,7 @@ const SHEET_SIZES = {
   md: "sm:max-w-md",
   lg: "sm:max-w-lg",
   xl: "sm:max-w-xl",
-  full: "sm:max-w-full sm:h-full sm:overflow-y-auto",
+  full: "max-w-full h-full sm:overflow-y-auto",
 } as const;
 
 const sheetVariants = cva("gap-10 border-none", {
@@ -35,6 +36,7 @@ const sheetVariants = cva("gap-10 border-none", {
 
 export default function CustomSheet({
   open = false,
+  hasFooter = true,
   setOpen,
   side = "right",
   size = "md",
@@ -64,10 +66,10 @@ export default function CustomSheet({
         className={cn(
           contentClassName,
           sheetVariants({ size }),
-          `${hasNav ? "[&>button]:hidden" : ""}`
+          `${hasNav ? "[&>button]:hidden scrollbar-none" : ""}`
         )}
       >
-        {navChildren && <SheetNav>{navChildren}</SheetNav>}
+        {hasNav && <SheetNav>{navChildren}</SheetNav>}
 
         <SheetHeader className="w-full flex flex-col items-center justify-center font-input-mono sr-only">
           <SheetTitle className="text-2xl">{title}</SheetTitle>
@@ -76,17 +78,34 @@ export default function CustomSheet({
 
         {children}
 
-        <SheetFooter />
+        {hasFooter && <SheetFooter />}
       </SheetContent>
     </Sheet>
   );
 }
 
-function SheetNav({ children }: { children: ReactNode }) {
+function SheetNav({
+  children,
+  closeFunction,
+}: {
+  children: ReactNode;
+  closeFunction?: CustomSheetProps["closeFunction"];
+}) {
   return (
-    <nav className="max-w-[1536px] w-[calc(100%-15px)] flex items-center justify-between px-[1rem] md:px-[2rem] fixed top-0 bg-white/10 backdrop-blur-sm">
+    <nav
+      className={clsx(
+        "max-w-[1536px] w-full flex items-center px-[1rem] md:px-[2rem] fixed top-0  backdrop-blur-sm",
+        {
+          "justify-end py-3 bg-transparent": !children,
+          "bg-white/10 justify-between": children,
+        }
+      )}
+    >
       {children}
-      <SheetClose className="p-2 hover:bg-white/10 rounded-lg">
+      <SheetClose
+        onClick={closeFunction}
+        className="p-2 hover:bg-white/10 rounded-lg"
+      >
         <X />
       </SheetClose>
     </nav>
@@ -124,4 +143,6 @@ interface CustomSheetProps extends SheetVariantProps {
   contentClassName?: string;
   hasNav?: boolean;
   navChildren?: ReactNode;
+  hasFooter?: boolean;
+  closeFunction?: () => void;
 }

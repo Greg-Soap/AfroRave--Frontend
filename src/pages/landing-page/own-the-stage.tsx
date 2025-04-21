@@ -55,7 +55,7 @@ function DetailsBlock({
       <div className="flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2">
         <span
           className={clsx(
-            "max-md:max-w-2/3 text-2xl md:text-[30px] leading-normal lg:text-[40px] lg:leading-[88px] max-md:text-center",
+            "max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px] lg:leading-[88px] max-md:text-center",
             {
               "text-center": isSecond,
               "text-left": !isSecond,

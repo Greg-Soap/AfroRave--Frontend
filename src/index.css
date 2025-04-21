@@ -4,6 +4,7 @@
 @import url("https://db.onlinewebfonts.com/c/1e16b363a6dabda72a084d971738be58?family=SF+Compact+Text+Regular");
 @import url("https://db.onlinewebfonts.com/c/ead4092f880f75ff0883ced1856b2c37?family=SF+Pro+Rounded+Regular");
 @import url("https://db.onlinewebfonts.com/c/c8da3c58be0ab862c24357279216fe05?family=SF+Mono+Regular");
+@import url("https://db.onlinewebfonts.com/c/1c45e28f8e86cc89876f003b953cc3e9?family=SF+Pro+Text+Regular");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -101,6 +102,7 @@
   --font-sf-compact: "SF Compact Text Regular", "sans-serif";
   --font-sf-pro-rounded: "SF Pro Rounded Regular", "sans-serif";
   --font-sf-mono: "SF Mono Regular", "sans-serif";
+  --font-sf-pro-text: "SF Pro Text Regular", "sans-serif";
 }
 
 .dark {
