@@ -76,7 +76,7 @@ export function FormField<T extends FieldValues>({
 
         return (
           <FormItem className={cn('flex flex-col items-start', className)}>
-            {label && <FormLabel className='text-gray-850'>{label}</FormLabel>}
+            {label && <FormLabel>{label}</FormLabel>}
             <FormControl>
               {typeof children === 'function'
                 ? children(field)

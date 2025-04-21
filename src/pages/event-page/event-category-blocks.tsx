@@ -1,4 +1,4 @@
-import { CustomSelect, type ICustomSelectProps } from '@/components/reusable/base-select'
+import { BaseSelect, type ICustomSelectProps } from '@/components/reusable/base-select'
 import { CalendarDays, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { type IEvents, events } from '@/data/events'
@@ -11,14 +11,14 @@ export default function EventCategoryBlocks() {
 
       <div className='flex flex-col gap-10'>
         <div className='flex items-center gap-3 overflow-x-scroll scrollbar-none'>
-          <CustomSelect
+          <BaseSelect
             placeholder={category_list.placeholder}
             defaultValue={category_list.placeholder}
             width={category_list.width}
             items={category_list.items}
           />
 
-          <CustomSelect
+          <BaseSelect
             placeholder={date_list.placeholder}
             defaultValue={date_list.placeholder}
             items={date_list.items}

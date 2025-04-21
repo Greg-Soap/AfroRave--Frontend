@@ -59,7 +59,10 @@ function BaseModal({
       }}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className={cn(`sm:max-w-[425px] ${sizeClasses[size]} p-0 rounded-[8px]  block`, className)}
+        className={cn(
+          `sm:max-w-[425px] ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%]`,
+          className,
+        )}
         noCancel={removeCancel}
         floatingCancel={floatingCancel}
         onClick={(e) => e.stopPropagation()}

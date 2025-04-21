@@ -42,7 +42,8 @@ function DetailsBlock({ title, href, linkName, details, isSecond = false }: IDet
       <div className='flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2'>
         <span
           className={clsx(
-            'max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px] lg:leading-[88px] max-md:text-center',
+            'max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px] lg:leading-[88px] max-md:text-center font-bungee-inline text-white',
+
             {
               'text-center': isSecond,
               'text-left': !isSecond,
@@ -53,7 +54,7 @@ function DetailsBlock({ title, href, linkName, details, isSecond = false }: IDet
         {!isSecond && <LinkToAuth href={href} linkName={linkName} />}
       </div>
       <p
-        className={clsx('md:text-2xl lg:text-[30px] uppercase max-md:text-center', {
+        className={clsx('md:text-2xl lg:text-[30px] uppercase max-md:text-center font-phosphate', {
           'text-center mb-2': isSecond,
         })}>
         {details}
@@ -67,7 +68,7 @@ function LinkToAuth({ href, linkName }: { href: string; linkName: string }) {
   return (
     <Link
       to={href}
-      className='w-[200px] h-10 bg-secondary text-[15px] font-light uppercase rounded-[10px] flex items-center justify-center text-center'>
+      className=' w-[200px] h-10 bg-secondary text-[15px] font-light uppercase rounded-[10px] flex items-center justify-center text-center  font-input-mono'>
       <span>{linkName}</span>
     </Link>
   )

@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/auth-context'
 
 export default function Header() {
   const [hasScrolled, setHasScrolled] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { openLoginModal } = useAuth()
 
   useEffect(() => {
@@ -47,19 +48,20 @@ export default function Header() {
             ]}
           />
 
+          <button
+            type='button'
+            aria-label='Open menu'
+            onClick={() => setIsMenuOpen(true)}
+            className='p-2 hover:bg-white/10 rounded-lg transition-colors'>
+            <img src='/assets/landing-page/menu.svg' alt='' className='w-6 h-6' />
+          </button>
           <BaseSheet
             side='right'
             size='sm'
             title='Menu'
             circleCancel
-            trigger={
-              <button
-                type='button'
-                aria-label='Open menu'
-                className='p-2 hover:bg-white/10 rounded-lg transition-colors'>
-                <img src='/assets/landing-page/menu.svg' alt='' className='w-6 h-6' />
-              </button>
-            }
+            open={isMenuOpen}
+            setOpen={setIsMenuOpen}
             contentClassName='bg-[#0F0F0F] text-white px-3'>
             <MobileMenu />
           </BaseSheet>

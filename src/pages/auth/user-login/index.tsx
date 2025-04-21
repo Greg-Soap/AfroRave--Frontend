@@ -9,10 +9,10 @@ export default function UserLogin() {
     <BaseModal
       open={isLoginModalOpen}
       onClose={closeLoginModal}
-      cancelOnOverlay={true}
-      disableOverlayClick={true}
-      size='small'
-      className='pt-[90px]'>
+      cancelOnOverlay
+      disableOverlayClick
+      floatingCancel
+      size='small'>
       <UserLoginForm loginType={loginType} />
     </BaseModal>
   )
