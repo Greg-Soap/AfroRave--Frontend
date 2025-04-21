@@ -45,9 +45,12 @@ function DetailsBlock({
 }: IDetailsBlockProps) {
   return (
     <div
-      className={clsx("md:max-w-2/3 lg:max-w-1/2 flex flex-col max-md:gap-5", {
-        "items-center z-10": isSecond,
-      })}
+      className={clsx(
+        "md:max-w-2/3 lg:max-w-1/2 flex flex-col gap-2 max-md:gap-5",
+        {
+          "items-center z-10": isSecond,
+        }
+      )}
     >
       <div className="flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2">
         <span
@@ -82,9 +85,9 @@ function LinkToAuth({ href, linkName }: { href: string; linkName: string }) {
   return (
     <Link
       to={href}
-      className="w-[200px] h-10 bg-secondary text-[15px] font-light uppercase rounded-[10px] flex items-center justify-center"
+      className="w-[200px] h-10 bg-secondary text-[15px] font-light uppercase rounded-[10px] flex items-center justify-center text-center"
     >
-      {linkName}
+      <span>{linkName}</span>
     </Link>
   );
 }

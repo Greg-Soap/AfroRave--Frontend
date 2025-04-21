@@ -13,7 +13,7 @@ const formSchema = z.object({
 
 export default function Footer() {
   return (
-    <footer className="w-full flex flex-col items-center gap-7 pt-[50px] pb-5 bg-primary font-input-mono">
+    <footer className="w-full flex flex-col items-center gap-7 pt-[50px] pb-16 bg-primary font-input-mono">
       <div className="max-w-[1536px] w-full flex flex-col items-center gap-5 px-[2rem]">
         <img
           src="/assets/landing-page/AR.png"
@@ -24,12 +24,15 @@ export default function Footer() {
 
         <NewsLetterForm />
 
-        <div className="w-full flex items-center gap-2.5 h-5">
+        <div className="w-full flex max-md:flex-col md:items-center gap-2.5 md:h-5">
           <Link to="/" className="font-semilight">
             Privacy Policy
           </Link>
 
-          <Separator orientation="vertical" className="h-full bg-white" />
+          <Separator
+            orientation="vertical"
+            className="h-full bg-white max-md:hidden"
+          />
 
           <Link to="/" className="font-semilight">
             Terms and Conditions

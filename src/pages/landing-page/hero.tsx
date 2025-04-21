@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import clsx from "clsx";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   const length: number = 7;
@@ -43,8 +44,11 @@ export default function Hero() {
             length={length}
           />
 
-          <Button className="w-[205px] h-[39px] opacity-90 bg-white text-black text-[15px] font-input-mono hover:bg-white">
-            Find Tickets
+          <Button
+            asChild
+            className="w-[205px] h-[39px] opacity-90 bg-white text-black text-[15px] font-input-mono hover:bg-white"
+          >
+            <Link to="/events">Find Tickets</Link>
           </Button>
         </div>
 

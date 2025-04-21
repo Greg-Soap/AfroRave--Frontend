@@ -29,9 +29,7 @@ export function InputTypeField<T extends object>({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col max-md:gap-2.5">
-          <FormLabel
-            className={`text-xl font-[275] max-md:text-center ${className}`}
-          >
+          <FormLabel className={`text-xl font-[275] ${className}`}>
             {label}
           </FormLabel>
           <FormControl>
