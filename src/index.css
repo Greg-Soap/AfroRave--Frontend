@@ -1,8 +1,14 @@
 @import url("https://fonts.cdnfonts.com/css/phosphatesolid");
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url("https://db.onlinewebfonts.com/c/0b51833ff62e4af8acb5fd3e2bf59e97?family=SF+Pro+Display+Regular");
+@import url("https://db.onlinewebfonts.com/c/1e16b363a6dabda72a084d971738be58?family=SF+Compact+Text+Regular");
+@import url("https://db.onlinewebfonts.com/c/ead4092f880f75ff0883ced1856b2c37?family=SF+Pro+Rounded+Regular");
+@import url("https://db.onlinewebfonts.com/c/c8da3c58be0ab862c24357279216fe05?family=SF+Mono+Regular");
 
 @import "tailwindcss";
 @import "tw-animate-css";
+
+@plugin "tailwind-scrollbar";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -20,19 +26,19 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
-  --background: hsla(0, 0%, 12%, 1);
+  --background: hsl(0, 0%, 12%);
   --foreground: hsla(0, 0%, 100%, 1);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: hsla(0, 0%, 6%, 1);
-  --primary-foreground: (0, 0%, 100%, 1);
+  --primary-foreground: hsl(0, 0%, 100%, 1);
   --secondary: hsla(352, 65%, 37%, 1);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: hsla(0, 86%, 37%, 1);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
@@ -91,6 +97,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-weight-semilight: 250;
   --font-input-mono: "IBM Plex Mono", "sans-serif";
+  --font-sf-pro-display: "SF Pro Display Regular", "sans-serif";
+  --font-sf-compact: "SF Compact Text Regular", "sans-serif";
+  --font-sf-pro-rounded: "SF Pro Rounded Regular", "sans-serif";
+  --font-sf-mono: "SF Mono Regular", "sans-serif";
 }
 
 .dark {

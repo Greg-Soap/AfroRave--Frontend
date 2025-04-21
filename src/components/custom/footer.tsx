@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
 import { Separator } from "../ui/separator";
-import ARLogo from "@/assets/landing-page/AR.png";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { InputTypeField } from "./form-fields";
-import Instagram from "@/assets/landing-page/insta.png";
-import X from "@/assets/landing-page/X.png";
-import Tiktok from "@/assets/landing-page/tiktok.png";
-import Youtube from "@/assets/landing-page/yt.png";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Provide a valid email address" }),
@@ -18,21 +13,23 @@ const formSchema = z.object({
 
 export default function Footer() {
   return (
-    <footer className="max-w-[1536px] w-full flex flex-col gap-7 pt-[50px] pb-5 bg-primary font-input-mono">
-      <div className="flex flex-col items-center gap-5 px-[2rem]">
-        <img src={ARLogo} alt="AR" width={139} height={55} />
+    <footer className="w-full flex flex-col items-center gap-7 pt-[50px] pb-5 bg-primary font-input-mono">
+      <div className="max-w-[1536px] w-full flex flex-col items-center gap-5 px-[2rem]">
+        <img
+          src="/assets/landing-page/AR.png"
+          alt="AR"
+          width={139}
+          height={55}
+        />
 
         <NewsLetterForm />
 
-        <div className="w-full flex items-center gap-2.5">
+        <div className="w-full flex items-center gap-2.5 h-5">
           <Link to="/" className="font-semilight">
             Privacy Policy
           </Link>
 
-          <Separator
-            orientation="vertical"
-            className="min-w-[1px] h-full bg-white"
-          />
+          <Separator orientation="vertical" className="h-full bg-white" />
 
           <Link to="/" className="font-semilight">
             Terms and Conditions
@@ -42,16 +39,16 @@ export default function Footer() {
 
       <Separator orientation="horizontal" className="w-full bg-white" />
 
-      <div className="w-full flex gap-10 px-[2rem]">
+      <div className="max-w-[1536px]  w-full flex max-md:flex-col gap-10 px-[2rem]">
         {footer_links.map((footer_link) => (
           <FooterLinkBlock key={footer_link.title} {...footer_link} />
         ))}
       </div>
 
-      <div className="w-full flex items-center gap-5 justify-end px-[2rem]">
+      <div className="max-w-[1536px]  w-full flex items-center gap-5 md:justify-end px-[2rem]">
         {socials.map((item) => (
           <Link key={item.alt} to={item.href}>
-            <img src={item.icon} alt={item.alt} className="w-auto h-10" />
+            <img src={item.icon} alt={item.alt} className="w-10 h-auto" />
           </Link>
         ))}
       </div>
@@ -136,10 +133,10 @@ const footer_links: IFooterLinks[] = [
 ];
 
 const socials: ISocials[] = [
-  { href: "/", icon: Instagram, alt: "Instagram" },
-  { href: "/", icon: X, alt: "X" },
-  { href: "/", icon: Tiktok, alt: "TikTok" },
-  { href: "/", icon: Youtube, alt: "Youtube" },
+  { href: "/", icon: "/assets/landing-page/insta.png", alt: "Instagram" },
+  { href: "/", icon: "/assets/landing-page/X.png", alt: "X" },
+  { href: "/", icon: "/assets/landing-page/tiktok.png", alt: "TikTok" },
+  { href: "/", icon: "/assets/landing-page/yt.png", alt: "Youtube" },
 ];
 
 interface IFooterLinks {
