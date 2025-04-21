@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 export default function EventCategoryBlocks() {
   return (
-    <section className='max-w-[1536px] w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-20 mt-36 pb-16'>
+    <section className='max-w-[var(--max-width)] w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-20 mt-36 pb-16'>
       <CategoryBlock name='Trending' data={events} />
 
       <div className='flex flex-col gap-10'>

@@ -28,7 +28,7 @@ export function AfroCarousel({
     <section className='relative h-[615px]'>
       <BaseCarousel
         items={carouselItems}
-        className='max-w-[1536px] w-full h-[615px] flex justify-center'
+        className='max-w-[var(--max-width)] w-full h-[615px] flex justify-center'
         itemClassName='h-[615px] flex flex-col items-center justify-center'
       />
 

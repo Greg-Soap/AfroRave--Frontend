@@ -52,25 +52,58 @@ interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {
   floatingCancel?: boolean
+  circleCancel?: boolean
+}
+
+interface CancelButtonProps {
+  variant?: 'default' | 'floating' | 'circle'
+}
+
+const CancelButton = ({ variant = 'default' }: CancelButtonProps) => {
+  const getCancelButtonStyles = () => {
+    switch (variant) {
+      case 'floating':
+        return 'absolute top-6 right-6 z-50'
+      case 'circle':
+        return 'w-full flex justify-end px-2 md:px-3 pt-4 md:pt-4'
+      default:
+        return 'w-full flex justify-end px-4 md:px-8 pt-4 md:pt-8'
+    }
+  }
+
+  const renderCancelIcon = () => {
+    switch (variant) {
+      case 'circle':
+        return (
+          <div className='flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#1E1E1E]'>
+            <X className='h-[10px] w-[10px]' />
+          </div>
+        )
+      default:
+        return <X className='h-8 w-8' />
+    }
+  }
+
+  return (
+    <SheetPrimitive.Close
+      className={cn(
+        'w-full flex justify-end rounded-sm opacity-90 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none cursor-pointer',
+        getCancelButtonStyles(),
+      )}>
+      {renderCancelIcon()}
+      <span className='sr-only'>Close</span>
+    </SheetPrimitive.Close>
+  )
 }
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = 'right', className, children, floatingCancel, ...props }, ref) => (
+>(({ side = 'right', className, children, floatingCancel, circleCancel, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
-      <SheetPrimitive.Close
-        className={cn(
-          'w-full flex justify-end  rounded-sm opacity-90  transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none ',
-          floatingCancel
-            ? 'absolute top-6 right-6 z-50'
-            : 'w-full flex justify-end px-4 md:px-8 pt-4 md:pt-8',
-        )}>
-        <X className='h-8 w-8' />
-        <span className='sr-only'>Close</span>
-      </SheetPrimitive.Close>
+      <CancelButton variant={circleCancel ? 'circle' : floatingCancel ? 'floating' : 'default'} />
       {children}
     </SheetPrimitive.Content>
   </SheetPortal>

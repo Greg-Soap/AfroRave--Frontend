@@ -6,14 +6,14 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetClose,
+  SheetFooter,
 } from '@/components/ui/sheet'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { useState } from 'react'
-import { formatNaira } from '@/lib/format-price'
-import { Button } from '../ui/button'
+
 import clsx from 'clsx'
 
 const SHEET_SIZES = {
@@ -36,7 +36,8 @@ const sheetVariants = cva('gap-10 border-none', {
 
 export default function BaseSheet({
   open = false,
-  hasFooter = true,
+  hasFooter = false,
+  footerContent,
   setOpen,
   side = 'right',
   size = 'md',
@@ -48,6 +49,7 @@ export default function BaseSheet({
   children,
   hasNav = false,
   navChildren,
+  circleCancel = false,
 }: CustomSheetProps) {
   const [internalOpen, setInternalOpen] = useState<boolean>(false)
 
@@ -61,6 +63,7 @@ export default function BaseSheet({
       {trigger && <SheetTrigger className={triggerClassName}>{trigger}</SheetTrigger>}
       <SheetContent
         side={side}
+        circleCancel={circleCancel}
         className={cn(
           contentClassName,
           sheetVariants({ size }),
@@ -75,7 +78,7 @@ export default function BaseSheet({
 
         {children}
 
-        {hasFooter && <SheetFooter />}
+        {hasFooter && <SheetFooter className='mt-auto pt-4'>{footerContent || null}</SheetFooter>}
       </SheetContent>
     </Sheet>
   )
@@ -91,30 +94,17 @@ function SheetNav({
   return (
     <nav
       className={clsx(
-        'max-w-[1536px] w-full flex items-center px-[1rem] md:px-[2rem] fixed top-0  backdrop-blur-sm',
+        'max-w-[var(--max-width)] w-full flex items-center px-[1rem] md:px-[2rem] fixed top-0  backdrop-blur-sm',
         {
           'justify-end py-3 bg-transparent': !children,
           'bg-white/10 justify-between': children,
         },
       )}>
       {children}
-      <SheetClose onClick={closeFunction} className='p-2 hover:bg-white/10 rounded-lg'>
+      <SheetClose onClick={closeFunction} className='p-2 hover:bg-white/10 rounded-lg w-6 h-6 '>
         <X />
       </SheetClose>
     </nav>
-  )
-}
-
-function SheetFooter() {
-  return (
-    <footer className='w-fit flex flex-col items-center gap-2 px-5 py-3 rounded-t-[20px] sticky bottom-0 left-[calc(100%-450px)] bg-accent'>
-      <div className='w-full flex items-center justify-between font-sf-pro-display'>
-        <span className='font-light text-2xl'>{formatNaira(73350)}</span>
-        <Button className='bg-white text-black hover:bg-white/90'>Continue</Button>
-      </div>
-
-      <p className='font-input-mono text-sm opacity-70'>Please checkout within 10:00 minutes</p>
-    </footer>
   )
 }
 
@@ -127,11 +117,13 @@ interface CustomSheetProps extends SheetVariantProps {
   trigger?: ReactNode
   triggerClassName?: string
   title: string
-  description: string
+  description?: string
   children: ReactNode
   contentClassName?: string
   hasNav?: boolean
   navChildren?: ReactNode
   hasFooter?: boolean
+  footerContent?: ReactNode
   closeFunction?: () => void
+  circleCancel?: boolean
 }

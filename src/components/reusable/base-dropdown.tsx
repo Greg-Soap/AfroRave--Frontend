@@ -56,21 +56,22 @@ function BaseDropdown({
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent
-        className={`p-10 min-w-[280px] bg-white ${className}`}
+        className={` py-2 rounded-lg min-w-[150px] bg-[#686868] text-white border-none ${className}`}
         align={align}
         side={side}
         onCloseAutoFocus={(event) => {
-          // Prevent focus from being trapped
           event.preventDefault()
         }}>
         {header && (
           <div className='flex flex-col justify-center items-center px-4 pb-4'>{header}</div>
         )}
 
-        {items.map((item) => (
+        {items.map((item, index) => (
           <DropdownMenuItem
             key={item.label}
-            className='py-2 cursor-pointer min-w-[280px] px-0'
+            className={`px-2 py-2 cursor-pointer  w-full text-white min-w-[150px] rounded-none ${
+              index !== items.length - 1 ? 'border-b border-[#8a8a8a]' : ''
+            }`}
             onSelect={(event) => {
               event.preventDefault()
               setIsOpen(false)
@@ -81,7 +82,7 @@ function BaseDropdown({
             {item.to ? (
               <Link
                 to={item.to}
-                className='flex items-center w-full text-base text-gray-700 font-normal'
+                className='flex items-center w-full text-base font-input-mono  font-light'
                 onClick={(e) => {
                   e.stopPropagation()
                   setIsOpen(false)
@@ -96,7 +97,7 @@ function BaseDropdown({
                   setIsOpen(false)
                   item.onClick?.()
                 }}
-                className='flex items-center w-full text-base text-gray-700 font-normal'
+                className='flex items-center w-full text-base font-input-mono font-light'
                 type='button'>
                 {item.icon && <span className='mr-3'>{item.icon}</span>}
                 {item.label}
