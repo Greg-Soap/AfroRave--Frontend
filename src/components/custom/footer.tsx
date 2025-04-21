@@ -14,7 +14,7 @@ const formSchema = z.object({
 export default function Footer() {
   return (
     <footer className="w-full flex flex-col items-center gap-7 pt-[50px] pb-16 bg-primary font-input-mono">
-      <div className="max-w-[1536px] w-full flex flex-col items-center gap-5 px-[2rem]">
+      <div className="max-w-[1536px] w-full flex flex-col items-center gap-5 px-[1rem] md:px-[2rem]">
         <img
           src="/assets/landing-page/AR.png"
           alt="AR"
@@ -42,13 +42,13 @@ export default function Footer() {
 
       <Separator orientation="horizontal" className="w-full bg-white" />
 
-      <div className="max-w-[1536px]  w-full flex max-md:flex-col gap-10 px-[2rem]">
+      <div className="max-w-[1536px]  w-full flex max-md:flex-col gap-10 px-[1rem] md:px-[2rem]">
         {footer_links.map((footer_link) => (
           <FooterLinkBlock key={footer_link.title} {...footer_link} />
         ))}
       </div>
 
-      <div className="max-w-[1536px]  w-full flex items-center gap-5 md:justify-end px-[2rem]">
+      <div className="max-w-[1536px]  w-full flex items-center gap-5 md:justify-end px-[1rem] md:px-[2rem]">
         {socials.map((item) => (
           <Link key={item.alt} to={item.href}>
             <img src={item.icon} alt={item.alt} className="w-10 h-auto" />
