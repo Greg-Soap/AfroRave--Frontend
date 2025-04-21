@@ -1,6 +1,7 @@
 import { Separator } from './ui/separator'
 import { Button } from './ui/button'
 import { Link } from 'react-router-dom'
+import { useAuth } from '@/contexts/auth-context'
 
 const menuLinks = [
   { href: '/', name: 'Discover' },
@@ -19,10 +20,16 @@ const socials = [
 ]
 
 export default function MobileMenu() {
+  const { openLoginModal } = useAuth()
+
   return (
     <div className='flex flex-col h-full'>
       <div className='flex flex-col gap-4 py-6 px-8'>
-        <Button className='w-full h-12 bg-white text-black hover:bg-white/90'>Log In</Button>
+        <Button
+          className='w-full h-12 bg-white text-black hover:bg-white/90'
+          onClick={() => openLoginModal()}>
+          Log In
+        </Button>
         <Button
           variant='secondary'
           className='w-full h-12  border-white text-white hover:bg-white/10'>

@@ -5,9 +5,11 @@ import BaseDropdown from './reusable/base-dropdown'
 import BaseSheet from './reusable/base-sheet'
 import { useEffect, useState } from 'react'
 import MobileMenu from './mobile-menu'
+import { useAuth } from '@/contexts/auth-context'
 
 export default function Header() {
   const [hasScrolled, setHasScrolled] = useState(false)
+  const { openLoginModal } = useAuth()
 
   useEffect(() => {
     function handleScroll() {
@@ -39,9 +41,9 @@ export default function Header() {
               </Button>
             }
             items={[
-              { to: '?login=true&auth=guest', label: 'Guest' },
-              { to: '?login=true&auth=creator', label: 'Creator' },
-              { to: '?login=true&auth=vendor', label: 'Vendor' },
+              { label: 'Guest', onClick: () => openLoginModal('guest') },
+              { label: 'Creator', onClick: () => openLoginModal('creator') },
+              { label: 'Vendor', onClick: () => openLoginModal('vendor') },
             ]}
           />
 

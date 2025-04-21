@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '../ui/dialog'
+import { cn } from '@/lib/utils'
 
 interface CustomModalProps {
   trigger?: ReactNode
@@ -20,12 +21,16 @@ interface CustomModalProps {
   size?: keyof typeof sizeClasses
   removeCancel?: boolean
   floatingCancel?: boolean
+  hasFooter?: boolean
+  footerContent?: ReactNode
+  disableOverlayClick?: boolean
+  cancelOnOverlay?: boolean
 }
 
 const sizeClasses = {
-  small: 'sm:max-w-[464px]',
+  small: 'sm:max-w-[415px]',
   large: 'sm:max-w-[864px]',
-  full: 'sm:max-w-[calc(100vw-2rem)]',
+  full: ' h-full sm:overflow-y-auto',
 }
 
 function BaseModal({
@@ -38,6 +43,11 @@ function BaseModal({
   size = 'small',
   removeCancel = false,
   floatingCancel = false,
+  hasFooter = false,
+  footerContent,
+  className,
+  disableOverlayClick = false,
+  cancelOnOverlay = false,
 }: CustomModalProps) {
   return (
     <Dialog
@@ -49,14 +59,18 @@ function BaseModal({
       }}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className={`sm:max-w-[425px] ${sizeClasses[size]} p-0 rounded-[8px] w-[90%] lg:w-full block`}
+        className={cn(`sm:max-w-[425px] ${sizeClasses[size]} p-0 rounded-[8px]  block`, className)}
         noCancel={removeCancel}
         floatingCancel={floatingCancel}
         onClick={(e) => e.stopPropagation()}
         onInteractOutside={(e) => {
-          e.preventDefault()
-        }}>
-        <DialogHeader>
+          if (disableOverlayClick) {
+            e.preventDefault()
+          }
+        }}
+        cancelOnOverlay={cancelOnOverlay}>
+        <DialogHeader
+          className={cn('w-full flex flex-col items-center justify-center font-input-mono')}>
           <VisuallyHidden>
             <DialogTitle>{title || 'Modal Dialog'}</DialogTitle>
           </VisuallyHidden>
@@ -64,7 +78,10 @@ function BaseModal({
             {description || <VisuallyHidden>Modal content</VisuallyHidden>}
           </DialogDescription>
         </DialogHeader>
+
         {children}
+
+        {hasFooter && <div className='mt-auto pt-4'>{footerContent}</div>}
       </DialogContent>
     </Dialog>
   )

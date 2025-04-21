@@ -15,16 +15,28 @@ const DialogClose = DialogPrimitive.Close
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & { cancelOnOverlay?: boolean }
+>(({ className, cancelOnOverlay, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-[3000] bg-[#00000040] backdrop-blur-[3px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'fixed inset-0 z-[3000] bg-gradient-to-b from-[#949494] via-[#616161] to-[#2E2E2E] backdrop-blur-[3px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className,
     )}
-    {...props}
-  />
+    style={{
+      backgroundImage:
+        'linear-gradient(to bottom, #949494 0%, #616161 34%, #616161 84%, #2E2E2E 100%)',
+    }}
+    {...props}>
+    {cancelOnOverlay && (
+      <DialogPrimitive.Close
+        className='absolute top-10 right-10 font-bold opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none cursor-pointer'
+        onClick={(e) => e.stopPropagation()}>
+        <X className='h-6 w-6 text-white font-bold' />
+        <span className='sr-only'>Close</span>
+      </DialogPrimitive.Close>
+    )}
+  </DialogPrimitive.Overlay>
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
@@ -32,29 +44,30 @@ interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   noCancel?: boolean
   floatingCancel?: boolean
+  cancelOnOverlay?: boolean
 }
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
->(({ className, children, noCancel, floatingCancel, ...props }, ref) => (
+>(({ className, children, noCancel, floatingCancel, cancelOnOverlay, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    <DialogOverlay cancelOnOverlay={cancelOnOverlay} />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-[4000] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4  bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+        'fixed left-[50%] top-[50%] z-[4000] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-center data-[state=open]:slide-in-from-center sm:rounded-lg',
         className,
       )}
       {...props}>
-      {!noCancel && (
+      {!noCancel && !cancelOnOverlay && (
         <DialogPrimitive.Close
           className={cn(
             'font-bold opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
             floatingCancel ? 'absolute top-10 right-10' : 'w-full flex justify-end px-10 pt-6',
           )}
           onClick={(e) => e.stopPropagation()}>
-          <X className='h-6 w-6' />
+          <X className='h-6 w-6 text-red-600' />
           <span className='sr-only'>Close</span>
         </DialogPrimitive.Close>
       )}

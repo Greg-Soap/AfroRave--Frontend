@@ -20,7 +20,11 @@ const formSchema = z.object({
     }),
 })
 
-export default function UserLoginForm() {
+interface UserLoginFormProps {
+  loginType: 'guest' | 'creator' | 'vendor'
+}
+
+export default function UserLoginForm({ loginType }: UserLoginFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,15 +38,13 @@ export default function UserLoginForm() {
   }
 
   return (
-    <div className='relative min-h-full min-w-full flex justify-center max-md:mt-[100px]'>
-      <div className='absolute inset-0 bg-gradient-to-t from-[#686868] via-[#686868]/10 to-transparent' />
-
+    <div className='relative  flex justify-center max-md:mt-[100px]'>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='w-full md:w-[415px] h-fit rounded-[12px] space-y-8 bg-white px-7 py-4 md:px-10 md:py-7 z-10 font-sf-pro-text'>
+          className=' md:w-[415px] h-fit rounded-[12px] space-y-8 bg-red px-7 py-4 md:px-10 md:py-7 z-10 font-sf-pro-text'>
           <div className='flex flex-col'>
-            <p className='text-[32px] font-bold text-black'>Log In</p>
+            <p className='text-[32px] font-bold text-black'>Log In as {loginType}</p>
             <span className='text-sm text-black'>
               New to AfroRevive?{' '}
               <Link to='/sign-up' className='text-base font-bold text-accent'>
