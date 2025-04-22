@@ -8,7 +8,7 @@ export default function OwnTheStage() {
         <DetailsBlock {...details[0]} />
       </div>
 
-      <div className='relative max-w-[var(--max-width)] px-[1rem] py-10 md:px-[2rem] flex items-center justify-end gap-[50px] bg-[url(assets/landing-page/section-bg.png)] bg-cover bg-center'>
+      <div className='relative max-w-[var(--max-width)] px-[1rem] py-10 md:px-[2rem] flex items-center justify-end gap-[50px] bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center'>
         <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent' />
 
         <DetailsBlock {...details[1]} isSecond />
@@ -26,7 +26,7 @@ export default function OwnTheStage() {
         />
       </div>
 
-      <Link to='/' className='self-center underline text-[30px] md:text-[40px] lg:text-[50px]'>
+      <Link to='/' className='self-center underline text-2xl md:text-3xl font-phosphate'>
         LEARN MORE
       </Link>
     </section>
@@ -42,7 +42,7 @@ function DetailsBlock({ title, href, linkName, details, isSecond = false }: IDet
       <div className='flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2'>
         <span
           className={clsx(
-            'max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px] lg:leading-[88px] max-md:text-center font-bungee-inline text-white',
+            'max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px]  max-md:text-center font-bungee-inline text-white',
 
             {
               'text-center': isSecond,
@@ -77,21 +77,21 @@ function LinkToAuth({ href, linkName }: { href: string; linkName: string }) {
 const details: IDetails[] = [
   {
     title: 'OWN THE STAGE!',
-    href: '/',
+    href: '/?login=creator',
     linkName: 'Create Your Event',
     details:
       'Ready to bring your event to life? With Afro Revive, creating and managing your event has never been easier! From ticket sales to attendee insights, we give you all the tools you need to sell out your event and make it unforgettable.',
   },
   {
     title: "CAN'T MAKE IT TO A CONCERT?",
-    href: '/',
+    href: '/resell',
     linkName: 'RESELL YOUR TICKET',
     details:
       'Our Ticket Resell feature lets you easily sell your tickets to other fans, safely and securely. List, set your price, and let us handle the rest!',
   },
   {
     title: 'READY TO CONNECT WITH MORE EVENTS?',
-    href: '/',
+    href: '/?login=vendor',
     linkName: 'REGISTER AS A VENDOR',
     details:
       "Get notified about open slots, express interest, and let organizers come to you. Whether you're offering food, tech, logistics, or entertainment—we'll help you stay booked and busy!",

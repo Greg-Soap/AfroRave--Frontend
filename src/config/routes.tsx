@@ -5,6 +5,7 @@ import { LoadingFallback } from '../components/loading-fallback'
 const LandingPage = lazy(() => import('../pages/landing-page'))
 const EventsPage = lazy(() => import('../pages/event-page'))
 const IndividualEventPage = lazy(() => import('../pages/individual-event'))
+const ResellPage = lazy(() => import('../pages/resell-page'))
 
 export const routes: RouteObject[] = [
   {
@@ -28,6 +29,14 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualEventPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/resell',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <ResellPage />
       </Suspense>
     ),
   },
