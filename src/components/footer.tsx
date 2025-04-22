@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { Form } from '@/components/ui/form'
-import { InputTypeField } from './form-fields'
+import { FormBase, FormField } from './reusable'
+import { Input } from './ui/input'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Provide a valid email address' }),
@@ -14,8 +14,14 @@ const formSchema = z.object({
 export default function Footer() {
   return (
     <footer className='w-full flex flex-col items-center gap-7 pt-[50px] pb-16 bg-primary font-input-mono'>
-      <div className='max-w-[var(--max-width)] w-full flex flex-col items-center gap-5 px-[1rem] md:px-[2rem]'>
-        <img src='/assets/landing-page/AR.png' alt='AR' width={139} height={55} />
+      <div className='max-w-[var(--max-width)] w-full flex flex-col  gap-5 px-[1rem] md:px-[2rem]'>
+        <img
+          src='/assets/landing-page/AR.png'
+          alt='AR'
+          width={139}
+          height={55}
+          className='self-center'
+        />
 
         <NewsLetterForm />
 
@@ -64,22 +70,25 @@ function NewsLetterForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
-        <InputTypeField
-          name='email'
-          label='Sign up to our newsletter to receive information about upcoming events.'
-          placeholder='Your Email'
-          form={form}
-          className='max-w-[772px]'
-          submitButton={
-            <Button type='submit' className='w-[128px] h-[49px] bg-red-500 hover:bg-red-600'>
-              Subscribe
-            </Button>
-          }
-        />
-      </form>
-    </Form>
+    <FormBase form={form} onSubmit={onSubmit} className='flex flex-col gap-2 max-w-[772px]'>
+      <p className='text-xl font-light'>
+        Sign up to our newsletter to receive information about upcoming events.
+      </p>
+      <div className='flex items-center gap-2 '>
+        <FormField form={form} name='email'>
+          <Input
+            placeholder='Your Email'
+            className='w-[320px] h-11 placeholder:text-white/70 border-white'
+          />
+        </FormField>
+
+        <Button
+          type='submit'
+          className='w-[128px] h-[49px] bg-secondary font-input-mono text-lg hover:opacity-75 hover:bg-secondary hover:transition-all hover:duration-300'>
+          Subscribe
+        </Button>
+      </div>
+    </FormBase>
   )
 }
 
