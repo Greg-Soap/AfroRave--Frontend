@@ -5,11 +5,7 @@ function StepCard({
 }: { title: string; description: string; icon: string }) {
   return (
     <div className='flex flex-col items-center text-center'>
-      <img
-        src={icon}
-        alt={title}
-        className='h-20 w-20 bg-gray-700 border border-white rounded-full mb-4'
-      />
+      <img src={icon} alt={title} className='h-[150px] w-[150px] mb-4' />
       <h3 className='text-xl font-semibold mb-2'>{title}</h3>
       <p className='text-gray-400 text-sm'>{description}</p>
     </div>
@@ -30,8 +26,34 @@ function FeatureItem({ title, description }: { title: string; description: strin
 
 function ResellPage() {
   return (
-    <div className='bg-transparent text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8'>
-      <div className='max-w-7xl mx-auto'>
+    <div className='bg-transparent text-white min-h-screen max-w-[var(--max-width)] mx-auto w-full'>
+      {/* Hero Section */}
+      <section className='relative max-h-[510px] h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 w-full '>
+        {/* Background Image with Grayscale */}
+        <div
+          className='absolute inset-0 bg-cover bg-center filter grayscale '
+          style={{ backgroundImage: "url('/assets/resell/hero.png')" }}
+        />
+
+        <div className='absolute inset-0 bg-gradient-to-t from-[#1f1f1f] via-[#1f1f1f]/10 to-transparent' />
+
+        {/* Content (remains on top) */}
+        <div className='relative z-10 max-w-[1140px] w-full'>
+          <h1 className='text-start m-0'>
+            <span className='text-4xl sm:text-5xl md:text-[100px] font-bold mb-8 leading-tight text-start'>
+              Resell with Ease on Afro Revive
+            </span>
+            <a
+              href='/events'
+              className='bg-secondary hover:bg-secondary/80 text-white p-6 rounded ml-4 align-super mb-3 text-2xl font-semilight font-sf-pro'>
+              LIST YOUR TICKET
+            </a>
+          </h1>
+        </div>
+      </section>
+
+      {/* Existing Content - Add padding top to separate from hero */}
+      <div className='max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 pt-24'>
         {/* Top Section: 3 Steps */}
         <section className='mb-24 text-center'>
           <h2 className='text-3xl sm:text-4xl font-bold mb-12'>
