@@ -3,26 +3,29 @@ import clsx from 'clsx'
 
 export default function OwnTheStage() {
   return (
-    <section className='flex flex-col gap-10 py-[75px]'>
-      <div className='container w-full'>
+    <section className='flex flex-col gap-10 md:gap-24 py-[75px] w-full'>
+      <div className='container w-full max-w-[var(--max-width)] mx-auto'>
         <DetailsBlock {...details[0]} />
       </div>
 
-      <div className='relative max-w-[var(--max-width)] px-[1rem] py-10 md:px-[2rem] flex items-center justify-end gap-[50px] bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center'>
-        <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent' />
+      <div className='relative w-full py-10 md:py-20'>
+        <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)]' />
+        <div className='absolute inset-0 bg-gradient-to-t from-[#494747] via-[#00000000] to-[#00000000] [background-position:0%_41%]' />
 
-        <DetailsBlock {...details[1]} isSecond />
+        <div className='relative max-w-[var(--max-width)] px-[1rem] md:px-[2rem] mx-auto flex items-center justify-end gap-[50px]'>
+          <DetailsBlock {...details[1]} isSecond />
+        </div>
       </div>
 
-      <div className='container w-full flex max-lg:flex-col lg:items-center gap-[30px]'>
+      <div className='container w-full flex max-lg:flex-col lg:items-center gap-[30px] max-w-[var(--max-width)] mx-auto relative'>
         <DetailsBlock {...details[2]} />
 
         <img
           src='/assets/landing-page/bolt.png'
           alt='BOLT'
           width={644}
-          height={756}
-          className='max-w-1/2 h-auto opacity-40 max-lg:self-center'
+          height={880}
+          className='hidden md:block absolute right-0 top-[100%] -translate-y-1/2 max-w-1/2 h-auto opacity-40'
         />
       </div>
 

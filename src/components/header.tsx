@@ -22,7 +22,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className='w-full fixed top-0 flex justify-center z-50 '>
+    <header className='w-full fixed top-0 flex justify-center z-50 h-[120px] '>
       <div
         className={`absolute inset-0 transition-all duration-300 ${
           hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
