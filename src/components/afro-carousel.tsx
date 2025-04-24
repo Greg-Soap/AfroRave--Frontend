@@ -35,7 +35,7 @@ export function AfroCarousel({
           items={carouselItems}
           className='w-full min-h-screen'
           itemClassName='h-full'
-          indicatorsPosition='bottom-36'
+          indicatorsPosition='bottom-38'
         />
       </div>
 

@@ -39,26 +39,30 @@ export default function OwnTheStage() {
 function DetailsBlock({ title, href, linkName, details, isSecond = false }: IDetailsBlockProps) {
   return (
     <div
-      className={clsx('md:max-w-2/3 lg:max-w-1/2 flex flex-col gap-2 max-md:gap-5', {
+      className={clsx('max-w-[569px] flex flex-col gap-2 max-md:gap-5', {
         'items-center z-10': isSecond,
       })}>
       <div className='flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2'>
         <span
           className={clsx(
-            'max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px]  max-md:text-center font-bungee-inline text-white',
+            'inline-block max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px]  max-md:text-center font-phosphate-inline text-white',
 
             {
-              'text-center': isSecond,
+              'text-center max-w-[490px]': isSecond,
               'text-left': !isSecond,
             },
           )}>
           {title}
         </span>
-        {!isSecond && <LinkToAuth href={href} linkName={linkName} />}
+        {!isSecond && (
+          <span className='inline-block'>
+            <LinkToAuth href={href} linkName={linkName} />
+          </span>
+        )}
       </div>
       <p
-        className={clsx('md:text-2xl lg:text-[30px] uppercase max-md:text-center font-phosphate', {
-          'text-center mb-2': isSecond,
+        className={clsx(' text-[20px] uppercase max-md:text-center font-phosphate', {
+          'text-center mb-2 max-w-[444px]': isSecond,
         })}>
         {details}
       </p>
