@@ -18,15 +18,12 @@ export function BaseSelect({
     <Select>
       <SelectTrigger
         defaultValue={defaultValue ?? defaultValue}
-        className={cn(
-          `!max-w-[${width}px] w-full border bg-transparent z-[9999]`,
-          {
-            "border-[#1E1E1E] h-[35px] font-sf-pro-text rounded-[4px] text-black":
-              type === "auth",
-            "border-white h-[50px] data-[state=open]:bg-[#494747] data-[state=open]:border-none font-input-mono rounded-[3px]":
-              type === "others",
-          }
-        )}
+        className={cn(`!min-w-[${width}px] border bg-transparent`, {
+          "border-[#1E1E1E] w-full h-[35px] font-sf-pro-text rounded-[4px] text-black z-[9999]":
+            type === "auth",
+          "border-white h-[50px] data-[state=open]:bg-[#494747] data-[state=open]:border-none font-input-mono rounded-[3px]":
+            type === "others",
+        })}
       >
         <SelectValue
           placeholder={placeholder}
