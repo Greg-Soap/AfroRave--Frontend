@@ -6,19 +6,19 @@ function StepCard({
   return (
     <div className='flex flex-col items-center text-center'>
       <img src={icon} alt={title} className='h-[150px] w-[150px] mb-4' />
-      <h3 className='text-xl font-semibold mb-2'>{title}</h3>
-      <p className='text-gray-400 text-sm'>{description}</p>
+      <h3 className='text-[24px] font-semibold mb-2'>{title}</h3>
+      <p className='text-white font-sf-pro-text text-base font-normal'>{description}</p>
     </div>
   )
 }
 
 function FeatureItem({ title, description }: { title: string; description: string }) {
   return (
-    <div className='flex items-start space-x-4'>
+    <div className='flex items-center space-x-4'>
       <img src='/assets/resell/lighting.svg' alt={title} />
       <div>
-        <h4 className='text-lg font-semibold'>{title}</h4>
-        <p className='text-gray-400 text-sm'>{description}</p>
+        <h4 className='text-[20px] font-semibold'>{title}</h4>
+        <p className='font-sf-pro-text text-[12px] max-w-[320px]'>{description}</p>
       </div>
     </div>
   )
@@ -26,7 +26,7 @@ function FeatureItem({ title, description }: { title: string; description: strin
 
 function ResellPage() {
   return (
-    <div className='bg-transparent text-white min-h-screen max-w-[var(--max-width)] mx-auto w-full'>
+    <div className='bg-transparent text-white min-h-screen  mx-auto w-full'>
       {/* Hero Section */}
       <section className='relative max-h-[510px] h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 w-full '>
         {/* Background Image with Grayscale */}
@@ -45,7 +45,7 @@ function ResellPage() {
             </span>
             <a
               href='/events'
-              className='bg-secondary hover:bg-secondary/80 text-white p-6 rounded ml-4 align-super mb-3 text-2xl font-semilight font-sf-pro'>
+              className='bg-secondary hover:bg-secondary/80 text-white p-6 rounded-[10px] ml-4 align-super mb-3 text-2xl font-normal font-sf-pro'>
               LIST YOUR TICKET
             </a>
           </h1>
@@ -53,13 +53,13 @@ function ResellPage() {
       </section>
 
       {/* Existing Content - Add padding top to separate from hero */}
-      <div className='max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 pt-24'>
+      <div className='max-w-[1400px] mx-auto py-16 px-4 sm:px-6 lg:px-8 pt-24'>
         {/* Top Section: 3 Steps */}
-        <section className='mb-24 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-bold mb-12'>
+        <section className='mb-[170px] text-center'>
+          <h2 className='text-3xl sm:text-[45px] font-bold mb-[192px]'>
             SELL YOUR TICKETS IN 3 SIMPLE STEPS
           </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-[112px] mx-auto'>
             <StepCard
               title='Select the Ticket You Want to sell'
               description='If the event supports resale and you purchased your ticket on Afro Revive, you can list it directly from your account.'
@@ -80,8 +80,8 @@ function ResellPage() {
 
         {/* Middle Section: Seamless Resale Experience */}
         <section className='mb-24 text-center'>
-          <h2 className='text-3xl sm:text-4xl font-bold mb-4'>Seamless Resale Experience</h2>
-          <p className='text-lg text-gray-400 max-w-3xl mx-auto mb-16'>
+          <h2 className='text-3xl sm:text-[40px] font-bold mb-4'>Seamless Resale Experience</h2>
+          <p className='text-[24px] mx-auto mb-[120px] font-normal max-w-[840px]'>
             List your ticket and let Afro Revive do the rest—from secure delivery to guaranteed
             payouts, we ensure a seamless resale process.
           </p>
@@ -89,7 +89,7 @@ function ResellPage() {
           {/* Features Grid */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-16 items-center'>
             {/* Feature Group 1 */}
-            <div className='flex flex-col space-y-8 text-left'>
+            <div className='flex flex-col justify-between text-left h-full'>
               <FeatureItem
                 title='Smart Pricing'
                 description='Using real-time ticket pricing information, We help you sell your tickets with confidence.'
@@ -118,7 +118,7 @@ function ResellPage() {
             </div>
 
             {/* Feature Group 2 */}
-            <div className='flex flex-col space-y-8 text-left row-start-4 md:row-start-auto'>
+            <div className='flex flex-col  text-left row-start-4 md:row-start-auto justify-between h-full'>
               <FeatureItem
                 title='Share Your Listing'
                 description="Know what you'll earn before you list. We show you a full breakdown of your resale payout, no hidden fees." // Note: Description duplicated in image, using it here.
