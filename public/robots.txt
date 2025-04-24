@@ -1,0 +1,18 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://afro-revive-frontend.vercel.app/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /payment/
+Disallow: /user/
+Disallow: /account/
+
+# Crawl-delay
+Crawl-delay: 10 

@@ -9,7 +9,6 @@ export default function IndexLayout() {
     <AuthProvider>
       <Header />
       <UserLogin />
-
       <main className='w-full flex flex-col items-center'>
         <Outlet />
       </main>

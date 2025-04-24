@@ -6,6 +6,7 @@ const LandingPage = lazy(() => import('../pages/landing-page'))
 const EventsPage = lazy(() => import('../pages/event-page'))
 const IndividualEventPage = lazy(() => import('../pages/individual-event'))
 const ResellPage = lazy(() => import('../pages/resell-page'))
+const NotFoundPage = lazy(() => import('../pages/not-found'))
 
 export const routes: RouteObject[] = [
   {
@@ -37,6 +38,14 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ResellPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <NotFoundPage />
       </Suspense>
     ),
   },
