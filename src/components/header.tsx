@@ -29,7 +29,7 @@ export default function Header() {
         }`}
       />
 
-      <nav className='relative max-w-[var(--max-width)] px-4 md:px-7 w-full flex items-center justify-between py-4'>
+      <nav className='relative  px-4 md:px-7 w-full flex items-center justify-between py-4'>
         <NavLogo />
 
         <div className='flex items-center gap-5'>

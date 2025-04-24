@@ -46,7 +46,7 @@ export function BaseCarousel({
 
   return (
     <Carousel className={cn('relative w-full', className)} setApi={setApi}>
-      <CarouselContent>
+      <CarouselContent className='min-h-screen'>
         {items.map((item) => (
           <CarouselItem key={item.id} className={cn('w-full ', itemClassName)}>
             {item.content}

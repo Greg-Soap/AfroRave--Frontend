@@ -19,15 +19,21 @@ export function AfroCarousel({
 }: AfroCarouselProps) {
   const carouselItems = items.map((item) => ({
     id: item.id,
-    content: <img src={item.image} alt={item.alt} className='w-full h-[615px] object-cover' />,
+    content: (
+      <img
+        src={item.image}
+        alt={item.alt}
+        className='w-full  object-cover object-center h-screen'
+      />
+    ),
   }))
 
   return (
-    <section className='relative w-full h-[615px]'>
-      <div className='w-full h-full'>
+    <section className='relative w-full min-h-screen'>
+      <div className='w-full min-h-screen'>
         <BaseCarousel
           items={carouselItems}
-          className='w-full h-full'
+          className='w-full min-h-screen'
           itemClassName='h-full'
           indicatorsPosition='bottom-36'
         />

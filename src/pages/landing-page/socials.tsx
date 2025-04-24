@@ -3,23 +3,22 @@ import clsx from 'clsx'
 
 export default function Socials() {
   return (
-    <section className='max-w-[var(--max-width)] w-full flex flex-col gap-10 pt-[75px]'>
+    <section className='min-h-screen w-full flex flex-col gap-10 pt-[75px]'>
       <p className='container font-input-mono font-bold text-2xl md:text-[30px]'>Socials</p>
 
-      <div className='flex flex-col'>
-        <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5'>
+      <div className='flex-1 flex flex-col min-h-screen'>
+        <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 min-h-screen'>
           {social_posts.map((item, index) => (
             <Link
               key={item.alt}
               to={item.href}
-              className={clsx('w-full overflow-hidden', {
-                'md:col-span-2 md:row-span-2 h-[275px] md:h-[550px]': index === 1 || index === 10,
-                'h-[275px]': index !== 1 && index !== 10,
+              className={clsx('w-full overflow-hidden block aspect-square', {
+                'md:col-span-2 md:row-span-2': index === 1 || index === 10,
               })}>
               <img
                 src={item.image}
                 alt={item.alt}
-                className='w-full h-full hover:scale-105 transition-all duration-300 opacity-60'
+                className='w-full h-full object-cover object-left-top hover:scale-105 transition-all duration-300 opacity-60'
               />
             </Link>
           ))}
