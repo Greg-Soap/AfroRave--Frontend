@@ -69,7 +69,7 @@ export default function SignupForm() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-[9px]">
+        <div className="grid md:grid-cols-2 gap-[9px]">
           <FormField form={form} name="first_name" label="First Name">
             <Input placeholder="Enter your first name." />
           </FormField>
