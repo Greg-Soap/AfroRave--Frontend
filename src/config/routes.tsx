@@ -18,6 +18,11 @@ const ResaleMarketPlacePage = lazy(() => import("../pages/resale-marketplace"));
 const IndividualResaleTicket = lazy(
   () => import("../pages/individual-resale-event")
 );
+const SellPage = lazy(() => import("../pages/sell"));
+const TermsAndConditionPage = lazy(
+  () => import("../pages/terms-and-condition")
+);
+const PrivacyPolicyPage = lazy(() => import("../pages/privacy-policy"));
 
 export const routes: RouteObject[] = [
   {
@@ -121,6 +126,30 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualResaleTicket />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/sell",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <SellPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/terms-and-conditions",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <TermsAndConditionPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/privacy-policy",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <PrivacyPolicyPage />
       </Suspense>
     ),
   },

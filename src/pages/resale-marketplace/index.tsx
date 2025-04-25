@@ -31,6 +31,7 @@ export default function ResaleMarketPlacePage() {
 }
 
 function ResaleMarketPlaceTicketCard({
+  id,
   image,
   event_name,
   event_location,
@@ -38,7 +39,7 @@ function ResaleMarketPlaceTicketCard({
   event_time,
 }: IEvents) {
   return (
-    <Link to="#" className="flex items-center gap-5">
+    <Link to={`/resale/${id}`} className="flex items-center gap-5">
       <img
         src={image}
         alt={event_name}

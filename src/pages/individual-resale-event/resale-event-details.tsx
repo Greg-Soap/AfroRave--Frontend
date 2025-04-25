@@ -9,16 +9,16 @@ import { EventLocation } from "@/components/reusable/event-location";
 export default function ResaleEventDetails({ event }: { event: IEvents }) {
   return (
     <section className="flex flex-col mt-[136px] px-20 pb-11 gap-[257px]">
-      <div className="flex gap-[54px]">
+      <div className="min-w-full flex gap-[54px]">
         <img
           src={event.image}
           alt={event.event_name}
           width={301}
           height={388}
-          className="max-h-[388px]"
+          className="max-w-[301px] w-auto max-h-[388px] h-auto"
         />
 
-        <div className="max-w-2/3 flex flex-col gap-[87px]">
+        <div className="w-full flex flex-col gap-[87px]">
           <div className="flex flex-col">
             <p className="font-phosphate text-[40px] tracking-[-0.25px] leading-normal uppercase">
               {event.event_name}
@@ -43,7 +43,7 @@ export default function ResaleEventDetails({ event }: { event: IEvents }) {
 
 function TicketContainer({ tickets }: { tickets: IEvents["tickets"] }) {
   return (
-    <div className="flex flex-col gap-[50px]">
+    <div className="w-full flex flex-col gap-[50px]">
       <BaseSelect placeholder="Price" items={price} width={224} />
 
       <div className="grid grid-cols-2 gap-x-[78px] gap-y-[50px] px-3.5">
@@ -57,7 +57,7 @@ function TicketContainer({ tickets }: { tickets: IEvents["tickets"] }) {
 
 function ResaleTicketCard({ name, price }: { name: string; price: number }) {
   return (
-    <div className="relative w-full flex flex-col pl-[15px] py-[19px] bg-[#686868] font-input-mono rounded-[2px]">
+    <div className="relative min-w-full flex flex-col pl-[15px] py-[19px] bg-[#686868] font-input-mono rounded-[2px]">
       <div className="w-2/3 flex items-center justify-between mb-[9px]">
         <p className="font-bold text-[15px]">{name}</p>
 
