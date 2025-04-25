@@ -15,6 +15,9 @@ const RefundPolicyPage = lazy(() => import("../pages/refund-policy"));
 const WorkWithUsPage = lazy(() => import("../pages/work-with-us"));
 const SupportPage = lazy(() => import("../pages/support"));
 const ResaleMarketPlacePage = lazy(() => import("../pages/resale-marketplace"));
+const IndividualResaleTicket = lazy(
+  () => import("../pages/individual-resale-event")
+);
 
 export const routes: RouteObject[] = [
   {
@@ -110,6 +113,14 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ResaleMarketPlacePage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/resale/:eventId",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <IndividualResaleTicket />
       </Suspense>
     ),
   },
