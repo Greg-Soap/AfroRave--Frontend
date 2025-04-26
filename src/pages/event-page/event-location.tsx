@@ -7,17 +7,19 @@ import 'leaflet/dist/leaflet.css'
 import { geocodeLocation } from '@/lib/geocode'
 import type { LatLngTuple } from 'leaflet'
 import { BlockName, EventOutlineButton } from './individual-event/event-details'
+import { Icon } from 'leaflet'
 
 // Fix for default marker icon
-const icon = new (await import('leaflet')).Icon({
-  iconUrl: '/assets/resell/lighting.svg',
-  iconRetinaUrl: '/assets/resell/lighting.svg',
-
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
+function createCustomIcon() {
+  return new Icon({
+    iconUrl: '/assets/resell/lighting.svg',
+    iconRetinaUrl: '/assets/resell/lighting.svg',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  })
+}
 
 export function EventLocation({
   event_location,
@@ -62,7 +64,7 @@ export function EventLocation({
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               attribution='© OpenStreetMap contributors'
             />
-            <Marker position={position} icon={icon}>
+            <Marker position={position} icon={createCustomIcon()}>
               <Popup>{event_location}</Popup>
             </Marker>
           </MapContainer>
