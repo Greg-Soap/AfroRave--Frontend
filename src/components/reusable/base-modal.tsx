@@ -1,3 +1,22 @@
+/**
+ * A reusable modal component built on top of shadcn/ui Dialog.
+ * Provides a flexible way to display content in a modal dialog with various customization options.
+ * Supports different sizes, footer content, and overlay behaviors.
+ *
+ * @example
+ * ```tsx
+ * <BaseModal
+ *   trigger={<Button>Open Modal</Button>}
+ *   title="Modal Title"
+ *   description="Modal description"
+ *   size="large"
+ *   hasFooter
+ *   footerContent={<Button>Close</Button>}
+ * >
+ *   <div>Modal content goes here</div>
+ * </BaseModal>
+ * ```
+ */
 import type { ReactNode } from 'react'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import {
@@ -10,29 +29,51 @@ import {
 } from '../ui/dialog'
 import { cn } from '@/lib/utils'
 
+/** Available modal size options */
+const sizeClasses = {
+  /** Small modal (415px max width) */
+  small: 'sm:max-w-[415px]',
+  /** Large modal (864px max width) */
+  large: 'sm:max-w-[864px]',
+  /** Full height modal with vertical scrolling */
+  full: ' h-full sm:overflow-y-auto w-full max-w-full',
+}
+
 interface CustomModalProps {
+  /** Trigger element that opens the modal (usually a button) */
   trigger?: ReactNode
+  /** Modal title (visually hidden by default) */
   title?: string
+  /** Modal description (visually hidden by default) */
   description?: string
+  /** Modal content */
   children: ReactNode
+  /** Additional CSS classes for the modal */
   className?: string
+  /** Controlled open state */
   open?: boolean
+  /** Callback when modal closes */
   onClose?: (open: boolean) => void
+  /** Modal size variant */
   size?: keyof typeof sizeClasses
+  /** Whether to remove the default cancel button */
   removeCancel?: boolean
+  /** Whether to show a floating cancel button */
   floatingCancel?: boolean
+  /** Whether to show the footer section */
   hasFooter?: boolean
+  /** Footer content (usually buttons) */
   footerContent?: ReactNode
+  /** Whether to disable closing on overlay click */
   disableOverlayClick?: boolean
+  /** Whether to cancel on overlay click */
   cancelOnOverlay?: boolean
 }
 
-const sizeClasses = {
-  small: 'sm:max-w-[415px]',
-  large: 'sm:max-w-[864px]',
-  full: ' h-full sm:overflow-y-auto',
-}
-
+/**
+ * Base modal component that provides a consistent way to display content in a modal dialog.
+ * Supports various customization options including size, footer, and overlay behaviors.
+ */
 function BaseModal({
   trigger,
   title,
@@ -60,7 +101,7 @@ function BaseModal({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={cn(
-          `sm:max-w-[425px] ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%]`,
+          ` ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%] sm:w-full`,
           className,
         )}
         noCancel={removeCancel}
@@ -84,7 +125,7 @@ function BaseModal({
 
         {children}
 
-        {hasFooter && <div className='mt-auto pt-4'>{footerContent}</div>}
+        {hasFooter && <div className='mt-auto pt-4 ml-auto'>{footerContent}</div>}
       </DialogContent>
     </Dialog>
   )

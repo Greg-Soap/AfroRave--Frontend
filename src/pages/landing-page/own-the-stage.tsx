@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
+import { getRoutePath } from '@/config/get-route-path'
 
 export default function OwnTheStage() {
   return (
@@ -29,7 +30,9 @@ export default function OwnTheStage() {
         />
       </div>
 
-      <Link to='/' className='self-center underline text-2xl md:text-3xl font-phosphate'>
+      <Link
+        to={getRoutePath('about_us')}
+        className='self-center underline text-2xl md:text-3xl font-phosphate'>
         LEARN MORE
       </Link>
     </section>
@@ -91,7 +94,7 @@ const details: IDetails[] = [
   },
   {
     title: "CAN'T MAKE IT TO A CONCERT?",
-    href: '/resell',
+    href: getRoutePath('resell'),
     linkName: 'RESELL YOUR TICKET',
     details:
       'Our Ticket Resell feature lets you easily sell your tickets to other fans, safely and securely. List, set your price, and let us handle the rest!',

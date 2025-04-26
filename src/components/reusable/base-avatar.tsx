@@ -1,3 +1,17 @@
+/**
+ * A reusable avatar component that displays user images with fallback options.
+ * Supports different sizes and custom fallback content.
+ *
+ * @example
+ * ```tsx
+ * <BaseAvatar
+ *   src="/path/to/image.jpg"
+ *   alt="User profile"
+ *   size="lg"
+ *   fallback={<UserIcon />}
+ * />
+ * ```
+ */
 'use client'
 
 import { cn } from '@/lib/utils'
@@ -6,10 +20,15 @@ import { User } from 'iconsax-react'
 import type { ReactNode } from 'react'
 
 interface CustomAvatarProps {
+  /** The source URL of the avatar image */
   src?: string | null
+  /** Alternative text for the avatar image */
   alt?: string
+  /** Custom fallback content to display when the image fails to load */
   fallback?: ReactNode
+  /** Size variant of the avatar */
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'huge'
+  /** Additional CSS classes to apply to the avatar */
   className?: string
 }
 

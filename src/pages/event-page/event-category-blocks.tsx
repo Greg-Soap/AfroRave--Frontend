@@ -5,6 +5,7 @@ import { type IEvents, events } from '@/data/events'
 import { cn } from '@/lib/utils'
 import { date_list } from '@/components/constants'
 import { Suspense, useState } from 'react'
+import { getRoutePath } from '@/config/get-route-path'
 
 export default function EventCategoryBlocks() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -94,7 +95,9 @@ function EventCard({
   className,
 }: IEventCardProps) {
   return (
-    <Link to={`/events/${id}`} className={cn('flex flex-col gap-4', className)}>
+    <Link
+      to={getRoutePath('individual_event', { eventId: id })}
+      className={cn('flex flex-col gap-4', className)}>
       {className?.includes('min-w-[290px]') ? (
         <img
           src={image}

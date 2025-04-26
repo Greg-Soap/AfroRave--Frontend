@@ -1,12 +1,40 @@
 import { Button } from '@/components/ui/button'
 import type { IEvents } from '@/data/events'
 import { formatNaira } from '@/lib/format-price'
-import { Plus } from 'lucide-react'
+import { Plus, Minus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { EventLocation } from '@/pages/event-page/event-location'
 import Cart from '../cart'
+import { useState } from 'react'
+
+interface CartTicket {
+  name: string
+  price: number
+  quantity: number
+}
 
 export default function EventDetails({ event }: { event: IEvents }) {
+  const [tickets, setTickets] = useState<CartTicket[]>(
+    event.tickets.map((ticket) => ({ ...ticket, quantity: 0 })),
+  )
+
+  const updateTicketQuantity = (index: number, newQuantity: number) => {
+    setTickets((prev) => {
+      const updated = [...prev]
+      updated[index] = { ...updated[index], quantity: Math.max(0, newQuantity) }
+      return updated
+    })
+  }
+
+  const calculateTotalPrice = () => {
+    const totalTicketPrice = tickets.reduce(
+      (sum, ticket) => sum + ticket.price * ticket.quantity,
+      0,
+    )
+    const totalFees = tickets.reduce((sum, ticket) => sum + 1350 * ticket.quantity, 0)
+    return totalTicketPrice + totalFees
+  }
+
   return (
     <section className=' pb-16 w-full flex flex-col'>
       <div className='relative w-full flex flex-col'>
@@ -89,12 +117,16 @@ export default function EventDetails({ event }: { event: IEvents }) {
           <BlockName name='tickets' />
 
           <div className='flex flex-col gap-4'>
-            {event.tickets.map((item) => (
-              <TicketCard key={item.name} {...item} />
+            {tickets.map((item, index) => (
+              <TicketCard
+                key={item.name}
+                {...item}
+                onQuantityChange={(newQuantity) => updateTicketQuantity(index, newQuantity)}
+              />
             ))}
           </div>
 
-          <Cart event={event} />
+          <Cart event={event} initialTickets={tickets} initialPrice={calculateTotalPrice()} />
         </div>
 
         {/**Location */}
@@ -131,17 +163,39 @@ export function BlockName({
   return <p className={`text-xl md:text-[26px] lg:text-4xl uppercase ${className}`}>{name}</p>
 }
 
-function TicketCard({ name, price }: { name: string; price: number }) {
+function TicketCard({
+  name,
+  price,
+  quantity,
+  onQuantityChange,
+}: {
+  name: string
+  price: number
+  quantity: number
+  onQuantityChange: (quantity: number) => void
+}) {
   return (
     <div className='relative flex flex-col w-full md:w-[378px] h-[81px] rounded-[10px] bg-[#686868] px-5 py-2.5 text-xl font-sf-pro-display'>
       <p className='font-bold'>{name}</p>
       <p>{formatNaira(price)}</p>
 
-      <Button
-        variant='green'
-        className='absolute top-0 right-0 w-[67px] rounded-l-none rounded-br-none'>
-        <Plus color='var(--foreground)' size={18} />
-      </Button>
+      <div className='absolute top-0 right-0 flex items-center gap-2'>
+        {quantity > 0 && (
+          <Button
+            variant='ghost'
+            className='hover:bg-white/10'
+            onClick={() => onQuantityChange(quantity - 1)}>
+            <Minus color='var(--foreground)' size={18} />
+          </Button>
+        )}
+        {quantity > 0 && <span className='font-input-mono'>{quantity}</span>}
+        <Button
+          variant='green'
+          className='w-[67px] rounded-l-none rounded-br-none'
+          onClick={() => onQuantityChange(quantity + 1)}>
+          <Plus color='var(--foreground)' size={18} />
+        </Button>
+      </div>
     </div>
   )
 }

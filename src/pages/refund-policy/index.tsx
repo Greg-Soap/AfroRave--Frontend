@@ -1,3 +1,5 @@
+import { EmptyPage } from '../about-us'
+
 export default function RefundPolicyPage() {
-  return <p>Refund Policy Page</p>;
+  return <EmptyPage />
 }

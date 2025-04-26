@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { LoadingFallback } from '../components/loading-fallback'
+import { getRoutePath } from './get-route-path'
 
 const LandingPage = lazy(() => import('../pages/landing-page'))
 const EventsPage = lazy(() => import('../pages/event-page'))
@@ -24,7 +25,7 @@ const PrivacyPolicyPage = lazy(() => import('../pages/privacy-policy'))
 
 export const routes: RouteObject[] = [
   {
-    path: '/',
+    path: getRoutePath('home'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <LandingPage />
@@ -32,7 +33,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/events',
+    path: getRoutePath('events'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <EventsPage />
@@ -40,7 +41,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/events/:eventId',
+    path: getRoutePath('individual_event', { eventId: ':eventId' }),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualEventPage />
@@ -48,7 +49,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/resell',
+    path: getRoutePath('resell'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ResellPage />
@@ -56,7 +57,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/about-us',
+    path: getRoutePath('about_us'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <AboutUsPage />
@@ -64,7 +65,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/blog',
+    path: getRoutePath('blog'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <BlogPage />
@@ -72,7 +73,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/creators',
+    path: getRoutePath('creators'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <CreatorsPage />
@@ -80,7 +81,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/faq',
+    path: getRoutePath('faq'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <FaqPage />
@@ -88,7 +89,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/refund-policy',
+    path: getRoutePath('refund_policy'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <RefundPolicyPage />
@@ -96,7 +97,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/work-with-us',
+    path: getRoutePath('work_with_us'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <WorkWithUsPage />
@@ -104,7 +105,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/support',
+    path: getRoutePath('support'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <SupportPage />
@@ -112,7 +113,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/resale',
+    path: getRoutePath('resale'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ResaleMarketPlacePage />
@@ -120,7 +121,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/resale/:eventId',
+    path: getRoutePath('individual_resale', { eventId: ':eventId' }),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualResaleTicket />
@@ -128,7 +129,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/sell',
+    path: getRoutePath('sell'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <SellPage />
@@ -136,7 +137,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/terms-and-conditions',
+    path: getRoutePath('terms_and_conditions'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <TermsAndConditionPage />
@@ -144,7 +145,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '/privacy-policy',
+    path: getRoutePath('privacy_policy'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <PrivacyPolicyPage />

@@ -1,3 +1,5 @@
+import { EmptyPage } from '../about-us'
+
 export default function CreatorsPage() {
-  return <p>Creators Page</p>;
+  return <EmptyPage />
 }

@@ -1,3 +1,23 @@
+/**
+ * A reusable dropdown menu component built on top of shadcn/ui DropdownMenu.
+ * Supports navigation links, click actions, icons, and custom positioning.
+ * Automatically handles route changes and cleanup.
+ *
+ * @example
+ * ```tsx
+ * <BaseDropdown
+ *   trigger={<Button>Menu</Button>}
+ *   items={[
+ *     { label: 'Profile', to: '/profile', icon: <UserIcon /> },
+ *     { label: 'Settings', onClick: () => handleSettings(), icon: <SettingsIcon /> },
+ *     { label: 'Logout', onClick: () => handleLogout(), icon: <LogoutIcon /> }
+ *   ]}
+ *   align="end"
+ *   side="bottom"
+ *   header={<UserInfo />}
+ * />
+ * ```
+ */
 'use client'
 
 import { type ReactNode, useEffect, useState } from 'react'
@@ -10,18 +30,28 @@ import {
 import { Link } from 'react-router-dom'
 
 interface DropdownItemProps {
+  /** Optional route path for navigation items */
   to?: string
+  /** Click handler for action items */
   onClick?: () => void
+  /** Optional icon to display before the label */
   icon?: ReactNode
+  /** Display text for the menu item */
   label: string
 }
 
 interface CustomDropdownProps {
+  /** The trigger element that opens the dropdown (usually a button) */
   trigger: ReactNode
+  /** Array of menu items to display */
   items: DropdownItemProps[]
+  /** Additional CSS classes for the dropdown content */
   className?: string
+  /** Horizontal alignment of the dropdown relative to the trigger */
   align?: 'start' | 'center' | 'end'
+  /** Position of the dropdown relative to the trigger */
   side?: 'top' | 'right' | 'bottom' | 'left'
+  /** Optional header content to display above the menu items */
   header?: ReactNode
 }
 

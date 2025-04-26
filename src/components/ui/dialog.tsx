@@ -67,7 +67,7 @@ const DialogContent = React.forwardRef<
             floatingCancel ? 'absolute top-10 right-10' : 'w-full flex justify-end px-10 pt-6',
           )}
           onClick={(e) => e.stopPropagation()}>
-          <X className='h-6 w-6 text-red-600' />
+          <X className='h-10 w-10 cursor-pointer' />
           <span className='sr-only'>Close</span>
         </DialogPrimitive.Close>
       )}
