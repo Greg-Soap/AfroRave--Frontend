@@ -1,22 +1,20 @@
-import Footer from "@/components/footer";
-import Header from "@/components/header";
-import { Outlet } from "react-router-dom";
-import UserLogin from "@/pages/auth/user-login";
-import { AuthProvider } from "@/contexts/auth-context";
-import SignupModal from "@/pages/auth/sign-up";
+import { Outlet } from 'react-router-dom'
+import { AuthProvider } from '@/contexts/auth-context'
+import Header from './header'
+import Footer from './footer'
+import { AuthModal } from '@/components/auth/auth-modal'
 
 export default function IndexLayout() {
   return (
     <AuthProvider>
       <Header />
-      <UserLogin />
-      <SignupModal />
+      <AuthModal />
 
-      <main className="w-full flex flex-col items-center">
+      <main className='w-full flex flex-col items-center'>
         <Outlet />
       </main>
 
       <Footer />
     </AuthProvider>
-  );
+  )
 }

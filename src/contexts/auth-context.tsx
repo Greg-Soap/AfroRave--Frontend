@@ -1,50 +1,63 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+type AuthType = 'login' | 'signup'
 type LoginType = 'guest' | 'creator' | 'vendor'
 
 interface AuthContextType {
-  isLoginModalOpen: boolean
+  isAuthModalOpen: boolean
+  authType: AuthType
   loginType: LoginType
-  openLoginModal: (type?: LoginType) => void
-  closeLoginModal: () => void
+  openAuthModal: (type: AuthType, loginType?: LoginType) => void
+  closeAuthModal: () => void
+  switchAuthType: (type: AuthType) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [authType, setAuthType] = useState<AuthType>('login')
   const [loginType, setLoginType] = useState<LoginType>('guest')
   const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
     const loginParam = searchParams.get('login')
+    const signupParam = searchParams.get('signup')
+
     if (loginParam === 'guest' || loginParam === 'creator' || loginParam === 'vendor') {
       setLoginType(loginParam)
-      setIsLoginModalOpen(true)
+      setAuthType('login')
+      setIsAuthModalOpen(true)
     } else if (loginParam === 'true') {
-      setIsLoginModalOpen(true)
+      setAuthType('login')
+      setIsAuthModalOpen(true)
+    } else if (signupParam === 'true') {
+      setAuthType('signup')
+      setIsAuthModalOpen(true)
     }
   }, [searchParams])
 
-  const openLoginModal = useCallback(
-    (type?: LoginType) => {
-      if (type) {
-        setLoginType(type)
-        setSearchParams({ login: type })
+  const openAuthModal = useCallback(
+    (type: AuthType, loginType?: LoginType) => {
+      setAuthType(type)
+      if (loginType) {
+        setLoginType(loginType)
+        setSearchParams({ [type]: loginType })
       } else {
-        setSearchParams({ login: 'true' })
+        setSearchParams({ [type]: 'true' })
       }
-      setIsLoginModalOpen(true)
+      setIsAuthModalOpen(true)
     },
     [setSearchParams],
   )
 
-  const closeLoginModal = useCallback(() => {
-    setIsLoginModalOpen(false)
+  const closeAuthModal = useCallback(() => {
+    setIsAuthModalOpen(false)
     setSearchParams(
       (params) => {
         params.delete('login')
+        params.delete('signup')
         params.delete('auth')
         return params
       },
@@ -52,13 +65,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     )
   }, [setSearchParams])
 
+  const switchAuthType = useCallback(
+    (type: AuthType) => {
+      setAuthType(type)
+      setSearchParams({ [type]: 'true' })
+    },
+    [setSearchParams],
+  )
+
   return (
     <AuthContext.Provider
       value={{
-        isLoginModalOpen,
+        isAuthModalOpen,
+        authType,
         loginType,
-        openLoginModal,
-        closeLoginModal,
+        openAuthModal,
+        closeAuthModal,
+        switchAuthType,
       }}>
       {children}
     </AuthContext.Provider>

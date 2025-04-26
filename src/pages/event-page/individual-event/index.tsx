@@ -1,7 +1,7 @@
 import { events } from '@/data/events'
 import { useParams } from 'react-router-dom'
 import EventDetails from './event-details'
-import { SEO } from '../../components/seo'
+import { SEO } from '@/components/seo'
 
 export default function IndividualEventPage() {
   const { eventId } = useParams()
