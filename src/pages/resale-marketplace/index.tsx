@@ -1,18 +1,19 @@
-import { BaseSelect } from "@/components/reusable";
-import { date_list } from "@/components/constants";
-import { events, type IEvents } from "@/data/events";
-import { Link } from "react-router-dom";
-import { SEO } from "@/components/seo";
+import { BaseSelect } from '@/components/reusable'
+import { date_list } from '@/components/constants'
+import { events, type IEvents } from '@/data/events'
+import { Link } from 'react-router-dom'
+import { SEO } from '@/components/seo'
+import { getRoutePath } from '@/config/get-route-path'
 
 export default function ResaleMarketPlacePage() {
   return (
     <>
       <SEO
-        title="Afro Revive - African Concert Tickets & Events"
-        description="Buy tickets for the hottest African concerts and events. Secure your spot for live performances by top African artists and experience authentic African entertainment."
+        title='Afro Revive - African Concert Tickets & Events'
+        description='Buy tickets for the hottest African concerts and events. Secure your spot for live performances by top African artists and experience authentic African entertainment.'
       />
 
-      <section className="flex flex-col gap-[100px] px-[169px] mt-[161px] pb-20">
+      <section className='flex flex-col gap-[100px] px-[169px] mt-[161px] pb-20'>
         <BaseSelect
           width={165}
           placeholder={date_list.placeholder}
@@ -20,14 +21,14 @@ export default function ResaleMarketPlacePage() {
           items={date_list.items}
         />
 
-        <div className="grid grid-cols-2 gap-x-[165px] gap-y-[67px]">
+        <div className='grid grid-cols-2 gap-x-[165px] gap-y-[67px]'>
           {events.map((item) => (
             <ResaleMarketPlaceTicketCard key={item.event_name} {...item} />
           ))}
         </div>
       </section>
     </>
-  );
+  )
 }
 
 function ResaleMarketPlaceTicketCard({
@@ -39,30 +40,28 @@ function ResaleMarketPlaceTicketCard({
   event_time,
 }: IEvents) {
   return (
-    <Link to={`/resale/${id}`} className="flex items-center gap-5">
+    <Link
+      to={getRoutePath('individual_resale', { eventId: id })}
+      className='flex items-center gap-5'>
       <img
         src={image}
         alt={event_name}
         width={200}
         height={173}
-        className="opacity-80 rounded-[4px]"
+        className='opacity-80 rounded-[4px]'
       />
 
-      <div className="flex flex-col">
-        <p className="font-phosphate uppercase text-xl mb-3 leading-normal">
-          {event_name}
-        </p>
-        <p className="font-sf-pro-display text-xs opcaity-70 font-medium mb-[11px]">
+      <div className='flex flex-col'>
+        <p className='font-phosphate uppercase text-xl mb-3 leading-normal'>{event_name}</p>
+        <p className='font-sf-pro-display text-xs opcaity-70 font-medium mb-[11px]'>
           {event_date} {event_time.start_time}
         </p>
-        <p className="font-sf-pro-display text-xs font-medium mb-[11px]">
-          {event_location}
-        </p>
-        <div className="flex items-center gap-5 font-input-mono text-xs">
+        <p className='font-sf-pro-display text-xs font-medium mb-[11px]'>{event_location}</p>
+        <div className='flex items-center gap-5 font-input-mono text-xs'>
           <p>STATUS:</p>
-          <span className="text-[#4CDA0A]">AVAILABLE</span>
+          <span className='text-[#4CDA0A]'>AVAILABLE</span>
         </div>
       </div>
     </Link>
-  );
+  )
 }

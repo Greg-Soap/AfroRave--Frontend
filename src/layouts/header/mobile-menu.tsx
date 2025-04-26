@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-
+import { getRoutePath } from '@/config/get-route-path'
 const menuLinks = [
-  { href: '/event', name: 'Discover' },
-  { href: '/sell', name: 'Sale' },
-  { href: '/blog', name: 'Blog' },
-  { href: '/creators', name: 'Creators' },
-  { href: '/support', name: 'Support' },
-  { href: '/faq', name: 'FAQ' },
+  { href: getRoutePath('events'), name: 'Discover' },
+  { href: getRoutePath('resale'), name: 'Resale' },
+  { href: getRoutePath('blog'), name: 'Blog' },
+  { href: getRoutePath('creators'), name: 'Creators' },
+  { href: getRoutePath('support'), name: 'Support' },
+  { href: getRoutePath('faq'), name: 'FAQ' },
 ]
 
 const socials = [

@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { FormField } from '@/components/reusable'
 import { FormBase } from '@/components/reusable'
 import { Input } from '@/components/ui/input'
+import { getRoutePath } from '@/config/get-route-path'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Provide a valid email address' }),
@@ -27,13 +28,15 @@ export default function Footer() {
         <NewsLetterForm />
 
         <div className='w-full flex max-md:flex-col md:items-center gap-2.5 md:h-5'>
-          <Link to='/privacy-policy' className='font-semilight hover:underline'>
+          <Link to={getRoutePath('privacy_policy')} className='font-semilight hover:underline'>
             Privacy Policy
           </Link>
 
           <Separator orientation='vertical' className='h-full bg-white max-md:hidden' />
 
-          <Link to='/terms-and-conditions' className='font-semilight hover:underline'>
+          <Link
+            to={getRoutePath('terms_and_conditions')}
+            className='font-semilight hover:underline'>
             Terms and Conditions
           </Link>
         </div>
@@ -113,19 +116,19 @@ const footer_links: IFooterLinks[] = [
   {
     title: 'Company',
     links: [
-      { href: '/about-us', name: 'About Us' },
-      { href: '/blog', name: 'Blog' },
-      { href: '/creators', name: 'Creators' },
-      { href: '/work-with-us', name: 'Work With Us' },
+      { href: getRoutePath('about_us'), name: 'About Us' },
+      { href: getRoutePath('blog'), name: 'Blog' },
+      { href: getRoutePath('creators'), name: 'Creators' },
+      { href: getRoutePath('work_with_us'), name: 'Work With Us' },
     ],
   },
   {
     title: 'Helpful Links',
     links: [
-      { href: '/sell', name: 'Sell' },
-      { href: '/support', name: 'Support' },
-      { href: '/faq', name: 'FAQ' },
-      { href: '/refund-policy', name: 'Refund Policy' },
+      { href: getRoutePath('sell'), name: 'Sell' },
+      { href: getRoutePath('support'), name: 'Support' },
+      { href: getRoutePath('faq'), name: 'FAQ' },
+      { href: getRoutePath('refund_policy'), name: 'Refund Policy' },
     ],
   },
 ]
