@@ -10,7 +10,7 @@ export default function Socials() {
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 min-h-screen'>
           {social_posts.map((item, index) => (
             <Link
-              key={item.alt}
+              key={`${item.alt}-${index}`}
               to={item.href}
               className={clsx('w-full overflow-hidden block aspect-square', {
                 'md:col-span-2 md:row-span-2': index === 1 || index === 10,

@@ -33,7 +33,6 @@ export function EventLocation({
     geocodeLocation(event_location).then((coords) => {
       if (coords) {
         setPosition([coords.lat, coords.lon])
-        console.log(coords)
       }
     })
   }, [event_location])

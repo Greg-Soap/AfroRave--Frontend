@@ -36,7 +36,7 @@ const sizeClasses = {
   /** Large modal (864px max width) */
   large: 'sm:max-w-[864px]',
   /** Full height modal with vertical scrolling */
-  full: ' h-full sm:overflow-y-auto',
+  full: ' h-full sm:overflow-y-auto w-full max-w-full',
 }
 
 interface CustomModalProps {
@@ -101,7 +101,7 @@ function BaseModal({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={cn(
-          `sm:max-w-[425px] ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%]`,
+          ` ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%] sm:w-full`,
           className,
         )}
         noCancel={removeCancel}
@@ -125,7 +125,7 @@ function BaseModal({
 
         {children}
 
-        {hasFooter && <div className='mt-auto pt-4'>{footerContent}</div>}
+        {hasFooter && <div className='mt-auto pt-4 ml-auto'>{footerContent}</div>}
       </DialogContent>
     </Dialog>
   )
