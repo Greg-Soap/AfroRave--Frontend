@@ -1,31 +1,15 @@
 @font-face {
   font-family: "SF Pro Display";
-  src: url("/fonts/sf-pro-display/SFPRODISPLAYREGULAR.OTF") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/fonts/sf-pro-display/SFPRODISPLAYMEDIUM.OTF") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/fonts/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/fonts/sf-pro-display/SFPRODISPLAYLIGHTITALIC.OTF")
+  src: url("/fonts/sf-pro-display/SF-Pro-Display-Ultralight.otf")
     format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/sf-pro-display/SF-Pro-Display-Light.otf") format("opentype");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -33,7 +17,24 @@
 
 @font-face {
   font-family: "SF Pro Display";
-  src: url("/fonts/sf-pro-display/SFPRODISPLAYSEMIBOLDITALIC.OTF")
+  src: url("/fonts/sf-pro-display/SF-Pro-Display-Regular.otf")
+    format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/sf-pro-display/SF-Pro-Display-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/fonts/sf-pro-display/SF-Pro-Display-Semibold.otf")
     format("opentype");
   font-weight: 600;
   font-style: italic;
@@ -42,10 +43,9 @@
 
 @font-face {
   font-family: "SF Pro Display";
-  src: url("/fonts/sf-pro-display/SFPRODISPLAYULTRALIGHTITALIC.OTF")
-    format("opentype");
-  font-weight: 200;
-  font-style: italic;
+  src: url("/fonts/sf-pro-display/SF-Pro-Display-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -70,8 +70,18 @@
 
 @font-face {
   font-family: "SF Compact Text";
-  src: url("/fonts/sf-compact-text/SF-Compact-Text-Bold.otf") format("opentype");
+  src: url("/fonts/sf-compact-text/SF-Compact-Text-Medium.otf")
+    format("opentype");
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Compact Text";
+  src: url("/fonts/sf-compact-text/SF-Compact-Text-Semibold.otf")
+    format("opentype");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
@@ -85,6 +95,23 @@
 }
 
 /* SF Pro Rounded */
+@font-face {
+  font-family: "SF Pro Rounded";
+  src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Ultralight.otf")
+    format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "SF Pro Rounded";
   src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Regular.otf")
@@ -104,6 +131,15 @@
 
 @font-face {
   font-family: "SF Pro Rounded";
+  src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Semibold.otf")
+    format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
   src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
@@ -111,6 +147,14 @@
 }
 
 /* SF Mono */
+@font-face {
+  font-family: "SF Mono";
+  src: url("/fonts/sf-mono/SFMono-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "SF Mono";
   src: url("/fonts/sf-mono/SF-Mono-Regular.otf") format("opentype");
@@ -129,6 +173,14 @@
 
 @font-face {
   font-family: "SF Mono";
+  src: url("/fonts/sf-mono/SF-Mono-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Mono";
   src: url("/fonts/sf-mono/SFMonoBold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
@@ -138,8 +190,8 @@
 /* SF Pro Text */
 @font-face {
   font-family: "SF Pro Text";
-  src: url("/fonts/sf-pro-text/SFProText-Regular.otf") format("opentype");
-  font-weight: 400;
+  src: url("/fonts/sf-pro-text/SFPro-Light.ttf") format("opentype");
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
@@ -162,12 +214,21 @@
 
 @font-face {
   font-family: "SF Pro Text";
+  src: url("/fonts/sf-pro-text/SFPro-Semibold.ttf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
   src: url("/fonts/sf-pro-text/SF-Pro-Text-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
+/** Phospahte Inline */
 @font-face {
   font-family: "PhosphateInline";
   src: url("/fonts/phosphate/PhosphateInline.ttf") format("truetype");
