@@ -14,13 +14,17 @@
  * />
  * ```
  */
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface IPopoverProps {
   /** The trigger element that opens the popover (usually a button) */
-  trigger: React.ReactNode
+  trigger: React.ReactNode;
   /** The content to display in the popover */
-  content: React.ReactNode
+  content: React.ReactNode;
 }
 
 /**
@@ -31,9 +35,9 @@ export function BasePopover({ trigger, content }: IPopoverProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent className='max-w-fit border-none flex flex-col bg-[#686868] p-0'>
+      <PopoverContent className="max-w-fit border-none flex flex-col bg-medium-gray p-0">
         {content}
       </PopoverContent>
     </Popover>
-  )
+  );
 }

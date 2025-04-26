@@ -1,4 +1,5 @@
 import type { ICustomSelectProps } from "./reusable/base-select";
+import { getRoutePath } from "@/config/get-route-path";
 
 export const date_list: ICustomSelectProps = {
   defaultValue: "jan",
@@ -18,3 +19,21 @@ export const date_list: ICustomSelectProps = {
     { value: "dec", label: "December" },
   ],
 };
+
+export const account_links: { link: string; icon: string; name: string }[] = [
+  {
+    link: getRoutePath("profile"),
+    icon: "/assets/harmburger/round-user.png",
+    name: "Account",
+  },
+  {
+    link: getRoutePath("my_tickets"),
+    icon: "/assets/harmburger/ticket.png",
+    name: "My Tickets",
+  },
+  {
+    link: getRoutePath("listed_tickets"),
+    icon: "/assets/harmburger/ticket.png",
+    name: "Listed Tickets",
+  },
+];

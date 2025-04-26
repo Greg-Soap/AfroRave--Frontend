@@ -17,8 +17,8 @@
  * </BaseModal>
  * ```
  */
-import type { ReactNode } from 'react'
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import type { ReactNode } from "react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   Dialog,
   DialogTrigger,
@@ -26,48 +26,48 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '../ui/dialog'
-import { cn } from '@/lib/utils'
+} from "../ui/dialog";
+import { cn } from "@/lib/utils";
 
 /** Available modal size options */
 const sizeClasses = {
   /** Small modal (415px max width) */
-  small: 'sm:max-w-[415px]',
+  small: "sm:max-w-[415px]",
   /** Large modal (864px max width) */
-  large: 'sm:max-w-[864px]',
+  large: "sm:max-w-[864px]",
   /** Full height modal with vertical scrolling */
-  full: ' h-full sm:overflow-y-auto w-full max-w-full',
-}
+  full: " h-full sm:overflow-y-auto w-full max-w-full",
+};
 
 interface CustomModalProps {
   /** Trigger element that opens the modal (usually a button) */
-  trigger?: ReactNode
+  trigger?: ReactNode;
   /** Modal title (visually hidden by default) */
-  title?: string
+  title?: string;
   /** Modal description (visually hidden by default) */
-  description?: string
+  description?: string;
   /** Modal content */
-  children: ReactNode
+  children: ReactNode;
   /** Additional CSS classes for the modal */
-  className?: string
+  className?: string;
   /** Controlled open state */
-  open?: boolean
+  open?: boolean;
   /** Callback when modal closes */
-  onClose?: (open: boolean) => void
+  onClose?: (open: boolean) => void;
   /** Modal size variant */
-  size?: keyof typeof sizeClasses
+  size?: keyof typeof sizeClasses;
   /** Whether to remove the default cancel button */
-  removeCancel?: boolean
+  removeCancel?: boolean;
   /** Whether to show a floating cancel button */
-  floatingCancel?: boolean
+  floatingCancel?: boolean;
   /** Whether to show the footer section */
-  hasFooter?: boolean
+  hasFooter?: boolean;
   /** Footer content (usually buttons) */
-  footerContent?: ReactNode
+  footerContent?: ReactNode;
   /** Whether to disable closing on overlay click */
-  disableOverlayClick?: boolean
+  disableOverlayClick?: boolean;
   /** Whether to cancel on overlay click */
-  cancelOnOverlay?: boolean
+  cancelOnOverlay?: boolean;
 }
 
 /**
@@ -81,7 +81,7 @@ function BaseModal({
   children,
   open,
   onClose,
-  size = 'small',
+  size = "small",
   removeCancel = false,
   floatingCancel = false,
   hasFooter = false,
@@ -95,40 +95,47 @@ function BaseModal({
       open={open}
       onOpenChange={(open) => {
         if (!open) {
-          onClose?.(open)
+          onClose?.(open);
         }
-      }}>
+      }}
+    >
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={cn(
           ` ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%] sm:w-full`,
-          className,
+          className
         )}
         noCancel={removeCancel}
         floatingCancel={floatingCancel}
         onClick={(e) => e.stopPropagation()}
         onInteractOutside={(e) => {
           if (disableOverlayClick) {
-            e.preventDefault()
+            e.preventDefault();
           }
         }}
-        cancelOnOverlay={cancelOnOverlay}>
+        cancelOnOverlay={cancelOnOverlay}
+      >
         <DialogHeader
-          className={cn('w-full flex flex-col items-center justify-center font-input-mono')}>
+          className={cn(
+            "w-full flex flex-col items-center justify-center font-input-mono"
+          )}
+        >
           <VisuallyHidden>
-            <DialogTitle>{title || 'Modal Dialog'}</DialogTitle>
+            <DialogTitle>{title || "Modal Dialog"}</DialogTitle>
           </VisuallyHidden>
           <DialogDescription>
             {description || <VisuallyHidden>Modal content</VisuallyHidden>}
           </DialogDescription>
         </DialogHeader>
 
-        {children}
+        <div className="flex flex-col">{children}</div>
 
-        {hasFooter && <div className='mt-auto pt-4 ml-auto'>{footerContent}</div>}
+        {hasFooter && (
+          <div className="mt-auto pt-4 ml-auto">{footerContent}</div>
+        )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-export default BaseModal
+export default BaseModal;

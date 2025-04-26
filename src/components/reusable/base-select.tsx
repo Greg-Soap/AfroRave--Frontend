@@ -25,39 +25,39 @@ import {
   SelectValue,
   SelectGroup,
   SelectLabel,
-} from '@/components/ui/select'
-import { cn } from '@/lib/utils'
-import type * as React from 'react'
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import type * as React from "react";
 
 export interface ICustomSelectProps {
   /** Select type variant (affects styling) */
-  type?: 'auth' | 'others'
+  type?: "auth" | "others";
   /** Minimum width of the select trigger in pixels */
-  width?: number
+  width?: number;
   /** Default selected value */
-  defaultValue?: string
+  defaultValue?: string;
   /** Placeholder text when no value is selected */
-  placeholder: string
+  placeholder: string;
   /** Array of selectable items */
-  items: { value: string; label: string }[]
+  items: { value: string; label: string }[];
   /** Controlled selected value */
-  value?: string
+  value?: string;
   /** Callback when selection changes */
-  onChange?: (value: string) => void
+  onChange?: (value: string) => void;
   /** Custom renderer for the selected item */
-  selectedItemRenderer?: (value: string) => React.ReactNode
+  selectedItemRenderer?: (value: string) => React.ReactNode;
   /** Custom options to replace default items */
-  customOptions?: React.ReactNode
+  customOptions?: React.ReactNode;
   /** Label text for the select group */
-  label?: string
+  label?: string;
   /** Whether to show loading state */
-  isLoading?: boolean
+  isLoading?: boolean;
   /** Additional CSS classes for the trigger element */
-  triggerClassName?: string
+  triggerClassName?: string;
   /** Additional CSS classes for the content element */
-  contentClassName?: string
+  contentClassName?: string;
   /** Additional CSS classes for the item elements */
-  itemClassName?: string
+  itemClassName?: string;
 }
 
 /**
@@ -65,7 +65,7 @@ export interface ICustomSelectProps {
  * Supports different styling variants, loading states, and custom content rendering.
  */
 export function BaseSelect({
-  type = 'others',
+  type = "others",
   width = 165,
   defaultValue,
   placeholder,
@@ -81,8 +81,11 @@ export function BaseSelect({
   itemClassName,
 }: ICustomSelectProps) {
   const safeItems = Array.isArray(items)
-    ? items.filter((item) => item && typeof item === 'object' && 'value' in item && 'label' in item)
-    : []
+    ? items.filter(
+        (item) =>
+          item && typeof item === "object" && "value" in item && "label" in item
+      )
+    : [];
 
   if (isLoading) {
     return (
@@ -90,14 +93,15 @@ export function BaseSelect({
         className={cn(
           `!min-w-[${width}px] border bg-transparent animate-pulse`,
           {
-            'border-[#1E1E1E] w-full h-[35px] font-sf-pro-text rounded-[4px] text-black':
-              type === 'auth',
-            'border-white h-[50px] font-input-mono rounded-[3px]': type === 'others',
+            "border-charcoal w-full h-[35px] font-sf-pro-text rounded-[4px] text-black":
+              type === "auth",
+            "border-white h-[50px] font-input-mono rounded-[3px]":
+              type === "others",
           },
-          triggerClassName,
+          triggerClassName
         )}
       />
-    )
+    );
   }
 
   return (
@@ -106,50 +110,54 @@ export function BaseSelect({
         className={cn(
           `!min-w-[${width}px] border bg-transparent`,
           {
-            'border-[#1E1E1E] w-full h-[35px] font-sf-pro-text rounded-[4px] text-black':
-              type === 'auth',
-            'border-white h-[50px] data-[state=open]:bg-[#494747] data-[state=open]:border-none font-input-mono rounded-[3px]':
-              type === 'others',
+            "border-charcoal w-full h-[35px] font-sf-pro-text rounded-[4px] text-black":
+              type === "auth",
+            "border-white h-[50px] data-[state=open]:bg-smoky-gray data-[state=open]:border-none font-input-mono rounded-[3px]":
+              type === "others",
           },
-          triggerClassName,
-        )}>
+          triggerClassName
+        )}
+      >
         {selectedItemRenderer ? (
           <SelectValue
             placeholder={placeholder}
-            className={cn('leading-normal', {
-              'font-light font-input-mono': type === 'others',
-              'font-normal font-sf-pro-text': type === 'auth',
-            })}>
+            className={cn("leading-normal", {
+              "font-light font-input-mono": type === "others",
+              "font-normal font-sf-pro-text": type === "auth",
+            })}
+          >
             {value && selectedItemRenderer(value)}
           </SelectValue>
         ) : (
           <SelectValue
             placeholder={placeholder}
-            className={cn('leading-normal', {
-              'font-light font-input-mono': type === 'others',
-              'font-normal font-sf-pro-text': type === 'auth',
+            className={cn("leading-normal", {
+              "font-light font-input-mono": type === "others",
+              "font-normal font-sf-pro-text": type === "auth",
             })}
           />
         )}
       </SelectTrigger>
       <SelectContent
         className={cn(
-          'flex flex-col',
+          "flex flex-col",
           {
-            'bg-[#494747] border-none': type === 'others',
-            'border-[#1E1E1E]': type === 'auth',
+            "bg-smoky-gray border-none": type === "others",
+            "border-charcoal": type === "auth",
           },
-          contentClassName,
+          contentClassName
         )}
-        position='popper'
-        sideOffset={5}>
+        position="popper"
+        sideOffset={5}
+      >
         <SelectGroup>
           {label && (
             <SelectLabel
-              className={cn('text-sm', {
-                'text-white': type === 'others',
-                'text-black': type === 'auth',
-              })}>
+              className={cn("text-sm", {
+                "text-white": type === "others",
+                "text-black": type === "auth",
+              })}
+            >
               {label}
             </SelectLabel>
           )}
@@ -160,20 +168,21 @@ export function BaseSelect({
                   key={item.value}
                   value={item.value}
                   className={cn(
-                    'border-b last:border-none rounded-none',
+                    "border-b last:border-none rounded-none",
                     {
-                      'font-input-mono font-light text-white hover:!text-white hover:!bg-white/10 data-[highlighted]:!bg-white/20 data-[highlighted]:!text-white border-white':
-                        type === 'others',
-                      'font-sf-pro-text text-black hover:!text-black hover:!bg-black/10 data-[highlighted]:!bg-black/20 data-[highlighted]:!black-white border-black':
-                        type === 'auth',
+                      "font-input-mono font-light text-white hover:!text-white hover:!bg-white/10 data-[highlighted]:!bg-white/20 data-[highlighted]:!text-white border-white":
+                        type === "others",
+                      "font-sf-pro-text text-black hover:!text-black hover:!bg-black/10 data-[highlighted]:!bg-black/20 data-[highlighted]:!black-white border-black":
+                        type === "auth",
                     },
-                    itemClassName,
-                  )}>
+                    itemClassName
+                  )}
+                >
                   {item.label}
                 </SelectItem>
               ))}
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }

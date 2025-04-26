@@ -52,7 +52,16 @@
 /* SF Compact Text */
 @font-face {
   font-family: "SF Compact Text";
-  src: url("/fonts/sf-compact-text/SFCompactText-Regular.otf")
+  src: url("/fonts/sf-compact-text/SF-Compact-Text-Light.otf")
+    format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Compact Text";
+  src: url("/fonts/sf-compact-text/SF-Compact-Text-Regular.otf")
     format("opentype");
   font-weight: 400;
   font-style: normal;
@@ -61,7 +70,7 @@
 
 @font-face {
   font-family: "SF Compact Text";
-  src: url("/fonts/sf-compact-text/SFCompactText-Medium.otf") format("opentype");
+  src: url("/fonts/sf-compact-text/SF-Compact-Text-Bold.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -69,7 +78,7 @@
 
 @font-face {
   font-family: "SF Compact Text";
-  src: url("/fonts/sf-compact-text/SFCompactText-Bold.otf") format("opentype");
+  src: url("/fonts/sf-compact-text/SF-Compact-Text-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -78,7 +87,7 @@
 /* SF Pro Rounded */
 @font-face {
   font-family: "SF Pro Rounded";
-  src: url("/fonts/sf-pro-display/SF-Pro-Rounded-Regular.otf")
+  src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Regular.otf")
     format("opentype");
   font-weight: 400;
   font-style: normal;
@@ -87,7 +96,7 @@
 
 @font-face {
   font-family: "SF Pro Rounded";
-  src: url("/fonts/sf-pro-display/SF-Pro-Rounded-Medium.otf") format("opentype");
+  src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -95,7 +104,7 @@
 
 @font-face {
   font-family: "SF Pro Rounded";
-  src: url("/fonts/sf-pro-display/SF-Pro-Rounded-Bold.otf") format("opentype");
+  src: url("/fonts/sf-pro-rounded/SF-Pro-Rounded-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -104,7 +113,7 @@
 /* SF Mono */
 @font-face {
   font-family: "SF Mono";
-  src: url("/fonts/sf-mono/SFMono-Regular.otf") format("opentype");
+  src: url("/fonts/sf-mono/SF-Mono-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -112,7 +121,7 @@
 
 @font-face {
   font-family: "SF Mono";
-  src: url("/fonts/sf-mono/SFMono-Medium.otf") format("opentype");
+  src: url("/fonts/sf-mono/SF-Mono-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -120,7 +129,7 @@
 
 @font-face {
   font-family: "SF Mono";
-  src: url("/fonts/sf-mono/SFMono-Bold.otf") format("opentype");
+  src: url("/fonts/sf-mono/SFMonoBold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -137,7 +146,15 @@
 
 @font-face {
   font-family: "SF Pro Text";
-  src: url("/fonts/sf-pro-text/SFProText-Medium.otf") format("opentype");
+  src: url("/fonts/sf-pro-text/SF-Pro-Text-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/fonts/sf-pro-text/SF-Pro-Text-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -145,7 +162,7 @@
 
 @font-face {
   font-family: "SF Pro Text";
-  src: url("/fonts/sf-pro-text/SFProText-Bold.otf") format("opentype");
+  src: url("/fonts/sf-pro-text/SF-Pro-Text-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

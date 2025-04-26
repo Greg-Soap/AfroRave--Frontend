@@ -1,31 +1,35 @@
-import { lazy, Suspense } from 'react'
-import type { RouteObject } from 'react-router-dom'
-import { LoadingFallback } from '../components/loading-fallback'
-import { getRoutePath } from './get-route-path'
+import { lazy, Suspense } from "react";
+import type { RouteObject } from "react-router-dom";
+import { LoadingFallback } from "../components/loading-fallback";
+import { getRoutePath } from "./get-route-path";
 
-const LandingPage = lazy(() => import('../pages/landing-page'))
-const EventsPage = lazy(() => import('../pages/event-page'))
-const IndividualEventPage = lazy(() => import('../pages/event-page/individual-event'))
-const ResellPage = lazy(() => import('../pages/resell-page'))
-const NotFoundPage = lazy(() => import('../pages/not-found'))
-const AboutUsPage = lazy(() => import('../pages/about-us'))
-const BlogPage = lazy(() => import('../pages/blog'))
-const CreatorsPage = lazy(() => import('../pages/creators'))
-const FaqPage = lazy(() => import('../pages/faq'))
-const RefundPolicyPage = lazy(() => import('../pages/refund-policy'))
-const WorkWithUsPage = lazy(() => import('../pages/work-with-us'))
-const SupportPage = lazy(() => import('../pages/support'))
-const ResaleMarketPlacePage = lazy(() => import('../pages/resale-marketplace'))
+const LandingPage = lazy(() => import("../pages/landing-page"));
+const EventsPage = lazy(() => import("../pages/event-page"));
+const IndividualEventPage = lazy(
+  () => import("../pages/event-page/individual-event")
+);
+const ResellPage = lazy(() => import("../pages/resell-page"));
+const NotFoundPage = lazy(() => import("../pages/not-found"));
+const AboutUsPage = lazy(() => import("../pages/about-us"));
+const BlogPage = lazy(() => import("../pages/blog"));
+const CreatorsPage = lazy(() => import("../pages/creators"));
+const FaqPage = lazy(() => import("../pages/faq"));
+const RefundPolicyPage = lazy(() => import("../pages/refund-policy"));
+const WorkWithUsPage = lazy(() => import("../pages/work-with-us"));
+const SupportPage = lazy(() => import("../pages/support"));
+const ResaleMarketPlacePage = lazy(() => import("../pages/resale-marketplace"));
 const IndividualResaleTicket = lazy(
-  () => import('../pages/resale-marketplace/individual-resale-event'),
-)
-const SellPage = lazy(() => import('../pages/sell'))
-const TermsAndConditionPage = lazy(() => import('../pages/terms-and-condition'))
-const PrivacyPolicyPage = lazy(() => import('../pages/privacy-policy'))
+  () => import("../pages/resale-marketplace/individual-resale-event")
+);
+const SellPage = lazy(() => import("../pages/sell"));
+const TermsAndConditionPage = lazy(
+  () => import("../pages/terms-and-condition")
+);
+const PrivacyPolicyPage = lazy(() => import("../pages/privacy-policy"));
 
 export const routes: RouteObject[] = [
   {
-    path: getRoutePath('home'),
+    path: getRoutePath("home"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <LandingPage />
@@ -33,7 +37,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('events'),
+    path: getRoutePath("events"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <EventsPage />
@@ -41,7 +45,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('individual_event', { eventId: ':eventId' }),
+    path: getRoutePath("individual_event", { eventId: ":eventId" }),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualEventPage />
@@ -49,7 +53,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('resell'),
+    path: getRoutePath("resell"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ResellPage />
@@ -57,7 +61,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('about_us'),
+    path: getRoutePath("about_us"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <AboutUsPage />
@@ -65,7 +69,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('blog'),
+    path: getRoutePath("blog"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <BlogPage />
@@ -73,7 +77,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('creators'),
+    path: getRoutePath("creators"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <CreatorsPage />
@@ -81,7 +85,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('faq'),
+    path: getRoutePath("faq"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <FaqPage />
@@ -89,7 +93,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('refund_policy'),
+    path: getRoutePath("refund_policy"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <RefundPolicyPage />
@@ -97,7 +101,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('work_with_us'),
+    path: getRoutePath("work_with_us"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <WorkWithUsPage />
@@ -105,7 +109,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('support'),
+    path: getRoutePath("support"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <SupportPage />
@@ -113,7 +117,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('resale'),
+    path: getRoutePath("resale"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ResaleMarketPlacePage />
@@ -121,7 +125,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('individual_resale', { eventId: ':eventId' }),
+    path: getRoutePath("individual_resale", { eventId: ":eventId" }),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualResaleTicket />
@@ -129,7 +133,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('sell'),
+    path: getRoutePath("sell"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <SellPage />
@@ -137,7 +141,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('terms_and_conditions'),
+    path: getRoutePath("terms_and_conditions"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <TermsAndConditionPage />
@@ -145,7 +149,7 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath('privacy_policy'),
+    path: getRoutePath("privacy_policy"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <PrivacyPolicyPage />
@@ -153,11 +157,11 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: '*',
+    path: "*",
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <NotFoundPage />
       </Suspense>
     ),
   },
-]
+];

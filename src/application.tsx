@@ -1,6 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import IndexLayout from './layouts/index-layout'
-import { routes } from './config/routes'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import IndexLayout from "./layouts/root-layout";
+import { routes } from "./config/routes";
+//import AccountLayout from "./layouts/account-layout";
 
 export default function Application() {
   return (
@@ -13,5 +14,5 @@ export default function Application() {
         </Route>
       </Routes>
     </Router>
-  )
+  );
 }
