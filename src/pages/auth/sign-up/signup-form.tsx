@@ -43,7 +43,7 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log('sign up values', values)
   }
 
   return (
@@ -68,12 +68,16 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
         </div>
 
         <FormField form={form} name='country' label='Country' className='w-full z-20'>
-          <BaseSelect
-            type='auth'
-            placeholder='Select a country.'
-            width={329}
-            items={africanCountries}
-          />
+          {(field) => (
+            <BaseSelect
+              type='auth'
+              placeholder='Select a country.'
+              width={329}
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
+              items={africanCountries}
+            />
+          )}
         </FormField>
 
         <FormField form={form} name='email' label='Email Address'>
