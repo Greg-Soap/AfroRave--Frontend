@@ -1,3 +1,20 @@
+/**
+ * A flexible carousel component that supports navigation, indicators, and custom content.
+ * Built on top of the shadcn/ui Carousel component with additional features.
+ *
+ * @example
+ * ```tsx
+ * <BaseCarousel
+ *   items={[
+ *     { id: '1', content: <div>Slide 1</div> },
+ *     { id: '2', content: <div>Slide 2</div> }
+ *   ]}
+ *   showIndicators={true}
+ *   showNavigation={true}
+ *   onSlideChange={(index) => console.log('Current slide:', index)}
+ * />
+ * ```
+ */
 import {
   Carousel,
   CarouselContent,
@@ -10,15 +27,24 @@ import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
 interface BaseCarouselProps {
+  /** Array of items to display in the carousel */
   items: {
+    /** Unique identifier for the item */
     id: string
+    /** React node to render as the carousel item content */
     content: React.ReactNode
   }[]
+  /** Whether to show the slide indicators */
   showIndicators?: boolean
+  /** Whether to show the navigation arrows */
   showNavigation?: boolean
+  /** Additional CSS classes for the carousel container */
   className?: string
+  /** Additional CSS classes for individual carousel items */
   itemClassName?: string
+  /** CSS position for the indicators (default: 'bottom-4') */
   indicatorsPosition?: string
+  /** Callback function triggered when the active slide changes */
   onSlideChange?: (index: number) => void
 }
 
