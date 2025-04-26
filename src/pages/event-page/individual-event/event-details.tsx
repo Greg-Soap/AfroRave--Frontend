@@ -8,7 +8,7 @@ import Cart from '../cart'
 
 export default function EventDetails({ event }: { event: IEvents }) {
   return (
-    <section className='max-w-[var(--max-width)] pb-16 w-full flex flex-col'>
+    <section className=' pb-16 w-full flex flex-col'>
       <div className='relative w-full flex flex-col'>
         <img
           src={event.thumbnail}

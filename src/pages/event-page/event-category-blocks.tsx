@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom'
 import { type IEvents, events } from '@/data/events'
 import { cn } from '@/lib/utils'
 import { date_list } from '@/components/constants'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 
 export default function EventCategoryBlocks() {
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedDate, setSelectedDate] = useState<string>('')
+
   return (
     <section className='w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-20 mt-36 pb-16'>
       <Suspense fallback={<CategoryBlockSkeleton />}>
@@ -16,16 +19,26 @@ export default function EventCategoryBlocks() {
       <div className='flex flex-col gap-10'>
         <div className='flex items-center gap-3 overflow-x-auto min-h-[40px]'>
           <BaseSelect
+            type='others'
             placeholder={category_list.placeholder}
-            defaultValue={category_list.placeholder}
             width={category_list.width}
             items={category_list.items}
+            value={selectedCategory}
+            onChange={(value) => {
+              setSelectedCategory(value)
+              console.log('Category changed:', value)
+            }}
           />
 
           <BaseSelect
+            type='others'
             placeholder={date_list.placeholder}
-            defaultValue={date_list.placeholder}
             items={date_list.items}
+            value={selectedDate}
+            onChange={(value) => {
+              setSelectedDate(value)
+              console.log('Date changed:', value)
+            }}
           />
         </div>
 
