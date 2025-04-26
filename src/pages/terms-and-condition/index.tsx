@@ -1,3 +1,5 @@
+import { EmptyPage } from '../about-us'
+
 export default function TermsAndConditionPage() {
-  return <p>Terms and Condition Page</p>;
+  return <EmptyPage />
 }

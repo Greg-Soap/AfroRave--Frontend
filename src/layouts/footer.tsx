@@ -33,7 +33,7 @@ export default function Footer() {
 
           <Separator orientation='vertical' className='h-full bg-white max-md:hidden' />
 
-          <Link to='/terms-and-condition' className='font-semilight hover:underline'>
+          <Link to='/terms-and-conditions' className='font-semilight hover:underline'>
             Terms and Conditions
           </Link>
         </div>

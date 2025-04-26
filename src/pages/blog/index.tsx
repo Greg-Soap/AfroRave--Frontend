@@ -1,3 +1,5 @@
+import { EmptyPage } from '../about-us'
+
 export default function BlogPage() {
-  return <p>Blog Page</p>;
+  return <EmptyPage />
 }

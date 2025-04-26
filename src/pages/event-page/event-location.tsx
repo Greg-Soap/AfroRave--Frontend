@@ -10,9 +10,9 @@ import { BlockName, EventOutlineButton } from './individual-event/event-details'
 
 // Fix for default marker icon
 const icon = new (await import('leaflet')).Icon({
-  iconUrl: '/images/marker-icon.png',
-  iconRetinaUrl: '/images/marker-icon-2x.png',
-  shadowUrl: '/images/marker-shadow.png',
+  iconUrl: '/assets/resell/lighting.svg',
+  iconRetinaUrl: '/assets/resell/lighting.svg',
+
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
