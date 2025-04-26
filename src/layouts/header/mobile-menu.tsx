@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { getRoutePath } from '@/config/get-route-path'
 
 export default function MobileMenu() {
   const isLoggedIn = false
@@ -102,12 +103,12 @@ function LogOutButton() {
 }
 
 const menuLinks = [
-  { href: '/event', name: 'Discover' },
-  { href: '/sell', name: 'Sale' },
-  { href: '/blog', name: 'Blog' },
-  { href: '/creators', name: 'Creators' },
-  { href: '/support', name: 'Support' },
-  { href: '/faq', name: 'FAQ' },
+  { href: getRoutePath('home'), name: 'Discover' },
+  { href: getRoutePath('resale'), name: 'Resale' },
+  { href: getRoutePath('blog'), name: 'Blog' },
+  { href: getRoutePath('creators'), name: 'Creators' },
+  { href: getRoutePath('support'), name: 'Support' },
+  { href: getRoutePath('faq'), name: 'FAQ' },
 ]
 
 const socials = [
