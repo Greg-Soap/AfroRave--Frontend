@@ -1,11 +1,14 @@
-import { BaseSelect } from '@/components/reusable'
+import { BaseSelect } from '@/components/reusable/base-select'
 import { date_list } from '@/components/constants'
 import { events, type IEvents } from '@/data/events'
 import { Link } from 'react-router-dom'
 import { SEO } from '@/components/seo'
 import { getRoutePath } from '@/config/get-route-path'
+import { useState } from 'react'
 
 export default function ResaleMarketPlacePage() {
+  const [selectedDate, setSelectedDate] = useState('')
+
   return (
     <>
       <SEO
@@ -15,10 +18,15 @@ export default function ResaleMarketPlacePage() {
 
       <section className='flex flex-col gap-[100px] px-[169px] mt-[161px] pb-20'>
         <BaseSelect
+          type='others'
           width={165}
           placeholder={date_list.placeholder}
-          defaultValue={date_list.placeholder}
+          value={selectedDate}
           items={date_list.items}
+          onChange={(value) => {
+            setSelectedDate(value)
+            console.log('Date changed:', value)
+          }}
         />
 
         <div className='grid grid-cols-2 gap-x-[165px] gap-y-[67px]'>

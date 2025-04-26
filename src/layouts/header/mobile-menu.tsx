@@ -6,12 +6,16 @@ import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getRoutePath } from '@/config/get-route-path'
 
-export default function MobileMenu() {
+interface MobileMenuProps {
+  onClose: () => void
+}
+
+export default function MobileMenu({ onClose }: MobileMenuProps) {
   const isLoggedIn = false
 
   return (
     <div className='flex flex-col h-full z-[10] overflow-y-auto scrollbar-none'>
-      {isLoggedIn ? <AccountLinks /> : <AuthButtons />}
+      {isLoggedIn ? <AccountLinks onClose={onClose} /> : <AuthButtons />}
 
       {isLoggedIn && <LogOutButton />}
 
@@ -27,6 +31,7 @@ export default function MobileMenu() {
           <Link
             key={link.name}
             to={link.href}
+            onClick={onClose}
             className='text-white hover:text-white/80 transition-colors font-input-mono text-xl font-light hover:underline'>
             {link.name}
           </Link>
@@ -37,7 +42,11 @@ export default function MobileMenu() {
         <Separator className='bg-white/20 mb-6' />
         <div className='flex items-center gap-4 justify-end'>
           {socials.map((social) => (
-            <Link key={social.alt} to={social.href} className='cursor-pointer hover:opacity-80'>
+            <Link
+              key={social.alt}
+              to={social.href}
+              onClick={onClose}
+              className='cursor-pointer hover:opacity-80'>
               <img src={social.icon} alt={social.alt} className='w-8 h-auto' />
             </Link>
           ))}
@@ -67,13 +76,14 @@ function AuthButtons() {
   )
 }
 
-function AccountLinks() {
+function AccountLinks({ onClose }: { onClose: () => void }) {
   return (
     <div className='flex flex-col items-center gap-[19px]'>
       {account_links.map((item) => (
         <Link
           key={item.name}
           to={item.link}
+          onClick={onClose}
           className='max-w-[calc(100%-39px)] w-full py-4 pl-[22px] pr-[11px] bg-[#1E1E1E] rounded-[8px] flex items-center justify-between'>
           <div className='flex items-center gap-[5px]'>
             <img src={item.icon} alt={item.name} width={19} height={19} />

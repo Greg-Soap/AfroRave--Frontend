@@ -67,7 +67,7 @@ export default function Header() {
             open={isMenuOpen}
             setOpen={setIsMenuOpen}
             contentClassName='bg-[#0F0F0F] text-white px-3'>
-            <MobileMenu />
+            <MobileMenu onClose={() => setIsMenuOpen(false)} />
           </BaseSheet>
         </div>
       </nav>
