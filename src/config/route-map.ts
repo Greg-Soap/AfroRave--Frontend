@@ -26,9 +26,7 @@ export const ROUTE_PATHS = {
   sell: "/sell",
   terms_and_conditions: "/terms-and-conditions",
   privacy_policy: "/privacy-policy",
-  profile: "/profile",
-  my_tickets: "/my-tickets",
-  listed_tickets: "/listed_tickets",
+  account: "/account",
   not_found: "*",
 } as const;
 
@@ -69,8 +67,6 @@ export interface RouteParams {
   sell: never;
   terms_and_conditions: never;
   privacy_policy: never;
-  profile: never;
-  my_tickets: never;
-  listed_tickets: never;
+  account: never;
   not_found: never;
 }
