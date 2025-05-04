@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import type { ICustomSelectProps } from "@/components/reusable/base-select";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Edit } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { africanBanks, africanCurrencies } from "@/components/constants";
@@ -28,6 +28,8 @@ export default function PayoutTab() {
           </p>
         </div>
 
+        <BankAccountDetails />
+
         <PayoutForm />
       </div>
 
@@ -36,6 +38,30 @@ export default function PayoutTab() {
 
         <RefundBuyerBlock />
       </div>
+    </div>
+  );
+}
+
+function BankAccountDetails() {
+  return (
+    <div className="w-[256px] flex flex-col items-center bg-charcoal rounded-[1px] pt-3.5 px-5 pb-3">
+      <div className="flex w-full justify-between">
+        <div className="flex flex-col gap-1.5 font-sf-pro-text">
+          <p>ACCESS BANK</p>
+          <p>0079304520</p>
+        </div>
+
+        <p className="font-input-mono text-[23px]">NGN</p>
+      </div>
+
+      <p className="font-sf-pro-text mt-7">Favour eseose atie</p>
+
+      <Button
+        variant="destructive"
+        className="mt-[21px] w-fit h-fit py-1 px-[19px] rounded-[2px]"
+      >
+        <Edit size={12} color="#ffffff" />
+      </Button>
     </div>
   );
 }

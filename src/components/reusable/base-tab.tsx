@@ -1,13 +1,23 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-export function BaseTab({ tab }: { tab: ITabProps[] }) {
+export function BaseTab({
+  activeTab,
+  setActiveTab,
+  tab,
+}: {
+  activeTab?: string;
+  setActiveTab?: (activeTab: string) => void;
+  tab: ITabProps[];
+}) {
   return (
     <Tabs
       defaultValue={tab[0].value}
+      value={activeTab}
+      onValueChange={setActiveTab}
       className="flex flex-row justify-center gap-[307px]"
     >
-      <TabsList className="w-[366px] flex flex-col gap-[45px] h-fit bg-transparent">
+      <TabsList className="w-[366px] flex flex-col gap-[45px] h-fit bg-transparent pb-10">
         {tab.map((item) => (
           <TabsTrigger
             key={item.name}
