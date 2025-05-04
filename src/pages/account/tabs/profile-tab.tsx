@@ -3,46 +3,14 @@ import { FormBase, FormField } from "@/components/reusable";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { cn } from "@/lib/utils";
 import { BaseSelect } from "@/components/reusable";
-
-const formSchema = z.object({
-  first_name: z.string().min(3, {
-    message: "first_name must be at least 3 characters.",
-  }),
-  last_name: z.string().min(3, {
-    message: "Last name must be at least 3 characters long",
-  }),
-  email: z.string().email({
-    message: "Provide a valid email.",
-  }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be atleast 6 characters long." })
-    .max(20, {
-      message: "Password too long.",
-    }),
-  gender: z.string().min(4, { message: "Provide a valid gender." }),
-  birthday: z.object({
-    month: z.string().min(1, { message: "Provide a valid month." }),
-    day: z.string().min(1, { message: "Provide a valid day." }),
-    year: z.string().min(4, { message: "Provide a valid year." }),
-  }),
-  country: z.string().min(4, {
-    message: "Provide a valid country.",
-  }),
-  state: z.string().min(3, {
-    message: "Provide a valid state.",
-  }),
-  phone: z.string().min(7, {
-    message: "Provide a valid phone number.",
-  }),
-});
+import { ProfileSchema } from "@/schema/profile-shema";
 
 export default function ProfileTab() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ProfileSchema>>({
+    resolver: zodResolver(ProfileSchema),
     defaultValues: {
       first_name: "",
       last_name: "",
@@ -60,7 +28,7 @@ export default function ProfileTab() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof ProfileSchema>) {
     console.log(values);
   }
 
@@ -91,6 +59,7 @@ export default function ProfileTab() {
           </FormField>
         ))}
 
+        {/**Birth day select form field */}
         <div className="grid grid-cols-4 gap-[3px]">
           <p className="py-[22px] pl-2 px-10 rounded-l-[6px]">Birthday</p>
 
@@ -216,7 +185,7 @@ const profile_form: IProfileForm[] = [
   { name: "phone", label: "Phone", opacity: "full" },
 ];
 
-type ProfileFormFields = z.infer<typeof formSchema>;
+type ProfileFormFields = z.infer<typeof ProfileSchema>;
 
 interface IProfileForm {
   name: keyof ProfileFormFields;

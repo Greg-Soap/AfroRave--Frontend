@@ -5,7 +5,7 @@ export function BaseTab({ tab }: { tab: ITabProps[] }) {
   return (
     <Tabs
       defaultValue={tab[0].value}
-      className="flex flex-row items-center justify-center gap-[307px] mt-[124px]"
+      className="flex flex-row justify-center gap-[307px]"
     >
       <TabsList className="w-[366px] flex flex-col gap-[45px] h-fit bg-transparent">
         {tab.map((item) => (
