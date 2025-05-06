@@ -120,6 +120,13 @@ function PayoutForm() {
           />
         </FormField>
       ))}
+
+      <Button
+        variant="destructive"
+        className="w-full h-[69px] rounded-[6px] text-xl font-bold font-sf-pro-text"
+      >
+        SAVE
+      </Button>
     </FormBase>
   );
 }

@@ -5,13 +5,15 @@ import AccountFooter from "./footer";
 export default function AccountLayout() {
   return (
     <>
-      <AccountHeader />
+      <div className="w-full flex flex-col items-center bg-pure-black">
+        <AccountHeader />
 
-      <main className="w-full flex flex-col items-center">
-        <Outlet />
-      </main>
+        <main className="w-full flex flex-col items-center">
+          <Outlet />
+        </main>
 
-      <AccountFooter />
+        <AccountFooter />
+      </div>
     </>
   );
 }

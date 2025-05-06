@@ -49,7 +49,7 @@ export default function ProfileTab() {
           >
             <Input
               className={cn(
-                "border-none bg-transparent pl-0 text-lg py-0 h-fit",
+                "border-none bg-transparent pl-0 text-lg py-0 h-fit text-white",
                 {
                   "opacity-50": item.opacity === "half",
                   "opacity-100": item.opacity === "full",
@@ -61,13 +61,15 @@ export default function ProfileTab() {
 
         {/**Birth day select form field */}
         <div className="grid grid-cols-4 gap-[3px]">
-          <p className="py-[22px] pl-2 px-10 rounded-l-[6px]">Birthday</p>
+          <p className="py-[22px] pl-2 px-10 rounded-l-[6px] bg-charcoal text-center">
+            Birthday
+          </p>
 
           <FormField
             form={form}
             name="birthday.year"
             label="Year"
-            className="w-full z-20 py-2.5 px-2"
+            className="w-full z-20 py-2.5 px-2 bg-charcoal"
           >
             {(field) => (
               <BaseSelect
@@ -85,7 +87,7 @@ export default function ProfileTab() {
             form={form}
             name="birthday.month"
             label="Month"
-            className="w-full z-20 py-2.5 px-2"
+            className="w-full z-20 py-2.5 px-2 bg-charcoal"
           >
             {(field) => (
               <BaseSelect
@@ -103,7 +105,7 @@ export default function ProfileTab() {
             form={form}
             name="birthday.day"
             label="Day"
-            className="w-full z-20 py-2.5 px-2 rounded-r-[6px]"
+            className="w-full z-20 py-2.5 px-2 rounded-r-[6px] bg-charcoal"
           >
             {(field) => (
               <BaseSelect
@@ -128,7 +130,7 @@ export default function ProfileTab() {
           >
             <Input
               className={cn(
-                "border-none bg-transparent pl-0 text-lg py-0 h-fit",
+                "border-none bg-transparent pl-0 text-lg py-0 h-fit text-white",
                 {
                   "opacity-50": item.opacity === "half",
                   "opacity-100": item.opacity === "full",
