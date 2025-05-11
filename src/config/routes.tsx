@@ -26,12 +26,6 @@ const TermsAndConditionPage = lazy(
   () => import("../pages/terms-and-condition")
 );
 const PrivacyPolicyPage = lazy(() => import("../pages/privacy-policy"));
-const AccountPage = lazy(() => import("../pages/account"));
-const MyTicketsPage = lazy(() => import("../pages/my-tickets"));
-const IndividualActiveTicketsPage = lazy(
-  () => import("../pages/my-tickets/individual-active-tickets")
-);
-const ListedTicketPage = lazy(() => import("../pages/listed-tickets"));
 
 export const routes: RouteObject[] = [
   {
@@ -159,38 +153,6 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <PrivacyPolicyPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: getRoutePath("account"),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <AccountPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: getRoutePath("my_tickets"),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <MyTicketsPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: getRoutePath("active_tickets", { eventId: ":eventId" }),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <IndividualActiveTicketsPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: getRoutePath("listed_tickets"),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <ListedTicketPage />
       </Suspense>
     ),
   },

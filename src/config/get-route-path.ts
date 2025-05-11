@@ -1,4 +1,4 @@
-import { ROUTE_PATHS, type RouteKey, type RouteParams } from './route-map'
+import { ROUTE_PATHS, type RouteKey, type RouteParams } from "./route-map";
 
 /**
  * Generates a type-safe route path with optional parameters.
@@ -28,12 +28,12 @@ export function getRoutePath<K extends RouteKey>(
   route: K,
   ...params: RouteParams[K] extends never ? [] : [RouteParams[K]]
 ): string {
-  let path: string = ROUTE_PATHS[route]
+  let path: string = ROUTE_PATHS[route];
   if (params.length > 0) {
-    const paramObj = params[0] as Record<string, string | number>
+    const paramObj = params[0] as Record<string, string | number>;
     for (const [key, value] of Object.entries(paramObj)) {
-      path = path.replace(`:${key}`, String(value))
+      path = path.replace(`:${key}`, String(value));
     }
   }
-  return path
+  return path;
 }

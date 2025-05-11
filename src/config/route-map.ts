@@ -30,6 +30,16 @@ export const ROUTE_PATHS = {
   my_tickets: "/my-tickets",
   active_tickets: "/my-tickets/:eventId",
   listed_tickets: "/listed-tickets",
+  standalone: "/standalone",
+  season: "/season",
+  reports: "/reports",
+  charts: "/charts",
+  realtime: "/realtime",
+  revenue_vendor: "/revenue-vendor",
+  service_vendor: "/service-vendor",
+  access_control: "/access-control",
+  promo_codes: "/promo-codes",
+  seating_maps: "/seating-maps",
   not_found: "*",
 } as const;
 
@@ -74,5 +84,15 @@ export interface RouteParams {
   my_tickets: never;
   active_tickets: { eventId: string | number };
   listed_tickets: never;
+  standalone: never;
+  season: never;
+  reports: never;
+  charts: never;
+  realtime: never;
+  revenue_vendor: never;
+  service_vendor: never;
+  access_control: never;
+  promo_codes: never;
+  seating_maps: never;
   not_found: never;
 }
