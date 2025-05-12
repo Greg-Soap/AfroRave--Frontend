@@ -36,7 +36,9 @@ export const ROUTE_PATHS = {
   charts: "/charts",
   realtime: "/realtime",
   revenue_vendor: "/revenue-vendor",
+  revenue_vendor_slot: "/revenue-vendor/:slotId",
   service_vendor: "/service-vendor",
+  individual_service_vendor: "/service-vendor/:serviceId",
   access_control: "/access-control",
   promo_codes: "/promo-codes",
   seating_maps: "/seating-maps",
@@ -90,7 +92,9 @@ export interface RouteParams {
   charts: never;
   realtime: never;
   revenue_vendor: never;
+  revenue_vendor_slot: { slotId: string | number };
   service_vendor: never;
+  individual_service_vendor: { serviceId: string | number };
   access_control: never;
   promo_codes: never;
   seating_maps: never;

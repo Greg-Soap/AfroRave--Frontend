@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatNaira } from "@/lib/format-price";
 import { cn } from "@/lib/utils";
+import { AddFilterBUtton } from "./components/add-filter-btn";
 
 export default function StandalonePage() {
   return (
@@ -21,17 +22,7 @@ export default function StandalonePage() {
 function StandAloneHeader() {
   return (
     <div className="w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray">
-      <Button variant="ghost" className="gap-2 p-2.5 hover:bg-black/10">
-        <img
-          src="/assets/dashboard/creator/filter.png"
-          alt="Filter"
-          width={20}
-          height={18}
-        />
-        <span className="font-medium text-xs font-sf-pro-rounded text-black">
-          Add Filter
-        </span>
-      </Button>
+      <AddFilterBUtton />
 
       <div className="flex items-center gap-8">
         <Button
