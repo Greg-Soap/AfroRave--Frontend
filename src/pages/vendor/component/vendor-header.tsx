@@ -5,7 +5,7 @@ import { Download, Plus } from "lucide-react";
 export function VendorHeader({
   type = "revenue",
 }: {
-  type?: "service" | "revenue";
+  type?: "service" | "revenue" | "access-control";
 }) {
   return (
     <div className="w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray">
@@ -28,7 +28,7 @@ export function VendorHeader({
           className="gap-2 py-0.5 px-1.5 hover:bg-black/10"
         >
           <span className="font-medium text-xs font-sf-pro-rounded text-black">
-            Blackmarket Flea
+            {RenderBtnName(type)}
           </span>
           <img
             src="/assets/dashboard/creator/live.png"
@@ -41,10 +41,21 @@ export function VendorHeader({
         <Button variant="destructive" className="p-3 rounded-[6px] gap-8">
           <Plus color="#ffffff" size={12} />
           <span className="font-sf-pro-text text-xs">
-            Add {type === "revenue" ? "Slot" : "Offer"}
+            Add {RenderText(type)}
           </span>
         </Button>
       </div>
     </div>
   );
+}
+
+function RenderBtnName(text: "service" | "revenue" | "access-control") {
+  if (text === "revenue" || text === "service") return " Blackmarket Flea";
+  if (text === "access-control") return "Afro Fest";
+}
+
+function RenderText(text: "service" | "revenue" | "access-control") {
+  if (text === "revenue") return "Slot";
+  if (text === "service") return "Offer";
+  if (text === "access-control") return "Staff";
 }

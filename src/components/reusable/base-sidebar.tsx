@@ -39,7 +39,9 @@ export function BaseSideBar({
             <SidebarMenu>
               {sidebar_links?.map((item, index) => {
                 const isActive = item.links.some(
-                  (link) => link.path === location.pathname
+                  (link) =>
+                    location.pathname === link.path ||
+                    location.pathname.startsWith(`${link.path}/`)
                 );
 
                 return (
@@ -81,7 +83,9 @@ function AccordionSidebarMenuItem({
       isActive={isActive}
     >
       {links.map((item) => {
-        const isActiveLink = location.pathname === item.path;
+        const isActiveLink =
+          location.pathname === item.path ||
+          location.pathname.startsWith(`${item.path}/`);
 
         return (
           <Link

@@ -12,6 +12,8 @@ const ServiceVendorPage = lazy(() => import("../pages/vendor/service-vendors"));
 const IndividualServicePage = lazy(
   () => import("../pages/vendor/service-vendors/individual-service")
 );
+const AccessControlPage = lazy(() => import("../pages/access-control"));
+const PromoCodesPage = lazy(() => import("../pages/promo-codes"));
 
 export const vendor_dashboard_routes: RouteObject[] = [
   {
@@ -53,6 +55,22 @@ export const vendor_dashboard_routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <IndividualServicePage />
+      </Suspense>
+    ),
+  },
+  {
+    path: getRoutePath("access_control"),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <AccessControlPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: getRoutePath("promo_codes"),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <PromoCodesPage />
       </Suspense>
     ),
   },
