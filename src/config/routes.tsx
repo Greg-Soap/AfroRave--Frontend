@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
 import { LoadingFallback } from "../components/loading-fallback";
 import { getRoutePath } from "./get-route-path";
-import AccountPage from "@/pages/account";
 
 const LandingPage = lazy(() => import("../pages/landing-page"));
 const EventsPage = lazy(() => import("../pages/event-page"));
@@ -154,14 +153,6 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <PrivacyPolicyPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: getRoutePath("account"),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <AccountPage />
       </Suspense>
     ),
   },

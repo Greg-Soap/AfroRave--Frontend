@@ -1,4 +1,3 @@
-import { BaseTab } from "@/components/reusable/base-tab";
 import ProfileTab from "./tabs/profile-tab";
 import PayoutTab from "./tabs/payout-tab";
 import { ChevronLeft } from "lucide-react";
@@ -6,6 +5,8 @@ import SettingsTab from "./tabs/settings-tab";
 import SupportTab from "./tabs/support-tab";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { BaseTab } from "@/components/reusable/base-tab";
+import { Button } from "@/components/ui/button";
 
 export default function AccountPage() {
   const [activeTab, setActiveTab] = useState<string>("profile");
@@ -27,26 +28,25 @@ export default function AccountPage() {
     }
   }, [searchParams]);
 
-  // Call this when changing tabs (e.g., onClick)
   const setActiveTabState = (tab: string) => {
     setActiveTab(tab);
     setSearchParams({ account: tab });
   };
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-[162px] mt-[124px]">
-      <ChevronLeft
-        width={14}
-        height={30}
-        color="#ffffff"
-        className="!w-[14px] !h-[30px] self-start ml-[50px]"
-      />
+    <section className="w-full flex flex-col items-center justify-center gap-[162px] mt-[124px]">
+      <Button
+        variant="ghost"
+        className="ml-[50px] self-start w-fit hover:bg-white/10"
+      >
+        <ChevronLeft color="#ffffff" className="w-[14px] h-[30px]" />
+      </Button>
 
       <BaseTab
         activeTab={activeTab}
         setActiveTab={setActiveTabState}
-        tab={account_tabs}
+        tabs={account_tabs}
       />
-    </div>
+    </section>
   );
 }
 

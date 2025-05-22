@@ -36,17 +36,15 @@ export default function SupportTab() {
             name={item.name}
             label={item.label}
             form={form}
-            className="w-full flex flex-col gap-2 p-2.5 rounded-[6px] bg-charcoal text-white font-input-mono"
+            className={cn(
+              "w-full flex flex-col gap-2 p-2.5 rounded-[6px] bg-charcoal text-white font-input-mono",
+              {
+                "opacity-50": item.opacity === "half",
+                "opacity-100": item.opacity === "full",
+              }
+            )}
           >
-            <Input
-              className={cn(
-                "border-none bg-transparent pl-0 text-lg py-0 h-fit",
-                {
-                  "opacity-50": item.opacity === "half",
-                  "opacity-100": item.opacity === "full",
-                }
-              )}
-            />
+            <Input className="border-none bg-transparent pl-0 text-lg py-0 h-fit text-white" />
           </FormField>
         ))}
       </div>
@@ -72,7 +70,7 @@ const support_form: ISupportForm[] = [
   { name: "first_name", label: "First Name", opacity: "half" },
   { name: "last_name", label: "Last Name", opacity: "half" },
   { name: "email", label: "Email", opacity: "full" },
-  { name: "message" },
+  { name: "message", opacity: "full" },
 ];
 
 type ProfileFormFields = z.infer<typeof SupportSchema>;
@@ -80,5 +78,5 @@ type ProfileFormFields = z.infer<typeof SupportSchema>;
 interface ISupportForm {
   name: keyof ProfileFormFields;
   label?: string;
-  opacity?: "half" | "full";
+  opacity: "half" | "full";
 }

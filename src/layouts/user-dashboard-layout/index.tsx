@@ -2,9 +2,9 @@ import { Outlet } from "react-router-dom";
 import AccountHeader from "./header";
 import AccountFooter from "./footer";
 
-export default function AccountLayout() {
+export default function UserDashboardLayout() {
   return (
-    <>
+    <div className="w-full flex flex-col items-center bg-pure-black">
       <AccountHeader />
 
       <main className="w-full flex flex-col items-center">
@@ -12,6 +12,6 @@ export default function AccountLayout() {
       </main>
 
       <AccountFooter />
-    </>
+    </div>
   );
 }
