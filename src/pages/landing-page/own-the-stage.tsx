@@ -4,35 +4,37 @@ import { getRoutePath } from '@/config/get-route-path'
 
 export default function OwnTheStage() {
   return (
-    <section className='flex flex-col gap-10 md:gap-24 py-[75px] w-full'>
-      <div className='container  max-w-[var(--max-width)] mx-auto'>
-        <DetailsBlock {...details[0]} />
-      </div>
+    <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-[182px] w-full'>
+      {/* Background layers */}
+      <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)_opacity(25%)]' />
+      <div className='absolute inset-0 bg-gradient-to-t from-smoky-gray via-black/30 to-black/0 [background-position:0%_41%]' />
 
-      <div className='relative w-full py-10 md:py-20'>
-        <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)]' />
-        <div className='absolute inset-0 bg-gradient-to-t from-smoky-gray via-black/0 to-black/0 [background-position:0%_41%]' />
+      {/* Lightning bolt */}
+      <img
+        src='/assets/landing-page/bolt.png'
+        alt='BOLT'
+        width={644}
+        height={880}
+        className='hidden md:block absolute left-[62%] top-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-auto scale-x-[2] scale-y-[1.5] opacity-40'
+      />
 
-        <div className='relative max-w-[var(--max-width)] px-[1rem] md:px-[2rem] mx-auto flex items-center justify-end gap-[50px]'>
+      {/* Content container */}
+      <div className='relative px-[56px]'>
+        {/* First row - blocks 1 and 3 */}
+        <div className='flex justify-between items-start gap-10 mb-10 md:mb-24'>
+          <DetailsBlock {...details[0]} />
+          <DetailsBlock {...details[2]} />
+        </div>
+
+        {/* Second row - block 2 centered */}
+        <div className='flex justify-center'>
           <DetailsBlock {...details[1]} isSecond />
         </div>
       </div>
 
-      <div className='container  flex max-lg:flex-col lg:items-center gap-[30px] max-w-[var(--max-width)] mx-auto relative'>
-        <DetailsBlock {...details[2]} />
-
-        <img
-          src='/assets/landing-page/bolt.png'
-          alt='BOLT'
-          width={644}
-          height={880}
-          className='hidden md:block absolute right-0 top-[100%] -translate-y-1/2 max-w-1/2 h-auto opacity-40'
-        />
-      </div>
-
       <Link
         to={getRoutePath('about_us')}
-        className='self-center underline text-2xl md:text-3xl font-phosphate'>
+        className='relative self-center underline text-[20px] font-phosphate'>
         LEARN MORE
       </Link>
     </section>
