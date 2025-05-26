@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { getRoutePath } from '@/config/get-route-path'
+import { CategoryBlockSkeleton } from '../event-page/event-category-blocks'
+import { Suspense } from 'react'
+import { CategoryBlock } from '../event-page/event-category-blocks'
+import { events } from '@/data/events'
 
 export default function OwnTheStage() {
   return (
-    <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-[182px] w-full'>
+    <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-[182px] w-full overflow-hidden'>
       {/* Background layers */}
       <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)_opacity(25%)]' />
       <div className='absolute inset-0 bg-gradient-to-t from-smoky-gray via-black/30 to-black/0 [background-position:0%_41%]' />
@@ -15,11 +19,16 @@ export default function OwnTheStage() {
         alt='BOLT'
         width={644}
         height={880}
-        className='hidden md:block absolute left-[62%] top-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-auto scale-x-[2] scale-y-[1.5] opacity-40'
+        className='hidden md:block absolute left-[62%] top-1/2 -translate-x-1/2 -translate-y-1/2 h-[80%] w-auto scale-x-[1.5] scale-y-[1.2] opacity-40'
       />
 
       {/* Content container */}
       <div className='relative px-[56px]'>
+        <div className='mb-[124px] overflow-x-hidden'>
+          <Suspense fallback={<CategoryBlockSkeleton />}>
+            <CategoryBlock name='Trending' data={events} isTrending />
+          </Suspense>
+        </div>
         {/* First row - blocks 1 and 3 */}
         <div className='flex justify-between items-start gap-10 mb-10 md:mb-24'>
           <DetailsBlock {...details[0]} />

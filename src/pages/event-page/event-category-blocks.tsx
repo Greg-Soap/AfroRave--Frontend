@@ -2,19 +2,19 @@ import { BaseSelect, type ICustomSelectProps } from '@/components/reusable/base-
 import { CalendarDays, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { type IEvents, events } from '@/data/events'
-import { cn } from '@/lib/utils'
 import { date_list } from '@/components/constants'
 import { Suspense, useState } from 'react'
 import { getRoutePath } from '@/config/get-route-path'
+import { cn } from '@/lib/utils'
 
 export default function EventCategoryBlocks() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
 
   return (
-    <section className='w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-20 mt-36 pb-16'>
+    <section className='w-full pl-[1rem] md:pl-[2rem] flex flex-col gap-20 mt-36 pb-16 min-h-[calc(100vh-300px)]'>
       <Suspense fallback={<CategoryBlockSkeleton />}>
-        <CategoryBlock name='Trending' data={events} />
+        <CategoryBlock name='Trending' data={events} isTrending />
       </Suspense>
 
       <div className='flex flex-col gap-10'>
@@ -43,41 +43,34 @@ export default function EventCategoryBlocks() {
           />
         </div>
 
-        <Suspense fallback={<CategoryBlockSkeleton displayType='grid' />}>
-          <CategoryBlock data={events} displayType='grid' />
+        <Suspense fallback={<CategoryBlockSkeleton />}>
+          <CategoryBlock data={events} isTrending={false} />
         </Suspense>
       </div>
     </section>
   )
 }
 
-function CategoryBlock({
+export function CategoryBlock({
   name,
   data,
-  displayType = 'flex',
+  isTrending = true,
 }: {
   name?: string
   data: IEvents[]
-  displayType?: 'flex' | 'grid'
+  isTrending?: boolean
 }) {
   return (
-    <div
-      className={cn('flex flex-col gap-6', {
-        'pr-[1rem] md:pr-[2rem]': displayType === 'grid',
-      })}>
+    <div className='flex flex-col gap-6 w-full'>
       {name && <p className='text-xl font-bold font-input-mono'>{name}</p>}
 
-      <div
-        className={cn('gap-7', {
-          'flex pr-7 overflow-x-auto scrollbar-none': displayType === 'flex',
-          'grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4': displayType === 'grid',
-        })}>
+      <div className='flex gap-7 overflow-x-auto scrollbar-none w-full'>
         {data.map((item) => (
           <EventCard
             key={item.id}
             {...item}
             start_time={item.event_time.start_time}
-            className={displayType === 'flex' ? 'min-w-[290px]' : undefined}
+            isTrending={isTrending}
           />
         ))}
       </div>
@@ -92,60 +85,50 @@ function EventCard({
   event_location,
   event_date,
   start_time,
-  className,
+  isTrending,
 }: IEventCardProps) {
   return (
     <Link
       to={getRoutePath('individual_event', { eventId: id })}
-      className={cn('flex flex-col gap-4', className)}>
-      {className?.includes('min-w-[290px]') ? (
-        <img
-          src={image}
-          alt={event_name}
-          className='rounded-[15px] min-w-[290px] h-[290px] object-cover'
-        />
-      ) : (
-        <div className='relative aspect-square w-full overflow-hidden rounded-[15px]'>
-          <img src={image} alt={event_name} className='w-full h-full object-cover' />
-        </div>
-      )}
+      className={cn('flex flex-col gap-4 min-w-[245px] max-w-[245px] w-full items-center', {
+        'items-start': !isTrending,
+      })}>
+      <img src={image} alt={event_name} className='rounded-[15px] h-[312px]  object-cover' />
 
       <div className='flex flex-col gap-1.5'>
-        <p className='text-xl uppercase'>{event_name}</p>
+        <p
+          className={cn('text-base font-bold font-sf-pro-display uppercase ', {
+            'text-center': isTrending,
+          })}>
+          {event_name}
+        </p>
 
-        <div className='flex items-center gap-1.5'>
-          <MapPin size={9} color='var(--foreground)' opacity={70} />
-          <p className='font-sf-pro-display text-sm opacity-70'>{event_location}</p>
-        </div>
-
-        <div className='flex items-center gap-1.5'>
-          <CalendarDays size={9} color='var(--foreground)' opacity={70} />
-          <p className='font-sf-pro-display text-sm opacity-70'>
-            {event_date} at {start_time}
-          </p>
-        </div>
+        {isTrending ? (
+          <div className='flex items-center gap-1.5 justify-center'>
+            <CalendarDays size={9} color='var(--foreground)' opacity={70} />
+            <p className='font-sf-pro-display text-sm font-normal opacity-70 text-center'>
+              {event_date} at {start_time}
+            </p>
+          </div>
+        ) : (
+          <div className='flex items-center gap-1.5'>
+            <MapPin size={9} color='var(--foreground)' opacity={70} />
+            <p className='font-sf-pro-display text-sm font-normal opacity-70'>{event_location}</p>
+          </div>
+        )}
       </div>
     </Link>
   )
 }
 
-function CategoryBlockSkeleton({ displayType = 'flex' }: { displayType?: 'flex' | 'grid' }) {
+export function CategoryBlockSkeleton() {
   return (
-    <div
-      className={cn('flex flex-col gap-6', {
-        'pr-[1rem] md:pr-[2rem]': displayType === 'grid',
-      })}>
+    <div className='flex flex-col gap-6 w-full'>
       <div className='h-6 w-32 bg-gray-200 rounded animate-pulse' />
 
-      <div
-        className={cn('gap-7', {
-          'flex pr-7 overflow-x-auto scrollbar-none': displayType === 'flex',
-          'grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4': displayType === 'grid',
-        })}>
+      <div className={'gap-7 flex pr-7 overflow-x-auto scrollbar-none'}>
         {Array.from({ length: 4 }).map(() => (
-          <div
-            key={`event-skeleton-${displayType}-${crypto.randomUUID()}`}
-            className='flex flex-col gap-4'>
+          <div key={`event-skeleton-${crypto.randomUUID()}`} className='flex flex-col gap-4'>
             <div className='aspect-square w-full bg-gray-200 rounded-[15px] animate-pulse' />
             <div className='space-y-2'>
               <div className='h-6 w-3/4 bg-gray-200 rounded animate-pulse' />
@@ -181,5 +164,5 @@ interface IEventCardProps {
   event_location: string
   event_date: string
   start_time: string
-  className?: string
+  isTrending?: boolean
 }
