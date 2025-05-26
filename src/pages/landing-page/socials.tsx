@@ -3,8 +3,8 @@ import clsx from 'clsx'
 
 export default function Socials() {
   return (
-    <section className='min-h-screen w-full flex flex-col gap-10 pt-[75px]'>
-      <p className='container font-input-mono font-bold text-2xl md:text-[30px]'>Socials</p>
+    <section className='min-h-screen w-full flex flex-col gap-3 mt-[-36px] z-[9999]'>
+      <p className='container font-input-mono font-bold text-base uppercase'>Socials</p>
 
       <div className='flex-1 flex flex-col min-h-screen'>
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 min-h-screen'>
@@ -18,7 +18,7 @@ export default function Socials() {
               <img
                 src={item.image}
                 alt={item.alt}
-                className='w-full h-full object-cover object-left-top hover:scale-105 transition-all duration-300 opacity-60'
+                className='w-full h-full object-cover object-left-top hover:scale-105 transition-all duration-300 '
               />
             </Link>
           ))}
