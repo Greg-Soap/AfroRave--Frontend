@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import type { IEvents } from "@/data/events";
 import { formatNaira } from "@/lib/format-price";
-import { Plus, Minus, Clock4 } from "lucide-react";
+import { Plus, Minus, Clock4, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { EventLocation } from "@/pages/event-page/event-location";
 import Cart from "../cart";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface CartTicket {
   name: string;
@@ -15,6 +16,8 @@ interface CartTicket {
 }
 
 export default function EventDetails({ event }: { event: IEvents }) {
+  const navigate = useNavigate();
+
   const [tickets, setTickets] = useState<CartTicket[]>(
     event.tickets.map((ticket) => ({ ...ticket, quantity: 0 }))
   );
@@ -45,6 +48,14 @@ export default function EventDetails({ event }: { event: IEvents }) {
   return (
     <section className="pb-16 w-full flex flex-col">
       <div className="relative w-full flex flex-col">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="absolute top-[100px] left-10 z-10 w-fit h-fit hover:bg-black/30"
+        >
+          <ChevronLeft size={40} color="#ffffff" className="min-w-7 min-h-10" />
+        </Button>
+
         <img
           src={event.thumbnail}
           alt={event.event_name}
@@ -54,7 +65,7 @@ export default function EventDetails({ event }: { event: IEvents }) {
         <div className="absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/10 to-transparent backdrop-blur-xs" />
       </div>
 
-      <div className="container w-full flex flex-col gap-10 -mt-[200px] xl:-mt-[250px] z-10">
+      <div className="container flex flex-col gap-10 -mt-[200px] xl:-mt-[250px] z-10">
         <div className="flex flex-col gap-10">
           <img
             src={event.image}
@@ -133,7 +144,13 @@ export default function EventDetails({ event }: { event: IEvents }) {
 
         {/**Tickets */}
         <div className="flex flex-col gap-7">
-          <BlockName name="tickets" />
+          <div className="flex items-center gap-5">
+            <BlockName name="tickets" />
+
+            <p className="font-sf-pro-display text-xl font-extrabold text-white/60">
+              SALE
+            </p>
+          </div>
 
           <div className="flex flex-col gap-4">
             {tickets.map((item, index) => (
@@ -214,17 +231,21 @@ function TicketCard({
       </div>
 
       <div className="flex items-center gap-2 px-3 rounded-full h-12 bg-light-green">
-        <Button
-          variant="ghost"
-          className="p-1 w-fit h-fit hover:bg-black/10"
-          onClick={() => onQuantityChange(quantity - 1)}
-        >
-          <Minus color="var(--foreground)" size={16} />
-        </Button>
+        {quantity > 0 && (
+          <>
+            <Button
+              variant="ghost"
+              className="p-1 w-fit h-fit hover:bg-black/10"
+              onClick={() => onQuantityChange(quantity - 1)}
+            >
+              <Minus color="var(--foreground)" size={16} />
+            </Button>
 
-        <span className="font-sf-pro-rounded font-bold text-sm">
-          {quantity}
-        </span>
+            <span className="font-sf-pro-rounded font-bold text-sm">
+              {quantity}
+            </span>
+          </>
+        )}
 
         <Button
           variant="ghost"

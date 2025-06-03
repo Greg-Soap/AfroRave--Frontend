@@ -42,6 +42,7 @@ export const ROUTE_PATHS = {
   access_control: "/access-control",
   promo_codes: "/promo-codes",
   seating_maps: "/seating-maps",
+  edit_event: "/edit/:eventId",
   not_found: "*",
 } as const;
 
@@ -98,5 +99,6 @@ export interface RouteParams {
   access_control: never;
   promo_codes: never;
   seating_maps: never;
+  edit_event: { eventId: string | number };
   not_found: never;
 }
