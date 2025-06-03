@@ -36,7 +36,7 @@ export default function OwnTheStage() {
         </div>
 
         {/* Second row - block 2 centered */}
-        <div className='flex justify-center'>
+        <div className='flex justify-center '>
           <DetailsBlock {...details[1]} isSecond />
         </div>
       </div>
@@ -53,16 +53,16 @@ export default function OwnTheStage() {
 function DetailsBlock({ title, href, linkName, details, isSecond = false }: IDetailsBlockProps) {
   return (
     <div
-      className={clsx('max-w-[569px] flex flex-col gap-2 max-md:gap-5', {
-        'items-center z-10': isSecond,
+      className={clsx('max-w-[554px] flex flex-col gap-2 max-md:gap-5', {
+        'items-center z-10 max-w-[375px]!': isSecond,
       })}>
-      <div className='flex flex-wrap items-center max-md:justify-center text-[40px] leading-[88px] gap-x-3.5 max-md:gap-y-2'>
+      <div className='flex flex-wrap items-center max-md:justify-center  gap-x-3.5 max-md:gap-y-2'>
         <span
           className={clsx(
             'inline-block max-md:max-w-2/3 text-2xl md:text-[30px] leading-[110%] lg:text-[40px]  max-md:text-center font-phosphate-inline text-white',
 
             {
-              'text-center max-w-[490px]': isSecond,
+              'text-center max-w-[320px]': isSecond,
               'text-left': !isSecond,
             },
           )}>

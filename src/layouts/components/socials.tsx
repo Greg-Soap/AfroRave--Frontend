@@ -10,7 +10,7 @@ export function Socials({ type = 'root' }: { type?: 'root' | 'account' }) {
       })}>
       {socials.map((item) => (
         <Link key={item.alt} to={item.href} className='cursor-pointer hover:opacity-80'>
-          <img src={item.icon} alt={item.alt} className='w-10 h-auto' />
+          <img src={item.icon} alt={item.alt} className='w-6 h-auto' />
         </Link>
       ))}
     </div>
