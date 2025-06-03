@@ -101,6 +101,7 @@
   --color-dark-gray: #1f1f1f;
   --color-bright-green: #5bae0d;
   --color-deep-red: #ae0d0d;
+  --color-light-red: #ae2323;
   --color-medium-gray: #686868;
   --color-smoky-gray: #494747;
   --color-lime-green: #4cda0a;
@@ -119,6 +120,8 @@
   --color-tech-blue: #007aff;
   --color-bright-mint: #34c759;
   --color-orange-peel: #ff9500;
+  --color-gunmetal-gray: #3d3d3d;
+  --color-light-green: #34c759;
   --font-weight-semilight: 250;
   --font-input-mono: "IBM Plex Mono", "sans-serif";
   --font-sf-pro-display: "SF Pro Display", "sans-serif";

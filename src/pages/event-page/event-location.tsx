@@ -54,8 +54,8 @@ export function EventLocation({
     );
 
   return (
-    <div className="flex flex-col gap-[43px]">
-      <BlockName name="location" className="underline" />
+    <div className="flex flex-col gap-5">
+      <BlockName name="location" />
 
       <div className="flex flex-col gap-4">
         <div className="w-full md:w-2/3 lg:w-[722px] h-[452px]">
@@ -74,12 +74,14 @@ export function EventLocation({
           </MapContainer>
         </div>
 
-        <p className="text-xl font-extralight font-sf-pro-display">
+        <p className="text-sm font-extralight font-sf-pro-display">
           {event_location}
         </p>
 
         <EventOutlineButton>
-          <span>Open in Maps</span>
+          <span className="text-sm font-sf-pro-rounded font-medium">
+            Open in Maps
+          </span>
         </EventOutlineButton>
       </div>
     </div>
