@@ -10,13 +10,15 @@ export function FooterLinks({ type = 'root' }: { type?: 'root' | 'account' }) {
         'max-md:flex-col md:items-center md:h-5': type === 'root',
         'items-center justify-center font-sf-pro-rounded h-5': type === 'account',
       })}>
-      <Link to={getRoutePath('privacy_policy')} className='font-semilight hover:underline'>
+      <Link to={getRoutePath('privacy_policy')} className='font-semilight hover:underline text-sm'>
         Privacy Policy
       </Link>
 
       <Separator orientation='vertical' className='h-full bg-white max-md:hidden' />
 
-      <Link to={getRoutePath('terms_and_conditions')} className='font-semilight hover:underline'>
+      <Link
+        to={getRoutePath('terms_and_conditions')}
+        className='font-semilight hover:underline text-sm'>
         Terms & Conditions
       </Link>
     </div>
