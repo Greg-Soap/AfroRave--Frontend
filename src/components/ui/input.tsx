@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-interface InputProps extends Omit<React.ComponentProps<"input">, "onError"> {
+export interface InputProps
+  extends Omit<React.ComponentProps<"input">, "onError"> {
   onError?: boolean;
 }
 
