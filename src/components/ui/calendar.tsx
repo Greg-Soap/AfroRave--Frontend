@@ -5,6 +5,10 @@ import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "./button-variants";
 
+interface IconProps extends React.ComponentPropsWithoutRef<"svg"> {
+  className?: string;
+}
+
 function Calendar({
   className,
   classNames,
@@ -58,10 +62,10 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ className, ...props }) => (
+        IconLeft: ({ className, ...props }: IconProps) => (
           <ChevronLeft className={cn("size-4", className)} {...props} />
         ),
-        IconRight: ({ className, ...props }) => (
+        IconRight: ({ className, ...props }: IconProps) => (
           <ChevronRight className={cn("size-4", className)} {...props} />
         ),
       }}
