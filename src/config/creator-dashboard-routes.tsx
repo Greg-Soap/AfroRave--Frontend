@@ -15,7 +15,7 @@ const IndividualServicePage = lazy(
 const AccessControlPage = lazy(() => import("../pages/access-control"));
 const PromoCodesPage = lazy(() => import("../pages/promo-codes"));
 
-export const vendor_dashboard_routes: RouteObject[] = [
+export const creator_dashboard_routes: RouteObject[] = [
   {
     path: getRoutePath("standalone"),
     element: (

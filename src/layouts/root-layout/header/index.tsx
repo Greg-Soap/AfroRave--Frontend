@@ -21,19 +21,19 @@ export default function Header() {
         }`}
       />
 
-      <nav className="relative px-4 md:px-7 w-full flex items-center justify-between py-4">
+      <nav className="relative px-4 md:px-8 w-full flex items-center justify-between py-4">
         <NavLogo />
 
         <div className="flex items-center gap-5">
           <Search
-            size={26}
+            size={20}
             color="var(--foreground)"
             className="max-sm:hidden cursor-pointer min-w-[26px] "
           />
 
           <BaseDropdown
             trigger={
-              <Button className="h-9 w-[86px] bg-white text-black font-input-mono hover:bg-white/90">
+              <Button className="h-6 w-[48px] bg-white text-[10px] text-black font-sf-pro-rounded hover:bg-white/90">
                 Log In
               </Button>
             }
@@ -62,7 +62,7 @@ export default function Header() {
             <img
               src="/assets/landing-page/menu.svg"
               alt=""
-              className="min-w-6 h-6"
+              className="min-w-5 h-4"
             />
           </button>
           <BaseSheet
