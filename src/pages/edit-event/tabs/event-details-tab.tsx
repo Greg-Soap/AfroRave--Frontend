@@ -19,6 +19,7 @@ import { BaseDatePicker } from "@/components/reusable/base-date-picker";
 import { BaseSelect } from "@/components/reusable";
 import { Button } from "@/components/ui/button";
 import { Clock, ChevronUp, ChevronDown } from "lucide-react";
+import { eventCategories, ageRatings, africanTimezones } from "../constant";
 
 export default function EventDetailsTab({ event }: { event: IEvents }) {
   return (
@@ -230,7 +231,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       <div className="flex flex-col gap-5">
         <SectionHeader name="SOCIALS" />
 
-        <GridCtn>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-5">
           {[
             { name: "socials.instagram" as const, label: "Instagram" },
             { name: "socials.x" as const, label: "X" },
@@ -253,56 +254,9 @@ function EventDetailsForm({ event }: { event: IEvents }) {
               )}
             </FormField>
           ))}
-        </GridCtn>
+        </div>
       </div>
     </FormBase>
-  );
-}
-
-function FormField<T extends FieldValues>({
-  name,
-  children,
-  form,
-  label,
-  className,
-}: {
-  name: Path<T>;
-  children:
-    | ReactElement
-    | ((field: ControllerRenderProps<T, Path<T>>) => ReactElement);
-  form: UseFormReturn<T>;
-  label?: string;
-  className?: string;
-}) {
-  return (
-    <BaseFormField
-      form={form}
-      name={name}
-      label={label}
-      className={cn(
-        "w-full flex flex-col gap-1 text-black text-xs uppercase font-sf-pro-text",
-        className
-      )}
-    >
-      {children}
-    </BaseFormField>
-  );
-}
-
-function Input({
-  placeholder,
-  className,
-  ...props
-}: { placeholder?: string; className?: string } & Omit<InputProps, "ref">) {
-  return (
-    <ShadcnInput
-      placeholder={placeholder}
-      className={cn(
-        "w-full h-10 text-black px-3 py-[11px] rounded-[4px] bg-white border border-mid-dark-gray/50 text-sm font-sf-pro-display",
-        className
-      )}
-      {...props}
-    />
   );
 }
 
@@ -420,8 +374,51 @@ function TimeForm<T extends FieldValues>({
   );
 }
 
-function GridCtn({ children }: { children: React.ReactNode }) {
-  return <div className="grid grid-cols-2 gap-x-8 gap-y-5">{children}</div>;
+function FormField<T extends FieldValues>({
+  name,
+  children,
+  form,
+  label,
+  className,
+}: {
+  name: Path<T>;
+  children:
+    | ReactElement
+    | ((field: ControllerRenderProps<T, Path<T>>) => ReactElement);
+  form: UseFormReturn<T>;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <BaseFormField
+      form={form}
+      name={name}
+      label={label}
+      className={cn(
+        "w-full flex flex-col gap-1 text-black text-xs uppercase font-sf-pro-text",
+        className
+      )}
+    >
+      {children}
+    </BaseFormField>
+  );
+}
+
+function Input({
+  placeholder,
+  className,
+  ...props
+}: { placeholder?: string; className?: string } & Omit<InputProps, "ref">) {
+  return (
+    <ShadcnInput
+      placeholder={placeholder}
+      className={cn(
+        "w-full h-10 text-black px-3 py-[11px] rounded-[4px] bg-white border border-mid-dark-gray/50 text-sm font-sf-pro-display",
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 function SectionHeader({ name }: { name: string }) {
@@ -431,104 +428,6 @@ function SectionHeader({ name }: { name: string }) {
     </p>
   );
 }
-
-const eventCategories: { value: string; label: string }[] = [
-  { value: "festival", label: "Festival" },
-  { value: "concert", label: "Concert" },
-  { value: "conference", label: "Conference" },
-  { value: "workshop", label: "Workshop" },
-  { value: "seminar", label: "Seminar" },
-  { value: "networking", label: "Networking" },
-  { value: "comedy", label: "Comedy Show" },
-  { value: "theater", label: "Theater & Drama" },
-  { value: "sports", label: "Sports" },
-  { value: "exhibition", label: "Exhibition" },
-  { value: "trade-show", label: "Trade Show" },
-  { value: "fashion", label: "Fashion Show" },
-  { value: "food-wine", label: "Food & Wine" },
-  { value: "art-culture", label: "Art & Culture" },
-  { value: "dance", label: "Dance" },
-  { value: "film-screening", label: "Film Screening" },
-  { value: "gaming", label: "Gaming" },
-  { value: "tech", label: "Technology" },
-  { value: "startup", label: "Startup Event" },
-  { value: "charity", label: "Charity & Fundraising" },
-  { value: "religious", label: "Religious" },
-  { value: "kids-family", label: "Kids & Family" },
-  { value: "fitness-wellness", label: "Fitness & Wellness" },
-  { value: "education", label: "Education" },
-  { value: "business", label: "Business" },
-  { value: "awards", label: "Awards Ceremony" },
-  { value: "party", label: "Party & Nightlife" },
-  { value: "outdoor", label: "Outdoor Adventure" },
-  { value: "craft-diy", label: "Craft & DIY" },
-  { value: "book-reading", label: "Book Reading" },
-  { value: "other", label: "Other" },
-];
-
-const ageRatings: { value: string; label: string }[] = [
-  { value: "G", label: "G – General Audiences" },
-  { value: "PG", label: "PG – Parental Guidance Suggested" },
-  { value: "PG-13", label: "PG-13 – Parents Strongly Cautioned" },
-  { value: "R", label: "R – Restricted" },
-  { value: "NC-17", label: "NC-17 – Adults Only" },
-  { value: "NR", label: "NR – Not Rated" },
-];
-
-const africanTimezones: { value: string; label: string }[] = [
-  { value: "Africa/Abidjan", label: "GMT – Abidjan" },
-  { value: "Africa/Accra", label: "GMT – Accra" },
-  { value: "Africa/Addis_Ababa", label: "EAT – Addis Ababa" },
-  { value: "Africa/Algiers", label: "CET – Algiers" },
-  { value: "Africa/Asmara", label: "EAT – Asmara" },
-  { value: "Africa/Bamako", label: "GMT – Bamako" },
-  { value: "Africa/Bangui", label: "WAT – Bangui" },
-  { value: "Africa/Banjul", label: "GMT – Banjul" },
-  { value: "Africa/Bissau", label: "GMT – Bissau" },
-  { value: "Africa/Blantyre", label: "CAT – Blantyre" },
-  { value: "Africa/Brazzaville", label: "WAT – Brazzaville" },
-  { value: "Africa/Bujumbura", label: "CAT – Bujumbura" },
-  { value: "Africa/Cairo", label: "EET – Cairo" },
-  { value: "Africa/Casablanca", label: "WET – Casablanca" },
-  { value: "Africa/Ceuta", label: "CET – Ceuta" },
-  { value: "Africa/Conakry", label: "GMT – Conakry" },
-  { value: "Africa/Dakar", label: "GMT – Dakar" },
-  { value: "Africa/Dar_es_Salaam", label: "EAT – Dar es Salaam" },
-  { value: "Africa/Djibouti", label: "EAT – Djibouti" },
-  { value: "Africa/Douala", label: "WAT – Douala" },
-  { value: "Africa/El_Aaiun", label: "WET – El Aaiun" },
-  { value: "Africa/Freetown", label: "GMT – Freetown" },
-  { value: "Africa/Gaborone", label: "CAT – Gaborone" },
-  { value: "Africa/Harare", label: "CAT – Harare" },
-  { value: "Africa/Johannesburg", label: "SAST – Johannesburg" },
-  { value: "Africa/Juba", label: "CAT – Juba" },
-  { value: "Africa/Kampala", label: "EAT – Kampala" },
-  { value: "Africa/Khartoum", label: "CAT – Khartoum" },
-  { value: "Africa/Kigali", label: "CAT – Kigali" },
-  { value: "Africa/Kinshasa", label: "WAT – Kinshasa" },
-  { value: "Africa/Lagos", label: "WAT – Lagos" },
-  { value: "Africa/Libreville", label: "WAT – Libreville" },
-  { value: "Africa/Lome", label: "GMT – Lomé" },
-  { value: "Africa/Luanda", label: "WAT – Luanda" },
-  { value: "Africa/Lubumbashi", label: "CAT – Lubumbashi" },
-  { value: "Africa/Lusaka", label: "CAT – Lusaka" },
-  { value: "Africa/Malabo", label: "WAT – Malabo" },
-  { value: "Africa/Maputo", label: "CAT – Maputo" },
-  { value: "Africa/Maseru", label: "SAST – Maseru" },
-  { value: "Africa/Mbabane", label: "SAST – Mbabane" },
-  { value: "Africa/Mogadishu", label: "EAT – Mogadishu" },
-  { value: "Africa/Monrovia", label: "GMT – Monrovia" },
-  { value: "Africa/Nairobi", label: "EAT – Nairobi" },
-  { value: "Africa/Ndjamena", label: "WAT – Ndjamena" },
-  { value: "Africa/Niamey", label: "WAT – Niamey" },
-  { value: "Africa/Nouakchott", label: "GMT – Nouakchott" },
-  { value: "Africa/Ouagadougou", label: "GMT – Ouagadougou" },
-  { value: "Africa/Porto-Novo", label: "WAT – Porto-Novo" },
-  { value: "Africa/Sao_Tome", label: "GMT – São Tomé" },
-  { value: "Africa/Tripoli", label: "EET – Tripoli" },
-  { value: "Africa/Tunis", label: "CET – Tunis" },
-  { value: "Africa/Windhoek", label: "CAT – Windhoek" },
-];
 
 interface ITimeFormProps<T extends FieldValues> {
   form: UseFormReturn<T>;
