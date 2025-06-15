@@ -93,7 +93,7 @@ export default function EditEventPage() {
         <TabsContent
           key={tab.value}
           value={tab.value}
-          className="w-full max-w-screen overflow-x-hidden"
+          className="w-full max-w-screen overflow-x-hidden bg-[#f8f8f8]"
         >
           <div className="w-full h-fit flex flex-col items-center">
             {/** Nav */}
@@ -141,7 +141,7 @@ function EventDetails({
   event_time,
 }: IEvents) {
   return (
-    <div className="flex gap-6 text-black">
+    <div className="flex gap-6 text-black w-[465px]">
       <img
         src={image}
         alt={event_name}

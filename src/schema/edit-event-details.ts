@@ -14,22 +14,31 @@ export const EditEventDetailsSchema = z.object({
     .max(950, { message: "Description must not exceed 950 characters." }),
   custom_url: z.string().min(3, { message: "URL too short." }),
   time_zone: z.string({ required_error: "Select a time zone." }),
+  start_date: z.object({
+    date: z.date({ required_error: "A start date is required." }),
+    hour: z.string().min(1).max(2),
+    minute: z.string().min(1).max(2),
+    period: z.enum(["AM", "PM"]),
+  }),
+  end_date: z.object({
+    date: z.date({ required_error: "A start date is required." }),
+    hour: z.string().min(1).max(2),
+    minute: z.string().min(1).max(2),
+    period: z.enum(["AM", "PM"]),
+  }),
   date: z.object({
     start_date: z.date({ required_error: "A start date is required." }),
     end_date: z.date({ required_error: "A end date is required." }),
   }),
-  time: z.object({
+  start_time: z.object({
     hour: z.string().min(1).max(2),
     minute: z.string().min(1).max(2),
-    period: z.enum(["am", "pm"]),
-    start_time: z
-      .string()
-      .min(4, { message: "Provide a valid time." })
-      .max(4, { message: "Provide a valid time." }),
-    end_time: z
-      .string()
-      .min(4, { message: "Provide a valid time." })
-      .max(4, { message: "Provide a valid time." }),
+    period: z.enum(["AM", "PM"]),
+  }),
+  end_time: z.object({
+    hour: z.string().min(1).max(2),
+    minute: z.string().min(1).max(2),
+    period: z.enum(["AM", "AM"]),
   }),
   email: z.string().email(),
   website_url: z.string().min(7, { message: "Provide a valid link." }),

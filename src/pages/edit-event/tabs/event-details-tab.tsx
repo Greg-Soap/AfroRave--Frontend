@@ -1,7 +1,7 @@
 import { FormBase, FormField as BaseFormField } from "@/components/reusable";
 import { EditEventDetailsSchema } from "@/schema/edit-event-details";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller, type Control } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Input as ShadcnInput, type InputProps } from "@/components/ui/input";
 import type { ReactElement } from "react";
@@ -43,12 +43,17 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       venue: event.event_location,
       description: event.description.join("\n"),
       date: { start_date: undefined, end_date: undefined },
-      time: {
+      start_date: {
+        date: new Date(),
         hour: "12",
         minute: "00",
-        period: "am",
-        start_time: "",
-        end_time: "",
+        period: "AM",
+      },
+      end_date: {
+        date: new Date(),
+        hour: "12",
+        minute: "00",
+        period: "AM",
       },
       email: "",
       website_url: event.socials.website,
@@ -89,33 +94,6 @@ function EventDetailsForm({ event }: { event: IEvents }) {
         )}
       </FormField>
 
-      <GridCtn>
-        <FormField form={form} name="age_rating" label="Age Rating">
-          {(field) => (
-            <BaseSelect
-              type="auth"
-              items={ageRatings}
-              defaultValue="PG"
-              placeholder="Select an age rating."
-              triggerClassName="w-full h-10 text-black px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-              value={field.value as string}
-              onChange={field.onChange}
-            />
-          )}
-        </FormField>
-
-        <FormField form={form} name="category" label="Event Category">
-          {(field) => (
-            <Input
-              placeholder="Enter event category."
-              className="uppercase"
-              {...field}
-              value={field.value == null ? "" : String(field.value)}
-            />
-          )}
-        </FormField>
-      </GridCtn>
-
       <FormField form={form} name="venue" label="Venue">
         {(field) => (
           <Input
@@ -123,6 +101,33 @@ function EventDetailsForm({ event }: { event: IEvents }) {
             className="uppercase"
             {...field}
             value={field.value == null ? "" : String(field.value)}
+          />
+        )}
+      </FormField>
+
+      <FormField form={form} name="age_rating" label="Age Rating">
+        {(field) => (
+          <BaseSelect
+            type="auth"
+            items={ageRatings}
+            defaultValue="PG"
+            placeholder="Select an age rating."
+            triggerClassName="w-[302px] h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+            value={field.value as string}
+            onChange={field.onChange}
+          />
+        )}
+      </FormField>
+
+      <FormField form={form} name="category" label="Event Category">
+        {(field) => (
+          <BaseSelect
+            type="auth"
+            items={eventCategories}
+            placeholder="Select a Category."
+            triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+            value={field.value as string}
+            onChange={field.onChange}
           />
         )}
       </FormField>
@@ -138,7 +143,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
             </div>
             <Textarea
               placeholder="Enter event description."
-              className="w-full h-[272px] text-black px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+              className="w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
               {...field}
               value={field.value == null ? "" : String(field.value)}
             />
@@ -148,23 +153,19 @@ function EventDetailsForm({ event }: { event: IEvents }) {
 
       <FormField form={form} name="custom_url" label="Custom URL">
         {(field) => (
-          <div className="flex items-center h-10 w-full border rounded-[4px] border-mid-dark-gray/50">
+          <div className="flex items-center h-10 w-full border rounded-[4px] border-mid-dark-gray/50 bg-white">
             <p className="lowercase border-r border-mid-dark-gray/50 px-3 py-[11px] rounded-l-[4px] text-black text-xs font-light font-sf-pro-text">
               afrorevive/events/
             </p>
             <Input
               placeholder="Enter custom URL."
-              className="border-none"
+              className="border-none h-9"
               {...field}
               value={field.value == null ? "" : String(field.value)}
             />
           </div>
         )}
       </FormField>
-
-      <p className="w-[300px] h-10 bg-medium-gray rounded-[4px] flex items-center justify-center">
-        Standalone
-      </p>
 
       <FormField form={form} name="time_zone" label="Timezone">
         {(field) => (
@@ -173,42 +174,30 @@ function EventDetailsForm({ event }: { event: IEvents }) {
             items={africanTimezones}
             defaultValue="Africa/Lagos"
             placeholder="Select a time zone."
-            triggerClassName="w-full h-10 text-black px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+            triggerClassName="w-full h-10 text-black px-3 py-[11px] bg-white rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
             value={field.value as string}
             onChange={field.onChange}
           />
         )}
       </FormField>
 
-      <GridCtn>
-        <FormField form={form} name="date.start_date" label="Start date">
-          {(field) => (
-            <BaseDatePicker
-              {...field}
-              className="min-h-10 bg-white border-mid-dark-gray/50 rounded-[4px] hover:bg-black/10"
-            />
-          )}
-        </FormField>
+      <DateForm
+        form={form}
+        name="START DATE"
+        input_name="start_date.date"
+        hour_name="start_date.hour"
+        minute_name="start_date.minute"
+        period_name="start_date.period"
+      />
 
-        <FormField form={form} name="date.end_date" label="End date">
-          {(field) => (
-            <BaseDatePicker
-              {...field}
-              className="min-h-10 bg-white border-mid-dark-gray/50 rounded-[4px] hover:bg-black/10"
-            />
-          )}
-        </FormField>
-      </GridCtn>
-
-      <GridCtn>
-        <FormField form={form} name="time.start_time" label="Start Time">
-          {(field) => <TimeForm control={form.control} {...field} />}
-        </FormField>
-
-        <FormField form={form} name="time.end_time" label="End Time">
-          {(field) => <TimeForm control={form.control} {...field} />}
-        </FormField>
-      </GridCtn>
+      <DateForm
+        form={form}
+        name="END DATE"
+        input_name="end_date.date"
+        hour_name="end_date.hour"
+        minute_name="end_date.minute"
+        period_name="end_date.period"
+      />
 
       {/**Contact */}
       <div className="flex flex-col gap-5">
@@ -309,7 +298,7 @@ function Input({
     <ShadcnInput
       placeholder={placeholder}
       className={cn(
-        "w-full h-10 text-black px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display",
+        "w-full h-10 text-black px-3 py-[11px] rounded-[4px] bg-white border border-mid-dark-gray/50 text-sm font-sf-pro-display",
         className
       )}
       {...props}
@@ -317,41 +306,78 @@ function Input({
   );
 }
 
-function TimeForm({
-  control,
-}: {
-  control: Control<z.infer<typeof EditEventDetailsSchema>>;
-}) {
+function DateForm<T extends FieldValues>({
+  name,
+  form,
+  input_name,
+  hour_name,
+  period_name,
+  minute_name,
+}: IDateFormProps<T>) {
+  return (
+    <div className="flex flex-col">
+      <p className="text-xs text-black font-sf-pro-text">{name}</p>
+      <div className="w-[448px] flex items-center gap-2 justify-between">
+        <FormField form={form} name={input_name} className="w-[316px]">
+          {(field) => (
+            <BaseDatePicker
+              value={field.value as Date}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              className="min-h-10 bg-white border-mid-dark-gray/50 rounded-[4px] hover:bg-black/10 font-sf-pro-display"
+            />
+          )}
+        </FormField>
+
+        <TimeForm
+          form={form}
+          hour_name={hour_name}
+          period_name={period_name}
+          minute_name={minute_name}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TimeForm<T extends FieldValues>({
+  form,
+  hour_name,
+  minute_name,
+  period_name,
+}: ITimeFormProps<T>) {
+  const togglePeriod = () => {
+    const currentPeriod = form.getValues(period_name);
+    const newPeriod = currentPeriod === "AM" ? "PM" : "AM";
+    form.setValue(period_name, newPeriod as any);
+  };
+
   return (
     <div className="relative w-full h-10 flex gap-1 items-center">
-      <div className="h-10 flex items-center justify-between border border-mid-dark-gray/50 w-full rounded-l-[4px] px-3 py-2">
-        <Clock className="h-[18px] w-4 mr-2 text-muted-foreground" />
+      <div className="h-10 flex items-center bg-white justify-between border border-mid-dark-gray/50 w-full rounded-l-[4px] px-3 py-2">
+        <Clock className="h-[18px] min-w-4 mr-2 text-muted-foreground" />
 
-        <Controller
-          name="time.hour"
-          control={control}
-          render={({ field }) => (
+        <FormField form={form} name={hour_name} className="w-fit">
+          {(field) => (
             <Input
               {...field}
               maxLength={2}
-              className="w-10 text-center border-0 shadow-none p-0 focus-visible:ring-0"
+              className="w-10 h-9 text-center border-0 shadow-none p-0 focus-visible:ring-0"
             />
           )}
-        />
+        </FormField>
 
-        <span className="px-1">:</span>
+        <span className="px-1 text-black">:</span>
 
-        <Controller
-          name="time.minute"
-          control={control}
-          render={({ field }) => (
+        <FormField form={form} name={minute_name} className="w-fit">
+          {(field) => (
             <Input
               {...field}
               maxLength={2}
-              className="w-10 text-center border-0 shadow-none p-0 focus-visible:ring-0"
+              className="w-10 h-9 text-center border-0 shadow-none p-0 focus-visible:ring-0"
             />
           )}
-        />
+        </FormField>
       </div>
 
       <div className="ml-auto flex flex-col items-center justify-center">
@@ -359,34 +385,35 @@ function TimeForm({
           type="button"
           variant="ghost"
           size="icon"
+          onClick={togglePeriod}
           className="h-3 w-8 p-0 hover:bg-black/10"
         >
-          <ChevronUp className="h-3 w-1.5" />
+          <ChevronUp className="h-3 w-1.5" color="#000000" />
         </Button>
 
-        <Controller
-          name="time.period"
-          control={control}
-          render={({ field }) => (
-            <BaseSelect
-              type="auth"
-              items={period}
-              defaultValue="am"
-              placeholder="AM / PM"
-              triggerClassName="w-12 min-h-10 text-black px-3 font-bold py-[11px] rounded-l-none rounded-r-[4px] border border-mid-dark-gray/50 text-xs font-sf-pro-text [&>svg]:hidden"
-              value={field.value as string}
-              onChange={field.onChange}
+        <FormField
+          form={form}
+          name={period_name}
+          className="border border-mid-dark-gray/50 rounded-r-[4px]"
+        >
+          {(field) => (
+            <Input
+              {...field}
+              readOnly
+              maxLength={2}
+              className="w-10 text-center text-xs font-bold border-0 shadow-none p-0 focus-visible:ring-0"
             />
           )}
-        />
+        </FormField>
 
         <Button
           type="button"
           variant="ghost"
           size="icon"
+          onClick={togglePeriod}
           className="h-3 w-8 p-0 hover:bg-black/10"
         >
-          <ChevronDown className="h-3 w-1.5" />
+          <ChevronDown className="h-3 w-1.5" color="#000000" />
         </Button>
       </div>
     </div>
@@ -404,6 +431,40 @@ function SectionHeader({ name }: { name: string }) {
     </p>
   );
 }
+
+const eventCategories: { value: string; label: string }[] = [
+  { value: "festival", label: "Festival" },
+  { value: "concert", label: "Concert" },
+  { value: "conference", label: "Conference" },
+  { value: "workshop", label: "Workshop" },
+  { value: "seminar", label: "Seminar" },
+  { value: "networking", label: "Networking" },
+  { value: "comedy", label: "Comedy Show" },
+  { value: "theater", label: "Theater & Drama" },
+  { value: "sports", label: "Sports" },
+  { value: "exhibition", label: "Exhibition" },
+  { value: "trade-show", label: "Trade Show" },
+  { value: "fashion", label: "Fashion Show" },
+  { value: "food-wine", label: "Food & Wine" },
+  { value: "art-culture", label: "Art & Culture" },
+  { value: "dance", label: "Dance" },
+  { value: "film-screening", label: "Film Screening" },
+  { value: "gaming", label: "Gaming" },
+  { value: "tech", label: "Technology" },
+  { value: "startup", label: "Startup Event" },
+  { value: "charity", label: "Charity & Fundraising" },
+  { value: "religious", label: "Religious" },
+  { value: "kids-family", label: "Kids & Family" },
+  { value: "fitness-wellness", label: "Fitness & Wellness" },
+  { value: "education", label: "Education" },
+  { value: "business", label: "Business" },
+  { value: "awards", label: "Awards Ceremony" },
+  { value: "party", label: "Party & Nightlife" },
+  { value: "outdoor", label: "Outdoor Adventure" },
+  { value: "craft-diy", label: "Craft & DIY" },
+  { value: "book-reading", label: "Book Reading" },
+  { value: "other", label: "Other" },
+];
 
 const ageRatings: { value: string; label: string }[] = [
   { value: "G", label: "G – General Audiences" },
@@ -469,7 +530,14 @@ const africanTimezones: { value: string; label: string }[] = [
   { value: "Africa/Windhoek", label: "CAT – Windhoek" },
 ];
 
-const period: { value: string; label: string }[] = [
-  { value: "am", label: "AM" },
-  { value: "pm", label: "PM" },
-];
+interface ITimeFormProps<T extends FieldValues> {
+  form: UseFormReturn<T>;
+  hour_name: Path<T>;
+  minute_name: Path<T>;
+  period_name: Path<T>;
+}
+
+interface IDateFormProps<T extends FieldValues> extends ITimeFormProps<T> {
+  name: string;
+  input_name: Path<T>;
+}

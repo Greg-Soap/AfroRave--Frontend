@@ -37,7 +37,7 @@ export function BaseDatePicker({
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-[280px] justify-start text-left font-normal bg-transparent",
             className
           )}
           onBlur={onBlur}
