@@ -4,22 +4,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Input as ShadcnInput, type InputProps } from "@/components/ui/input";
-import type { ReactElement } from "react";
-import type {
-  ControllerRenderProps,
-  UseFormReturn,
-  FieldValues,
-  Path,
-} from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import type { IEvents } from "@/data/events";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { BaseDatePicker } from "@/components/reusable/base-date-picker";
 import { BaseSelect } from "@/components/reusable";
-import { Button } from "@/components/ui/button";
-import { Clock, ChevronUp, ChevronDown } from "lucide-react";
 import { eventCategories, ageRatings, africanTimezones } from "../constant";
+import { DateForm } from "@/components/custom/date-form";
+import { FormFieldWithAbsoluteText } from "@/components/custom/field-with-absolute-text";
+import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
+import type { FormFieldProps } from "@/components/reusable/base-form";
 
 export default function EventDetailsTab({ event }: { event: IEvents }) {
   return (
@@ -76,24 +70,16 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       onSubmit={onSubmit}
       className="w-full flex flex-col gap-8"
     >
-      <FormField form={form} name="name">
+      <FormFieldWithCounter name="NAME" field_name="name" form={form}>
         {(field) => (
-          <>
-            <div className="w-full flex items-center justify-between text-black text-xs uppercase font-sf-pro-text">
-              <Label htmlFor="name">EVENT NAME</Label>
-              <p className="font-light">
-                {85 - String(field.value || "").length}/85
-              </p>
-            </div>
-            <Input
-              placeholder="Enter event name."
-              className="uppercase"
-              {...field}
-              value={field.value == null ? "" : String(field.value)}
-            />
-          </>
+          <Input
+            placeholder="Enter event name."
+            className="uppercase"
+            {...field}
+            value={field.value == null ? "" : String(field.value)}
+          />
         )}
-      </FormField>
+      </FormFieldWithCounter>
 
       <FormField form={form} name="venue" label="Venue">
         {(field) => (
@@ -133,40 +119,36 @@ function EventDetailsForm({ event }: { event: IEvents }) {
         )}
       </FormField>
 
-      <FormField form={form} name="description">
+      <FormFieldWithCounter
+        name="DESCRIPTION"
+        field_name="description"
+        form={form}
+      >
         {(field) => (
-          <>
-            <div className="w-full flex items-center justify-between text-black text-xs uppercase font-sf-pro-text">
-              <Label htmlFor="name">DESCRIPTION</Label>
-              <p className="font-light">
-                {950 - String(field.value || "").length}/950
-              </p>
-            </div>
-            <Textarea
-              placeholder="Enter event description."
-              className="w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-              {...field}
-              value={field.value == null ? "" : String(field.value)}
-            />
-          </>
+          <Textarea
+            placeholder="Enter event description."
+            className="w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+            {...field}
+            value={field.value == null ? "" : String(field.value)}
+          />
         )}
-      </FormField>
+      </FormFieldWithCounter>
 
-      <FormField form={form} name="custom_url" label="Custom URL">
+      <FormFieldWithAbsoluteText
+        form={form}
+        name="custom_url"
+        label="Custom URL"
+        text="afrorevive/events/"
+      >
         {(field) => (
-          <div className="flex items-center h-10 w-full border rounded-[4px] border-mid-dark-gray/50 bg-white">
-            <p className="lowercase border-r border-mid-dark-gray/50 px-3 py-[11px] rounded-l-[4px] text-black text-xs font-light font-sf-pro-text">
-              afrorevive/events/
-            </p>
-            <Input
-              placeholder="Enter custom URL."
-              className="border-none h-9"
-              {...field}
-              value={field.value == null ? "" : String(field.value)}
-            />
-          </div>
+          <Input
+            placeholder="Enter custom URL."
+            className="border-none h-9"
+            {...field}
+            value={field.value == null ? "" : String(field.value)}
+          />
         )}
-      </FormField>
+      </FormFieldWithAbsoluteText>
 
       <FormField form={form} name="time_zone" label="Timezone">
         {(field) => (
@@ -260,135 +242,13 @@ function EventDetailsForm({ event }: { event: IEvents }) {
   );
 }
 
-function DateForm<T extends FieldValues>({
-  name,
-  form,
-  input_name,
-  hour_name,
-  period_name,
-  minute_name,
-}: IDateFormProps<T>) {
-  return (
-    <div className="flex flex-col">
-      <p className="text-xs text-black font-sf-pro-text">{name}</p>
-      <div className="w-[448px] flex items-center gap-2 justify-between">
-        <FormField form={form} name={input_name} className="w-[316px]">
-          {(field) => (
-            <BaseDatePicker
-              value={field.value as Date}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              className="min-h-10 bg-white border-mid-dark-gray/50 rounded-[4px] hover:bg-black/10 font-sf-pro-display"
-            />
-          )}
-        </FormField>
-
-        <TimeForm
-          form={form}
-          hour_name={hour_name}
-          period_name={period_name}
-          minute_name={minute_name}
-        />
-      </div>
-    </div>
-  );
-}
-
-function TimeForm<T extends FieldValues>({
-  form,
-  hour_name,
-  minute_name,
-  period_name,
-}: ITimeFormProps<T>) {
-  const togglePeriod = () => {
-    const currentPeriod = form.getValues(period_name);
-    const newPeriod = currentPeriod === "AM" ? "PM" : "AM";
-    form.setValue(period_name, newPeriod as any);
-  };
-
-  return (
-    <div className="relative w-full h-10 flex gap-1 items-center">
-      <div className="h-10 flex items-center bg-white justify-between border border-mid-dark-gray/50 w-full rounded-l-[4px] px-3 py-2">
-        <Clock className="h-[18px] min-w-4 mr-2 text-muted-foreground" />
-
-        <FormField form={form} name={hour_name} className="w-fit">
-          {(field) => (
-            <Input
-              {...field}
-              maxLength={2}
-              className="w-10 h-9 text-center border-0 shadow-none p-0 focus-visible:ring-0"
-            />
-          )}
-        </FormField>
-
-        <span className="px-1 text-black">:</span>
-
-        <FormField form={form} name={minute_name} className="w-fit">
-          {(field) => (
-            <Input
-              {...field}
-              maxLength={2}
-              className="w-10 h-9 text-center border-0 shadow-none p-0 focus-visible:ring-0"
-            />
-          )}
-        </FormField>
-      </div>
-
-      <div className="ml-auto flex flex-col items-center justify-center">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={togglePeriod}
-          className="h-3 w-8 p-0 hover:bg-black/10"
-        >
-          <ChevronUp className="h-3 w-1.5" color="#000000" />
-        </Button>
-
-        <FormField
-          form={form}
-          name={period_name}
-          className="border border-mid-dark-gray/50 rounded-r-[4px]"
-        >
-          {(field) => (
-            <Input
-              {...field}
-              readOnly
-              maxLength={2}
-              className="w-10 text-center text-xs font-bold border-0 shadow-none p-0 focus-visible:ring-0"
-            />
-          )}
-        </FormField>
-
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={togglePeriod}
-          className="h-3 w-8 p-0 hover:bg-black/10"
-        >
-          <ChevronDown className="h-3 w-1.5" color="#000000" />
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 function FormField<T extends FieldValues>({
   name,
   children,
   form,
   label,
   className,
-}: {
-  name: Path<T>;
-  children:
-    | ReactElement
-    | ((field: ControllerRenderProps<T, Path<T>>) => ReactElement);
-  form: UseFormReturn<T>;
-  label?: string;
-  className?: string;
-}) {
+}: FormFieldProps<T>) {
   return (
     <BaseFormField
       form={form}
@@ -427,16 +287,4 @@ function SectionHeader({ name }: { name: string }) {
       {name}
     </p>
   );
-}
-
-interface ITimeFormProps<T extends FieldValues> {
-  form: UseFormReturn<T>;
-  hour_name: Path<T>;
-  minute_name: Path<T>;
-  period_name: Path<T>;
-}
-
-interface IDateFormProps<T extends FieldValues> extends ITimeFormProps<T> {
-  name: string;
-  input_name: Path<T>;
 }

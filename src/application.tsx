@@ -5,8 +5,11 @@ import { user_dashboard_routes } from "./config/user-dashboard-routes";
 import UserDashboardLayout from "./layouts/user-dashboard-layout";
 import CreatorDashboardLayout from "./layouts/creator-dashboard-layout";
 import { creator_dashboard_routes } from "./config/creator-dashboard-routes";
-import EditEventPage from "./pages/edit-event";
 import { getRoutePath } from "./config/get-route-path";
+import { lazy } from "react";
+
+const EditEventPage = lazy(() => import("../src/pages/edit-event"));
+const AddEventPage = lazy(() => import("../src/pages/add-event"));
 
 export default function Application() {
   return (
@@ -34,6 +37,8 @@ export default function Application() {
           path={getRoutePath("edit_event", { eventId: ":eventId" })}
           element={<EditEventPage />}
         />
+
+        <Route path={getRoutePath("add_event")} element={<AddEventPage />} />
       </Routes>
     </Router>
   );

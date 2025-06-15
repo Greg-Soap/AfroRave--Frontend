@@ -76,7 +76,7 @@ export function FormBase<T extends FieldValues>({
   );
 }
 
-interface FormFieldProps<T extends FieldValues> {
+export interface FormFieldProps<T extends FieldValues> {
   /** Field name (must match form values type) */
   name: Path<T>;
   /** Field label text */
