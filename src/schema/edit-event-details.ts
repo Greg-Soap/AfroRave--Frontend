@@ -26,20 +26,6 @@ export const EditEventDetailsSchema = z.object({
     minute: z.string().min(1).max(2),
     period: z.enum(["AM", "PM"]),
   }),
-  date: z.object({
-    start_date: z.date({ required_error: "A start date is required." }),
-    end_date: z.date({ required_error: "A end date is required." }),
-  }),
-  start_time: z.object({
-    hour: z.string().min(1).max(2),
-    minute: z.string().min(1).max(2),
-    period: z.enum(["AM", "PM"]),
-  }),
-  end_time: z.object({
-    hour: z.string().min(1).max(2),
-    minute: z.string().min(1).max(2),
-    period: z.enum(["AM", "AM"]),
-  }),
   email: z.string().email(),
   website_url: z.string().min(7, { message: "Provide a valid link." }),
   socials: z.object({

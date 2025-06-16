@@ -17,28 +17,28 @@ export default function AddEventPage() {
   const [step, setStep] = useState<number>();
 
   useEffect(() => {
-    const editParam = searchParams.get("editTab");
+    const tabParam = searchParams.get("tab");
 
     if (
-      editParam === "event-details" ||
-      editParam === "tickets" ||
-      editParam === "theme" ||
-      editParam === "vendor" ||
-      editParam === "publish"
+      tabParam === "event-details" ||
+      tabParam === "tickets" ||
+      tabParam === "theme" ||
+      tabParam === "vendor" ||
+      tabParam === "publish"
     ) {
-      setActiveTab(editParam);
-      RenderHeadline(editParam, setHeading, setDescription);
+      setActiveTab(tabParam);
+      RenderHeadline(tabParam, setHeading, setDescription);
     } else {
       setActiveTab("event-details");
-      setSearchParams({ editTab: "event-details" });
+      setSearchParams({ tab: "event-details" });
       RenderHeadline("event-details", setHeading, setDescription);
     }
   }, [searchParams]);
 
-  const setActiveTabState = (tab: string) => {
-    setActiveTab(tab);
-    setSearchParams({ account: tab });
-    RenderHeadline(tab, setHeading, setDescription);
+  const setActiveTabState = (incomingTab: string) => {
+    setActiveTab(incomingTab);
+    setSearchParams({ tab: incomingTab });
+    RenderHeadline(incomingTab, setHeading, setDescription);
   };
 
   const handleBackClick = () => {
@@ -54,9 +54,20 @@ export default function AddEventPage() {
     {
       value: "event-details",
       name: "Event Details",
-      element: <EventDetailsTab setStep={setStep} />,
+      element: (
+        <EventDetailsTab
+          setStep={setStep}
+          setActiveTabState={setActiveTabState}
+        />
+      ),
     },
-    { value: "tickets", name: "Tickets", element: <TicketsTab /> },
+    {
+      value: "tickets",
+      name: "Tickets",
+      element: (
+        <TicketsTab setStep={setStep} setActiveTabState={setActiveTabState} />
+      ),
+    },
     { value: "theme", name: "Theme", element: <ThemeTab /> },
     { value: "vendor", name: "Vendor", element: <VendorTab /> },
     { value: "publish", name: "Publish", element: <PublishTab /> },
@@ -98,11 +109,11 @@ export default function AddEventPage() {
         <TabsContent
           key={tab.value}
           value={tab.value}
-          className="w-full max-w-screen overflow-x-hidden bg-[#f8f8f8]"
+          className="w-full h-fit max-w-screen overflow-x-hidden bg-[#f8f8f8]"
         >
           <div className="w-full h-fit flex flex-col items-center">
             {/** Nav */}
-            <div className="w-full flex items-center justify-between py-3 px-8">
+            <div className="w-full h-fit flex items-center justify-between py-3 px-8">
               <Button
                 variant="ghost"
                 className="w-fit h-fit hover:bg-black/10"
@@ -117,7 +128,7 @@ export default function AddEventPage() {
                 disabled
                 className="h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]"
               >
-                Save and Exit Text
+                Save and Exit
               </Button>
             </div>
 

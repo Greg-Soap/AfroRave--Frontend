@@ -43,12 +43,14 @@ import type {
 } from "react-hook-form";
 import { cn } from "@/lib/utils";
 
-interface FormBaseProps<T extends FieldValues> {
+export interface FormBaseProps<T extends FieldValues> {
   /** React Hook Form instance */
   form: UseFormReturn<T>;
   /** Form submission handler */
   onSubmit: (data: T) => void;
   /** Form content */
+  /** Form error handler */
+  onError?: (errors: any) => void;
   children: ReactNode;
   /** Additional CSS classes for the form */
   className?: string;
@@ -61,13 +63,14 @@ interface FormBaseProps<T extends FieldValues> {
 export function FormBase<T extends FieldValues>({
   form,
   onSubmit,
+  onError,
   children,
   className,
 }: FormBaseProps<T>) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
         className={cn("space-y-8", className)}
       >
         {children}
@@ -164,7 +167,11 @@ export function FormField<T extends FieldValues>({
                   } as React.HTMLAttributes<HTMLElement>)
                 : null}
             </FormControl>
-            {description && <FormDescription>{description}</FormDescription>}
+            {description && (
+              <FormDescription className="self-end uppercase text-xs font-light font-sf-pro-text text-mid-dark-gray">
+                {description}
+              </FormDescription>
+            )}
             {showMessage && <FormMessage className="text-end" />}
           </FormItem>
         );

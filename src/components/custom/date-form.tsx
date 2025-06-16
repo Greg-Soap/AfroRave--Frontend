@@ -12,7 +12,7 @@ export function DateForm<T extends FieldValues>({
   minute_name,
 }: IDateFormProps<T>) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-2.5">
       <p className="text-xs text-black font-sf-pro-text">{name}</p>
       <div className="w-[448px] flex items-center gap-2 justify-between">
         <FormField

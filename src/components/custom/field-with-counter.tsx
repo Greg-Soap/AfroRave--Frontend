@@ -12,24 +12,33 @@ export function FormFieldWithCounter<T extends FieldValues>({
   field_name,
   name,
   children,
+  className,
+  maxLength,
+  description,
 }: {
   form: UseFormReturn<T>;
   field_name: Path<T>;
   name: string;
   children: (field: ControllerRenderProps<T, Path<T>>) => React.ReactNode;
+  className?: string;
+  maxLength: number;
+  description?: string;
 }) {
   return (
     <FormField
       form={form}
       name={field_name}
       className="w-full flex flex-col gap-1 text-black text-xs uppercase font-sf-pro-text"
+      description={description}
     >
       {(field) => (
         <>
           <div className="w-full flex items-center justify-between text-black text-xs uppercase font-sf-pro-text">
-            <Label htmlFor={field_name}>{name}</Label>
+            <Label htmlFor={field_name} className={className}>
+              {name}
+            </Label>
             <p className="font-light">
-              {950 - String(field.value || "").length}/950
+              {maxLength - String(field.value || "").length}/{maxLength}
             </p>
           </div>
           {children(field)}

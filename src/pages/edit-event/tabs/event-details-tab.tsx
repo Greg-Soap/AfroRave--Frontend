@@ -1,19 +1,19 @@
-import { FormBase, FormField as BaseFormField } from "@/components/reusable";
+import { FormBase } from "@/components/reusable";
 import { EditEventDetailsSchema } from "@/schema/edit-event-details";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Input as ShadcnInput, type InputProps } from "@/components/ui/input";
-import type { FieldValues } from "react-hook-form";
 import type { IEvents } from "@/data/events";
-import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { BaseSelect } from "@/components/reusable";
 import { eventCategories, ageRatings, africanTimezones } from "../constant";
 import { DateForm } from "@/components/custom/date-form";
 import { FormFieldWithAbsoluteText } from "@/components/custom/field-with-absolute-text";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
-import type { FormFieldProps } from "@/components/reusable/base-form";
+import {
+  CustomFormField as FormField,
+  CustomInput as Input,
+} from "@/components/custom/custom-form";
 
 export default function EventDetailsTab({ event }: { event: IEvents }) {
   return (
@@ -37,7 +37,6 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       category: "FASHION & LIFESTYLE",
       venue: event.event_location,
       description: event.description.join("\n"),
-      date: { start_date: undefined, end_date: undefined },
       start_date: {
         date: new Date(),
         hour: "12",
@@ -70,7 +69,12 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       onSubmit={onSubmit}
       className="w-full flex flex-col gap-8"
     >
-      <FormFieldWithCounter name="NAME" field_name="name" form={form}>
+      <FormFieldWithCounter
+        name="NAME"
+        field_name="name"
+        form={form}
+        maxLength={85}
+      >
         {(field) => (
           <Input
             placeholder="Enter event name."
@@ -123,6 +127,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
         name="DESCRIPTION"
         field_name="description"
         form={form}
+        maxLength={950}
       >
         {(field) => (
           <Textarea
@@ -239,45 +244,6 @@ function EventDetailsForm({ event }: { event: IEvents }) {
         </div>
       </div>
     </FormBase>
-  );
-}
-
-function FormField<T extends FieldValues>({
-  name,
-  children,
-  form,
-  label,
-  className,
-}: FormFieldProps<T>) {
-  return (
-    <BaseFormField
-      form={form}
-      name={name}
-      label={label}
-      className={cn(
-        "w-full flex flex-col gap-1 text-black text-xs uppercase font-sf-pro-text",
-        className
-      )}
-    >
-      {children}
-    </BaseFormField>
-  );
-}
-
-function Input({
-  placeholder,
-  className,
-  ...props
-}: { placeholder?: string; className?: string } & Omit<InputProps, "ref">) {
-  return (
-    <ShadcnInput
-      placeholder={placeholder}
-      className={cn(
-        "w-full h-10 text-black px-3 py-[11px] rounded-[4px] bg-white border border-mid-dark-gray/50 text-sm font-sf-pro-display",
-        className
-      )}
-      {...props}
-    />
   );
 }
 
