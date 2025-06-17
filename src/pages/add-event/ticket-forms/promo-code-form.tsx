@@ -40,7 +40,11 @@ export default function PromoCodeForm({
   });
 
   function onSubmit(values: { promoCodes: z.infer<typeof promoCodeSchema> }) {
-    console.log(values.promoCodes);
+    console.log(
+      "[PromoCodeForm] Form submitted with values:",
+      values.promoCodes
+    );
+    console.log("[PromoCodeForm] Calling handleFormChange with 'upgrades'");
     handleFormChange("upgrades");
   }
 

@@ -16,6 +16,11 @@ export default function TicketsTab({
 
   useEffect(() => {
     const formParam = searchParams.get("form");
+    console.log("[TicketsTab] URL params changed:", {
+      formParam,
+      allParams: Object.fromEntries(searchParams.entries()),
+      searchParamsString: searchParams.toString(),
+    });
 
     if (
       formParam === "create" ||
@@ -23,14 +28,14 @@ export default function TicketsTab({
       formParam === "upgrades"
     ) {
       setCurrentForm(formParam);
-    } else {
-      setCurrentForm("create");
-      setSearchParams({ form: "create" });
+    } else if (searchParams.get("tab") === "tickets") {
+      // Only reset to create form if we're explicitly on the tickets tab
+      setSearchParams({ tab: "tickets", form: "create" });
     }
   }, [searchParams]);
 
   function handleFormChange(form: string) {
-    setSearchParams({ tab: "tickets", form: "create" });
+    setSearchParams({ tab: "tickets", form: form });
     setCurrentForm(form);
   }
 

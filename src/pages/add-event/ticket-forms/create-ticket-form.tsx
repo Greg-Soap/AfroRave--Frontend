@@ -114,7 +114,12 @@ export default function CreateTicketForm({
             </FormFieldWithCounter>
 
             <div className="flex items-end gap-6">
-              <FormField form={form} name="email" label="EMAIL">
+              <FormField
+                form={form}
+                name="email"
+                label="EMAIL"
+                className="max-w-[360px]"
+              >
                 {(field) => (
                   <Input
                     {...field}
@@ -192,6 +197,7 @@ function TicketForm({
         label="SALES TYPE"
         data={salesTypeItems}
         placeholder="Select a type of sale."
+        triggerClassName="w-full"
       />
 
       <SelectField
@@ -200,6 +206,7 @@ function TicketForm({
         label="TICKET TYPE"
         data={ticketTypeItems}
         placeholder="Select a type of sale."
+        triggerClassName="w-full"
       />
 
       <div className="flex items-end gap-3">
@@ -272,7 +279,7 @@ function TicketForm({
         form={form}
         name={`tickets.${idx}.tags`}
         label="TAGS"
-        className="w-full"
+        triggerClassName="w-full"
         data={tags}
         placeholder="Select a tag."
       />

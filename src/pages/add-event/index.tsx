@@ -18,6 +18,11 @@ export default function AddEventPage() {
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
+    console.log("[AddEventPage] URL params changed:", {
+      tabParam,
+      allParams: Object.fromEntries(searchParams.entries()),
+      searchParamsString: searchParams.toString(),
+    });
 
     if (
       tabParam === "event-details" ||
@@ -28,15 +33,15 @@ export default function AddEventPage() {
     ) {
       setActiveTab(tabParam);
       RenderHeadline(tabParam, setHeading, setDescription);
-    } else {
+    } else if (!tabParam) {
       setActiveTab("event-details");
+
       setSearchParams({ tab: "event-details" });
       RenderHeadline("event-details", setHeading, setDescription);
     }
   }, [searchParams]);
 
   const setActiveTabState = (incomingTab: string) => {
-    setActiveTab(incomingTab);
     setSearchParams({ tab: incomingTab });
     RenderHeadline(incomingTab, setHeading, setDescription);
   };
