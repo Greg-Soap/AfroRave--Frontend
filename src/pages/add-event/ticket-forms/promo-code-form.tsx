@@ -71,6 +71,7 @@ export default function PromoCodeForm({
               form={form}
               name={`${idx}.discount.type`}
               label="SALES TYPE"
+              className="w-fit"
             >
               {(field) => (
                 <BaseSelect

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export function SubmitBtn({ children }: { children?: React.ReactNode }) {
   return (
-    <div className="flex items-center gap- justify-center py-8">
+    <div className="flex items-center gap-8 justify-center py-8">
       {children}
 
       <Button
