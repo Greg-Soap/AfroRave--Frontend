@@ -177,7 +177,7 @@ export default function EventDetailsTab({
               </Button>
               <Button
                 type="button"
-                className="w-[160px] h-10 rounded-4px text-sm font-sf-pro-text bg-[#DDDDDD] text-black font-sf-pro-text hover:bg-black/20"
+                className="w-[160px] h-10 rounded-4px text-sm font-sf-pro-text bg-[#DDDDDD] text-black hover:bg-black/20"
               >
                 Season
               </Button>

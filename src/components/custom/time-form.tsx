@@ -28,6 +28,7 @@ export function TimeForm<T extends FieldValues>({
         >
           {(field) => (
             <Input
+              type="number"
               {...field}
               maxLength={2}
               className="w-10 h-9 text-center border-0 shadow-none p-0 focus-visible:ring-0 text-black px-3 py-[11px] rounded-[4px] bg-white text-sm font-sf-pro-display"
@@ -44,6 +45,7 @@ export function TimeForm<T extends FieldValues>({
         >
           {(field) => (
             <Input
+              type="number"
               {...field}
               maxLength={2}
               className="w-10 h-9 text-center border-0 shadow-none p-0 focus-visible:ring-0"
