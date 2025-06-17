@@ -24,6 +24,7 @@ import { AddBtn } from "../component/add-btn";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SkipBtn } from "../component/skip-btn";
+import { PriceField } from "../component/price-field";
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -135,13 +136,7 @@ export default function PromoCodeForm({
           </FormField>
 
           <FormField form={form} name={`promoCodes.${idx}.onePerCustomer`}>
-            {(field) => (
-              <BaseCheckbox
-                data={checkboxData[0]}
-                {...field}
-                labelClassName="text-xs"
-              />
-            )}
+            {(field) => <BaseCheckbox data={checkboxData[0]} {...field} />}
           </FormField>
 
           <div className="flex flex-col gap-4">
@@ -169,34 +164,13 @@ export default function PromoCodeForm({
               form={form}
               name={`promoCodes.${idx}.conditions.spend.minimum`}
             >
-              {(field) => (
-                <BaseCheckbox
-                  data={checkboxData[1]}
-                  {...field}
-                  labelClassName="text-xs"
-                />
-              )}
+              {(field) => <BaseCheckbox data={checkboxData[1]} {...field} />}
             </FormField>
 
-            <FormField
+            <PriceField
               form={form}
               name={`promoCodes.${idx}.conditions.spend.amount`}
-              label="PRICE"
-            >
-              {(field) => (
-                <div className="flex items-center gap-3">
-                  <p className="py-[11px] px-[66px] w-[140px] h-10 flex items-center justify-center bg-[#acacac] rounded-[5px]">
-                    ₦
-                  </p>
-                  <Input
-                    type="number"
-                    className="w-[200px]"
-                    {...field}
-                    value={field.value == null ? "" : String(field.value)}
-                  />
-                </div>
-              )}
-            </FormField>
+            />
           </div>
 
           <div className="flex flex-col gap-4">
@@ -204,13 +178,7 @@ export default function PromoCodeForm({
               form={form}
               name={`promoCodes.${idx}.conditions.purchased.minimum`}
             >
-              {(field) => (
-                <BaseCheckbox
-                  data={checkboxData[2]}
-                  {...field}
-                  labelClassName="text-xs"
-                />
-              )}
+              {(field) => <BaseCheckbox data={checkboxData[2]} {...field} />}
             </FormField>
 
             <FormField
@@ -230,13 +198,7 @@ export default function PromoCodeForm({
           </div>
 
           <FormField form={form} name={`promoCodes.${idx}.private`}>
-            {(field) => (
-              <BaseCheckbox
-                data={checkboxData[3]}
-                {...field}
-                labelClassName="text-xs"
-              />
-            )}
+            {(field) => <BaseCheckbox data={checkboxData[3]} {...field} />}
           </FormField>
 
           <FormFieldWithCounter
@@ -279,14 +241,8 @@ export default function PromoCodeForm({
             />
           </div>
 
-          <FormField form={form} name={`promoCodes.${idx}.private`}>
-            {(field) => (
-              <BaseCheckbox
-                data={checkboxData[4]}
-                {...field}
-                labelClassName="text-xs"
-              />
-            )}
+          <FormField form={form} name={`promoCodes.${idx}.partnershipCode`}>
+            {(field) => <BaseCheckbox data={checkboxData[4]} {...field} />}
           </FormField>
         </div>
       ))}
