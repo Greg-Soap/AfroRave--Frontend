@@ -2,6 +2,7 @@ import CreateTicketForm from "../ticket-forms/create-ticket-form";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PromoCodeForm from "../ticket-forms/promo-code-form";
+import UpgradeForm from "../ticket-forms/upgrade-form";
 
 export default function TicketsTab({
   setStep,
@@ -33,6 +34,11 @@ export default function TicketsTab({
     setCurrentForm(form);
   }
 
+  function renderThemeTab() {
+    setActiveTabState("theme");
+    searchParams.delete("form");
+  }
+
   if (currentForm === "promocode") {
     setStep(2.5);
     return <PromoCodeForm handleFormChange={handleFormChange} />;
@@ -40,9 +46,11 @@ export default function TicketsTab({
 
   if (currentForm === "upgrades") {
     setStep(2.5);
-    return <CreateTicketForm handleFormChange={handleFormChange} />;
+    return <UpgradeForm renderThemeTab={renderThemeTab} />;
   }
 
-  setStep(2);
-  return <CreateTicketForm handleFormChange={handleFormChange} />;
+  if (currentForm === "create") {
+    setStep(2);
+    return <CreateTicketForm handleFormChange={handleFormChange} />;
+  }
 }

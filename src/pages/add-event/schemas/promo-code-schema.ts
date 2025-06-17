@@ -45,7 +45,7 @@ export const defaultPromoCodeValues: z.infer<typeof promoCodeSchema> = [
   {
     code: "",
     discount: {
-      type: "%",
+      type: "percentage",
       amount: "",
     },
     usageLimit: "100",

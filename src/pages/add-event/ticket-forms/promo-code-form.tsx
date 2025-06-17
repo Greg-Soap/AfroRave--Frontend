@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { z } from "zod";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import {
   CustomFormField as FormField,
@@ -22,6 +22,8 @@ import {
 } from "../schemas/promo-code-schema";
 import { AddBtn } from "../component/add-btn";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { SkipBtn } from "../component/skip-btn";
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -31,28 +33,43 @@ export default function PromoCodeForm({
   const [formCount, setFormCount] = useState<number>(1);
   const [perksCount, setPerksCount] = useState<number>(1);
 
-  const form = useForm<z.infer<typeof promoCodeSchema>>({
-    resolver: zodResolver(promoCodeSchema),
-    defaultValues: defaultPromoCodeValues,
+  const form = useForm<{ promoCodes: z.infer<typeof promoCodeSchema> }>({
+    resolver: zodResolver(z.object({ promoCodes: promoCodeSchema })),
+    defaultValues: { promoCodes: defaultPromoCodeValues },
   });
 
-  function onSubmit(values: z.infer<typeof promoCodeSchema>) {
-    console.log(values);
+  function onSubmit(values: { promoCodes: z.infer<typeof promoCodeSchema> }) {
+    console.log(values.promoCodes);
     handleFormChange("upgrades");
   }
 
   return (
-    <TabContainer<z.infer<typeof promoCodeSchema>>
-      heading="CREATE TICKETS"
+    <TabContainer<{ promoCodes: z.infer<typeof promoCodeSchema> }>
+      heading="enable PROMO CODES"
+      description="Code names must be unique per event"
+      headerButton={
+        <Button className="uppercase text-xs font-semibold font-sf-pro-rounded h-10 w-[192px]">
+          generate multiple codes
+        </Button>
+      }
       className="w-full flex flex-col"
       form={form}
       onSubmit={onSubmit}
     >
       {Array.from({ length: formCount }).map((_, idx) => (
         <div key={idx} className="w-full flex flex-col gap-8">
+          <p
+            className={cn("text-black font-bold", {
+              hidden: idx === 0,
+              flex: idx > 0,
+            })}
+          >
+            PROMOCODE {idx + 1}
+          </p>
+
           <FormFieldWithCounter
             name="promo code"
-            field_name={`${idx}.code`}
+            field_name={`promoCodes.${idx}.code`}
             form={form}
             className="font-normal"
             maxLength={20}
@@ -69,7 +86,7 @@ export default function PromoCodeForm({
           <div className="flex items-end gap-3">
             <FormField
               form={form}
-              name={`${idx}.discount.type`}
+              name={`promoCodes.${idx}.discount.type`}
               label="SALES TYPE"
               className="w-fit"
             >
@@ -87,7 +104,7 @@ export default function PromoCodeForm({
 
             <FormField
               form={form}
-              name={`${idx}.discount.amount`}
+              name={`promoCodes.${idx}.discount.amount`}
               className="mb-2"
             >
               {(field) => (
@@ -101,7 +118,12 @@ export default function PromoCodeForm({
             </FormField>
           </div>
 
-          <FormField form={form} name={`${idx}.usageLimit`} className="mb-2">
+          <FormField
+            form={form}
+            name={`promoCodes.${idx}.usageLimit`}
+            label="usage limit"
+            className="mb-2"
+          >
             {(field) => (
               <Input
                 type="number"
@@ -112,7 +134,7 @@ export default function PromoCodeForm({
             )}
           </FormField>
 
-          <FormField form={form} name={`${idx}.onePerCustomer`}>
+          <FormField form={form} name={`promoCodes.${idx}.onePerCustomer`}>
             {(field) => (
               <BaseCheckbox
                 data={checkboxData[0]}
@@ -126,24 +148,27 @@ export default function PromoCodeForm({
             <DateForm
               form={form}
               name="START DATE"
-              input_name={`${idx}.startDate.date`}
-              hour_name={`${idx}.startDate.hour`}
-              minute_name={`${idx}.startDate.minute`}
-              period_name={`${idx}.startDate.period`}
+              input_name={`promoCodes.${idx}.startDate.date`}
+              hour_name={`promoCodes.${idx}.startDate.hour`}
+              minute_name={`promoCodes.${idx}.startDate.minute`}
+              period_name={`promoCodes.${idx}.startDate.period`}
             />
 
             <DateForm
               form={form}
               name="END DATE"
-              input_name={`${idx}.endDate.date`}
-              hour_name={`${idx}.endDate.hour`}
-              minute_name={`${idx}.endDate.minute`}
-              period_name={`${idx}.endDate.period`}
+              input_name={`promoCodes.${idx}.endDate.date`}
+              hour_name={`promoCodes.${idx}.endDate.hour`}
+              minute_name={`promoCodes.${idx}.endDate.minute`}
+              period_name={`promoCodes.${idx}.endDate.period`}
             />
           </div>
 
           <div className="flex flex-col gap-4">
-            <FormField form={form} name={`${idx}.conditions.spend.minimum`}>
+            <FormField
+              form={form}
+              name={`promoCodes.${idx}.conditions.spend.minimum`}
+            >
               {(field) => (
                 <BaseCheckbox
                   data={checkboxData[1]}
@@ -155,7 +180,7 @@ export default function PromoCodeForm({
 
             <FormField
               form={form}
-              name={`${idx}.conditions.spend.amount`}
+              name={`promoCodes.${idx}.conditions.spend.amount`}
               label="PRICE"
             >
               {(field) => (
@@ -164,6 +189,7 @@ export default function PromoCodeForm({
                     ₦
                   </p>
                   <Input
+                    type="number"
                     className="w-[200px]"
                     {...field}
                     value={field.value == null ? "" : String(field.value)}
@@ -174,7 +200,10 @@ export default function PromoCodeForm({
           </div>
 
           <div className="flex flex-col gap-4">
-            <FormField form={form} name={`${idx}.conditions.purchased.minimum`}>
+            <FormField
+              form={form}
+              name={`promoCodes.${idx}.conditions.purchased.minimum`}
+            >
               {(field) => (
                 <BaseCheckbox
                   data={checkboxData[2]}
@@ -186,7 +215,7 @@ export default function PromoCodeForm({
 
             <FormField
               form={form}
-              name={`${idx}.conditions.purchased.amount`}
+              name={`promoCodes.${idx}.conditions.purchased.amount`}
               label="PRICE"
             >
               {(field) => (
@@ -200,7 +229,7 @@ export default function PromoCodeForm({
             </FormField>
           </div>
 
-          <FormField form={form} name={`${idx}.private`}>
+          <FormField form={form} name={`promoCodes.${idx}.private`}>
             {(field) => (
               <BaseCheckbox
                 data={checkboxData[3]}
@@ -212,7 +241,7 @@ export default function PromoCodeForm({
 
           <FormFieldWithCounter
             name="DESCRIPTION"
-            field_name={`${idx}.notes`}
+            field_name={`promoCodes.${idx}.notes`}
             form={form}
             maxLength={450}
             description="Optional"
@@ -232,7 +261,7 @@ export default function PromoCodeForm({
               <FormField
                 key={`perk-${index}-${Date.now()}`}
                 form={form}
-                name={`${idx}.perks.${index}`}
+                name={`promoCodes.${idx}.perks.${index}`}
                 label={index === 0 ? "Perks" : undefined}
               >
                 {(field) => (
@@ -250,7 +279,7 @@ export default function PromoCodeForm({
             />
           </div>
 
-          <FormField form={form} name={`${idx}.private`}>
+          <FormField form={form} name={`promoCodes.${idx}.private`}>
             {(field) => (
               <BaseCheckbox
                 data={checkboxData[4]}
@@ -259,22 +288,16 @@ export default function PromoCodeForm({
               />
             )}
           </FormField>
-
-          <AddBtn
-            name="Promo Code"
-            onClick={() => setFormCount((prev) => prev + 1)}
-          />
         </div>
       ))}
 
+      <AddBtn
+        name="Promo Code"
+        onClick={() => setFormCount((prev) => prev + 1)}
+      />
+
       <SubmitBtn>
-        <Button
-          type="button"
-          onClick={() => handleFormChange("upgrades")}
-          className="w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase bg-black text-white hover:bg-black hover:text-white"
-        >
-          SKIP
-        </Button>
+        <SkipBtn action={() => handleFormChange("upgrades")} />
       </SubmitBtn>
     </TabContainer>
   );
@@ -290,11 +313,11 @@ const checkboxData: IBaseCheckbox[] = [
     items: [{ label: "minimum spend", id: "yes" }],
   },
   {
-    description: "Only allow use if cart total exceeds this",
-    items: [{ label: "minimum spend", id: "yes" }],
+    description: "Only allow use if tickets total exceeds this",
+    items: [{ label: "minimum tickets", id: "yes" }],
   },
   {
-    description: "Promo code won’t be displayed on the event page",
+    description: "Promo code won't be displayed on the event page",
     items: [{ label: "private", id: "yes" }],
   },
   {
