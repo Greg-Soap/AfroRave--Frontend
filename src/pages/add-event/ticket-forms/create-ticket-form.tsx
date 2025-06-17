@@ -20,6 +20,8 @@ import {
 } from "@/components/reusable/base-checkbox";
 import { cn } from "@/lib/utils";
 import { AddBtn } from "../component/add-btn";
+import { PriceField } from "../component/price-field";
+import { SelectField } from "../component/select-field";
 
 export default function CreateTicketForm({
   handleFormChange,
@@ -175,7 +177,6 @@ function TicketForm({
         <FormField form={form} name={`tickets.${idx}.type`}>
           {(field) => (
             <BaseCheckbox
-              //defaultChecked={field["value"]}
               data={checkboxData[3]}
               {...field}
               labelClassName="text-xs"
@@ -185,61 +186,31 @@ function TicketForm({
         </FormField>
       </div>
 
-      <FormField
+      <SelectField
         form={form}
         name={`tickets.${idx}.salesType`}
         label="SALES TYPE"
-      >
-        {(field) => (
-          <BaseSelect
-            type="auth"
-            defaultValue="online"
-            items={salesTypeItems}
-            placeholder="Select a type of sale."
-            triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-            value={field.value as string}
-            onChange={field.onChange}
-          />
-        )}
-      </FormField>
+        data={salesTypeItems}
+        placeholder="Select a type of sale."
+      />
 
-      <FormField
+      <SelectField
         form={form}
         name={`tickets.${idx}.ticketType`}
         label="TICKET TYPE"
-      >
-        {(field) => (
-          <BaseSelect
-            type="auth"
-            defaultValue="single_ticket"
-            items={ticketTypeItems}
-            placeholder="Select a type of sale."
-            triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-            value={field.value as string}
-            onChange={field.onChange}
-          />
-        )}
-      </FormField>
+        data={ticketTypeItems}
+        placeholder="Select a type of sale."
+      />
 
       <div className="flex items-end gap-3">
-        <FormField
+        <SelectField
           form={form}
           name={`tickets.${idx}.quantity.availability`}
           label="QUANTITY"
           className="w-fit"
-        >
-          {(field) => (
-            <BaseSelect
-              type="auth"
-              defaultValue="limited"
-              items={availability}
-              placeholder="Select availability."
-              triggerClassName="w-[140px] h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-              value={field.value as string}
-              onChange={field.onChange}
-            />
-          )}
-        </FormField>
+          data={availability}
+          placeholder="Select availability."
+        />
 
         <FormField
           form={form}
@@ -256,20 +227,7 @@ function TicketForm({
         </FormField>
       </div>
 
-      <FormField form={form} name={`tickets.${idx}.price`} label="PRICE">
-        {(field) => (
-          <div className="flex items-center gap-3">
-            <p className="py-[11px] px-[66px] w-[140px] h-10 flex items-center justify-center bg-[#acacac] rounded-[5px]">
-              ₦
-            </p>
-            <Input
-              className="w-[200px]"
-              {...field}
-              value={field.value == null ? "" : String(field.value)}
-            />
-          </div>
-        )}
-      </FormField>
+      <PriceField form={form} name={`tickets.${idx}.price`} />
 
       <FormFieldWithCounter
         name="DESCRIPTION"
@@ -310,32 +268,23 @@ function TicketForm({
         />
       </div>
 
-      <FormField
+      <SelectField
         form={form}
         name={`tickets.${idx}.tags`}
         label="TAGS"
         className="w-full"
-      >
-        {(field) => (
-          <BaseSelect
-            type="auth"
-            items={tags}
-            placeholder="Select a tag."
-            triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-            value={field.value as string}
-            onChange={field.onChange}
-          />
-        )}
-      </FormField>
+        data={tags}
+        placeholder="Select a tag."
+      />
 
       <div className="flex flex-col gap-4">
         <FormField form={form} name={`tickets.${idx}.advancedOptions`}>
           {(field) => <BaseCheckbox data={checkboxData[0]} {...field} />}
         </FormField>
+
         <FormField form={form} name="tickets.0.allowResell">
           {(field) => (
             <BaseCheckbox
-              //defaultChecked={field["value"]}
               data={checkboxData[1]}
               {...field}
               labelClassName="text-xs"

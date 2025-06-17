@@ -8,7 +8,6 @@ import {
   CustomInput as Input,
 } from "@/components/custom/custom-form";
 import { Textarea } from "@/components/ui/textarea";
-import { BaseSelect } from "@/components/reusable";
 import { DateForm } from "@/components/custom/date-form";
 import { FormFieldWithAbsoluteText } from "@/components/custom/field-with-absolute-text";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
@@ -20,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TabContainer } from "../component/tab-ctn";
 import { SubmitBtn } from "../component/submit-btn";
+import { SelectField } from "../component/select-field";
 
 export default function EventDetailsTab({
   setStep,
@@ -34,19 +34,20 @@ export default function EventDetailsTab({
     resolver: zodResolver(EditEventDetailsSchema),
     defaultValues: {
       name: "",
-      category: "",
+      age_rating: "PG",
+      category: "festival",
       venue: "",
       description: "",
       start_date: {
         date: new Date(),
-        hour: "",
-        minute: "",
+        hour: "12",
+        minute: "00",
         period: "AM",
       },
       end_date: {
         date: new Date(),
-        hour: "",
-        minute: "",
+        hour: "12",
+        minute: "00",
         period: "AM",
       },
       email: "",
@@ -89,32 +90,23 @@ export default function EventDetailsTab({
           )}
         </FormFieldWithCounter>
 
-        <FormField form={form} name="age_rating" label="Age Rating">
-          {(field) => (
-            <BaseSelect
-              type="auth"
-              items={ageRatings}
-              defaultValue="PG"
-              placeholder="Select an age rating."
-              triggerClassName="w-[302px] h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-              value={field.value as string}
-              onChange={field.onChange}
-            />
-          )}
-        </FormField>
+        <SelectField
+          form={form}
+          name="age_rating"
+          label="Age Rating"
+          placeholder="Select an age rating."
+          data={ageRatings}
+          triggerClassName="w-[302px]"
+        />
 
-        <FormField form={form} name="category" label="Event Category">
-          {(field) => (
-            <BaseSelect
-              type="auth"
-              items={eventCategories}
-              placeholder="Select a Category."
-              triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-              value={field.value as string}
-              onChange={field.onChange}
-            />
-          )}
-        </FormField>
+        <SelectField
+          form={form}
+          name="category"
+          label="Event Category"
+          data={eventCategories}
+          placeholder="Select a Category."
+          triggerClassName="w-full"
+        />
 
         <FormField form={form} name="venue" label="Venue">
           {(field) => (
@@ -184,19 +176,14 @@ export default function EventDetailsTab({
             </div>
           </div>
 
-          <FormField form={form} name="time_zone" label="Timezone">
-            {(field) => (
-              <BaseSelect
-                type="auth"
-                items={africanTimezones}
-                defaultValue="Africa/Lagos"
-                placeholder="Select a time zone."
-                triggerClassName="w-full h-10 text-black px-3 py-[11px] bg-white rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-                value={field.value as string}
-                onChange={field.onChange}
-              />
-            )}
-          </FormField>
+          <SelectField
+            form={form}
+            name="time_zone"
+            label="Timezone"
+            data={africanTimezones}
+            placeholder="Select a time zone."
+            triggerClassName="w-full"
+          />
         </div>
 
         <div className="flex flex-col gap-4">

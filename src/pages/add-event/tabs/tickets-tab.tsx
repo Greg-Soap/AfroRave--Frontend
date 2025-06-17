@@ -30,7 +30,7 @@ export default function TicketsTab({
   }, [searchParams]);
 
   function handleFormChange(form: string) {
-    setSearchParams(form);
+    setSearchParams({ tab: "tickets", form: "create" });
     setCurrentForm(form);
   }
 

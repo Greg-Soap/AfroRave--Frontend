@@ -7,7 +7,6 @@ import {
   CustomInput as Input,
 } from "@/components/custom/custom-form";
 import { Textarea } from "@/components/ui/textarea";
-import { BaseSelect } from "@/components/reusable";
 import { DateForm } from "@/components/custom/date-form";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
 import { TabContainer } from "../component/tab-ctn";
@@ -25,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SkipBtn } from "../component/skip-btn";
 import { PriceField } from "../component/price-field";
+import { SelectField } from "../component/select-field";
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -85,23 +85,14 @@ export default function PromoCodeForm({
           </FormFieldWithCounter>
 
           <div className="flex items-end gap-3">
-            <FormField
+            <SelectField<{ promoCodes: z.infer<typeof promoCodeSchema> }>
               form={form}
               name={`promoCodes.${idx}.discount.type`}
               label="SALES TYPE"
               className="w-fit"
-            >
-              {(field) => (
-                <BaseSelect
-                  type="auth"
-                  items={discountTypes}
-                  placeholder="Select a type of sale."
-                  triggerClassName="w-[120px] h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-                  value={field.value as string}
-                  onChange={field.onChange}
-                />
-              )}
-            </FormField>
+              data={discountTypes}
+              placeholder="Select a type of sale."
+            />
 
             <FormField
               form={form}

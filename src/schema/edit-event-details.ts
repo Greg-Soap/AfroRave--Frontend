@@ -29,18 +29,9 @@ export const EditEventDetailsSchema = z.object({
   email: z.string().email(),
   website_url: z.string().min(7, { message: "Provide a valid link." }),
   socials: z.object({
-    instagram: z
-      .string()
-      .min(3, { message: "Provide a valid Instagram link." })
-      .optional(),
-    x: z.string().min(3, { message: "Provide a valid X link." }).optional(),
-    tiktok: z
-      .string()
-      .min(3, { message: "Provide a valid Tiktok link." })
-      .optional(),
-    facebook: z
-      .string()
-      .min(3, { message: "Provide a valid Facebook link." })
-      .optional(),
+    instagram: z.string().optional(),
+    x: z.string().optional(),
+    tiktok: z.string().optional(),
+    facebook: z.string().optional(),
   }),
 });

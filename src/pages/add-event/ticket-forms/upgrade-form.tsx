@@ -8,7 +8,6 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 import { CustomFormField as FormField } from "@/components/custom/custom-form";
-import { BaseSelect } from "@/components/reusable";
 import { TabContainer } from "../component/tab-ctn";
 import { SubmitBtn } from "../component/submit-btn";
 import {
@@ -21,6 +20,7 @@ import { defaultUgradeValues, upgradeSchema } from "../schemas/upgrade-schema";
 import { SkipBtn } from "../component/skip-btn";
 import { PriceField } from "../component/price-field";
 import type { ICustomSelectProps } from "@/components/reusable/base-select";
+import { SelectField } from "../component/select-field";
 
 export default function UpgradeForm({
   renderThemeTab,
@@ -127,18 +127,13 @@ function UpgradeSelect<T extends FieldValues>({
   return (
     <div className="flex items-center gap-3">
       <p className="text-deep-red font-sf-mono">{text}</p>
-      <FormField form={form} name={name} className="w-fit">
-        {(field) => (
-          <BaseSelect
-            type="auth"
-            items={data}
-            placeholder="Select an option"
-            triggerClassName="w-[240px] h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-            value={field.value as string}
-            onChange={field.onChange}
-          />
-        )}
-      </FormField>
+      <SelectField
+        form={form}
+        name={name}
+        className="w-fit"
+        data={data}
+        placeholder="Select an option"
+      />
     </div>
   );
 }
