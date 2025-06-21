@@ -73,8 +73,20 @@ export default function AddEventPage() {
         <TicketsTab setStep={setStep} setActiveTabState={setActiveTabState} />
       ),
     },
-    { value: "theme", name: "Theme", element: <ThemeTab /> },
-    { value: "vendor", name: "Vendor", element: <VendorTab /> },
+    {
+      value: "theme",
+      name: "Theme",
+      element: (
+        <ThemeTab setStep={setStep} setActiveTabState={setActiveTabState} />
+      ),
+    },
+    {
+      value: "vendor",
+      name: "Vendor",
+      element: (
+        <VendorTab setStep={setStep} setActiveTabState={setActiveTabState} />
+      ),
+    },
     { value: "publish", name: "Publish", element: <PublishTab /> },
   ];
 

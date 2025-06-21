@@ -15,20 +15,24 @@ import {
   type IBaseCheckbox,
 } from "@/components/reusable/base-checkbox";
 import { AddBtn } from "../component/add-btn";
-import { cn } from "@/lib/utils";
 import { defaultUgradeValues, upgradeSchema } from "../schemas/upgrade-schema";
 import { SkipBtn } from "../component/skip-btn";
 import { PriceField } from "../component/price-field";
 import type { ICustomSelectProps } from "@/components/reusable/base-select";
 import { SelectField } from "../component/select-field";
+import { FormCount } from "../component/form-count";
 
 export default function UpgradeForm({
   renderThemeTab,
 }: {
   renderThemeTab: () => void;
 }) {
-  const [formCount, setFormCount] = useState<number>(1);
-  const [options, setOptions] = useState<number>(1);
+  const [upgrades, setUpgrades] = useState([
+    {
+      id: Date.now() + Math.random(),
+      options: [{ id: Date.now() + Math.random() }],
+    },
+  ]);
 
   const form = useForm<{ upgrades: z.infer<typeof upgradeSchema> }>({
     resolver: zodResolver(z.object({ upgrades: upgradeSchema })),
@@ -48,20 +52,13 @@ export default function UpgradeForm({
       form={form}
       onSubmit={onSubmit}
     >
-      {Array.from({ length: formCount }).map((_, idx) => (
-        <div key={idx} className="w-full flex flex-col gap-8">
-          <p
-            className={cn("text-black font-bold", {
-              hidden: idx === 0,
-              flex: idx > 0,
-            })}
-          >
-            UPGRADES {idx + 1}
-          </p>
+      {upgrades.map((upgrade, idx) => (
+        <div key={upgrade.id} className="w-full flex flex-col gap-8">
+          <FormCount idx={idx} name="upgrades" />
 
           <div className="flex flex-col gap-5">
-            {Array.from({ length: options }).map((_, optionIdx) => (
-              <div key={optionIdx} className="flex items-center gap-5">
+            {upgrade.options.map((option, optionIdx) => (
+              <div key={option.id} className="flex items-center gap-5">
                 <UpgradeSelect
                   name={`upgrades.${idx}.upgrade.${optionIdx}.from`}
                   form={form}
@@ -81,7 +78,21 @@ export default function UpgradeForm({
             <AddBtn
               custom
               name="multiple upgrade options"
-              onClick={() => setOptions((o) => o + 1)}
+              onClick={() =>
+                setUpgrades((prev) =>
+                  prev.map((u, i) =>
+                    i === idx
+                      ? {
+                          ...u,
+                          options: [
+                            ...u.options,
+                            { id: Date.now() + Math.random() },
+                          ],
+                        }
+                      : u
+                  )
+                )
+              }
             />
           </div>
 
@@ -105,9 +116,20 @@ export default function UpgradeForm({
         </div>
       ))}
 
-      <AddBtn name="upgrade" onClick={() => setFormCount((f) => f + 1)} />
+      <AddBtn
+        name="upgrade"
+        onClick={() =>
+          setUpgrades((prev) => [
+            ...prev,
+            {
+              id: Date.now() + Math.random(),
+              options: [{ id: Date.now() + Math.random() }],
+            },
+          ])
+        }
+      />
       <SubmitBtn>
-        <SkipBtn action={renderThemeTab} />
+        <SkipBtn action={() => renderThemeTab()} />
       </SubmitBtn>
     </TabContainer>
   );

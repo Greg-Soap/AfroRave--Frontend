@@ -7,7 +7,6 @@ import {
   CustomInput as Input,
 } from "@/components/custom/custom-form";
 import { Textarea } from "@/components/ui/textarea";
-import { BaseSelect } from "@/components/reusable";
 import { DateForm } from "@/components/custom/date-form";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
 import { Button } from "@/components/ui/button";
@@ -18,17 +17,17 @@ import {
   BaseCheckbox,
   type IBaseCheckbox,
 } from "@/components/reusable/base-checkbox";
-import { cn } from "@/lib/utils";
 import { AddBtn } from "../component/add-btn";
 import { PriceField } from "../component/price-field";
 import { SelectField } from "../component/select-field";
+import { FormCount } from "../component/form-count";
 
 export default function CreateTicketForm({
   handleFormChange,
 }: {
   handleFormChange: (form: string) => void;
 }) {
-  const [ticketCount, setTicketCount] = useState<number>(1);
+  const [tickets, setTickets] = useState([{ id: Date.now() + Math.random() }]);
 
   const form = useForm<z.infer<typeof ticketSchema>>({
     resolver: zodResolver(ticketSchema),
@@ -48,12 +47,14 @@ export default function CreateTicketForm({
       onSubmit={onSubmit}
     >
       <>
-        {Array.from({ length: ticketCount }).map((_, idx) => (
-          <TicketForm key={idx} form={form} idx={idx} />
+        {tickets.map((ticket, idx) => (
+          <TicketForm key={ticket.id} form={form} idx={idx} />
         ))}
 
         <AddBtn
-          onClick={() => setTicketCount((prev) => prev + 1)}
+          onClick={() =>
+            setTickets((prev) => [...prev, { id: Date.now() + Math.random() }])
+          }
           name="Ticket"
         />
 
@@ -152,14 +153,7 @@ function TicketForm({
 
   return (
     <>
-      <p
-        className={cn("text-black font-bold", {
-          hidden: idx === 0,
-          flex: idx > 0,
-        })}
-      >
-        TICKET {idx + 1}
-      </p>
+      <FormCount name="TICKET" idx={idx} />
 
       <div className="flex flex-col gap-3">
         <FormFieldWithCounter

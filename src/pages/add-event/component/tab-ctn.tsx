@@ -11,7 +11,7 @@ export function TabContainer<TFormValues extends FieldValues>({
   onSubmit,
   ...props
 }: {
-  heading: string;
+  heading?: string;
   description?: string;
   headerButton?: React.ReactNode;
   children: React.ReactNode;

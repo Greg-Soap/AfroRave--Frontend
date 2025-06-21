@@ -21,18 +21,20 @@ import {
 } from "../schemas/promo-code-schema";
 import { AddBtn } from "../component/add-btn";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { SkipBtn } from "../component/skip-btn";
 import { PriceField } from "../component/price-field";
 import { SelectField } from "../component/select-field";
+import { FormCount } from "../component/form-count";
 
 export default function PromoCodeForm({
   handleFormChange,
 }: {
   handleFormChange: (form: string) => void;
 }) {
-  const [formCount, setFormCount] = useState<number>(1);
   const [perksCount, setPerksCount] = useState<number>(1);
+  const [promoCodes, setPromoCodes] = useState([
+    { id: Date.now() + Math.random() },
+  ]);
 
   const form = useForm<{ promoCodes: z.infer<typeof promoCodeSchema> }>({
     resolver: zodResolver(z.object({ promoCodes: promoCodeSchema })),
@@ -40,11 +42,7 @@ export default function PromoCodeForm({
   });
 
   function onSubmit(values: { promoCodes: z.infer<typeof promoCodeSchema> }) {
-    console.log(
-      "[PromoCodeForm] Form submitted with values:",
-      values.promoCodes
-    );
-    console.log("[PromoCodeForm] Calling handleFormChange with 'upgrades'");
+    console.log(values.promoCodes);
     handleFormChange("upgrades");
   }
 
@@ -61,16 +59,9 @@ export default function PromoCodeForm({
       form={form}
       onSubmit={onSubmit}
     >
-      {Array.from({ length: formCount }).map((_, idx) => (
-        <div key={idx} className="w-full flex flex-col gap-8">
-          <p
-            className={cn("text-black font-bold", {
-              hidden: idx === 0,
-              flex: idx > 0,
-            })}
-          >
-            PROMOCODE {idx + 1}
-          </p>
+      {promoCodes.map((promo, idx) => (
+        <div key={promo.id} className="w-full flex flex-col gap-8">
+          <FormCount name="promocode" idx={idx} />
 
           <FormFieldWithCounter
             name="promo code"
@@ -244,7 +235,9 @@ export default function PromoCodeForm({
 
       <AddBtn
         name="Promo Code"
-        onClick={() => setFormCount((prev) => prev + 1)}
+        onClick={() =>
+          setPromoCodes((prev) => [...prev, { id: Date.now() + Math.random() }])
+        }
       />
 
       <SubmitBtn>

@@ -12,6 +12,7 @@ export function AddBtn({
 }) {
   return (
     <Button
+      type="button"
       variant="ghost"
       className="text-deep-red flex items-center gap-2 text-xs font-sf-pro-text w-fit hover:bg-black/20 hover:text-deep-red uppercase"
       onClick={onClick}

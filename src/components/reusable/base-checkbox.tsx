@@ -34,8 +34,8 @@ export function BaseCheckbox({
                   defaultChecked={defaultChecked ? defaultChecked : false}
                   id={item.id}
                   checked={value === item.id}
-                  onCheckedChange={(checked) => {
-                    onChange?.(checked ? item.id : "");
+                  onCheckedChange={() => {
+                    onChange?.(item.id);
                   }}
                   className="size-4"
                 />

@@ -16,11 +16,6 @@ export default function TicketsTab({
 
   useEffect(() => {
     const formParam = searchParams.get("form");
-    console.log("[TicketsTab] URL params changed:", {
-      formParam,
-      allParams: Object.fromEntries(searchParams.entries()),
-      searchParamsString: searchParams.toString(),
-    });
 
     if (
       formParam === "create" ||
