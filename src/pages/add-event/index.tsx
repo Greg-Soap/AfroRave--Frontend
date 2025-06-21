@@ -202,7 +202,6 @@ function TabNav({
 
         <Button
           variant="destructive"
-          disabled
           className="h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]"
         >
           Save and Exit
