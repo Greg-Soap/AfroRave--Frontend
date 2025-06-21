@@ -30,14 +30,15 @@ import {
   categoryOptions,
   vendorCheckboxData as checkboxData,
 } from "../constant";
+import { SkipBtn } from "../component/skip-btn";
 
 export default function SlotForm({
   renderPublishTab,
 }: {
   renderPublishTab: () => void;
 }) {
-  const [slotCount, setSlotCount] = useState<number>(1);
-  const [phoneCount, setPhoneCount] = useState<number>(1);
+  const [slots, setSlots] = useState([{ id: Date.now() + Math.random() }]);
+  const [phones, setPhones] = useState([{ id: Date.now() + Math.random() }]);
 
   const form = useForm<z.infer<typeof slotSchema>>({
     resolver: zodResolver(slotSchema),
@@ -49,6 +50,14 @@ export default function SlotForm({
     renderPublishTab();
   }
 
+  const addSlot = () => {
+    setSlots((prev) => [...prev, { id: Date.now() + Math.random() }]);
+  };
+
+  const addPhone = () => {
+    setPhones((prev) => [...prev, { id: Date.now() + Math.random() }]);
+  };
+
   return (
     <TabContainer
       form={form}
@@ -56,8 +65,8 @@ export default function SlotForm({
       heading="ADD VENDORS"
       description="List your vendor slots and let the right vendors come to you"
     >
-      {Array.from({ length: slotCount }).map((_, idx) => (
-        <div key={idx} className="w-full flex flex-col gap-8">
+      {slots.map((slot, idx) => (
+        <div key={slot.id} className="w-full flex flex-col gap-8">
           <SelectField
             form={form}
             name={`slot.${idx}.type`}
@@ -77,11 +86,9 @@ export default function SlotForm({
           />
 
           <div className="flex flex-col gap-4">
-            <p className="text-xl font-sf-pro-text text-black">
-              Service Details
-            </p>
+            <p className="text-xl font-sf-pro-text text-black">Slot Details</p>
 
-            <FormField form={form} name={`slot.${idx}.name`}>
+            <FormField form={form} name={`slot.${idx}.name`} label="SLOT NAME">
               <Input />
             </FormField>
           </div>
@@ -120,7 +127,7 @@ export default function SlotForm({
         </div>
       ))}
 
-      <AddBtn name="vendor slot" onClick={() => setSlotCount((s) => s + 1)} />
+      <AddBtn name="vendor slot" onClick={addSlot} />
 
       <div className="flex flex-col gap-3">
         <FormField form={form} name={`useDifferentContactDetails`}>
@@ -128,13 +135,13 @@ export default function SlotForm({
         </FormField>
 
         <div className="flex flex-col gap-6">
-          <FormField form={form} name="email">
+          <FormField form={form} name="email" label="EMAIL">
             <Input />
           </FormField>
 
           <div className="flex flex-col gap-4">
-            {Array.from({ length: phoneCount }).map((_, idx) => (
-              <div key={idx} className="flex items-end gap-3">
+            {phones.map((phone, idx) => (
+              <div key={phone.id} className="flex items-end gap-3">
                 <SelectField
                   form={form}
                   name={`phone.${idx}.countryCode`}
@@ -154,11 +161,7 @@ export default function SlotForm({
               </div>
             ))}
 
-            <AddBtn
-              custom
-              name="PHONE NUMBER"
-              onClick={() => setPhoneCount((s) => s + 1)}
-            />
+            <AddBtn custom name="PHONE NUMBER" onClick={addPhone} />
           </div>
         </div>
 
@@ -167,7 +170,9 @@ export default function SlotForm({
         </FormField>
       </div>
 
-      <SubmitBtn />
+      <SubmitBtn>
+        <SkipBtn action={renderPublishTab} />
+      </SubmitBtn>
     </TabContainer>
   );
 }

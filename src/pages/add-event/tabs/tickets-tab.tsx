@@ -24,7 +24,6 @@ export default function TicketsTab({
     ) {
       setCurrentForm(formParam);
     } else if (searchParams.get("tab") === "tickets") {
-      // Only reset to create form if we're explicitly on the tickets tab
       setSearchParams({ tab: "tickets", form: "create" });
     }
   }, [searchParams]);

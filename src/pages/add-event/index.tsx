@@ -8,6 +8,7 @@ import TicketsTab from "./tabs/tickets-tab";
 import ThemeTab from "./tabs/theme-tab";
 import VendorTab from "./tabs/vendor-tab";
 import PublishTab from "./tabs/publish-tab";
+import { useNavigate } from "react-router-dom";
 
 export default function AddEventPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,9 +16,14 @@ export default function AddEventPage() {
   const [heading, setHeading] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [step, setStep] = useState<number>();
+  const [themeBtnVisibility, setThemeBtnVisibility] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
+    const formParam = searchParams.get("form");
+
     console.log("[AddEventPage] URL params changed:", {
       tabParam,
       allParams: Object.fromEntries(searchParams.entries()),
@@ -35,9 +41,14 @@ export default function AddEventPage() {
       RenderHeadline(tabParam, setHeading, setDescription);
     } else if (!tabParam) {
       setActiveTab("event-details");
-
       setSearchParams({ tab: "event-details" });
       RenderHeadline("event-details", setHeading, setDescription);
+    }
+
+    if (tabParam === "theme" && formParam === "layout") {
+      setThemeBtnVisibility(true);
+    } else {
+      setThemeBtnVisibility(false);
     }
   }, [searchParams]);
 
@@ -47,15 +58,17 @@ export default function AddEventPage() {
   };
 
   const handleBackClick = () => {
-    const currentIndex = edit_tabs.findIndex((tab) => tab.value === activeTab);
+    const currentIndex = tabs.findIndex((tab) => tab.value === activeTab);
     if (currentIndex > 0) {
-      const previousTab = edit_tabs[currentIndex - 1].value;
+      const previousTab = tabs[currentIndex - 1].value;
       setActiveTab(previousTab);
       setSearchParams({ account: previousTab });
+    } else {
+      navigate(-1);
     }
   };
 
-  const edit_tabs: IEditTabProps[] = [
+  const tabs: IEditTabProps[] = [
     {
       value: "event-details",
       name: "Event Details",
@@ -87,7 +100,11 @@ export default function AddEventPage() {
         <VendorTab setStep={setStep} setActiveTabState={setActiveTabState} />
       ),
     },
-    { value: "publish", name: "Publish", element: <PublishTab /> },
+    {
+      value: "publish",
+      name: "Publish",
+      element: <PublishTab setStep={setStep} />,
+    },
   ];
 
   return (
@@ -106,7 +123,7 @@ export default function AddEventPage() {
         />
 
         <TabsList className="flex items-center gap-24 w-fit h-fit bg-transparent p-0">
-          {edit_tabs.map((tab) => (
+          {tabs.map((tab) => (
             <TabsTrigger
               disabled
               key={tab.value}
@@ -122,7 +139,7 @@ export default function AddEventPage() {
           EA
         </p>
       </div>
-      {edit_tabs.map((tab) => (
+      {tabs.map((tab) => (
         <TabsContent
           key={tab.value}
           value={tab.value}
@@ -130,24 +147,11 @@ export default function AddEventPage() {
         >
           <div className="w-full h-fit flex flex-col items-center">
             {/** Nav */}
-            <div className="w-full h-fit flex items-center justify-between py-3 px-8">
-              <Button
-                variant="ghost"
-                className="w-fit h-fit hover:bg-black/10"
-                onClick={handleBackClick}
-                disabled={activeTab === "event-details"}
-              >
-                <ChevronLeft color="#000000" className="min-w-1.5 min-h-3" />
-              </Button>
-
-              <Button
-                variant="destructive"
-                disabled
-                className="h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]"
-              >
-                Save and Exit
-              </Button>
-            </div>
+            <TabNav
+              handleBackClick={handleBackClick}
+              activeTab={activeTab}
+              themeBtnVisibility={themeBtnVisibility}
+            />
 
             <section className="container w-full flex flex-col gap-10">
               <div className="flex flex-col gap-2 py-10 px-14 text-black font-sf-pro-display">
@@ -164,6 +168,58 @@ export default function AddEventPage() {
         </TabsContent>
       ))}
     </Tabs>
+  );
+}
+
+function TabNav({
+  activeTab,
+  handleBackClick,
+  themeBtnVisibility,
+}: {
+  activeTab: string;
+  handleBackClick: () => void;
+  themeBtnVisibility: boolean;
+}) {
+  return (
+    <div className="w-full h-fit flex items-center justify-between py-3 px-8">
+      <Button
+        variant="ghost"
+        className="w-fit h-fit hover:bg-black/10"
+        onClick={handleBackClick}
+        disabled={activeTab !== "publish"}
+      >
+        <ChevronLeft color="#000000" className="min-w-1.5 min-h-3" />
+      </Button>
+
+      <div className="flex gap-8">
+        {themeBtnVisibility && (
+          <NavBtn name={activeTab} action={() => console.log("hello world")} />
+        )}
+
+        {activeTab === "publish" && (
+          <NavBtn name={activeTab} action={() => console.log("hello world")} />
+        )}
+
+        <Button
+          variant="destructive"
+          disabled
+          className="h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]"
+        >
+          Save and Exit
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function NavBtn({ name, action }: { name: string; action: () => void }) {
+  return (
+    <Button
+      onClick={action}
+      className="h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px] bg-white text-deep-red hover:bg-black/10 uppercase"
+    >
+      {name}
+    </Button>
   );
 }
 

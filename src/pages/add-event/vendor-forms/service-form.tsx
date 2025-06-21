@@ -33,14 +33,17 @@ import {
   QuantityDecreaseButton,
   QuantityIncreaseBtn,
 } from "../component/quantity-buttons";
+import { SkipBtn } from "../component/skip-btn";
 
 export default function ServiceForm({
   handleFormChange,
 }: {
   handleFormChange: () => void;
 }) {
-  const [slotCount, setSlotCount] = useState<number>(1);
-  const [phoneCount, setPhoneCount] = useState<number>(1);
+  const [services, setServices] = useState([
+    { id: Date.now() + Math.random() },
+  ]);
+  const [phones, setPhones] = useState([{ id: Date.now() + Math.random() }]);
 
   const form = useForm<z.infer<typeof serviceSchema>>({
     resolver: zodResolver(serviceSchema),
@@ -52,6 +55,14 @@ export default function ServiceForm({
     handleFormChange();
   }
 
+  const addService = () => {
+    setServices((prev) => [...prev, { id: Date.now() + Math.random() }]);
+  };
+
+  const addPhone = () => {
+    setPhones((prev) => [...prev, { id: Date.now() + Math.random() }]);
+  };
+
   return (
     <TabContainer
       form={form}
@@ -59,8 +70,8 @@ export default function ServiceForm({
       heading="ADD VENDORS"
       description="List your vendor slots and let the right vendors come to you"
     >
-      {Array.from({ length: slotCount }).map((_, idx) => (
-        <div key={idx} className="w-full flex flex-col gap-8">
+      {services.map((service, idx) => (
+        <div key={service.id} className="w-full flex flex-col gap-8">
           <SelectField
             form={form}
             name={`service.${idx}.type`}
@@ -84,7 +95,11 @@ export default function ServiceForm({
               Service Details
             </p>
 
-            <FormField form={form} name={`service.${idx}.name`}>
+            <FormField
+              form={form}
+              name={`service.${idx}.name`}
+              label="SERVICE NAME"
+            >
               <Input />
             </FormField>
           </div>
@@ -157,7 +172,7 @@ export default function ServiceForm({
         </div>
       ))}
 
-      <AddBtn name="vendor slot" onClick={() => setSlotCount((s) => s + 1)} />
+      <AddBtn name="vendor slot" onClick={addService} />
 
       <div className="flex flex-col gap-3">
         <FormField form={form} name={`useDifferentContactDetails`}>
@@ -165,13 +180,13 @@ export default function ServiceForm({
         </FormField>
 
         <div className="flex flex-col gap-6">
-          <FormField form={form} name="email">
+          <FormField form={form} name="email" label="EMAIL">
             <Input />
           </FormField>
 
           <div className="flex flex-col gap-4">
-            {Array.from({ length: phoneCount }).map((_, idx) => (
-              <div key={idx} className="flex items-end gap-3">
+            {phones.map((phone, idx) => (
+              <div key={phone.id} className="flex items-end gap-3">
                 <SelectField
                   form={form}
                   name={`phone.${idx}.countryCode`}
@@ -191,11 +206,7 @@ export default function ServiceForm({
               </div>
             ))}
 
-            <AddBtn
-              custom
-              name="PHONE NUMBER"
-              onClick={() => setPhoneCount((s) => s + 1)}
-            />
+            <AddBtn custom name="PHONE NUMBER" onClick={addPhone} />
           </div>
         </div>
 
@@ -204,7 +215,9 @@ export default function ServiceForm({
         </FormField>
       </div>
 
-      <SubmitBtn />
+      <SubmitBtn>
+        <SkipBtn action={handleFormChange} />
+      </SubmitBtn>
     </TabContainer>
   );
 }
