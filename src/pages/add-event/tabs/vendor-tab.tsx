@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ServiceForm from "../vendor-forms/service-form";
+import SlotForm from "../vendor-forms/slot-form";
 
 export default function VendorTab({
   setStep,
@@ -17,7 +18,7 @@ export default function VendorTab({
 
     if (formParam === "service" || formParam === "slot") {
       setCurrentForm(formParam);
-    } else if (searchParams.get("tab") === "service") {
+    } else if (searchParams.get("tab") === "vendor") {
       setSearchParams({ tab: "vendor", form: "service" });
     }
   }, [searchParams]);
@@ -34,7 +35,7 @@ export default function VendorTab({
 
   if (currentForm === "slot") {
     setStep(4.5);
-    return <p>Hello</p>;
+    return <SlotForm renderPublishTab={renderPublishTab} />;
   }
 
   setStep(4);

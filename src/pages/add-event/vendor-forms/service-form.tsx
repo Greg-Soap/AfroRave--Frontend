@@ -16,18 +16,23 @@ import {
   CustomFormField as FormField,
   CustomInput as Input,
 } from "@/components/custom/custom-form";
-import {
-  BaseCheckbox,
-  type IBaseCheckbox,
-} from "@/components/reusable/base-checkbox";
+import { BaseCheckbox } from "@/components/reusable/base-checkbox";
 import { TimeForm } from "@/components/custom/time-form";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
 import { Textarea } from "@/components/ui/textarea";
 import { AddBtn } from "../component/add-btn";
 import { useState } from "react";
 import { SubmitBtn } from "../component/submit-btn";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import {
+  africanCountryCodes,
+  vendorTypes,
+  categoryOptions,
+  vendorCheckboxData as checkboxData,
+} from "../constant";
+import {
+  QuantityDecreaseButton,
+  QuantityIncreaseBtn,
+} from "../component/quantity-buttons";
 
 export default function ServiceForm({
   handleFormChange,
@@ -276,25 +281,8 @@ function DetailedTimeForm<T extends FieldValues>({
       </div>
 
       <div className="flex w-10 h-10 flex-col items-center justify-between rounded-r-[4px] border border-mid-dark-gray/50">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={increaseMinute}
-          className="w-8 p-0 hover:bg-black/10 h-1/2 border-b border-black rounded-none px-0"
-        >
-          <ChevronUp className="h-3 w-1.5" color="#000000" />
-        </Button>
-
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={decreaseMinute}
-          className="h-1/2 w-8 p-0 hover:bg-black/10"
-        >
-          <ChevronDown className="h-3 w-1.5" color="#000000" />
-        </Button>
+        <QuantityIncreaseBtn action={increaseMinute} />
+        <QuantityDecreaseButton action={decreaseMinute} />
       </div>
     </div>
   );
@@ -306,89 +294,3 @@ interface ITimeFormProps<T extends FieldValues> {
   minute_name: Path<T>;
   second_name: Path<T>;
 }
-
-const checkboxData: IBaseCheckbox[] = [
-  { items: [{ label: "BUDGET RANGE", id: "yes" }] },
-  { items: [{ label: "use different CONTACT DETAILS", id: "yes" }] },
-  { items: [{ label: "SHOW SOCIAL HANDLES", id: "yes" }] },
-];
-
-const vendorTypes: { value: string; label: string }[] = [
-  { value: "service_vendor", label: "Service Vendor" },
-  { value: "product_vendor", label: "Product Vendor" },
-  { value: "consultant", label: "Consultant" },
-  { value: "contractor", label: "Contractor" },
-  { value: "freelancer", label: "Freelancer" },
-];
-
-const categoryOptions: { value: string; label: string }[] = [
-  { value: "dj_mc", label: "DJ/MC" },
-  { value: "live_band", label: "Live Band" },
-  { value: "photographer", label: "Photographer" },
-  { value: "videographer", label: "Videographer" },
-  { value: "caterer", label: "Caterer" },
-  { value: "decorator", label: "Decorator" },
-  { value: "event_planner", label: "Event Planner" },
-  { value: "security", label: "Security" },
-  { value: "usher", label: "Usher" },
-  { value: "makeup_artist", label: "Makeup Artist" },
-  { value: "lighting", label: "Lighting" },
-  { value: "sound", label: "Sound" },
-];
-
-const africanCountryCodes: { value: string; label: string }[] = [
-  { value: "+213", label: "Algeria (+213)" },
-  { value: "+244", label: "Angola (+244)" },
-  { value: "+229", label: "Benin (+229)" },
-  { value: "+267", label: "Botswana (+267)" },
-  { value: "+226", label: "Burkina Faso (+226)" },
-  { value: "+257", label: "Burundi (+257)" },
-  { value: "+237", label: "Cameroon (+237)" },
-  { value: "+238", label: "Cape Verde (+238)" },
-  { value: "+236", label: "Central African Republic (+236)" },
-  { value: "+235", label: "Chad (+235)" },
-  { value: "+269", label: "Comoros (+269)" },
-  { value: "+242", label: "Congo - Brazzaville (+242)" },
-  { value: "+243", label: "Congo - Kinshasa (+243)" },
-  { value: "+225", label: "Côte d’Ivoire (+225)" },
-  { value: "+253", label: "Djibouti (+253)" },
-  { value: "+20", label: "Egypt (+20)" },
-  { value: "+240", label: "Equatorial Guinea (+240)" },
-  { value: "+291", label: "Eritrea (+291)" },
-  { value: "+268", label: "Eswatini (+268)" },
-  { value: "+251", label: "Ethiopia (+251)" },
-  { value: "+241", label: "Gabon (+241)" },
-  { value: "+220", label: "Gambia (+220)" },
-  { value: "+233", label: "Ghana (+233)" },
-  { value: "+224", label: "Guinea (+224)" },
-  { value: "+245", label: "Guinea-Bissau (+245)" },
-  { value: "+254", label: "Kenya (+254)" },
-  { value: "+266", label: "Lesotho (+266)" },
-  { value: "+231", label: "Liberia (+231)" },
-  { value: "+218", label: "Libya (+218)" },
-  { value: "+261", label: "Madagascar (+261)" },
-  { value: "+265", label: "Malawi (+265)" },
-  { value: "+223", label: "Mali (+223)" },
-  { value: "+222", label: "Mauritania (+222)" },
-  { value: "+230", label: "Mauritius (+230)" },
-  { value: "+212", label: "Morocco (+212)" },
-  { value: "+258", label: "Mozambique (+258)" },
-  { value: "+264", label: "Namibia (+264)" },
-  { value: "+227", label: "Niger (+227)" },
-  { value: "+234", label: "Nigeria (+234)" },
-  { value: "+250", label: "Rwanda (+250)" },
-  { value: "+239", label: "São Tomé & Príncipe (+239)" },
-  { value: "+221", label: "Senegal (+221)" },
-  { value: "+248", label: "Seychelles (+248)" },
-  { value: "+232", label: "Sierra Leone (+232)" },
-  { value: "+252", label: "Somalia (+252)" },
-  { value: "+27", label: "South Africa (+27)" },
-  { value: "+211", label: "South Sudan (+211)" },
-  { value: "+249", label: "Sudan (+249)" },
-  { value: "+255", label: "Tanzania (+255)" },
-  { value: "+228", label: "Togo (+228)" },
-  { value: "+216", label: "Tunisia (+216)" },
-  { value: "+256", label: "Uganda (+256)" },
-  { value: "+260", label: "Zambia (+260)" },
-  { value: "+263", label: "Zimbabwe (+263)" },
-];
