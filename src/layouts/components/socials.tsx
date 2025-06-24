@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-export function Socials({ type = "root" }: { type?: "root" | "account" }) {
+export function Socials({
+  className,
+  data = socials,
+}: {
+  className?: string;
+  data?: ISocials[];
+}) {
   return (
-    <div
-      className={cn("w-full flex items-center gap-2.5", {
-        "md:justify-end px-[1rem] md:px-[2rem]": type === "root",
-        "justify-center": type === "account",
-      })}
-    >
-      {socials.map((item) => (
+    <div className={cn("w-full flex items-center gap-2.5", className)}>
+      {data.map((item) => (
         <Link
           key={item.alt}
           to={item.href}
@@ -28,7 +29,7 @@ const socials: ISocials[] = [
   { href: "/", icon: "/assets/landing-page/yt.png", alt: "Youtube" },
 ];
 
-interface ISocials {
+export interface ISocials {
   href: string;
   icon: string;
   alt: string;

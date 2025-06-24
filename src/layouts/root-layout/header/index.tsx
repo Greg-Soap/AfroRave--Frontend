@@ -1,16 +1,10 @@
 import { Search } from "lucide-react";
-import BaseDropdown from "@/components/reusable/base-dropdown";
-import BaseSheet from "@/components/reusable/base-sheet";
-import { useState } from "react";
-import { useAuth } from "@/contexts/auth-context";
 import { NavLogo } from "./nav-logo";
-import { Button } from "@/components/ui/button";
-import MobileMenu from "./mobile-menu";
 import { useScroll } from "@/lib/useScroll";
+import LoginButton from "@/layouts/components/login-button";
+import NavSheet from "@/layouts/components/nav-sheet";
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { openAuthModal } = useAuth();
   const { hasScrolled } = useScroll();
 
   return (
@@ -31,51 +25,9 @@ export default function Header() {
             className="max-sm:hidden cursor-pointer min-w-[26px] "
           />
 
-          <BaseDropdown
-            trigger={
-              <Button className="h-6 w-[48px] bg-white text-[10px] text-black font-sf-pro-rounded hover:bg-white/90">
-                Log In
-              </Button>
-            }
-            items={[
-              {
-                label: "Guest",
-                onClick: () => openAuthModal("login", "guest"),
-              },
-              {
-                label: "Creator",
-                onClick: () => openAuthModal("login", "creator"),
-              },
-              {
-                label: "Vendor",
-                onClick: () => openAuthModal("login", "vendor"),
-              },
-            ]}
-          />
+          <LoginButton />
 
-          <button
-            type="button"
-            aria-label="Open menu"
-            onClick={() => setIsMenuOpen(true)}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <img
-              src="/assets/landing-page/menu.svg"
-              alt=""
-              className="min-w-5 h-4"
-            />
-          </button>
-          <BaseSheet
-            side="right"
-            size="sm"
-            title="Menu"
-            circleCancel
-            open={isMenuOpen}
-            setOpen={setIsMenuOpen}
-            contentClassName="bg-pure-black text-white px-3"
-          >
-            <MobileMenu onClose={() => setIsMenuOpen(false)} />
-          </BaseSheet>
+          <NavSheet />
         </div>
       </nav>
     </header>

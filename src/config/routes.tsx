@@ -13,10 +13,10 @@ const NotFoundPage = lazy(() => import("../pages/not-found"));
 const AboutUsPage = lazy(() => import("../pages/about-us"));
 const BlogPage = lazy(() => import("../pages/blog"));
 const CreatorsPage = lazy(() => import("../pages/creators"));
-const FaqPage = lazy(() => import("../pages/faq"));
+//const FaqPage = lazy(() => import("../pages/faq"));
 const RefundPolicyPage = lazy(() => import("../pages/refund-policy"));
 const WorkWithUsPage = lazy(() => import("../pages/work-with-us"));
-const SupportPage = lazy(() => import("../pages/support"));
+//const SupportPage = lazy(() => import("../pages/support"));
 const ResaleMarketPlacePage = lazy(() => import("../pages/resale-marketplace"));
 const IndividualResaleTicket = lazy(
   () => import("../pages/resale-marketplace/individual-resale-event")
@@ -85,14 +85,6 @@ export const routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath("faq"),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <FaqPage />
-      </Suspense>
-    ),
-  },
-  {
     path: getRoutePath("refund_policy"),
     element: (
       <Suspense fallback={<LoadingFallback />}>
@@ -105,14 +97,6 @@ export const routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <WorkWithUsPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: getRoutePath("support"),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <SupportPage />
       </Suspense>
     ),
   },

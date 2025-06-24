@@ -3,32 +3,42 @@ import { Separator } from "@/components/ui/separator";
 import { getRoutePath } from "@/config/get-route-path";
 import { cn } from "@/lib/utils";
 
-export function FooterLinks({ type = "root" }: { type?: "root" | "account" }) {
+export function FooterLinks({
+  type = "default",
+  className,
+}: {
+  type?: "default" | "support";
+  className?: string;
+}) {
   return (
     <div
-      className={cn("w-full flex gap-2.5 font-sf-pro-rounded h-5", {
-        "max-md:flex-col md:items-center md:h-5": type === "root",
-        "items-center justify-center": type === "account",
-      })}
+      className={cn("w-full flex gap-2.5 font-sf-pro-rounded h-5", className)}
     >
-      <Link
+      <IndividualLinks
         to={getRoutePath("privacy_policy")}
-        className="font-light hover:underline text-sm"
-      >
-        Privacy Policy
-      </Link>
+        name="Privacy Policy"
+      />
 
       <Separator
         orientation="vertical"
-        className="h-full bg-white max-md:hidden"
+        className={cn("h-full max-md:hidden", {
+          "bg-white": type === "default",
+          "bg-black": type === "support",
+        })}
       />
 
-      <Link
+      <IndividualLinks
         to={getRoutePath("terms_and_conditions")}
-        className="font-light hover:underline text-sm"
-      >
-        Terms & Conditions
-      </Link>
+        name="Terms & Conditions"
+      />
     </div>
+  );
+}
+
+function IndividualLinks({ to, name }: { to: string; name: string }) {
+  return (
+    <Link to={to} className="font-light hover:underline text-sm text-inherit">
+      {name}
+    </Link>
   );
 }

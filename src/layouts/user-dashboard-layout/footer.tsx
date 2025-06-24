@@ -7,9 +7,9 @@ export default function AccountFooter() {
     <footer className="w-full flex flex-col gap-[78px] items-center py-[136px] border-t border-white/70">
       <NavLogo />
 
-      <FooterLinks type="account" />
+      <FooterLinks className="items-center justify-center" />
 
-      <Socials type="account" />
+      <Socials className="justify-center" />
     </footer>
   );
 }

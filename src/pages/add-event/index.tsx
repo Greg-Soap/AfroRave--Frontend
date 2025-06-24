@@ -24,12 +24,6 @@ export default function AddEventPage() {
     const tabParam = searchParams.get("tab");
     const formParam = searchParams.get("form");
 
-    console.log("[AddEventPage] URL params changed:", {
-      tabParam,
-      allParams: Object.fromEntries(searchParams.entries()),
-      searchParamsString: searchParams.toString(),
-    });
-
     if (
       tabParam === "event-details" ||
       tabParam === "tickets" ||

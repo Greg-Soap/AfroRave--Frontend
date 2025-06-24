@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { AddFilterBUtton } from "./components/add-filter-btn";
 import { Badge } from "@/components/ui/badge";
 import { getRoutePath } from "@/config/get-route-path";
+import StandAloneModal from "./components/standalone-modal";
 
 export default function StandalonePage() {
   return (
@@ -22,7 +23,6 @@ export default function StandalonePage() {
 }
 
 function StandAloneHeader() {
- 
   return (
     <div className="w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray">
       <AddFilterBUtton />
@@ -46,7 +46,7 @@ function StandAloneHeader() {
         <Button
           variant="destructive"
           className="p-3 rounded-[6px] gap-8"
-        asChild
+          asChild
         >
           <Link to={getRoutePath("add_event")}>
             <Plus color="#ffffff" size={12} />
@@ -128,37 +128,46 @@ function StandAloneEvents({
         </p>
       </div>
       <div className="grid grid-cols-3 border-t border-t-semi-light-gray/28 h-fit bg-white">
-        {event_buttons.map((item, index) => (
-          <Button
-            key={item.icon}
-            variant="ghost"
-            className={cn(
-              "flex items-center justify-center hover:bg-black/10 rounded-none",
-              {
-                "border-r border-r-semi-light-gray/28":
-                  index === 0 || index === 1,
-              }
-            )}
-          >
-            <img src={item.icon} alt={item.alt} width={12} height={10} />
-          </Button>
+        {event_buttons.map((item) => (
+          <EventButtons key={item.alt} {...item} className="border-r" />
         ))}
+
+        <StandAloneModal id={id} />
       </div>
     </div>
   );
 }
 
+function EventButtons({
+  icon,
+  alt,
+  className,
+  action,
+}: {
+  icon: string;
+  alt: string;
+  className?: string;
+  action?: () => void;
+}) {
+  return (
+    <Button
+      onClick={action}
+      variant="ghost"
+      className={cn(
+        "flex items-center justify-center hover:bg-black/10 rounded-none border-r-semi-light-gray/28",
+        className
+      )}
+    >
+      <img src={icon} alt={alt} width={12} height={10} />
+    </Button>
+  );
+}
+
 const event_buttons: IEventButtons[] = [
-  { icon: "/assets/dashboard/creator/chart2.png", alt: "Chart", action: "" },
+  { icon: "/assets/dashboard/creator/chart2.png", alt: "Chart" },
   {
     icon: "/assets/dashboard/creator/group-user.png",
     alt: "Group User",
-    action: "",
-  },
-  {
-    icon: "/assets/dashboard/creator/ellipses.png",
-    alt: "Ellipses",
-    action: "",
   },
 ];
 
@@ -221,5 +230,4 @@ interface IStandaloneEventProps {
 interface IEventButtons {
   icon: string;
   alt: string;
-  action: string; // a placeholder
 }

@@ -115,11 +115,7 @@ function BaseModal({
         }}
         cancelOnOverlay={cancelOnOverlay}
       >
-        <DialogHeader
-          className={cn(
-            "w-full flex flex-col items-center justify-center font-input-mono"
-          )}
-        >
+        <DialogHeader className="w-full flex flex-col items-center justify-center font-input-mono">
           <VisuallyHidden>
             <DialogTitle>{title || "Modal Dialog"}</DialogTitle>
           </VisuallyHidden>

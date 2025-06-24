@@ -16,7 +16,7 @@ export default function Footer() {
           className="self-center"
         />
 
-        <FooterLinks />
+        <FooterLinks className="max-md:flex-col md:items-center md:h-5" />
       </div>
 
       <Separator orientation="horizontal" className="w-full bg-[#686868]" />
@@ -27,7 +27,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <Socials />
+      <Socials className="md:!justify-end px-[1rem] md:px-[2rem]" />
     </footer>
   );
 }

@@ -7,6 +7,8 @@ import CreatorDashboardLayout from "./layouts/creator-dashboard-layout";
 import { creator_dashboard_routes } from "./config/creator-dashboard-routes";
 import { getRoutePath } from "./config/get-route-path";
 import { lazy } from "react";
+import SupportLayout from "./layouts/support-layout";
+import { support_routes } from "./config/support-routes";
 
 const EditEventPage = lazy(() => import("../src/pages/edit-event"));
 const AddEventPage = lazy(() => import("../src/pages/add-event"));
@@ -29,6 +31,12 @@ export default function Application() {
 
         <Route element={<CreatorDashboardLayout />}>
           {creator_dashboard_routes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
+        </Route>
+
+        <Route element={<SupportLayout />}>
+          {support_routes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
         </Route>
