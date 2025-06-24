@@ -5,6 +5,7 @@ import { formatNaira } from "@/lib/format-price";
 import { cn } from "@/lib/utils";
 import { AddFilterBUtton } from "./components/add-filter-btn";
 import { Badge } from "@/components/ui/badge";
+import { getRoutePath } from "@/config/get-route-path";
 
 export default function StandalonePage() {
   return (
@@ -21,6 +22,7 @@ export default function StandalonePage() {
 }
 
 function StandAloneHeader() {
+ 
   return (
     <div className="w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray">
       <AddFilterBUtton />
@@ -41,9 +43,15 @@ function StandAloneHeader() {
           />
         </Button>
 
-        <Button variant="destructive" className="p-3 rounded-[6px] gap-8">
-          <Plus color="#ffffff" size={12} />
-          <span className="font-sf-pro-text text-xs">Add Event</span>
+        <Button
+          variant="destructive"
+          className="p-3 rounded-[6px] gap-8"
+        asChild
+        >
+          <Link to={getRoutePath("add_event")}>
+            <Plus color="#ffffff" size={12} />
+            <span className="font-sf-pro-text text-xs">Add Event</span>
+          </Link>
         </Button>
       </div>
     </div>

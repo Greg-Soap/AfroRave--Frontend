@@ -43,7 +43,7 @@ export const ROUTE_PATHS = {
   promo_codes: "/promo-codes",
   seating_maps: "/seating-maps",
   edit_event: "/edit/:eventId",
-  add_event: "add-event",
+  add_event: "/add-event",
   not_found: "*",
 } as const;
 
