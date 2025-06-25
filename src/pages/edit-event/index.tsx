@@ -119,7 +119,7 @@ export default function EditEventPage() {
             {/**Content */}
             <div className="container h-fit gap-2 flex">
               <div className="flex flex-col py-16 px-14 gap-14 max-w-[612px]">
-                <EventDetails {...event} />
+                <EventDetails {...event} isTheme={activeTab === "theme"} />
 
                 <SalesSummary />
               </div>
@@ -139,16 +139,24 @@ function EventDetails({
   event_location,
   event_date,
   event_time,
-}: IEvents) {
+  isTheme = false,
+}: IEvents & { isTheme?: boolean }) {
   return (
     <div className="flex gap-6 text-black w-[465px]">
-      <img
-        src={image}
-        alt={event_name}
-        width={240}
-        height={285}
-        className="rounded-[10px]"
-      />
+      <div className="relative w-fit h-fit flex items-center justify-center">
+        <img
+          src={image}
+          alt={event_name}
+          width={240}
+          height={285}
+          className="rounded-[10px]"
+        />
+        {isTheme && (
+          <Button className="absolute w-[92px] h-10 bg-white text-deep-red text-[11px] font-medium hover:bg-medium-gray hover:text-white">
+            Edit Flyer
+          </Button>
+        )}
+      </div>
 
       <div className="flex flex-col max-w-[237px] gap-2 py-3 font-sf-pro-display">
         <p className="text-xl font-bold uppercase">{event_name}</p>

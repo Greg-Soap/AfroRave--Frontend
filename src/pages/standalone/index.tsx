@@ -7,6 +7,7 @@ import { AddFilterBUtton } from "./components/add-filter-btn";
 import { Badge } from "@/components/ui/badge";
 import { getRoutePath } from "@/config/get-route-path";
 import StandAloneModal from "./components/standalone-modal";
+import VendorSelect from "@/components/custom/vendor-select";
 
 export default function StandalonePage() {
   return (
@@ -28,20 +29,7 @@ function StandAloneHeader() {
       <AddFilterBUtton />
 
       <div className="flex items-center gap-8">
-        <Button
-          variant="ghost"
-          className="gap-2 py-0.5 px-1.5 hover:bg-black/10"
-        >
-          <span className="font-medium text-xs font-sf-pro-rounded text-black">
-            Live
-          </span>
-          <img
-            src="/assets/dashboard/creator/live.png"
-            alt="Chevron Down"
-            width={20}
-            height={18}
-          />
-        </Button>
+        <VendorSelect />
 
         <Button
           variant="destructive"

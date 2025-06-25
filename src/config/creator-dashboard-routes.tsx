@@ -14,6 +14,7 @@ const IndividualServicePage = lazy(
 );
 const AccessControlPage = lazy(() => import("../pages/access-control"));
 const PromoCodesPage = lazy(() => import("../pages/promo-codes"));
+const ChartPage = lazy(() => import("../pages/charts"));
 
 export const creator_dashboard_routes: RouteObject[] = [
   {
@@ -71,6 +72,14 @@ export const creator_dashboard_routes: RouteObject[] = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <PromoCodesPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: getRoutePath("charts"),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <ChartPage />
       </Suspense>
     ),
   },
