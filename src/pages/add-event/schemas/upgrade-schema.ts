@@ -9,14 +9,14 @@ export const upgradeSchema = z.array(
           to: z.string({ required_error: "Field cannot be empty" }),
         })
       ),
-      automaticFee: z.enum(["yes", "no"]),
-      customFee: z.enum(["yes", "no"]),
+      automaticFee: z.boolean().optional(),
+      customFee: z.boolean().optional(),
       customPrice: z.string({ required_error: "Field cannot be empty." }),
     })
     .refine(
       (data) => {
-        if (data.customFee === "yes") {
-          return !!data.customFee && data.customFee.trim() !== "";
+        if (data.customFee === true) {
+          return !!data.customPrice && data.customPrice.trim() !== "";
         }
         return true;
       },
@@ -29,8 +29,8 @@ export const upgradeSchema = z.array(
 
 export const defaultUgradeValues: z.infer<typeof upgradeSchema> = [
   {
-    automaticFee: "yes",
-    customFee: "no",
+    automaticFee: true,
+    customFee: false,
     upgrade: [{ from: "", to: "" }],
     customPrice: "",
   },

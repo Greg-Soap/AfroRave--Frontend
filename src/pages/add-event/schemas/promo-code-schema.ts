@@ -12,7 +12,7 @@ export const promoCodeSchema = z.array(
         amount: z.string({ required_error: "Provide a valid amount." }),
       }),
       usageLimit: z.string({ required_error: "Provide a usage limit" }),
-      onePerCustomer: z.enum(["yes", "no"]),
+      onePerCustomer: z.boolean().optional(),
       startDate: z.object({
         date: z.date({ required_error: "A start date is required." }),
         hour: z.string().min(1).max(2),
@@ -27,22 +27,22 @@ export const promoCodeSchema = z.array(
       }),
       conditions: z.object({
         spend: z.object({
-          minimum: z.enum(["yes", "no"]).optional(),
+          minimum: z.boolean().optional(),
           amount: z.string().optional(),
         }),
         purchased: z.object({
-          minimum: z.enum(["yes", "no"]).optional(),
+          minimum: z.boolean().optional(),
           amount: z.string().optional(),
         }),
       }),
-      private: z.enum(["yes", "no"]),
+      private: z.boolean().optional(),
       notes: z.string().max(250, { message: "Note too long." }).optional(),
       perks: z.array(z.string().optional()),
-      partnershipCode: z.enum(["yes", "no"]),
+      partnershipCode: z.boolean().optional(),
     })
     .refine(
       (data) => {
-        if (data.conditions.spend.minimum === "yes") {
+        if (data.conditions.spend.minimum === true) {
           return (
             !!data.conditions.spend.amount &&
             data.conditions.spend.amount.trim() !== ""
@@ -51,13 +51,13 @@ export const promoCodeSchema = z.array(
         return true;
       },
       {
-        message: "Amount is required when spend minimum is yes",
+        message: "Amount is required when spend minimum is required",
         path: ["conditions", "spend", "amount"],
       }
     )
     .refine(
       (data) => {
-        if (data.conditions.purchased.minimum === "yes") {
+        if (data.conditions.purchased.minimum === true) {
           return (
             !!data.conditions.purchased.amount &&
             data.conditions.purchased.amount.trim() !== ""
@@ -66,7 +66,7 @@ export const promoCodeSchema = z.array(
         return true;
       },
       {
-        message: "Amount is required when purchased minimum is yes",
+        message: "Amount is required when purchased minimum is required",
         path: ["conditions", "purchased", "amount"],
       }
     )
@@ -80,7 +80,7 @@ export const defaultPromoCodeValues: z.infer<typeof promoCodeSchema> = [
       amount: "",
     },
     usageLimit: "100",
-    onePerCustomer: "yes",
+    onePerCustomer: true,
     startDate: {
       date: new Date(),
       hour: "12",
@@ -95,17 +95,17 @@ export const defaultPromoCodeValues: z.infer<typeof promoCodeSchema> = [
     },
     conditions: {
       spend: {
-        minimum: "no",
+        minimum: false,
         amount: "",
       },
       purchased: {
-        minimum: "no",
+        minimum: false,
         amount: "",
       },
     },
-    private: "yes",
+    private: true,
     notes: "",
     perks: [],
-    partnershipCode: "no",
+    partnershipCode: false,
   },
 ];

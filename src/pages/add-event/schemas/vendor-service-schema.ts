@@ -4,7 +4,7 @@ const serviceDetails = z.object({
   type: z.string({ required_error: "Select an option." }),
   category: z.string({ required_error: "Select an option." }),
   name: z.string({ required_error: "Provide a name for the service." }),
-  budgetRange: z.enum(["yes", "no"]).optional(),
+  budgetRange: z.boolean().optional(),
   workDuration: z.object({
     hour: z.string().min(1).max(2),
     minute: z.string().min(1).max(2),
@@ -27,7 +27,7 @@ const serviceDetails = z.object({
 
 export const serviceSchema = z.object({
   service: z.array(serviceDetails),
-  useDifferentContactDetails: z.enum(["yes", "no"]),
+  useDifferentContactDetails: z.boolean().optional(),
   email: z.string().email(),
   phone: z.array(
     z.object({
@@ -37,7 +37,7 @@ export const serviceSchema = z.object({
         .max(11, { message: "Provide a valid number." }),
     })
   ),
-  showSocialHandles: z.enum(["yes", "no"]),
+  showSocialHandles: z.boolean().optional(),
 });
 
 export const defaultServiceValue: z.infer<typeof serviceSchema> = {
@@ -45,7 +45,7 @@ export const defaultServiceValue: z.infer<typeof serviceSchema> = {
     {
       type: "service_vendor",
       category: "dj_mc",
-      budgetRange: "yes",
+      budgetRange: true,
       name: "",
       workDuration: { hour: "12", minute: "12", second: "12" },
       start: { hour: "12", minute: "12", period: "AM" },
@@ -53,8 +53,8 @@ export const defaultServiceValue: z.infer<typeof serviceSchema> = {
       description: "",
     },
   ],
-  useDifferentContactDetails: "yes",
+  useDifferentContactDetails: false,
   email: "",
   phone: [{ countryCode: "+234", number: "" }],
-  showSocialHandles: "yes",
+  showSocialHandles: true,
 };

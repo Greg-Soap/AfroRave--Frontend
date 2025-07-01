@@ -81,7 +81,14 @@ export const africanCountryCodes: { value: string; label: string }[] = [
 ];
 
 export const vendorCheckboxData: IBaseCheckbox[] = [
-  { items: [{ label: "BUDGET RANGE", id: "yes" }] },
-  { items: [{ label: "use different CONTACT DETAILS", id: "yes" }] },
-  { items: [{ label: "SHOW SOCIAL HANDLES", id: "yes" }] },
+  { items: [{ label: "BUDGET RANGE", id: "budgetRange" }] },
+  {
+    items: [
+      {
+        label: "use different CONTACT DETAILS",
+        id: "useDifferentContactDetails",
+      },
+    ],
+  },
+  { items: [{ label: "SHOW SOCIAL HANDLES", id: "showSocialHandles" }] },
 ];

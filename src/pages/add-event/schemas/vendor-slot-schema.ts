@@ -13,7 +13,7 @@ const slotDetails = z.object({
 
 export const slotSchema = z.object({
   slot: z.array(slotDetails),
-  useDifferentContactDetails: z.enum(["yes", "no"]),
+  useDifferentContactDetails: z.boolean().optional(),
   email: z.string().email(),
   phone: z.array(
     z.object({
@@ -23,7 +23,7 @@ export const slotSchema = z.object({
         .max(11, { message: "Provide a valid number." }),
     })
   ),
-  showSocialHandles: z.enum(["yes", "no"]),
+  showSocialHandles: z.boolean().optional(),
 });
 
 export const defaultSlotValue: z.infer<typeof slotSchema> = {
@@ -37,8 +37,8 @@ export const defaultSlotValue: z.infer<typeof slotSchema> = {
       description: "",
     },
   ],
-  useDifferentContactDetails: "yes",
+  useDifferentContactDetails: false,
   email: "",
   phone: [{ countryCode: "+234", number: "" }],
-  showSocialHandles: "yes",
+  showSocialHandles: true,
 };

@@ -1,22 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  type IBaseCheckbox,
-  BaseCheckbox,
-} from "@/components/reusable/base-checkbox";
+import type { IBaseCheckbox } from "@/components/reusable/base-checkbox";
 import { CustomFormField as FormField } from "@/components/custom/custom-form";
 import { cn } from "@/lib/utils";
 import { FormBase } from "@/components/reusable";
 import { SubmitBtn } from "../component/submit-btn";
 import { SkipBtn } from "../component/skip-btn";
 import { useEffect } from "react";
+import { BaseBooleanCheckbox } from "@/components/reusable/base-boolean-checkbox";
 
 const notificationSchema = z.object({
-  sales: z.enum(["yes", "no"]),
-  promoCode: z.enum(["yes", "no"]),
-  vendorSlot: z.enum(["yes", "no"]),
-  ticketSalesStatus: z.enum(["yes", "no"]),
+  sales: z.boolean().optional(),
+  promoCode: z.boolean().optional(),
+  vendorSlot: z.boolean().optional(),
+  ticketSalesStatus: z.boolean().optional(),
 });
 
 export default function PublishTab({
@@ -29,10 +27,10 @@ export default function PublishTab({
   const form = useForm<z.infer<typeof notificationSchema>>({
     resolver: zodResolver(notificationSchema),
     defaultValues: {
-      sales: "yes",
-      promoCode: "yes",
-      vendorSlot: "yes",
-      ticketSalesStatus: "yes",
+      sales: true,
+      promoCode: true,
+      vendorSlot: true,
+      ticketSalesStatus: true,
     },
   });
 
@@ -87,16 +85,24 @@ export default function PublishTab({
           </div>
 
           <FormField form={form} name="sales">
-            {(field) => <BaseCheckbox data={checkboxData[0]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[0]} {...field} />
+            )}
           </FormField>
           <FormField form={form} name="promoCode">
-            {(field) => <BaseCheckbox data={checkboxData[1]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[1]} {...field} />
+            )}
           </FormField>
           <FormField form={form} name="vendorSlot">
-            {(field) => <BaseCheckbox data={checkboxData[2]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[2]} {...field} />
+            )}
           </FormField>
           <FormField form={form} name="ticketSalesStatus">
-            {(field) => <BaseCheckbox data={checkboxData[3]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[3]} {...field} />
+            )}
           </FormField>
         </div>
       </div>
@@ -135,7 +141,7 @@ const checkboxData: IBaseCheckbox[] = [
     items: [
       {
         label: "Notify When Sales Start",
-        id: "yes",
+        id: "sales",
         description: "Get a notification when your tickets first go live",
       },
     ],
@@ -144,7 +150,7 @@ const checkboxData: IBaseCheckbox[] = [
     items: [
       {
         label: "Promo Code Expiry Reminder",
-        id: "yes",
+        id: "promoCode",
         description:
           "Receive a notification 48 hours before your promo codes expire",
       },
@@ -154,7 +160,7 @@ const checkboxData: IBaseCheckbox[] = [
     items: [
       {
         label: "NVendor Slot Request Alerts",
-        id: "yes",
+        id: "vendorSlot",
         description: "Get notifications when vendors apply for available slots",
       },
     ],
@@ -163,7 +169,7 @@ const checkboxData: IBaseCheckbox[] = [
     items: [
       {
         label: "Ticket Sales Status",
-        id: "yes",
+        id: "ticketSalesStatus",
         description:
           "Get regular push notifications on your ticket sales performance, including milestones and key updates.",
       },

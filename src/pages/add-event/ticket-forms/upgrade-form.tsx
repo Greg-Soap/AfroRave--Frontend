@@ -10,10 +10,7 @@ import {
 import { CustomFormField as FormField } from "@/components/custom/custom-form";
 import { TabContainer } from "../component/tab-ctn";
 import { SubmitBtn } from "../component/submit-btn";
-import {
-  BaseCheckbox,
-  type IBaseCheckbox,
-} from "@/components/reusable/base-checkbox";
+import type { IBaseCheckbox } from "@/components/reusable/base-checkbox";
 import { AddBtn } from "../component/add-btn";
 import { defaultUgradeValues, upgradeSchema } from "../schemas/upgrade-schema";
 import { SkipBtn } from "../component/skip-btn";
@@ -21,6 +18,7 @@ import { PriceField } from "../component/price-field";
 import type { ICustomSelectProps } from "@/components/reusable/base-select";
 import { SelectField } from "../component/select-field";
 import { FormCount } from "../component/form-count";
+import { BaseBooleanCheckbox } from "@/components/reusable/base-boolean-checkbox";
 
 export default function UpgradeForm({
   renderThemeTab,
@@ -98,7 +96,9 @@ export default function UpgradeForm({
 
           <div className="flex flex-col gap-4">
             <FormField form={form} name={`upgrades.${idx}.automaticFee`}>
-              {(field) => <BaseCheckbox data={checkboxData[0]} {...field} />}
+              {(field) => (
+                <BaseBooleanCheckbox data={checkboxData[0]} {...field} />
+              )}
             </FormField>
 
             <p className="py-[11px] px-[66px] w-[140px] h-10 flex items-center justify-center bg-[#acacac] rounded-[5px]">
@@ -108,7 +108,9 @@ export default function UpgradeForm({
 
           <div className="flex flex-col gap-4">
             <FormField form={form} name={`upgrades.${idx}.customFee`}>
-              {(field) => <BaseCheckbox data={checkboxData[1]} {...field} />}
+              {(field) => (
+                <BaseBooleanCheckbox data={checkboxData[1]} {...field} />
+              )}
             </FormField>
 
             <PriceField form={form} name={`upgrades.${idx}.customPrice`} />
@@ -168,9 +170,9 @@ const discountTypes: { value: string; label: string }[] = [
 const checkboxData: IBaseCheckbox[] = [
   {
     description: "Subtracts original ticket price from target ticket price",
-    items: [{ label: "automatic fee", id: "yes" }],
+    items: [{ label: "automatic fee", id: "automaticFee" }],
   },
   {
-    items: [{ label: "Custom upgrade fee", id: "yes" }],
+    items: [{ label: "Custom upgrade fee", id: "customFee" }],
   },
 ];

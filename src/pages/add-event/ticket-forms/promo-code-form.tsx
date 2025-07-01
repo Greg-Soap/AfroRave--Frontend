@@ -11,10 +11,7 @@ import { DateForm } from "@/components/custom/date-form";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
 import { TabContainer } from "../component/tab-ctn";
 import { SubmitBtn } from "../component/submit-btn";
-import {
-  BaseCheckbox,
-  type IBaseCheckbox,
-} from "@/components/reusable/base-checkbox";
+import type { IBaseCheckbox } from "@/components/reusable/base-checkbox";
 import {
   promoCodeSchema,
   defaultPromoCodeValues,
@@ -25,6 +22,7 @@ import { SkipBtn } from "../component/skip-btn";
 import { PriceField } from "../component/price-field";
 import { SelectField } from "../component/select-field";
 import { FormCount } from "../component/form-count";
+import { BaseBooleanCheckbox } from "@/components/reusable/base-boolean-checkbox";
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -122,7 +120,9 @@ export default function PromoCodeForm({
           </FormField>
 
           <FormField form={form} name={`promoCodes.${idx}.onePerCustomer`}>
-            {(field) => <BaseCheckbox data={checkboxData[0]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[0]} {...field} />
+            )}
           </FormField>
 
           <div className="flex flex-col gap-4">
@@ -150,7 +150,9 @@ export default function PromoCodeForm({
               form={form}
               name={`promoCodes.${idx}.conditions.spend.minimum`}
             >
-              {(field) => <BaseCheckbox data={checkboxData[1]} {...field} />}
+              {(field) => (
+                <BaseBooleanCheckbox data={checkboxData[1]} {...field} />
+              )}
             </FormField>
 
             <PriceField
@@ -164,7 +166,9 @@ export default function PromoCodeForm({
               form={form}
               name={`promoCodes.${idx}.conditions.purchased.minimum`}
             >
-              {(field) => <BaseCheckbox data={checkboxData[2]} {...field} />}
+              {(field) => (
+                <BaseBooleanCheckbox data={checkboxData[2]} {...field} />
+              )}
             </FormField>
 
             <FormField
@@ -184,7 +188,9 @@ export default function PromoCodeForm({
           </div>
 
           <FormField form={form} name={`promoCodes.${idx}.private`}>
-            {(field) => <BaseCheckbox data={checkboxData[3]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[3]} {...field} />
+            )}
           </FormField>
 
           <FormFieldWithCounter
@@ -228,7 +234,9 @@ export default function PromoCodeForm({
           </div>
 
           <FormField form={form} name={`promoCodes.${idx}.partnershipCode`}>
-            {(field) => <BaseCheckbox data={checkboxData[4]} {...field} />}
+            {(field) => (
+              <BaseBooleanCheckbox data={checkboxData[4]} {...field} />
+            )}
           </FormField>
         </div>
       ))}
@@ -250,24 +258,24 @@ export default function PromoCodeForm({
 const checkboxData: IBaseCheckbox[] = [
   {
     description: "only 1 use per customer",
-    items: [{ label: "limit per customer", id: "yes" }],
+    items: [{ label: "limit per customer", id: "onePerCustomer" }],
   },
   {
     description: "Only allow use if cart total exceeds this",
-    items: [{ label: "minimum spend", id: "yes" }],
+    items: [{ label: "minimum spend", id: "spendMinimum" }],
   },
   {
     description: "Only allow use if tickets total exceeds this",
-    items: [{ label: "minimum tickets", id: "yes" }],
+    items: [{ label: "minimum tickets", id: "purchasedMinimum" }],
   },
   {
     description: "Promo code won't be displayed on the event page",
-    items: [{ label: "private", id: "yes" }],
+    items: [{ label: "private", id: "private" }],
   },
   {
     description:
       "Link THIS code to a partner or influencer for sales tracking.",
-    items: [{ label: "partnership code?", id: "yes" }],
+    items: [{ label: "partnership code?", id: "partnershipCode" }],
   },
 ];
 

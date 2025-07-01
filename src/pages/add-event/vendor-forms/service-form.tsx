@@ -16,7 +16,6 @@ import {
   CustomFormField as FormField,
   CustomInput as Input,
 } from "@/components/custom/custom-form";
-import { BaseCheckbox } from "@/components/reusable/base-checkbox";
 import { TimeForm } from "@/components/custom/time-form";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,6 +33,7 @@ import {
   QuantityIncreaseBtn,
 } from "../component/quantity-buttons";
 import { SkipBtn } from "../component/skip-btn";
+import { BaseBooleanCheckbox } from "@/components/reusable/base-boolean-checkbox";
 
 export default function ServiceForm({
   handleFormChange,
@@ -106,7 +106,9 @@ export default function ServiceForm({
 
           <div className="flex flex-col gap-4">
             <FormField form={form} name={`service.${idx}.budgetRange`}>
-              {(field) => <BaseCheckbox data={checkboxData[0]} {...field} />}
+              {(field) => (
+                <BaseBooleanCheckbox data={checkboxData[0]} {...field} />
+              )}
             </FormField>
 
             {/** A range is supposed to be here */}
@@ -176,7 +178,7 @@ export default function ServiceForm({
 
       <div className="flex flex-col gap-3">
         <FormField form={form} name={`useDifferentContactDetails`}>
-          {(field) => <BaseCheckbox data={checkboxData[1]} {...field} />}
+          {(field) => <BaseBooleanCheckbox data={checkboxData[1]} {...field} />}
         </FormField>
 
         <div className="flex flex-col gap-6">
@@ -211,7 +213,7 @@ export default function ServiceForm({
         </div>
 
         <FormField form={form} name="showSocialHandles">
-          {(field) => <BaseCheckbox data={checkboxData[2]} {...field} />}
+          {(field) => <BaseBooleanCheckbox data={checkboxData[2]} {...field} />}
         </FormField>
       </div>
 

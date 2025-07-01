@@ -12,7 +12,6 @@ import {
   CustomFormField as FormField,
   CustomInput as Input,
 } from "@/components/custom/custom-form";
-import { BaseCheckbox } from "@/components/reusable/base-checkbox";
 import { FormFieldWithCounter } from "@/components/custom/field-with-counter";
 import { Textarea } from "@/components/ui/textarea";
 import { AddBtn } from "../component/add-btn";
@@ -31,6 +30,7 @@ import {
   vendorCheckboxData as checkboxData,
 } from "../constant";
 import { SkipBtn } from "../component/skip-btn";
+import { BaseBooleanCheckbox } from "@/components/reusable/base-boolean-checkbox";
 
 export default function SlotForm({
   renderPublishTab,
@@ -131,7 +131,7 @@ export default function SlotForm({
 
       <div className="flex flex-col gap-3">
         <FormField form={form} name={`useDifferentContactDetails`}>
-          {(field) => <BaseCheckbox data={checkboxData[1]} {...field} />}
+          {(field) => <BaseBooleanCheckbox data={checkboxData[1]} {...field} />}
         </FormField>
 
         <div className="flex flex-col gap-6">
@@ -166,7 +166,7 @@ export default function SlotForm({
         </div>
 
         <FormField form={form} name="showSocialHandles">
-          {(field) => <BaseCheckbox data={checkboxData[2]} {...field} />}
+          {(field) => <BaseBooleanCheckbox data={checkboxData[2]} {...field} />}
         </FormField>
       </div>
 
