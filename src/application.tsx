@@ -10,8 +10,8 @@ import { lazy } from "react";
 import SupportLayout from "./layouts/support-layout";
 import { support_routes } from "./config/support-routes";
 
-const EditEventPage = lazy(() => import("../src/pages/edit-event"));
-const AddEventPage = lazy(() => import("../src/pages/add-event"));
+const EditEventPage = lazy(() => import("./pages/creators/edit-event"));
+const AddEventPage = lazy(() => import("./pages/creators/add-event"));
 
 export default function Application() {
   return (

@@ -1,4 +1,4 @@
-import { AddFilterBUtton } from "@/pages/standalone/components/add-filter-btn";
+import { AddFilterBUtton } from "@/pages/creators/standalone/components/add-filter-btn";
 import { Button } from "@/components/ui/button";
 import { Download, Plus } from "lucide-react";
 import VendorSelect from "@/components/custom/vendor-select";

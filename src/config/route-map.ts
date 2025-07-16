@@ -10,6 +10,7 @@
  * ```
  */
 export const ROUTE_PATHS = {
+  // Landing page routes
   home: "/",
   events: "/events",
   individual_event: "/events/:eventId",
@@ -26,25 +27,33 @@ export const ROUTE_PATHS = {
   sell: "/sell",
   terms_and_conditions: "/terms-and-conditions",
   privacy_policy: "/privacy-policy",
-  account: "/account",
-  my_tickets: "/my-tickets",
-  active_tickets: "/my-tickets/:eventId",
-  listed_tickets: "/listed-tickets",
-  standalone: "/standalone",
-  season: "/season",
-  reports: "/reports",
-  charts: "/charts",
-  realtime: "/realtime",
-  revenue_vendor: "/revenue-vendor",
-  revenue_vendor_slot: "/revenue-vendor/:slotId",
-  service_vendor: "/service-vendor",
-  individual_service_vendor: "/service-vendor/:serviceId",
-  access_control: "/access-control",
-  promo_codes: "/promo-codes",
-  seating_maps: "/seating-maps",
-  edit_event: "/edit/:eventId",
-  add_event: "/add-event",
   not_found: "*",
+
+  // User dashboard routes
+  account: "/fans/account",
+  my_tickets: "/fans/my-tickets",
+  active_tickets: "/fans/my-tickets/:eventId",
+  listed_tickets: "/fans/listed-tickets",
+
+  // Creator dashboard routes
+  standalone: "/creators/standalone",
+  season: "/creators/season",
+  reports: "/creators/reports",
+  charts: "/creators/charts",
+  realtime: "/creators/realtime",
+  promo_codes: "/creators/promo-codes",
+  edit_event: "/creators/edit/:eventId",
+  add_event: "/creators/add-event",
+  access_control: "/creators/access-control",
+  revenue_vendor: "/creators/revenue-vendor",
+  creator_not_found: "/creators/*",
+
+  // Vendor dashboard routes
+  revenue_vendor_slot: "/vendor/revenue-vendor/:slotId",
+  service_vendor: "/vendor/service-vendor",
+  individual_service_vendor: "/vendor/service-vendor/:serviceId",
+  seating_maps: "/vendor/seating-maps",
+  vendor_not_found: "/vendor/*",
 } as const;
 
 /**
@@ -84,23 +93,31 @@ export interface RouteParams {
   sell: never;
   terms_and_conditions: never;
   privacy_policy: never;
+  not_found: never;
+
+  // User dashboard routes
   account: never;
   my_tickets: never;
   active_tickets: { eventId: string | number };
   listed_tickets: never;
+
+  // Creator dashboard routes
   standalone: never;
   season: never;
   reports: never;
   charts: never;
   realtime: never;
-  revenue_vendor: never;
-  revenue_vendor_slot: { slotId: string | number };
-  service_vendor: never;
-  individual_service_vendor: { serviceId: string | number };
-  access_control: never;
   promo_codes: never;
-  seating_maps: never;
   edit_event: { eventId: string | number };
   add_event: never;
-  not_found: never;
+  access_control: never;
+  seating_maps: never;
+  creator_not_found: never;
+
+  // Vendor dashboard routes
+  service_vendor: never;
+  revenue_vendor: never;
+  individual_service_vendor: { serviceId: string | number };
+  revenue_vendor_slot: { slotId: string | number };
+  vendor_not_found: never;
 }

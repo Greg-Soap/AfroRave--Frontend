@@ -3,7 +3,7 @@ import { getRoutePath } from "./get-route-path";
 import { LoadingFallback } from "@/components/loading-fallback";
 
 const SupportPage = lazy(() => import("../pages/support"));
-const FaqPage = lazy(() => import("../pages/faq"));
+const FaqPage = lazy(() => import("../pages/support/faq"));
 
 export const support_routes = [
   {

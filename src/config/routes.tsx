@@ -3,29 +3,27 @@ import type { RouteObject } from "react-router-dom";
 import { LoadingFallback } from "../components/loading-fallback";
 import { getRoutePath } from "./get-route-path";
 
-const LandingPage = lazy(() => import("../pages/landing-page"));
-const EventsPage = lazy(() => import("../pages/event-page"));
+const LandingPage = lazy(() => import("../pages/landing-page/home"));
+const EventsPage = lazy(() => import("../pages/landing-page/event-page"));
 const IndividualEventPage = lazy(
-  () => import("../pages/event-page/individual-event")
+  () => import("../pages/landing-page/event-page/individual-event")
 );
-const ResellPage = lazy(() => import("../pages/resell-page"));
-const NotFoundPage = lazy(() => import("../pages/not-found"));
-const AboutUsPage = lazy(() => import("../pages/about-us"));
-const BlogPage = lazy(() => import("../pages/blog"));
-const CreatorsPage = lazy(() => import("../pages/creators"));
-//const FaqPage = lazy(() => import("../pages/faq"));
-const RefundPolicyPage = lazy(() => import("../pages/refund-policy"));
-const WorkWithUsPage = lazy(() => import("../pages/work-with-us"));
-//const SupportPage = lazy(() => import("../pages/support"));
-const ResaleMarketPlacePage = lazy(() => import("../pages/resale-marketplace"));
+const ResellPage = lazy(() => import("../pages/landing-page/resell-page"));
+const NotFoundPage = lazy(() => import("../pages/landing-page/not-found"));
+const AboutUsPage = lazy(() => import("../pages/landing-page/about-us"));
+const BlogPage = lazy(() => import("../pages/landing-page/blog"));
+const CreatorsPage = lazy(() => import("../pages/landing-page/creators"));
+const RefundPolicyPage = lazy(() => import("../pages/landing-page/refund-policy"));
+const WorkWithUsPage = lazy(() => import("../pages/landing-page/work-with-us"));
+const ResaleMarketPlacePage = lazy(() => import("../pages/landing-page/resale-marketplace"));
 const IndividualResaleTicket = lazy(
-  () => import("../pages/resale-marketplace/individual-resale-event")
+  () => import("../pages/landing-page/resale-marketplace/individual-resale-event")
 );
-const SellPage = lazy(() => import("../pages/sell"));
+const SellPage = lazy(() => import("../pages/landing-page/sell"));
 const TermsAndConditionPage = lazy(
-  () => import("../pages/terms-and-condition")
+  () => import("../pages/landing-page/terms-and-condition")
 );
-const PrivacyPolicyPage = lazy(() => import("../pages/privacy-policy"));
+const PrivacyPolicyPage = lazy(() => import("../pages/landing-page/privacy-policy"));
 
 export const routes: RouteObject[] = [
   {

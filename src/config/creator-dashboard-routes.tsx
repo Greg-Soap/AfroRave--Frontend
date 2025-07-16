@@ -3,7 +3,13 @@ import type { RouteObject } from "react-router-dom";
 import { LoadingFallback } from "@/components/loading-fallback";
 import { getRoutePath } from "./get-route-path";
 
-const StandalonePage = lazy(() => import("../pages/standalone"));
+// Creator routes
+const StandalonePage = lazy(() => import("../pages/creators/standalone"));
+const AccessControlPage = lazy(() => import("../pages/creators/access-control"));
+const PromoCodesPage = lazy(() => import("../pages/creators/promo-codes"));
+const ChartPage = lazy(() => import("../pages/creators/charts"));
+
+// Vendor routes
 const RevenueVendorPage = lazy(() => import("../pages/vendor/revenue-vendor"));
 const IndividualSlotsPage = lazy(
   () => import("../pages/vendor/revenue-vendor/individual-slot")
@@ -12,9 +18,6 @@ const ServiceVendorPage = lazy(() => import("../pages/vendor/service-vendors"));
 const IndividualServicePage = lazy(
   () => import("../pages/vendor/service-vendors/individual-service")
 );
-const AccessControlPage = lazy(() => import("../pages/access-control"));
-const PromoCodesPage = lazy(() => import("../pages/promo-codes"));
-const ChartPage = lazy(() => import("../pages/charts"));
 
 export const creator_dashboard_routes: RouteObject[] = [
   {

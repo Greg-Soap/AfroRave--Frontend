@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { AddFilterBUtton } from "@/pages/standalone/components/add-filter-btn";
+import { AddFilterBUtton } from "@/pages/creators/standalone/components/add-filter-btn";
 import { Download } from "lucide-react";
 
 export function IndividualHeader({ name }: { name: string }) {

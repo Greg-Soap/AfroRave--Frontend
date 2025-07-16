@@ -3,12 +3,12 @@ import type { RouteObject } from "react-router-dom";
 import { LoadingFallback } from "@/components/loading-fallback";
 import { getRoutePath } from "./get-route-path";
 
-const AccountPage = lazy(() => import("../pages/account"));
-const MyTicketsPage = lazy(() => import("../pages/my-tickets"));
+const AccountPage = lazy(() => import("../pages/fans/account"));
+const MyTicketsPage = lazy(() => import("../pages/fans/my-tickets"));
 const IndividualActiveTicketsPage = lazy(
-  () => import("../pages/my-tickets/individual-active-tickets")
+  () => import("../pages/fans/my-tickets/individual-active-tickets")
 );
-const ListedTicketPage = lazy(() => import("../pages/listed-tickets"));
+const ListedTicketPage = lazy(() => import("../pages/fans/listed-tickets"));
 
 export const user_dashboard_routes: RouteObject[] = [
   {
