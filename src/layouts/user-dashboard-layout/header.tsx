@@ -59,13 +59,13 @@ export default function AccountHeader() {
 
 function NavigationLinks() {
   return (
-    <div className="flex items-center gap-14">
+    <div className="hidden md:flex items-center gap-14">
       {account_links.map((item) => (
         <NavLink
           key={item.name}
           to={item.link}
           className={({ isActive }) =>
-            cn("flex items-center gap-[1px]", {
+            cn("flex items-center gap-2", {
               "opacity-100": isActive,
               "opacity-60": !isActive,
             })

@@ -1,5 +1,4 @@
 import { formatNaira } from "@/lib/format-price";
-import { ShoppingCart } from "lucide-react";
 import BaseModal from "@/components/reusable/base-modal";
 import type { IEvents } from "@/data/events";
 import { Button } from "@/components/ui/button";
@@ -27,9 +26,6 @@ export default function Cart({
   const [totalPrice, setTotalPrice] = useState(initialPrice);
   const [isOpen, setIsOpen] = useState(false);
 
-  const totalQuantity =
-    initialTickets?.reduce((sum, ticket) => sum + ticket.quantity, 0) || 0;
-
   useEffect(() => {
     setTotalPrice(initialPrice);
   }, [initialPrice]);
@@ -37,22 +33,11 @@ export default function Cart({
   return (
     <>
       <Button
-        className="flex items-center gap-5 w-full md:w-[378px] h-fit py-4 px-6 bg-bright-green hover:bg-bright-green/80 rounded-sm"
+        className="h-14 bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80"
         onClick={() => setIsOpen(true)}
       >
-        <div className="flex items-center gap-2">
-          <ShoppingCart
-            size={57}
-            color="var(--foreground)"
-            className="size-8"
-          />
-          {totalQuantity > 0 && (
-            <span className="font-sf-pro-display text-xl">{totalQuantity}</span>
-          )}
-        </div>
-        <span className="text-xl font-sf-pro-display">
-          {formatNaira(totalPrice)}
-        </span>
+        <span className="text-sm">Checkout</span>
+        <span className="text-2xl">{formatNaira(totalPrice)}</span>
       </Button>
 
       <BaseModal

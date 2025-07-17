@@ -17,7 +17,7 @@ export default function IndividualEventPage() {
         title={`${event.event_name} - Afro Revive`}
         description={`Buy tickets for ${event.event_name} - Afro Revive`}
       />
-      <EventDetails event={event} layout="no-image" />
+      <EventDetails event={event} layout="default" />
     </>
   );
 }

@@ -15,8 +15,8 @@ export default function EventCategoryBlocks() {
   const [selectedDate, setSelectedDate] = useState<string>("");
 
   return (
-    <section className="w-full flex flex-col gap-20 mt-36 pb-16 min-h-[calc(100vh-300px)]">
-      <div className="px-24">
+    <section className="w-full flex flex-col gap-20 mt-36 pb-16 max-lg:px-8 min-h-[calc(100vh-300px)]">
+      <div className="lg:pl-[60px]">
         <Suspense fallback={<CategoryBlockSkeleton />}>
           <CategoryBlock
             name="Trending"
@@ -27,8 +27,8 @@ export default function EventCategoryBlocks() {
         </Suspense>
       </div>
 
-      <div className="flex flex-col gap-10">
-        <div className="flex items-center gap-3 px-8 overflow-x-auto min-h-[40px]">
+      <div className="flex flex-col gap-[60px] lg:pl-[60px] xl:pl-[120px]">
+        <div className="flex items-center gap-6 overflow-x-auto min-h-[40px]">
           <BaseSelect
             type="others"
             placeholder={category_list.placeholder}
@@ -53,11 +53,9 @@ export default function EventCategoryBlocks() {
           />
         </div>
 
-        <div className="px-14">
-          <Suspense fallback={<CategoryBlockSkeleton />}>
-            <CategoryBlock data={events} showLocation={true} display="grid" />
-          </Suspense>
-        </div>
+        <Suspense fallback={<CategoryBlockSkeleton />}>
+          <CategoryBlock data={events} showLocation={true} display="grid" />
+        </Suspense>
       </div>
     </section>
   );
@@ -82,9 +80,10 @@ export function CategoryBlock({
 
       <div
         className={cn({
-          "flex gap-5 overflow-x-auto scrollbar-none w-full":
+          "flex gap-5 overflow-x-scroll scrollbar-none w-full":
             display === "flex",
-          "grid grid-cols-4 gap-8": display === "grid",
+          "grid md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 justify-center":
+            display === "grid",
         })}
       >
         {data.map((item) => (
@@ -114,10 +113,13 @@ function EventCard({
   return (
     <Link
       to={getRoutePath("individual_event", { eventId: id })}
-      className={cn("flex flex-col gap-1 min-w-[245px] max-w-[284px] w-full", {
-        "items-start": layout === "start",
-        "items-center": layout === "middle",
-      })}
+      className={cn(
+        "flex flex-col gap-1 min-w-[243px] max-w-[243px] md:min-w-fit md:max-w-full lg:min-w-[245px] lg:max-w-[284px] w-full",
+        {
+          "items-start": layout === "start",
+          "items-center": layout === "middle",
+        }
+      )}
     >
       <img
         src={image}

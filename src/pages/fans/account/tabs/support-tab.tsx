@@ -5,15 +5,12 @@ import { Textarea } from "@/components/ui/textarea";
 import type { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export default function SupportTab() {
   const form = useForm<z.infer<typeof SupportSchema>>({
     resolver: zodResolver(SupportSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
       email: "",
       message: "",
     },
@@ -27,56 +24,30 @@ export default function SupportTab() {
     <FormBase
       form={form}
       onSubmit={onSubmit}
-      className="w-[529px] flex flex-col gap-[25px] mb-[285px]"
+      className="w-[529px] flex flex-col items-center gap-6 mb-[100px]"
     >
-      <div className="w-full flex flex-col gap-[15px]">
-        {support_form.slice(0, 3).map((item) => (
-          <FormField
-            key={item.name}
-            name={item.name}
-            label={item.label}
-            form={form}
-            className={cn(
-              "w-full flex flex-col gap-2 p-2.5 rounded-[6px] bg-charcoal text-white font-input-mono",
-              {
-                "opacity-50": item.opacity === "half",
-                "opacity-100": item.opacity === "full",
-              }
-            )}
-          >
-            <Input className="border-none bg-transparent pl-0 text-lg py-0 h-fit text-white" />
-          </FormField>
-        ))}
-      </div>
+      <FormField
+        form={form}
+        name="email"
+        className="w-full flex flex-col gap-1 border border-white px-3 py-2 rounded-[5px] h-[60px]"
+        label="Email"
+      >
+        <Input className="bg-transparent border-none" />
+      </FormField>
 
-      <FormField name={support_form[3].name} form={form} className="w-full">
+      <FormField name="message" form={form} className="w-full">
         <Textarea
-          className="bg-transparent text-lg h-[291px] px-[22px] py-[23px]"
+          className="bg-transparent text-lg h-[291px] px-[22px] py-[23px] placeholder:text-white rounded-[4px]"
           placeholder="How can we help you?"
         />
       </FormField>
 
       <Button
-        variant="destructive"
-        className="w-full h-[69px] mt-[25px] font-sf-pro-text text-xl font-bold"
+        variant="ghost"
+        className="w-[120px] h-10 font-sf-pro-text text-sm font-semibold text-white hover:bg-white/10 hover:text-white"
       >
         SUBMIT
       </Button>
     </FormBase>
   );
-}
-
-const support_form: ISupportForm[] = [
-  { name: "first_name", label: "First Name", opacity: "half" },
-  { name: "last_name", label: "Last Name", opacity: "half" },
-  { name: "email", label: "Email", opacity: "full" },
-  { name: "message", opacity: "full" },
-];
-
-type ProfileFormFields = z.infer<typeof SupportSchema>;
-
-interface ISupportForm {
-  name: keyof ProfileFormFields;
-  label?: string;
-  opacity: "half" | "full";
 }

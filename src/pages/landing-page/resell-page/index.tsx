@@ -80,7 +80,7 @@ function ResellPage() {
             <h2 className="text-3xl sm:text-[32px] text-black font-bold mb-[40px]">
               SELL YOUR TICKETS IN 3 SIMPLE STEPS
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-[112px] mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[112px] mx-auto">
               <StepCard
                 title="Select the Ticket You Want to sell"
                 description="If the event supports resale and you purchased your ticket on Afro Revive, you can list it directly from your account."
@@ -112,9 +112,9 @@ function ResellPage() {
 
             {/* Features Grid */}
             <div className=" flex flex-col gap-16 items-center">
-              <div className="flex items-center justify-between text-left h-full max-w-[980px] w-full ">
+              <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10 md:gap-0 text-left h-full max-w-[980px] w-full ">
                 {/* Feature Group 1 */}
-                <div className="flex flex-col justify-between text-left h-full gap-[120px] ">
+                <div className="flex flex-col justify-between text-left h-full gap-10 md:gap-[120px] ">
                   <FeatureItem
                     title="Smart Pricing"
                     description="Using real-time ticket pricing information, We help you sell your tickets with confidence."
@@ -129,11 +129,11 @@ function ResellPage() {
                   <img
                     src="/assets/resell/pic3.jpg"
                     alt="image1"
-                    className="w-full h-full object-cover md:w-[320px] md:h-[320px] rounded-full grayscale-100"
+                    className="w-full h-full object-cover md:w-[320px] md:h-[320px] rounded-full grayscale-100 aspect-square"
                   />
                 </div>
               </div>
-              <div className="flex items-center w-full  justify-between text-left h-full max-w-[980px]">
+              <div className="flex flex-col md:flex-row items-center w-full gap-10 md:gap-0 justify-between text-left h-full max-w-[980px]">
                 {/* Image 2 */}
                 <div className="flex justify-center md:justify-start ">
                   <img
@@ -144,7 +144,7 @@ function ResellPage() {
                 </div>
 
                 {/* Feature Group 2 */}
-                <div className="flex flex-col  text-left gap-[40px]  justify-between h-full ">
+                <div className="flex flex-col  text-left gap-10 justify-between h-full ">
                   <FeatureItem
                     title="Share Your Listing"
                     description="Know what you'll earn before you list. We show you a full breakdown of your resale payout, no hidden fees." // Note: Description duplicated in image, using it here.

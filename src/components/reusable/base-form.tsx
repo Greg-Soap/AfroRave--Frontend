@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/form";
 import type {
   ControllerRenderProps,
+  FieldErrors,
   FieldValues,
   Path,
   UseFormReturn,
@@ -50,7 +51,7 @@ export interface FormBaseProps<T extends FieldValues> {
   onSubmit: (data: T) => void;
   /** Form content */
   /** Form error handler */
-  onError?: (errors: any) => void;
+  onError?: (errors: FieldErrors<T>) => void;
   children: ReactNode;
   /** Additional CSS classes for the form */
   className?: string;

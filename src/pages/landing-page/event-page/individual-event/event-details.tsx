@@ -1,36 +1,47 @@
 import { Button } from "@/components/ui/button";
 import type { IEvents } from "@/data/events";
 import { formatNaira } from "@/lib/format-price";
-import { Plus, Minus, Clock4, ChevronLeft } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  Clock4,
+  type LucideIcon,
+  ShoppingCart,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { EventLocation } from "@/pages/landing-page/event-page/event-location";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
-
-interface CartTicket {
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { BlockName } from "../_components/block-name";
+import { EventOutlineButton } from "../_components/event-otline-btn";
+import Cart from "../cart";
 
 export default function EventDetails({
   event,
   layout = "default",
 }: IEventDetailsProp) {
-  const navigate = useNavigate();
+  const [tickets, setTickets] = useState<CartTicket[]>(
+    event.tickets.map((ticket) => ({ ...ticket, quantity: 0 }))
+  );
+
+  const totalQuantity =
+    tickets?.reduce((sum, ticket) => sum + ticket.quantity, 0) || 0;
+
+  const calculateTotalPrice = () => {
+    const totalTicketPrice = tickets.reduce(
+      (sum, ticket) => sum + ticket.price * ticket.quantity,
+      0
+    );
+    const totalFees = tickets.reduce(
+      (sum, ticket) => sum + 1350 * ticket.quantity,
+      0
+    );
+    return totalTicketPrice + totalFees;
+  };
 
   return (
-    <section className="pb-16 w-full flex flex-col">
+    <section className="pb-16 w-full flex flex-col items-center">
       <div className="relative w-full flex flex-col">
-        <Button
-          variant="ghost"
-          onClick={() => navigate(-1)}
-          className="absolute top-[100px] left-10 z-10 w-fit h-fit hover:bg-black/30"
-        >
-          <ChevronLeft size={40} color="#ffffff" className="min-w-7 min-h-10" />
-        </Button>
-
         <img
           src={event.thumbnail}
           alt={event.event_name}
@@ -40,12 +51,31 @@ export default function EventDetails({
         <div className="absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/10 to-transparent backdrop-blur-xs" />
       </div>
 
-      <div className="container flex flex-col gap-10 -mt-[349px] xl:-mt-[250px] z-10">
+      <div className="max-w-[1536px] w-full flex flex-col gap-[120px] -mt-[200px] xl:-mt-[475px] z-10 px-5 lg:px-[120px]">
         {/** Contains the event-image and event-name */}
-        <EventDetailsSection event={event} layout={layout} />
+        <div className="flex flex-col gap-5 md:gap-0 md:items-end">
+          <EventDetailsSection event={event} layout={layout} />
+          <div className="flex gap-4">
+            <div className="flex h-fit gap-[11px] py-4 px-2 rounded-[6px] bg-deep-red">
+              <ShoppingCart size={24} color="#ffffff" />
+              <p className="h-6 rounded-full bg-white px-3 text-sm font-semibold font-sf-pro-display text-black flex items-center justify-center">
+                {totalQuantity}
+              </p>
+            </div>
+            <Cart
+              event={event}
+              initialTickets={tickets}
+              initialPrice={calculateTotalPrice()}
+            />
+          </div>
+        </div>
 
         {(layout === "no-image" || layout === "ticket-first") && (
-          <TicketSection event={event} layout={layout} />
+          <TicketSection
+            layout={layout}
+            tickets={tickets}
+            setTickets={setTickets}
+          />
         )}
 
         {/**Event Description */}
@@ -53,7 +83,11 @@ export default function EventDetails({
 
         {/**Tickets */}
         {layout === "default" && (
-          <TicketSection event={event} layout={layout} />
+          <TicketSection
+            layout={layout}
+            tickets={tickets}
+            setTickets={setTickets}
+          />
         )}
 
         {/**Location */}
@@ -61,6 +95,8 @@ export default function EventDetails({
 
         {/**Contact */}
         <ContactSection event={event} />
+
+        <TermsSection />
       </div>
     </section>
   );
@@ -69,7 +105,7 @@ export default function EventDetails({
 function EventDetailsSection({ event, layout }: IEventDetailsProp) {
   return (
     <div
-      className={cn("flex flex-col gap-3", {
+      className={cn("w-full flex flex-col gap-3", {
         "mb-[220px]": layout === "no-image",
       })}
     >
@@ -99,10 +135,10 @@ function EventDetailsSection({ event, layout }: IEventDetailsProp) {
 
 function EventDescription({ event }: { event: IEvents }) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-0 md:gap-1.5">
-        <BlockName name="description" />
+    <SectionContainer>
+      <BlockName name="description" />
 
+      <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3 font-sf-pro-rounded font-medium text-xs text-white">
           {event.rated_18 && (
             <p className="px-3 w-16 h-8 rounded-[6px] bg-light-red flex justify-center items-center">
@@ -122,46 +158,49 @@ function EventDescription({ event }: { event: IEvents }) {
             6 Days Left
           </p>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-1 font-sf-pro-display text-sm md:max-w-2/3">
-        {event.description.map((item) => (
-          <p key={item} className="text-sm">
-            {item}
-          </p>
-        ))}
+        <div className="flex flex-col gap-1 font-sf-pro-display text-sm md:max-w-2/3">
+          {event.description.map((item) => (
+            <p key={item} className="text-sm">
+              {item}
+            </p>
+          ))}
 
-        <div className="flex flex-col gap-0.5">
-          <p>Artist Lineup Includes:</p>
-          <ul className="flex flex-col gap-0.5">
-            {event.artist_lineup.map((item) => (
-              <li key={item} className="list-disc list-inside">
-                {item}
-              </li>
-            ))}
-          </ul>
+          <div className="flex flex-col gap-0.5">
+            <p>Artist Lineup Includes:</p>
+            <ul className="flex flex-col gap-0.5">
+              {event.artist_lineup.map((item) => (
+                <li key={item} className="list-disc list-inside">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
 
-      <EventOutlineButton className="justify-between">
-        <>
-          <span className="text-sm font-medium font-sf-pro-rounded">
-            Read More
-          </span>
-          <Plus color="var(--foreground)" size={12} />
-        </>
-      </EventOutlineButton>
-    </div>
+        <EventOutlineButton className="justify-between">
+          <>
+            <span className="text-sm font-medium font-sf-pro-rounded">
+              Read More
+            </span>
+            <Plus color="var(--foreground)" size={12} />
+          </>
+        </EventOutlineButton>
+      </div>
+    </SectionContainer>
   );
 }
 
-function TicketSection({ event, layout }: IEventDetailsProp) {
-  const [tickets, setTickets] = useState<CartTicket[]>(
-    event.tickets.map((ticket) => ({ ...ticket, quantity: 0 }))
-  );
-
+function TicketSection({
+  layout,
+  tickets,
+  setTickets,
+}: Omit<IEventDetailsProp, "event"> & {
+  tickets: CartTicket[];
+  setTickets: React.Dispatch<React.SetStateAction<CartTicket[]>>;
+}) {
   const updateTicketQuantity = (index: number, newQuantity: number) => {
-    setTickets((prev) => {
+    setTickets((prev: CartTicket[]) => {
       const updated = [...prev];
       updated[index] = {
         ...updated[index],
@@ -171,20 +210,8 @@ function TicketSection({ event, layout }: IEventDetailsProp) {
     });
   };
 
-  // const calculateTotalPrice = () => {
-  //   const totalTicketPrice = tickets.reduce(
-  //     (sum, ticket) => sum + ticket.price * ticket.quantity,
-  //     0
-  //   );
-  //   const totalFees = tickets.reduce(
-  //     (sum, ticket) => sum + 1350 * ticket.quantity,
-  //     0
-  //   );
-  //   return totalTicketPrice + totalFees;
-  // };
-
   return (
-    <div className="flex flex-col gap-7">
+    <div className="!w-full flex flex-col gap-7">
       <div className="flex items-center gap-5">
         <BlockName name="tickets" />
 
@@ -194,10 +221,10 @@ function TicketSection({ event, layout }: IEventDetailsProp) {
       </div>
 
       <div
-        className={cn("w-full flex", {
-          "gap-7 overflow-x-scroll scrollbar-none":
+        className={cn("w-full", {
+          "flex gap-7 overflow-x-scroll scrollbar-none":
             layout === "ticket-first" || layout === "no-image",
-          "flex-col gap-4": layout === "default",
+          "grid sm:grid-cols-2 gap-x-5 gap-y-7": layout === "default",
         })}
       >
         {tickets.map((item, index) => (
@@ -223,22 +250,58 @@ function TicketSection({ event, layout }: IEventDetailsProp) {
 
 function ContactSection({ event }: { event: IEvents }) {
   return (
-    <div className="flex flex-col gap-3">
+    <SectionContainer>
       <BlockName name="contact" />
 
-      <div className="flex flex-col gap-3">
-        {event.socials.website && (
-          <Link
-            to={event.socials.website}
-            className="font-sf-pro-text font-normal text-sm w-fit"
-          >
-            {event.socials.website}
-          </Link>
-        )}
+      <div className="w-full flex flex-col">
+        <div className="w-full flex items-center justify-between p-6 border-b border-mid-dark-gray/30 rounded-t-[8px] bg-[#3d3d3d]">
+          <p className="text-xl font-medium leading-[140%] font-sf-pro-display">
+            Socials
+          </p>
 
-        <SocialMediaLinks socials={event.socials} />
+          <SocialMediaLinks socials={event.socials} />
+        </div>
+
+        {event.socials.website && (
+          <div className="w-full flex items-center justify-between p-6 border-b border-mid-dark-gray/30 rounded-b-[8px] bg-[#3d3d3d]">
+            <p className="text-xl font-medium leading-[140%] font-sf-pro-display">
+              Website
+            </p>
+
+            <Link
+              to={event.socials.website}
+              className="font-sf-pro-display font-medium text-xl w-fit leading-[140%] underline text-[#419e57] underline-offset-4"
+            >
+              Click here
+            </Link>
+          </div>
+        )}
       </div>
-    </div>
+    </SectionContainer>
+  );
+}
+
+function TermsSection() {
+  return (
+    <SectionContainer>
+      <div className="w-[150px]">
+        <BlockName name="TERMS" />
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <p className="font-sf-pro-display">
+          Step into the vibrant world of ALTÉ — where sound, fashion, and
+          self-expression collide. ALTÉ RENAISSANCE is a night curated for the
+          bold and the free, a sonic exhibition of Nigeria’s new-wave culture.
+        </p>
+
+        <EventOutlineButton>
+          <span className="text-sm font-medium font-sf-pro-rounded">
+            Read More
+          </span>
+        </EventOutlineButton>
+      </div>
+    </SectionContainer>
   );
 }
 
@@ -262,7 +325,7 @@ function TicketCard({
         {
           "w-full max-w-[383px]":
             layout === "no-image" || layout === "ticket-first",
-          "w-full md:w-[695px]": layout === "default",
+          "w-full": layout === "default",
         }
       )}
     >
@@ -274,13 +337,10 @@ function TicketCard({
       <div className="flex items-center gap-2 px-3 rounded-full h-12 bg-light-green">
         {quantity > 0 && (
           <>
-            <Button
-              variant="ghost"
-              className="p-1 w-fit h-fit hover:bg-black/10"
-              onClick={() => onQuantityChange(quantity - 1)}
-            >
-              <Minus color="var(--foreground)" size={16} />
-            </Button>
+            <TicketButton
+              action={() => onQuantityChange(quantity - 1)}
+              Icon={Minus}
+            />
 
             <span className="font-sf-pro-rounded font-bold text-sm">
               {quantity}
@@ -288,50 +348,29 @@ function TicketCard({
           </>
         )}
 
-        <Button
-          variant="ghost"
-          className="p-1 w-fit h-fit hover:bg-black/10"
-          onClick={() => onQuantityChange(quantity + 1)}
-        >
-          <Plus color="var(--foreground)" size={16} />
-        </Button>
+        <TicketButton
+          action={() => onQuantityChange(quantity + 1)}
+          Icon={Plus}
+        />
       </div>
     </div>
   );
 }
 
-export function BlockName({
-  name,
-  className = "",
+function TicketButton({
+  action,
+  Icon,
 }: {
-  name: string;
-  className?: string;
-}) {
-  return (
-    <p
-      className={`text-2xl font-sf-pro-display font-black tracking-[-0.25px] text-white uppercase ${className}`}
-    >
-      {name}
-    </p>
-  );
-}
-
-export function EventOutlineButton({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
+  action: () => void;
+  Icon: LucideIcon;
 }) {
   return (
     <Button
-      variant="outline"
-      className={cn(
-        "flex items-center justify-center gap-2.5 h-10 w-[188px] rounded-[10px] border-white font-medium text-2xl font-sf-pro-rounded hover:text-white hover:bg-black/10",
-        className
-      )}
+      variant="ghost"
+      className="p-1 w-fit h-fit hover:bg-black/10"
+      onClick={action}
     >
-      {children}
+      <Icon color="var(--foreground)" size={16} />
     </Button>
   );
 }
@@ -345,7 +384,7 @@ function SocialMediaLinks({ socials }: { socials: IEvents["socials"] }) {
   ].filter((platform) => platform.link) as SocialPlatform[];
 
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex items-center gap-5">
       {platforms.map((platform) => (
         <SocialMediaIcon
           key={platform.name}
@@ -369,9 +408,17 @@ function SocialMediaIcon({
       <img
         src={`/assets/landing-page/${platform.name}.png`}
         alt={platform.alt}
-        className="w-5 h-auto"
+        className="w-[18px] h-auto"
       />
     </Link>
+  );
+}
+
+function SectionContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex max-lg:flex-col gap-[30px] lg:gap-[120px]">
+      {children}
+    </div>
   );
 }
 
@@ -384,4 +431,10 @@ type SocialPlatform = {
 interface IEventDetailsProp {
   event: IEvents;
   layout?: "default" | "ticket-first" | "no-image";
+}
+
+interface CartTicket {
+  name: string;
+  price: number;
+  quantity: number;
 }

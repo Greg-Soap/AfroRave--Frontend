@@ -1,67 +1,32 @@
 import { BaseSelect } from "@/components/reusable";
 import { FormBase, FormField } from "@/components/reusable";
-import { PayoutSchema } from "@/schema/payout-schema";
+import { defaultPayoutValues, PayoutSchema } from "@/schema/payout-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Input } from "@/components/ui/input";
-import type { ICustomSelectProps } from "@/components/reusable/base-select";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, Edit } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { africanBanks, africanCurrencies } from "@/components/constants";
+import { africanCurrencies, date_list } from "@/components/constants";
+import { AccountInput } from "../components/account-input";
 
 export default function PayoutTab() {
   return (
-    <div className="flex flex-col gap-[96px] pb-[424px]">
-      <div className="max-w-[590px] flex flex-col gap-[54px]">
-        <div className="flex flex-col gap-2">
-          <p className="font-input-mono font-semilight">
-            Add your payout account details to receive funds from your Ticket
-            sales
-          </p>
+    <div className="max-w-[436px] w-full flex flex-col gap-8 pb-[100px]">
+      <p className="font-sf-pro-display text-sm text-center px-3">
+        Add your payout account details to receive funds from your Ticket sales
+      </p>
 
-          <p className="w-full py-[9px] font-input-mono text-2xl text-center bg-soft-gray opacity-70 h-fit">
-            BANK TRANSFER
-          </p>
-        </div>
+      <PayoutForm />
 
-        <BankAccountDetails />
+      <CreditCard />
 
-        <PayoutForm />
+      <div className="flex flex-col gap-1 font-sf-pro-display">
+        <p className="font-semibold text-white">
+          If the event is canceled, postponed or rescheduled
+        </p>
+        <p>This card will be used to refund the buyer</p>
       </div>
-
-      <div className="flex flex-col gap-10">
-        <Separator className="w-full bg-white/70" />
-
-        <RefundBuyerBlock />
-      </div>
-    </div>
-  );
-}
-
-function BankAccountDetails() {
-  return (
-    <div className="w-[256px] flex flex-col items-center bg-charcoal rounded-[1px] pt-3.5 px-5 pb-3">
-      <div className="flex w-full justify-between">
-        <div className="flex flex-col gap-1.5 font-sf-pro-text">
-          <p>ACCESS BANK</p>
-          <p>0079304520</p>
-        </div>
-
-        <p className="font-input-mono text-[23px]">NGN</p>
-      </div>
-
-      <p className="font-sf-pro-text mt-7">Favour eseose atie</p>
-
-      <Button
-        variant="destructive"
-        className="mt-[21px] w-fit h-fit py-1 px-[19px] rounded-[2px]"
-      >
-        <Edit size={12} color="#ffffff" />
-      </Button>
     </div>
   );
 }
@@ -69,12 +34,7 @@ function BankAccountDetails() {
 function PayoutForm() {
   const form = useForm<z.infer<typeof PayoutSchema>>({
     resolver: zodResolver(PayoutSchema),
-    defaultValues: {
-      currency: "",
-      bank: "",
-      account_number: undefined,
-      account_name: "",
-    },
+    defaultValues: defaultPayoutValues,
   });
 
   function onSubmit(values: z.infer<typeof PayoutSchema>) {
@@ -85,71 +45,87 @@ function PayoutForm() {
     <FormBase
       form={form}
       onSubmit={onSubmit}
-      className="w-full flex flex-col gap-4"
+      className="w-full flex flex-col items-center gap-3"
     >
-      {payout_select_fields.map((item) => (
-        <FormField
+      <div className="w-full flex flex-col gap-1">
+        <p className="text-sm">Payment Method</p>
+        <div className="w-full flex gap-1">
+          <FormField form={form} name="currency">
+            {(field) => (
+              <BaseSelect
+                onChange={(value) => field.onChange(value)}
+                label="Payment Method"
+                placeholder="Currency"
+                items={africanCurrencies}
+                triggerClassName="!h-10 w-[85px] rounded-l-[5px] rounded-r-none px-3 bg-soft-gray text-sm font-sf-pro-display !text-white !placeholder:text-white border-none"
+              />
+            )}
+          </FormField>
+          <p className="flex w-full h-10 rounded-r-[5px] bg-soft-gray justify-center items-center text-sm font-medium font-sf-pro-display">
+            DEBIT/CREDIT CARD
+          </p>
+        </div>
+      </div>
+
+      {payout_input_fields.slice(0, 2).map((item) => (
+        <AccountInput
           key={item.name}
           form={form}
           name={item.name}
           label={item.label}
-        >
-          {(field) => (
-            <BaseSelect
-              type="auth"
-              placeholder={item.placeholder}
-              onChange={(value) => field.onChange(value)}
-              items={item.data}
-              triggerClassName="w-full border-none text-white bg-charcoal h-[46px] px-[18px] py-3.5 font-input-mono"
-            />
-          )}
-        </FormField>
+          type={
+            item.name === "card_number" || item.name === "cvc"
+              ? "number"
+              : "text"
+          }
+        />
       ))}
 
-      {payout_input_fields.map((item) => (
-        <FormField
+      <div className="w-full flex flex-col gap-1">
+        <p className="text-sm font-medium">Expiry</p>
+        <div className="grid grid-cols-2 gap-1">
+          <FormField form={form} name="expiry_date.month">
+            {(field) => (
+              <BaseSelect
+                onChange={(value) => field.onChange(value)}
+                label="Month"
+                placeholder="Month"
+                items={date_list.items}
+                triggerClassName="h-10 w-full rounded-none px-3 rounded-t-[5px] bg-transparent text-sm font-sf-pro-display !text-white border-none"
+              />
+            )}
+          </FormField>
+          <FormField form={form} name="expiry_date.year">
+            {(field) => (
+              <BaseSelect
+                onChange={(value) => field.onChange(value)}
+                label="Year"
+                placeholder="Year"
+                items={years}
+                triggerClassName="h-10 w-full rounded-none px-3 rounded-t-[5px] bg-transparent text-sm font-sf-pro-display !text-white border-none"
+              />
+            )}
+          </FormField>
+        </div>
+      </div>
+
+      {payout_input_fields.slice(2).map((item) => (
+        <AccountInput
           key={item.name}
           form={form}
           name={item.name}
           label={item.label}
-        >
-          <Input
-            type={item.name === "account_number" ? "number" : "text"}
-            placeholder={item.placeholder}
-            className="h-[46px] w-full bg-charcoal text-white/70 font-input-mono"
-          />
-        </FormField>
+          type="number"
+        />
       ))}
 
       <Button
         variant="destructive"
-        className="w-full h-[69px] rounded-[6px] text-xl font-bold font-sf-pro-text"
+        className="w-[200px] h-10 rounded-[5px] bg-white text-sm text-deep-red font-sf-pro-display hover:bg-white/80"
       >
         SAVE
       </Button>
     </FormBase>
-  );
-}
-
-function RefundBuyerBlock() {
-  return (
-    <div className="max-w-[540px] w-full flex flex-col gap-[21px]">
-      <div className="flex flex-col gap-2 font-sf-pro-display">
-        <p className="text-2xl">
-          If the event is canceled, postponed or rescheduled
-        </p>
-        <p className="text-lg font-light">Use this card to refund the buyer</p>
-      </div>
-
-      <CreditCard />
-
-      <Button className="w-full bg-transparent hover:bg-transparent group py-[18px] px-[13px] flex items-center justify-start gap-2 font-sf-pro-display">
-        <PlusIcon color="#ffffff" size={16} />
-        <span className="text-bright-green font-black group-hover:text-bright-green/80 text-base">
-          Add New Credit Card
-        </span>
-      </Button>
-    </div>
   );
 }
 
@@ -159,7 +135,7 @@ function CreditCard() {
       defaultValue="option-one"
       className="w-full flex flex-col gap-3"
     >
-      <div className="w-full h-[55px] flex items-center gap-[7px] bg-slate-gray/74 border border-slate-gray py-[11px] pl-[22px] pr-[15px]">
+      <div className="w-full h-[55px] flex items-center gap-[7px] bg-medium-gray py-[11px] pl-[22px] pr-[15px] rounded-[5px]">
         <RadioGroupItem value="option-one" id="option-one" />
         <Label
           htmlFor="option-one"
@@ -187,38 +163,27 @@ function CreditCard() {
   );
 }
 
-const payout_select_fields: IPayoutSelectFields[] = [
-  { name: "currency", data: africanCurrencies, placeholder: "SELECT CURRENCY" },
-  {
-    label: "*Bank name",
-    name: "bank",
-    data: africanBanks,
-    placeholder: "SELECT BANK",
-  },
-];
+const years = Array.from({ length: 20 }, (_, i) => {
+  const year = `${new Date().getFullYear() + i}`;
+  return { value: year, label: year };
+});
+
+type PayoutFormFields = z.infer<typeof PayoutSchema>;
 
 const payout_input_fields: {
   label: string;
   name: keyof PayoutFormFields;
-  placeholder: string;
 }[] = [
   {
-    label: "*Account number",
-    name: "account_number",
-    placeholder: "ACCOUNT NUMBER",
+    label: "Name",
+    name: "name",
   },
   {
-    label: "*Account name",
-    name: "account_name",
-    placeholder: "ACCOUNT NAME",
+    label: "Card Number",
+    name: "card_number",
+  },
+  {
+    label: "CVC",
+    name: "cvc",
   },
 ];
-
-type PayoutFormFields = z.infer<typeof PayoutSchema>;
-
-interface IPayoutSelectFields {
-  label?: string;
-  name: keyof PayoutFormFields;
-  data: ICustomSelectProps["items"];
-  placeholder: string;
-}

@@ -6,13 +6,10 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { geocodeLocation } from "@/lib/geocode";
 import type { LatLngTuple } from "leaflet";
-import {
-  BlockName,
-  EventOutlineButton,
-} from "./individual-event/event-details";
+import { BlockName } from "./_components/block-name";
+import { EventOutlineButton } from "./_components/event-otline-btn";
 import { Icon } from "leaflet";
 
-// Fix for default marker icon
 function createCustomIcon() {
   return new Icon({
     iconUrl: "/assets/resell/lighting.svg",
@@ -29,10 +26,7 @@ export function EventLocation({
 }: {
   event_location: IEvents["event_location"];
 }) {
-  const [position, setPosition] = useState<LatLngTuple>([
-    6.5244,
-    3.3792, //lagos
-  ]);
+  const [position, setPosition] = useState<LatLngTuple>([6.5244, 3.3792]);
 
   useEffect(() => {
     geocodeLocation(event_location).then((coords) => {
@@ -44,21 +38,21 @@ export function EventLocation({
 
   if (!position)
     return (
-      <div className="flex flex-col gap-[43px]">
+      <div className="flex gap-[120px]">
         <BlockName name="location" className="underline" />
 
-        <div className="flex w-full md:w-2/3 lg:w-[722px] h-[452px] rounded-[4px] border border-white items-center justify-center">
+        <div className="flex w-full xl:w-[722px] h-[452px] rounded-[4px] border border-white items-center justify-center">
           <p>Loading Map...</p>
         </div>
       </div>
     );
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex max-lg:flex-col gap-[30px] lg:gap-[120px]">
       <BlockName name="location" />
 
-      <div className="flex flex-col gap-4">
-        <div className="w-full md:w-2/3 lg:w-[722px] h-[452px]">
+      <div className="flex flex-col gap-8">
+        <div className="w-full lg:w-[525px] xl:w-[722px] h-[452px]">
           <MapContainer
             center={position}
             zoom={13}
@@ -74,15 +68,15 @@ export function EventLocation({
           </MapContainer>
         </div>
 
-        <p className="text-sm font-extralight font-sf-pro-display">
-          {event_location}
-        </p>
+        <div className="flex flex-col gap-5">
+          <p className="font-sf-pro-display">{event_location}</p>
 
-        <EventOutlineButton>
-          <span className="text-sm font-sf-pro-rounded font-medium">
-            Open in Maps
-          </span>
-        </EventOutlineButton>
+          <EventOutlineButton>
+            <span className="text-sm font-sf-pro-rounded font-medium">
+              Open in Maps
+            </span>
+          </EventOutlineButton>
+        </div>
       </div>
     </div>
   );
