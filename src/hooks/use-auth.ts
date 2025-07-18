@@ -8,6 +8,49 @@ import type {
   VendorRegisterData,
 } from '@/types/auth'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
+
+// Helper function to extract error messages from API responses
+function extractErrorMessage(error: unknown): string {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const axiosError = error as AxiosError
+    const responseData = axiosError.response?.data as Record<string, unknown>
+    
+    // Handle validation errors from the API
+    if (responseData?.errors && typeof responseData.errors === 'object') {
+      const errorMessages: string[] = []
+      
+      // Extract all error messages from the errors object
+      Object.entries(responseData.errors).forEach(([, messages]) => {
+        if (Array.isArray(messages)) {
+          errorMessages.push(...messages)
+        } else if (typeof messages === 'string') {
+          errorMessages.push(messages)
+        }
+      })
+      
+      if (errorMessages.length > 0) {
+        return errorMessages.join(', ')
+      }
+    }
+    
+    // Handle other error messages
+    if (responseData?.message) {
+      return responseData.message as string
+    }
+    
+    if (responseData?.title) {
+      return responseData.title as string
+    }
+  }
+  
+  // Fallback to generic error message
+  if (error instanceof Error) {
+    return error.message
+  }
+  
+  return 'An unexpected error occurred'
+}
 
 // Query keys for authentication
 export const authKeys = {
@@ -33,12 +76,10 @@ export function useRegisterUser() {
       // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.userRegistered()
-      console.log('User registration successful:', data.data)
     },
     onError: (error: unknown) => {
-      const errorMessage = error instanceof Error ? error.message : undefined
+      const errorMessage = extractErrorMessage(error)
       authToasts.registrationError(errorMessage)
-      console.error('User registration failed:', error)
     },
   })
 }
@@ -58,12 +99,10 @@ export function useRegisterVendor() {
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.vendorRegistered()
-      console.log('Vendor registration successful:', data.data)
     },
     onError: (error: unknown) => {
-      const errorMessage = error instanceof Error ? error.message : undefined
+      const errorMessage = extractErrorMessage(error)
       authToasts.vendorRegistrationError(errorMessage)
-      console.error('Vendor registration failed:', error)
     },
   })
 }
@@ -83,12 +122,10 @@ export function useRegisterOrganizer() {
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.organizerRegistered()
-      console.log('Organizer registration successful:', data.data)
     },
     onError: (error: unknown) => {
-      const errorMessage = error instanceof Error ? error.message : undefined
+      const errorMessage = extractErrorMessage(error)
       authToasts.organizerRegistrationError(errorMessage)
-      console.error('Organizer registration failed:', error)
     },
   })
 }
@@ -108,12 +145,10 @@ export function useLogin() {
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.loginSuccess()
-      console.log('Login successful:', data.data)
     },
     onError: (error: unknown) => {
-      const errorMessage = error instanceof Error ? error.message : undefined
+      const errorMessage = extractErrorMessage(error)
       authToasts.loginError(errorMessage)
-      console.error('Login failed:', error)
     },
   })
 }
@@ -132,12 +167,10 @@ export function useLogout() {
       // Clear all auth-related queries
       queryClient.removeQueries({ queryKey: authKeys.all })
       authToasts.logoutSuccess()
-      console.log('Logout successful')
     },
     onError: (error: unknown) => {
-      const errorMessage = error instanceof Error ? error.message : undefined
+      const errorMessage = extractErrorMessage(error)
       authToasts.logoutError(errorMessage)
-      console.error('Logout failed:', error)
     },
   })
 }

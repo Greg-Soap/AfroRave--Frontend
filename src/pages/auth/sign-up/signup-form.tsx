@@ -76,16 +76,16 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
         </div>
 
         <div className='grid md:grid-cols-2 gap-[9px]'>
-          <FormField form={form} name='first_name' label='First Name'>
+          <FormField form={form} name='first_name' >
             <Input placeholder='Enter your first name.' />
           </FormField>
 
-          <FormField form={form} name='last_name' label='Last Name'>
+          <FormField form={form} name='last_name' >
             <Input placeholder='Enter your last name.' />
           </FormField>
         </div>
 
-        <FormField form={form} name='country' label='Country' className='w-full z-20'>
+        <FormField form={form} name='country' className='w-full z-20'>
           {(field) => (
             <BaseSelect
               type='auth'
@@ -98,11 +98,11 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
           )}
         </FormField>
 
-        <FormField form={form} name='email' label='Email Address'>
+        <FormField form={form} name='email' >
           <Input placeholder='Enter email address.' />
         </FormField>
 
-        <FormField form={form} name='password' label='Password' className='w-full'>
+          <FormField form={form} name='password' className='w-full'>
           {(field) => (
             <PasswordInput
               placeholder='Enter password.'

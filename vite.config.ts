@@ -4,11 +4,26 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+    },
+  },
+  define: {
+    'import.meta.env.DEV': mode === 'development',
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://afro-revive-latest.onrender.com',
+        changeOrigin: true,
+        secure: false,
+        configure: () => {
+          // Proxy configuration without logging
+        },
+      },
     },
   },
   build: {
@@ -70,4 +85,4 @@ export default defineConfig({
     reportCompressedSize: true,
     sourcemap: false,
   },
-})
+}))

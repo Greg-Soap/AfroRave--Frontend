@@ -45,7 +45,7 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
       password: values.password,
     }
 
-        login.mutate(loginData)
+    login.mutate(loginData)
   }
 
   return (

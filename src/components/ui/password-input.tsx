@@ -33,7 +33,7 @@ function PasswordInput({ placeholder, value, onChange, disabled, onError }: Pass
         type='button'
         variant='ghost'
         size='icon'
-        className='absolute right-0 top-0 h-full rounded-full hover:text-primary/75 hover:bg-transparent'
+        className='absolute right-0 top-0 h-full rounded-full hover:text-primary/75 hover:bg-transparent text-black'
         onClick={toggleVisibility}>
         {isVisible ? <Eye className='h-4 w-4' /> : <EyeOff className='h-4 w-4' />}
       </Button>

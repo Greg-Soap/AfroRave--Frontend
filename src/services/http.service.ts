@@ -5,19 +5,21 @@ export const multipartHeaders = {
   headers: { 'Content-Type': 'multipart/form-data' },
 }
 
-const apiUrl =
-  import.meta.env.NODE_ENV === 'development'
-    ? import.meta.env.VITE_API_DEV
-    : import.meta.env.VITE_API_PROD
+// Force development mode for now to use proxy
+const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development' || window.location.hostname === 'localhost'
+
+const apiUrl = isDev 
+  ? '' // Use relative URLs in development (proxy will handle it)
+  : import.meta.env.VITE_API_PROD || 'https://afro-revive-latest.onrender.com'
 
 const api = axios.create({
   baseURL: apiUrl,
   headers: {
     'X-Device-Type': 'web',
-    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json',
     tokenId: import.meta.env.TOKEN_ID,
   },
-  withCredentials: true,
+  withCredentials: false, // Changed to false to avoid CORS preflight issues
 })
 
 api.interceptors.request.use(
@@ -33,7 +35,17 @@ api.interceptors.request.use(
     return req
   },
   (err) => {
-    Promise.reject(err)
+    return Promise.reject(err)
+  },
+)
+
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    return Promise.reject(error)
   },
 )
 
