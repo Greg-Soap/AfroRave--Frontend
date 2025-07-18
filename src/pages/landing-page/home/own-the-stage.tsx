@@ -23,7 +23,7 @@ export default function OwnTheStage() {
       /> */}
 
       {/* Content container */}
-      <div className="relative px-[56px]">
+      <div className="relative px-5 md:px-14">
         <div className="mb-[124px] overflow-x-hidden">
           <Suspense fallback={<CategoryBlockSkeleton />}>
             <CategoryBlock
@@ -35,13 +35,13 @@ export default function OwnTheStage() {
           </Suspense>
         </div>
         {/* First row - blocks 1 and 3 */}
-        <div className="flex justify-between items-start gap-10 mb-10 md:mb-24">
+        <div className="flex max-lg;flex-col lg:justify-between items-center lg:items-start gap-10 mb-10 md:mb-24">
           <DetailsBlock {...details[0]} position="first" />
           <DetailsBlock {...details[2]} position="third" />
         </div>
 
         {/* Second row - block 2 centered */}
-        <div className="flex justify-center ">
+        <div className="flex justify-center">
           <DetailsBlock {...details[1]} position="second" />
         </div>
       </div>
@@ -58,30 +58,34 @@ function DetailsBlock({
 }: IDetailsBlockProps) {
   return (
     <div
-      className={cn("max-w-[554px] flex flex-col gap-2 max-md:gap-5", {
-        "items-center z-10 max-w-[375px]!": position === "second",
-        "items-end": position === "third",
-      })}
+      className={cn(
+        "max-w-[554px] flex flex-col max-lg:items-center gap-2 max-md:gap-5",
+        {
+          "items-center z-10 lg:max-w-[375px]": position === "second",
+          "items-end": position === "third",
+        }
+      )}
     >
-      <div className="flex flex-wrap items-center max-md:justify-center  gap-x-3.5 max-md:gap-y-2">
-        <span
-          className={cn(
-            "inline-block text-2xl md:text-[30px] leading-[110%] lg:text-[36px] max-md:text-center font-phosphate-inline text-white",
-            {
-              "text-right w-[426px]": position === "third",
-              "text-center w-full": position === "second",
-              "text-left w-full": position === "first",
-            }
-          )}
-        >
-          {title}
-        </span>
-      </div>
+      <span
+        className={cn(
+          "inline-block text-2xl md:text-[30px] leading-[110%] lg:text-[36px] max-md:text-center font-phosphate-inline text-white max-lg:text-center text-wrap",
+          {
+            "text-right lg:w-[426px]": position === "third",
+            "text-center w-full": position === "second",
+            "text-left w-full": position === "first",
+          }
+        )}
+      >
+        {title}
+      </span>
       <p
-        className={cn("text-xl uppercase max-md:text-center font-phosphate", {
-          "text-center mb-2 max-w-[444px]": position === "second",
-          "text-right": position === "third",
-        })}
+        className={cn(
+          "text-xl uppercase max-md:text-center font-phosphate max-lg:text-center",
+          {
+            "text-center mb-2 max-w-[444px]": position === "second",
+            "text-right": position === "third",
+          }
+        )}
       >
         {details}
       </p>

@@ -28,7 +28,27 @@ export const ProfileSchema = z.object({
   state: z.string().min(3, {
     message: "Provide a valid state.",
   }),
-  phone: z.string().min(7, {
-    message: "Provide a valid phone number.",
+  number: z.object({
+    country_code: z.string(),
+    digits: z.string(),
   }),
 });
+
+export const defaultProfileValues: z.infer<typeof ProfileSchema> = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  gender: "",
+  birthday: {
+    month: "",
+    day: "",
+    year: "",
+  },
+  country: "",
+  state: "",
+  number: {
+    country_code: "",
+    digits: "",
+  },
+};

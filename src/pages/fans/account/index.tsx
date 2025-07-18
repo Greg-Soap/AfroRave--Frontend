@@ -33,10 +33,10 @@ export default function AccountPage() {
     setSearchParams({ account: tab });
   };
   return (
-    <section className="w-full flex flex-col items-center justify-center gap-[162px] mt-[124px]">
+    <section className="w-full flex flex-col items-center justify-center gap-10 md:gap-[162px] mt-[124px] max-md:px-5">
       <Button
         variant="ghost"
-        className="ml-[50px] self-start w-fit hover:bg-white/10"
+        className="md:ml-[50px] self-start w-fit hover:bg-white/10"
       >
         <ChevronLeft color="#ffffff" className="w-[14px] h-[30px]" />
       </Button>
@@ -45,8 +45,30 @@ export default function AccountPage() {
         activeTab={activeTab}
         setActiveTab={setActiveTabState}
         tabs={account_tabs}
+        CustomElement={<LogOutBtn />}
       />
     </section>
+  );
+}
+
+function LogOutBtn() {
+  return (
+    <Button
+      variant="ghost"
+      className="w-full py-7 border-t border-white flex justify-start items-center gap-2 rounded-none opacity-50 hover:opacity-100 hover:bg-white/20"
+    >
+      <img
+        src="/assets/harmburger/logout.png"
+        alt="Logout"
+        width={17}
+        height={18}
+        className="opacity-60 group-hover:opacity-100 group-data-[state=active]:opacity-100"
+      />
+
+      <span className="opacity-60 group-hover:opacity-100 group-data-[state=active]:opacity-100">
+        LOGOUT
+      </span>
+    </Button>
   );
 }
 
@@ -59,19 +81,13 @@ const account_tabs: IAccountTab[] = [
   },
   {
     value: "payout",
-    image: "/assets/harmburger/round-user.png",
+    image: "/assets/harmburger/payout.png",
     name: "Payout",
     element: <PayoutTab />,
   },
   {
-    value: "settings",
-    image: "/assets/harmburger/round-user.png",
-    name: "Settings",
-    element: <SettingsTab />,
-  },
-  {
     value: "support",
-    image: "/assets/harmburger/round-user.png",
+    image: "/assets/harmburger/support.png",
     name: "Support",
     element: <SupportTab />,
   },

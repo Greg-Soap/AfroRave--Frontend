@@ -19,7 +19,10 @@ export default function Footer() {
         <FooterLinks className="max-md:flex-col md:items-center md:h-5" />
       </div>
 
-      <Separator orientation="horizontal" className="w-full bg-[#686868]" />
+      <Separator
+        orientation="horizontal"
+        className="w-full bg-[#686868] max-md:mt-7"
+      />
 
       <div className="  w-full flex max-md:flex-col gap-[120px] px-[1rem] md:px-[2rem] justify-start md:pr-[160px]">
         {footer_links.map((footer_link) => (

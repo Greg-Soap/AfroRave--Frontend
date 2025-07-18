@@ -6,6 +6,7 @@ export function BaseTab({
   setActiveTab,
   tabs,
   variant = "account",
+  CustomElement,
 }: BaseTabProps) {
   const isAccount = variant === "account";
   const isListed = variant === "listed-tickets";
@@ -15,14 +16,16 @@ export function BaseTab({
       value={activeTab}
       onValueChange={setActiveTab}
       defaultValue={tabs[0]?.value}
-      className={cn("flex", {
-        "flex-row justify-center gap-[307px]": isAccount,
+      className={cn("w-full md:w-fit flex", {
+        "flex-col md:flex-row justify-center gap-10 md:gap-[100px] xl:gap-[307px]":
+          isAccount,
         "flex-col items-center gap-[132px]": isListed,
       })}
     >
       <TabsList
         className={cn("flex h-fit", {
-          "w-[366px] flex-col gap-[45px] bg-transparent mb-10": isAccount,
+          "w-full md:w-fit lg:w-[175px] xl:w-[366px] flex-row max-md:gap-7 md:flex-col bg-transparent mb-10 justify-start overflow-scroll scrollbar-none":
+            isAccount,
           "w-fit px-1 py-1.5 rounded-[8px] bg-deep-red": isListed,
         })}
       >
@@ -31,9 +34,9 @@ export function BaseTab({
             key={value}
             value={value}
             className={cn("font-input-mono transition-all duration-300", {
-              "w-full flex items-center justify-start gap-[7px] text-[15px] uppercase rounded-none tracking-[4%] data-[state=active]:bg-transparent data-[state=active]:shadow-none group":
+              "w-full flex items-center justify-start gap-[7px] text-[15px] uppercase rounded-none tracking-[4%] py-7 data-[state=active]:bg-transparent data-[state=active]:shadow-none group font-sf-pro-display font-normal":
                 isAccount,
-              "border-y border-y-white/40 py-[42px]": value === "payout",
+              "md:border-y md:border-y-white/40 md:py-7": value === "payout",
               "w-[116px] h-9 text-[13px] rounded-[8px] bg-transparent text-white data-[state=active]:bg-white data-[state=active]:text-pure-black":
                 isListed,
             })}
@@ -58,6 +61,7 @@ export function BaseTab({
             </span>
           </TabsTrigger>
         ))}
+        {CustomElement}
       </TabsList>
 
       {tabs.map(({ value, element }) => (
@@ -83,4 +87,5 @@ interface BaseTabProps {
   setActiveTab: (value: string) => void;
   tabs: ITabProps[];
   variant?: TabVariant;
+  CustomElement?: React.ReactNode;
 }

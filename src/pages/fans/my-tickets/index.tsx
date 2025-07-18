@@ -17,20 +17,20 @@ export default function MyTicketsPage() {
       setActiveTab(myTicketParam);
     } else {
       setActiveTab("active");
-      setSearchParams({ myticket: "active" });
+      setSearchParams({ tab: "active" });
     }
   }, [searchParams]);
 
   const setActiveTabState = (tab: string) => {
     setActiveTab(tab);
-    setSearchParams({ myticket: tab });
+    setSearchParams({ tab: tab });
   };
 
   return (
     <section className="w-full flex flex-col items-center justify-center gap-[34px] mt-[124px]">
       <Button
         variant="ghost"
-        className="ml-[50px] self-start w-fit hover:bg-white/10"
+        className="pl-5 md:ml-[50px] self-start w-fit hover:bg-white/10"
       >
         <ChevronLeft color="#ffffff" className="w-[14px] h-[30px]" />
       </Button>
