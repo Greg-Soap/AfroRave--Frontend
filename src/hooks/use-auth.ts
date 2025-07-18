@@ -1,3 +1,4 @@
+import { getRoutePath } from '@/config/get-route-path'
 import { authToasts } from '@/lib/toast'
 import authService from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth-store'
@@ -9,6 +10,7 @@ import type {
 } from '@/types/auth'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 // Helper function to extract error messages from API responses
 function extractErrorMessage(error: unknown): string {
@@ -64,18 +66,21 @@ export const authKeys = {
 export function useRegisterUser() {
   const queryClient = useQueryClient()
   const setAuth = useAuthStore((state) => state.setAuth)
-
+  const navigate = useNavigate()
   return useMutation({
     mutationFn: (data: UserRegisterData) => authService.registerUser(data),
     onSuccess: (data) => {
+      console.log('data', data);
+
       // Store user data and token in store
-      if (data.data.user && data.data.token) {
-        setAuth(data.data.user, data.data.token)
+      if (data.data.userData && data.data.token) {
+        setAuth(data.data.userData, data.data.token)
       }
       
       // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.userRegistered()
+      navigate(getRoutePath('account'))
     },
     onError: (error: unknown) => {
       const errorMessage = extractErrorMessage(error)
@@ -93,8 +98,8 @@ export function useRegisterVendor() {
     mutationFn: (data: VendorRegisterData) => authService.registerVendor(data),
     onSuccess: (data) => {
       // Store user data and token in store
-      if (data.data.user && data.data.token) {
-        setAuth(data.data.user, data.data.token)
+      if (data.data.userData && data.data.token) {
+        setAuth(data.data.userData, data.data.token)
       }
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -116,8 +121,8 @@ export function useRegisterOrganizer() {
     mutationFn: (data: OrganizerRegisterData) => authService.registerOrganizer(data),
     onSuccess: (data) => {
       // Store user data and token in store
-      if (data.data.user && data.data.token) {
-        setAuth(data.data.user, data.data.token)
+      if (data.data.userData && data.data.token) {
+        setAuth(data.data.userData, data.data.token)
       }
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -139,8 +144,8 @@ export function useLogin() {
     mutationFn: (data: LoginData) => authService.login(data),
     onSuccess: (data) => {
       // Store user data and token in store
-      if (data.data.user && data.data.token) {
-        setAuth(data.data.user, data.data.token)
+      if (data.data.userData && data.data.token) {
+        setAuth(data.data.userData, data.data.token)
       }
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })

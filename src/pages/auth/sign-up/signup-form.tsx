@@ -53,11 +53,11 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
       firstName: values.first_name,
       lastName: values.last_name,
       email: values.email,
-      telphone: '', // This field is required by API but not in current form
-      gender: '', // This field is required by API but not in current form
-      dateOfBirth: '', // This field is required by API but not in current form
+      telphone: '0000000000', 
+      gender: 'male', 
+      dateOfBirth: '2000-01-01', 
       country: values.country,
-      state: '', // This field is required by API but not in current form
+      state: 'Benin', 
       password: values.password,
     }
 

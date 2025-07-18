@@ -66,14 +66,14 @@ export interface User {
 // API Response types
 export interface AuthResponse {
   message: string
-  user: User
+  userData: User
   token?: string
-  otp?: string
+  
 }
 
 export interface LoginResponse {
   message: string
-  user: User
+  userData: User
   token: string
 }
 

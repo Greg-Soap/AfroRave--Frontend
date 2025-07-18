@@ -3,9 +3,12 @@ import { NavLogo } from "./nav-logo";
 import { useScroll } from "@/lib/useScroll";
 import LoginButton from "@/layouts/components/login-button";
 import NavSheet from "@/layouts/components/nav-sheet";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function Header() {
   const { hasScrolled } = useScroll();
+  const { user } = useAuthStore();
+  console.log(user);
 
   return (
     <header className="w-full fixed top-0 flex justify-center z-50 h-[120px]">

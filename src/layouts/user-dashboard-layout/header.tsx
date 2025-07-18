@@ -7,10 +7,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "../root-layout/header/mobile-menu";
 import { useScroll } from "@/lib/useScroll";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function AccountHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { hasScrolled } = useScroll();
+  const { user } = useAuthStore();
+  console.log(user);
 
   return (
     <header className="w-full fixed top-0 flex justify-center z-50 h-[120px]">
