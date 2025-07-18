@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { lazy } from 'react'
+import { lazy, Suspense } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { creator_dashboard_routes } from './config/creator-dashboard-routes'
@@ -8,6 +8,8 @@ import { getRoutePath } from './config/get-route-path'
 import { routes } from './config/routes'
 import { support_routes } from './config/support-routes'
 import { user_dashboard_routes } from './config/user-dashboard-routes'
+import { OrganizerAuthGuard } from './components/auth/organizer-auth-guard'
+import { LoadingFallback } from './components/loading-fallback'
 import CreatorDashboardLayout from './layouts/creator-dashboard-layout'
 import IndexLayout from './layouts/root-layout'
 import SupportLayout from './layouts/support-layout'
@@ -57,10 +59,25 @@ export default function Application() {
 
           <Route
             path={getRoutePath('edit_event', { eventId: ':eventId' })}
-            element={<EditEventPage />}
+            element={
+              <OrganizerAuthGuard>
+                <Suspense fallback={<LoadingFallback />}>
+                  <EditEventPage />
+                </Suspense>
+              </OrganizerAuthGuard>
+            }
           />
 
-          <Route path={getRoutePath('add_event')} element={<AddEventPage />} />
+          <Route 
+            path={getRoutePath('add_event')} 
+            element={
+              <OrganizerAuthGuard>
+                <Suspense fallback={<LoadingFallback />}>
+                  <AddEventPage />
+                </Suspense>
+              </OrganizerAuthGuard>
+            } 
+          />
         </Routes>
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />

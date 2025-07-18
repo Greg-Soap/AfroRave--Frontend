@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
 import { LoadingFallback } from "@/components/loading-fallback";
+import { UserAuthGuard } from "@/components/auth/user-auth-guard";
 import { getRoutePath } from "./get-route-path";
 
 const AccountPage = lazy(() => import("../pages/fans/account"));
@@ -14,33 +15,41 @@ export const user_dashboard_routes: RouteObject[] = [
   {
     path: getRoutePath("account"),
     element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <AccountPage />
-      </Suspense>
+      <UserAuthGuard>
+        <Suspense fallback={<LoadingFallback />}>
+          <AccountPage />
+        </Suspense>
+      </UserAuthGuard>
     ),
   },
   {
     path: getRoutePath("my_tickets"),
     element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <MyTicketsPage />
-      </Suspense>
+      <UserAuthGuard>
+        <Suspense fallback={<LoadingFallback />}>
+          <MyTicketsPage />
+        </Suspense>
+      </UserAuthGuard>
     ),
   },
   {
     path: getRoutePath("active_tickets", { eventId: ":eventId" }),
     element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <IndividualActiveTicketsPage />
-      </Suspense>
+      <UserAuthGuard>
+        <Suspense fallback={<LoadingFallback />}>
+          <IndividualActiveTicketsPage />
+        </Suspense>
+      </UserAuthGuard>
     ),
   },
   {
     path: getRoutePath("listed_tickets"),
     element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <ListedTicketPage />
-      </Suspense>
+      <UserAuthGuard>
+        <Suspense fallback={<LoadingFallback />}>
+          <ListedTicketPage />
+        </Suspense>
+      </UserAuthGuard>
     ),
   },
 ];
