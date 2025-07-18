@@ -1,11 +1,13 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { Button } from '@/components/ui/button'
 import { FormBase, FormField } from '@/components/reusable'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
 import { useAuth } from '@/contexts/auth-context'
+import { useLogin } from '@/hooks/use-auth'
+import type { LoginData } from '@/types/auth'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,6 +29,8 @@ interface UserLoginFormProps {
 
 export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
   const { loginType } = useAuth()
+  const login = useLogin()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +40,12 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    const loginData: LoginData = {
+      email: values.email,
+      password: values.password,
+    }
+
+        login.mutate(loginData)
   }
 
   return (
@@ -80,8 +89,11 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
           </button>
         </div>
 
-        <Button type='submit' className='w-full h-[50px] text-xl font-semibold font-sf-pro-text'>
-          Sign In
+        <Button
+          type='submit'
+          className='w-full h-[50px] text-xl font-semibold font-sf-pro-text'
+          disabled={login.isPending}>
+          {login.isPending ? 'Signing In...' : 'Sign In'}
         </Button>
       </FormBase>
     </div>

@@ -1,5 +1,5 @@
-import { getToken } from '@/lib/cookies'
 import axios from 'axios'
+import { useAuthStore } from '@/stores/auth-store'
 
 export const multipartHeaders = {
   headers: { 'Content-Type': 'multipart/form-data' },
@@ -20,9 +20,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (req) => {
-    if (req.url?.includes('login')) return req
+    if (req.url?.includes('login') || req.url?.includes('register')) return req
 
-    const token = getToken()
+    // Get token from auth store
+    const token = useAuthStore.getState().token
 
     if (token) {
       req.headers.Authorization = `Bearer ${token}`
