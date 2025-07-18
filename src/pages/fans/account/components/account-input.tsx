@@ -14,11 +14,11 @@ export function AccountInput<T extends FieldValues>({
       name={name}
       label={label}
       form={form}
-      className="w-full flex flex-col gap-2.5 px-3 py-1 rounded-[5px] bg-transparent text-white font-sf-pro-display h-14"
+      className="w-full flex flex-col gap-2.5 px-3 py-3 rounded-[5px] bg-transparent text-white font-sf-pro-display focus-within:ring-2 focus-within:ring-white focus-within:ring-opacity-50 focus-within:rounded-[5px] transition-all duration-200"
     >
       <Input
         type={type}
-        className="border-none bg-transparent pl-0 text-lg py-0 h-fit text-white"
+        className="border-none bg-transparent pl-0 text-lg py-0 h-fit text-white focus-visible:ring-0 focus-visible:border-0"
       />
     </FormField>
   );

@@ -25,7 +25,7 @@ export default function ProfileTab() {
       <FormBase
         form={form}
         onSubmit={onSubmit}
-        className="w-full flex flex-col items-center gap-6 font-input-mono"
+        className="w-full flex flex-col items-center space-y-6 font-input-mono"
       >
         {profile_form.slice(0, 5).map((item) => (
           <AccountInput
@@ -47,11 +47,11 @@ export default function ProfileTab() {
               form={form}
               name={item.name}
               label={item.label}
-              className="w-full z-20 py-2.5 px-2 bg-transparent"
+              className="w-full z-20 py-2.5 px-2 bg-transparent focus-visible:border"
             >
               {(field) => (
                 <BaseSelect
-                  type="auth"
+                  type='others'
                   placeholder={item.placeholder}
                   width={329}
                   onChange={(value) => field.onChange(value)}
@@ -63,7 +63,16 @@ export default function ProfileTab() {
           ))}
         </div>
 
-        <div className="w-full flex items-end gap-1">
+        {profile_form.slice(5, 7).map((item) => (
+          <AccountInput
+            key={item.name}
+            form={form}
+            name={item.name}
+            label={item.label}
+          />
+        ))}
+
+        <div className="w-full flex items-start gap-1">
           <FormField form={form} name="number.country_code" className="h-10">
             {(field) => (
               <BaseSelect
@@ -72,20 +81,17 @@ export default function ProfileTab() {
                 placeholder="+123"
                 items={africanCountryCodes}
                 width={150}
-                triggerClassName="h-10 w-24 rounded-none px-3 rounded-t-[5px] text-sm font-sf-pro-display !text-white border-none"
+                triggerClassName="h-10 w-40 rounded-none px-3 rounded-t-[5px] text-sm font-sf-pro-display !text-white border-none"
               />
             )}
           </FormField>
 
-          {profile_form.slice(5).map((item) => (
-            <AccountInput
-              key={item.name}
-              form={form}
-              name={item.name}
-              label={item.label}
-              type="number"
-            />
-          ))}
+          <AccountInput
+            form={form}
+            name="number.digits"
+            label="Phone"
+            type="number"
+          />
         </div>
 
         <Button className="w-[200px] text-sm h-10 font-sf-pro-display font-normal bg-white text-deep-red hover:bg-white/80">
