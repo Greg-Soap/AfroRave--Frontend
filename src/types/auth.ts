@@ -43,10 +43,14 @@ export interface LoginData {
 
 // User type
 export interface User {
-  id: string
-  firstName: string
-  lastName: string
+  userId: string
   email: string
+  accountType: 'User' | 'Vendor' | 'Organizer'
+  profile: {
+    firstName: string
+    lastName: string
+  }
+  messages: number
   telphone?: string
   gender?: string
   dateOfBirth?: string
@@ -57,7 +61,6 @@ export interface User {
   category?: string
   website?: string
   companyName?: string
-  userType: 'user' | 'vendor' | 'organizer'
   isEmailVerified?: boolean
   createdAt?: string
   updatedAt?: string
@@ -68,7 +71,6 @@ export interface AuthResponse {
   message: string
   userData: User
   token?: string
-  
 }
 
 export interface LoginResponse {

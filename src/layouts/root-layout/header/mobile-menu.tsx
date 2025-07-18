@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
+import { useAuthStore } from "@/stores/auth-store";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
@@ -12,18 +13,18 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ onClose }: MobileMenuProps) {
-  const isLoggedIn = false;
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <div className="flex flex-col h-full z-[10] overflow-y-auto scrollbar-none">
-      {isLoggedIn ? <AccountLinks onClose={onClose} /> : <AuthButtons />}
+      {isAuthenticated ? <AccountLinks onClose={onClose} /> : <AuthButtons />}
 
-      {isLoggedIn && <LogOutButton />}
+      {isAuthenticated && <LogOutButton />}
 
       <Separator
         className={cn("bg-white/20 mb-12", {
-          "mt-[19px]": isLoggedIn,
-          "mt-16": !isLoggedIn,
+          "mt-[19px]": isAuthenticated,
+          "mt-16": !isAuthenticated,
         })}
       />
 
@@ -108,8 +109,19 @@ function AccountLinks({ onClose }: { onClose: () => void }) {
 }
 
 function LogOutButton() {
+  const { clearAuth } = useAuthStore();
+
+  const handleLogout = () => {
+    clearAuth();
+    // Optionally redirect to home page
+    window.location.href = getRoutePath("home");
+  };
+
   return (
-    <Button className="w-full min-h-fit border-t !border-neutral-gray px-[11px] bg-transparent hover:bg-transparent hover:text-white rounded-none mt-[42px]">
+    <Button 
+      onClick={handleLogout}
+      className="w-full min-h-fit border-t !border-neutral-gray px-[11px] bg-transparent hover:bg-transparent hover:text-white rounded-none mt-[42px]"
+    >
       <div className="w-full flex items-center gap-[5px] pt-4">
         <img
           src="/assets/harmburger/logout.png"

@@ -4,11 +4,14 @@ import { useScroll } from "@/lib/useScroll";
 import LoginButton from "@/layouts/components/login-button";
 import NavSheet from "@/layouts/components/nav-sheet";
 import { useAuthStore } from "@/stores/auth-store";
+import { cn } from "@/lib/utils";
+import { account_links } from "@/components/constants";
+import { NavLink } from "react-router-dom";
+import { UserMenuButton } from "@/components/reusable/user-menu-button";
 
 export default function Header() {
   const { hasScrolled } = useScroll();
-  const { user } = useAuthStore();
-  console.log(user);
+  const { user, isAuthenticated } = useAuthStore();
 
   return (
     <header className="w-full fixed top-0 flex justify-center z-50 h-[120px]">
@@ -28,11 +31,41 @@ export default function Header() {
             className="max-sm:hidden cursor-pointer min-w-[26px] "
           />
 
-          <LoginButton />
-
-          <NavSheet />
+          {isAuthenticated ? (
+            <>
+              <NavigationLinks />
+              <UserMenuButton user={user} />
+            </>
+          ) : (
+            <>
+              <LoginButton />
+              <NavSheet />
+            </>
+          )}
         </div>
       </nav>
     </header>
+  );
+}
+
+function NavigationLinks() {
+  return (
+    <div className="hidden md:flex items-center gap-14">
+      {account_links.map((item) => (
+        <NavLink
+          key={item.name}
+          to={item.link}
+          className={({ isActive }) =>
+            cn("flex items-center gap-2", {
+              "opacity-100": isActive,
+              "opacity-60": !isActive,
+            })
+          }
+        >
+          <img src={item.icon} alt={item.name} className="size-[19px]" />
+          <span className="text-base font-input-mono">{item.name}</span>
+        </NavLink>
+      ))}
+    </div>
   );
 }

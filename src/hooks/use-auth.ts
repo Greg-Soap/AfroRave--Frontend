@@ -1,4 +1,5 @@
 import { getRoutePath } from '@/config/get-route-path'
+import { useAuth } from '@/contexts/auth-context'
 import { authToasts } from '@/lib/toast'
 import authService from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth-store'
@@ -67,6 +68,8 @@ export function useRegisterUser() {
   const queryClient = useQueryClient()
   const setAuth = useAuthStore((state) => state.setAuth)
   const navigate = useNavigate()
+  const { closeAuthModal } = useAuth()
+  
   return useMutation({
     mutationFn: (data: UserRegisterData) => authService.registerUser(data),
     onSuccess: (data) => {
@@ -76,6 +79,9 @@ export function useRegisterUser() {
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
       }
+      
+      // Close auth modal
+      closeAuthModal()
       
       // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -93,6 +99,8 @@ export function useRegisterUser() {
 export function useRegisterVendor() {
   const queryClient = useQueryClient()
   const setAuth = useAuthStore((state) => state.setAuth)
+  const navigate = useNavigate()
+  const { closeAuthModal } = useAuth()
 
   return useMutation({
     mutationFn: (data: VendorRegisterData) => authService.registerVendor(data),
@@ -100,6 +108,12 @@ export function useRegisterVendor() {
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
+        
+        // Close auth modal
+        closeAuthModal()
+        
+        // Redirect to vendor dashboard
+        navigate(getRoutePath('service_vendor'))
       }
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -116,6 +130,8 @@ export function useRegisterVendor() {
 export function useRegisterOrganizer() {
   const queryClient = useQueryClient()
   const setAuth = useAuthStore((state) => state.setAuth)
+  const navigate = useNavigate()
+  const { closeAuthModal } = useAuth()
 
   return useMutation({
     mutationFn: (data: OrganizerRegisterData) => authService.registerOrganizer(data),
@@ -123,6 +139,12 @@ export function useRegisterOrganizer() {
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
+        
+        // Close auth modal
+        closeAuthModal()
+        
+        // Redirect to organizer dashboard
+        navigate(getRoutePath('standalone'))
       }
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -139,6 +161,8 @@ export function useRegisterOrganizer() {
 export function useLogin() {
   const queryClient = useQueryClient()
   const setAuth = useAuthStore((state) => state.setAuth)
+  const navigate = useNavigate()
+  const { closeAuthModal } = useAuth()
 
   return useMutation({
     mutationFn: (data: LoginData) => authService.login(data),
@@ -146,6 +170,25 @@ export function useLogin() {
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
+        
+        // Close auth modal
+        closeAuthModal()
+        
+        // Redirect based on account type
+        const accountType = data.data.userData.accountType
+        switch (accountType) {
+          case 'User':
+            navigate(getRoutePath('account'))
+            break
+          case 'Vendor':
+            navigate(getRoutePath('service_vendor'))
+            break
+          case 'Organizer':
+            navigate(getRoutePath('standalone'))
+            break
+          default:
+            navigate(getRoutePath('account'))
+        }
       }
       
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -162,6 +205,7 @@ export function useLogin() {
 export function useLogout() {
   const queryClient = useQueryClient()
   const clearAuth = useAuthStore((state) => state.clearAuth)
+  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: () => authService.logout(),
@@ -172,6 +216,9 @@ export function useLogout() {
       // Clear all auth-related queries
       queryClient.removeQueries({ queryKey: authKeys.all })
       authToasts.logoutSuccess()
+      
+      // Redirect to home page after logout
+      navigate(getRoutePath('home'))
     },
     onError: (error: unknown) => {
       const errorMessage = extractErrorMessage(error)

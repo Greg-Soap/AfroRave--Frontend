@@ -2,18 +2,13 @@ import { NavLink } from "react-router-dom";
 import { NavLogo } from "../root-layout/header/nav-logo";
 import { cn } from "@/lib/utils";
 import { account_links } from "@/components/constants";
-import { BaseSheet } from "@/components/reusable";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import MobileMenu from "../root-layout/header/mobile-menu";
+import { UserMenuButton } from "@/components/reusable/user-menu-button";
 import { useScroll } from "@/lib/useScroll";
 import { useAuthStore } from "@/stores/auth-store";
 
 export default function AccountHeader() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { hasScrolled } = useScroll();
   const { user } = useAuthStore();
-  console.log(user);
 
   return (
     <header className="w-full fixed top-0 flex justify-center z-50 h-[120px]">
@@ -28,33 +23,7 @@ export default function AccountHeader() {
 
         <NavigationLinks />
 
-        <Button
-          variant="outline"
-          type="button"
-          aria-label="Open menu"
-          onClick={() => setIsMenuOpen(true)}
-          className="p-2 hover:bg-black/70 transition-colors flex items-center gap-[5px] py-1.5 pl-[19px] pr-[11px] rounded-full w-fit h-fit group"
-        >
-          <span className="font-phosphate text-lg tracking-[-1px] text-white uppercase group-hover:text-white">
-            EA
-          </span>
-          <img
-            src="/assets/landing-page/menu.svg"
-            alt=""
-            className="!w-4 !h-4"
-          />
-        </Button>
-        <BaseSheet
-          side="right"
-          size="sm"
-          title="Menu"
-          circleCancel
-          open={isMenuOpen}
-          setOpen={setIsMenuOpen}
-          contentClassName="bg-pure-black text-white px-3"
-        >
-          <MobileMenu onClose={() => setIsMenuOpen(false)} />
-        </BaseSheet>
+        <UserMenuButton user={user} />
       </nav>
     </header>
   );
