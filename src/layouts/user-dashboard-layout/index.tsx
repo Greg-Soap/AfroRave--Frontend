@@ -4,10 +4,10 @@ import AccountFooter from "./footer";
 
 export default function UserDashboardLayout() {
   return (
-    <div className="w-full flex flex-col items-center bg-pure-black">
+    <div className="w-full min-h-screen flex flex-col items-center bg-pure-black">
       <AccountHeader />
 
-      <main className="w-full flex flex-col items-center">
+      <main className="w-full min-h-[calc(100vh-250px)] flex flex-col items-center">
         <Outlet />
       </main>
 

@@ -24,7 +24,7 @@ export function BaseTab({
     >
       <TabsList
         className={cn("flex h-fit", {
-          "w-full md:w-fit lg:w-[175px] xl:w-[366px] flex-row md:flex-col bg-transparent mb-10 justify-start overflow-scroll scrollbar-none":
+          "w-full md:w-fit lg:w-[175px] xl:w-[366px] flex-row max-md:gap-7 md:flex-col bg-transparent mb-10 justify-start overflow-scroll scrollbar-none":
             isAccount,
           "w-fit px-1 py-1.5 rounded-[8px] bg-deep-red": isListed,
         })}

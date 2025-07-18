@@ -23,16 +23,9 @@ export default function PastTicketsTab() {
 
 function PastTickets() {
   return (
-    <div className="flex flex-wrap items-center gap-7 px-[100px] mb-[499px]">
-      {events.map(({ event_name, image, id, event_location, event_date }) => (
-        <Tickets
-          key={id}
-          id={id}
-          event_name={event_name}
-          event_date={event_date}
-          image={image}
-          event_location={event_location}
-        />
+    <div className="flex flex-wrap items-center justify-center gap-7 px-5 md:px-[50px] lg:px-[100px] mb-[100px]">
+      {events.map(({ event_name, image, id }) => (
+        <Tickets key={id} id={id} event_name={event_name} image={image} />
       ))}
     </div>
   );
