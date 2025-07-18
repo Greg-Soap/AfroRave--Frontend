@@ -11,7 +11,7 @@ import { z } from 'zod'
 
 const formSchema = z.object({
   email: z.string().email({
-    message: 'Username must be at least 2 characters.',
+    message: 'Please enter a valid email address.',
   }),
   password: z
     .string()
@@ -69,12 +69,12 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
           </span>
         </div>
 
-        <FormField form={form} name='email' label='Email Address'>
+        <FormField form={form} name='email' showError={true} showMessage={true}>
           <Input placeholder='Enter email address.' />
         </FormField>
 
         <div className='w-full flex flex-col items-end gap-2'>
-          <FormField form={form} name='password' label='Password' className='w-full'>
+          <FormField form={form} name='password'  className='w-full' showError={true} showMessage={true}>
             {(field) => (
               <PasswordInput
                 placeholder='Enter password.'
@@ -84,9 +84,9 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
             )}
           </FormField>
 
-          <button type='button' className='text-[13px] font-bold text-accent hover:underline'>
+          {/* <button type='button' className='text-[13px] font-bold text-accent hover:underline'>
             Forgot Password?
-          </button>
+          </button> */}
         </div>
 
         <Button

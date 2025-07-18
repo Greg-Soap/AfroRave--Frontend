@@ -6,14 +6,16 @@ export const multipartHeaders = {
 }
 
 const apiUrl =
-  process.env.NODE_ENV === 'development' ? process.env.VITE_API_DEV : process.env.VITE_API_PROD
+  import.meta.env.NODE_ENV === 'development'
+    ? import.meta.env.VITE_API_DEV
+    : import.meta.env.VITE_API_PROD
 
 const api = axios.create({
   baseURL: apiUrl,
   headers: {
     'X-Device-Type': 'web',
     'Access-Control-Allow-Origin': '*',
-    tokenId: process.env.TOKEN_ID,
+    tokenId: import.meta.env.TOKEN_ID,
   },
   withCredentials: true,
 })
