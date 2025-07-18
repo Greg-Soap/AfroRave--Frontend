@@ -1,7 +1,6 @@
 import ProfileTab from "./tabs/profile-tab";
 import PayoutTab from "./tabs/payout-tab";
 import { ChevronLeft } from "lucide-react";
-import SettingsTab from "./tabs/settings-tab";
 import SupportTab from "./tabs/support-tab";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
