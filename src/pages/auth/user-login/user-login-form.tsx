@@ -23,12 +23,8 @@ const formSchema = z.object({
     }),
 })
 
-interface UserLoginFormProps {
-  onSwitchToSignup: () => void
-}
-
-export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
-  const { loginType } = useAuth()
+export function UserLoginForm() {
+  const { loginType, switchToSignup } = useAuth()
   const login = useLogin()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,6 +44,11 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
     login.mutate(loginData)
   }
 
+  const handleSwitchToSignup = () => {
+    // Use the login type to determine the signup type
+    switchToSignup(loginType)
+  }
+
   return (
     <div className='relative flex justify-center'>
       <FormBase
@@ -62,7 +63,7 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
             New to AfroRevive?{' '}
             <button
               type='button'
-              onClick={onSwitchToSignup}
+              onClick={handleSwitchToSignup}
               className='text-base font-bold text-accent hover:underline'>
               Sign Up
             </button>
@@ -74,7 +75,12 @@ export function UserLoginForm({ onSwitchToSignup }: UserLoginFormProps) {
         </FormField>
 
         <div className='w-full flex flex-col items-end gap-2'>
-          <FormField form={form} name='password'  className='w-full' showError={true} showMessage={true}>
+          <FormField
+            form={form}
+            name='password'
+            className='w-full'
+            showError={true}
+            showMessage={true}>
             {(field) => (
               <PasswordInput
                 placeholder='Enter password.'

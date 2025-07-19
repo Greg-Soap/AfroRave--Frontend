@@ -1,16 +1,19 @@
-import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 type AuthType = 'login' | 'signup'
 type LoginType = 'guest' | 'creator' | 'vendor'
+type SignupType = 'guest' | 'creator' | 'vendor'
 
 interface AuthContextType {
   isAuthModalOpen: boolean
   authType: AuthType
   loginType: LoginType
+  signupType: SignupType
   openAuthModal: (type: AuthType, loginType?: LoginType) => void
   closeAuthModal: () => void
   switchAuthType: (type: AuthType) => void
+  switchToSignup: (signupType: SignupType) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -19,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [authType, setAuthType] = useState<AuthType>('login')
   const [loginType, setLoginType] = useState<LoginType>('guest')
+  const [signupType, setSignupType] = useState<SignupType>('guest')
   const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
@@ -31,6 +35,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsAuthModalOpen(true)
     } else if (loginParam === 'true') {
       setAuthType('login')
+      setIsAuthModalOpen(true)
+    } else if (signupParam === 'guest' || signupParam === 'creator' || signupParam === 'vendor') {
+      setSignupType(signupParam)
+      setAuthType('signup')
       setIsAuthModalOpen(true)
     } else if (signupParam === 'true') {
       setAuthType('signup')
@@ -73,15 +81,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [setSearchParams],
   )
 
+  const switchToSignup = useCallback(
+    (signupType: SignupType) => {
+      setSignupType(signupType)
+      setAuthType('signup')
+      setSearchParams({ signup: signupType })
+    },
+    [setSearchParams],
+  )
+
   return (
     <AuthContext.Provider
       value={{
         isAuthModalOpen,
         authType,
         loginType,
+        signupType,
         openAuthModal,
         closeAuthModal,
         switchAuthType,
+        switchToSignup,
       }}>
       {children}
     </AuthContext.Provider>
