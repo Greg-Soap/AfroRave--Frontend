@@ -1,12 +1,12 @@
-import { useAuthStore } from '@/stores/auth-store'
+import { useAfroStore } from '@/stores'
 
 export function useAuth() {
-  const user = useAuthStore((state) => state.user)
-  const token = useAuthStore((state) => state.token)
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  const setAuth = useAuthStore((state) => state.setAuth)
-  const clearAuth = useAuthStore((state) => state.clearAuth)
-  const updateUser = useAuthStore((state) => state.updateUser)
+  const user = useAfroStore((state) => state.user)
+  const token = useAfroStore((state) => state.token)
+  const isAuthenticated = useAfroStore((state) => state.isAuthenticated)
+  const setAuth = useAfroStore((state) => state.setAuth)
+  const clearAuth = useAfroStore((state) => state.clearAuth)
+  const updateUser = useAfroStore((state) => state.updateUser)
 
   return {
     user,
@@ -16,4 +16,4 @@ export function useAuth() {
     clearAuth,
     updateUser,
   }
-} 
+}

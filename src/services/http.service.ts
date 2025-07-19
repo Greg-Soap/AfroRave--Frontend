@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/stores/auth-store'
+import { useAfroStore } from '@/stores'
 import axios from 'axios'
 
 export const multipartHeaders = {
@@ -29,7 +29,7 @@ api.interceptors.request.use(
     if (req.url?.includes('login') || req.url?.includes('register')) return req
 
     // Get token from auth store
-    const token = useAuthStore.getState().token
+    const token = useAfroStore.getState().token
 
     if (token) {
       req.headers.Authorization = `Bearer ${token}`

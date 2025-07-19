@@ -2,18 +2,21 @@ import type { User } from '@/types/auth'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface AuthState {
+interface AfroState {
   user: User | null
   token: string | null
   isAuthenticated: boolean
   setAuth: (user: User, token: string) => void
   clearAuth: () => void
   updateUser: (user: User) => void
+  get isCreator(): boolean
+  get isFan(): boolean
+  get isVendor(): boolean
 }
 
-export const useAuthStore = create<AuthState>()(
+export const useAfroStore = create<AfroState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isAuthenticated: false,
@@ -30,13 +33,22 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
         }),
       updateUser: (user: User) =>
-        set((state: AuthState) => ({
+        set((state: AfroState) => ({
           ...state,
           user,
         })),
+      get isCreator() {
+        return get().user?.accountType === 'Organizer'
+      },
+      get isFan() {
+        return get().user?.accountType === 'User'
+      },
+      get isVendor() {
+        return get().user?.accountType === 'Vendor'
+      },
     }),
     {
-      name: 'auth-storage',
+      name: 'afro-store-v1',
     },
   ),
 )

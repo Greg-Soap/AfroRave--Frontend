@@ -2,7 +2,7 @@ import { getRoutePath } from '@/config/get-route-path'
 import { useAuth } from '@/contexts/auth-context'
 import { authToasts } from '@/lib/toast'
 import authService from '@/services/auth.service'
-import { useAuthStore } from '@/stores/auth-store'
+import { useAfroStore } from '@/stores'
 import type {
   LoginData,
   OrganizerRegisterData,
@@ -18,40 +18,40 @@ function extractErrorMessage(error: unknown): string {
   if (error && typeof error === 'object' && 'response' in error) {
     const axiosError = error as AxiosError
     const responseData = axiosError.response?.data as Record<string, unknown>
-    
+
     // Handle validation errors from the API
     if (responseData?.errors && typeof responseData.errors === 'object') {
       const errorMessages: string[] = []
-      
+
       // Extract all error messages from the errors object
-      Object.entries(responseData.errors).forEach(([, messages]) => {
+      for (const [, messages] of Object.entries(responseData.errors)) {
         if (Array.isArray(messages)) {
           errorMessages.push(...messages)
         } else if (typeof messages === 'string') {
           errorMessages.push(messages)
         }
-      })
-      
+      }
+
       if (errorMessages.length > 0) {
         return errorMessages.join(', ')
       }
     }
-    
+
     // Handle other error messages
     if (responseData?.message) {
       return responseData.message as string
     }
-    
+
     if (responseData?.title) {
       return responseData.title as string
     }
   }
-  
+
   // Fallback to generic error message
   if (error instanceof Error) {
     return error.message
   }
-  
+
   return 'An unexpected error occurred'
 }
 
@@ -66,23 +66,23 @@ export const authKeys = {
 // User Registration Hook
 export function useRegisterUser() {
   const queryClient = useQueryClient()
-  const setAuth = useAuthStore((state) => state.setAuth)
+  const setAuth = useAfroStore((state) => state.setAuth)
   const navigate = useNavigate()
   const { closeAuthModal } = useAuth()
-  
+
   return useMutation({
     mutationFn: (data: UserRegisterData) => authService.registerUser(data),
     onSuccess: (data) => {
-      console.log('data', data);
+      console.log('data', data)
 
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
       }
-      
+
       // Close auth modal
       closeAuthModal()
-      
+
       // Invalidate and refetch user data
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.userRegistered()
@@ -98,7 +98,7 @@ export function useRegisterUser() {
 // Vendor Registration Hook
 export function useRegisterVendor() {
   const queryClient = useQueryClient()
-  const setAuth = useAuthStore((state) => state.setAuth)
+  const setAuth = useAfroStore((state) => state.setAuth)
   const navigate = useNavigate()
   const { closeAuthModal } = useAuth()
 
@@ -108,14 +108,14 @@ export function useRegisterVendor() {
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
-        
+
         // Close auth modal
         closeAuthModal()
-        
+
         // Redirect to vendor dashboard
         navigate(getRoutePath('service_vendor'))
       }
-      
+
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.vendorRegistered()
     },
@@ -129,7 +129,7 @@ export function useRegisterVendor() {
 // Organizer Registration Hook
 export function useRegisterOrganizer() {
   const queryClient = useQueryClient()
-  const setAuth = useAuthStore((state) => state.setAuth)
+  const setAuth = useAfroStore((state) => state.setAuth)
   const navigate = useNavigate()
   const { closeAuthModal } = useAuth()
 
@@ -139,14 +139,14 @@ export function useRegisterOrganizer() {
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
-        
+
         // Close auth modal
         closeAuthModal()
-        
+
         // Redirect to organizer dashboard
         navigate(getRoutePath('standalone'))
       }
-      
+
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.organizerRegistered()
     },
@@ -160,7 +160,7 @@ export function useRegisterOrganizer() {
 // Login Hook
 export function useLogin() {
   const queryClient = useQueryClient()
-  const setAuth = useAuthStore((state) => state.setAuth)
+  const setAuth = useAfroStore((state) => state.setAuth)
   const navigate = useNavigate()
   const { closeAuthModal } = useAuth()
 
@@ -170,10 +170,10 @@ export function useLogin() {
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
-        
+
         // Close auth modal
         closeAuthModal()
-        
+
         // Redirect based on account type
         const accountType = data.data.userData.accountType
         switch (accountType) {
@@ -190,7 +190,7 @@ export function useLogin() {
             navigate(getRoutePath('my_tickets'))
         }
       }
-      
+
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
       authToasts.loginSuccess()
     },
@@ -204,7 +204,7 @@ export function useLogin() {
 // Logout Hook
 export function useLogout() {
   const queryClient = useQueryClient()
-  const clearAuth = useAuthStore((state) => state.clearAuth)
+  const clearAuth = useAfroStore((state) => state.clearAuth)
   const navigate = useNavigate()
 
   return useMutation({
@@ -212,11 +212,11 @@ export function useLogout() {
     onSuccess: () => {
       // Clear auth store
       clearAuth()
-      
+
       // Clear all auth-related queries
       queryClient.removeQueries({ queryKey: authKeys.all })
       authToasts.logoutSuccess()
-      
+
       // Redirect to home page after logout
       navigate(getRoutePath('home'))
     },
