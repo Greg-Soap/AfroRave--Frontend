@@ -12,7 +12,9 @@ import { NavLogo } from './nav-logo'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
-  const { user, isAuthenticated, isCreator, isFan } = useAfroStore()
+  const { user, isAuthenticated, isCreator, isFan, isVendor } = useAfroStore()
+
+  console.log({ isCreator, isVendor, user })
 
   return (
     <header className='w-full fixed top-0 flex justify-center z-50 h-[120px]'>
@@ -39,7 +41,7 @@ export default function Header() {
             </>
           )}
 
-          {isAuthenticated && isCreator && (
+          {isAuthenticated && (isCreator || isVendor) && (
             <>
               <CreatorMenuButton user={user} variant='dark' />
             </>

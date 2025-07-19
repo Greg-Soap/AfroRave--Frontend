@@ -7,9 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { getRoutePath } from '@/config/get-route-path'
 import { getUserInitials } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import type { User } from '@/types/auth'
+import { useNavigate } from 'react-router-dom'
 
 interface CreatorMenuButtonProps {
   user: User | null
@@ -18,11 +20,27 @@ interface CreatorMenuButtonProps {
 
 export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButtonProps) {
   const { clearAuth } = useAfroStore()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     clearAuth()
     // You can add navigation logic here if needed
     window.location.href = '/'
+  }
+
+  const handleDashboardClick = () => {
+    if (!user) return
+
+    switch (user.accountType) {
+      case 'Organizer':
+        navigate(getRoutePath('standalone'))
+        break
+      case 'Vendor':
+        navigate(getRoutePath('service_vendor'))
+        break
+      default:
+        navigate(getRoutePath('home'))
+    }
   }
 
   return (
@@ -55,6 +73,7 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleDashboardClick}>Dashboard</DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
