@@ -73,8 +73,6 @@ export function useRegisterUser() {
   return useMutation({
     mutationFn: (data: UserRegisterData) => authService.registerUser(data),
     onSuccess: (data) => {
-      console.log('data', data)
-
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)
