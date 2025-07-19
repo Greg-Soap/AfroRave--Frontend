@@ -8,24 +8,7 @@ import { NavLogo } from '../root-layout/header/nav-logo'
 
 export default function AccountHeader() {
   const { hasScrolled } = useScroll()
-  const { user, isHydrated } = useAfroStore()
-
-  // Don't render user-dependent UI until store is hydrated
-  if (!isHydrated) {
-    return (
-      <header className='w-full fixed top-0 flex justify-center z-50 h-[120px]'>
-        <div
-          className={`absolute inset-0 transition-all duration-300 ${
-            hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
-          }`}
-        />
-
-        <nav className='relative px-4 md:px-7 w-full flex items-center justify-between py-4'>
-          <NavLogo />
-        </nav>
-      </header>
-    )
-  }
+  const { user } = useAfroStore()
 
   return (
     <header className='w-full fixed top-0 flex justify-center z-50 h-[120px]'>
