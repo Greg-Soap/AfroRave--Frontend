@@ -114,7 +114,7 @@ export default function CreateTicketForm({
               )}
             </FormFieldWithCounter>
 
-            <div className="flex items-end gap-6">
+            <div className="flex items-end hap-2 md:gap-6">
               <FormField
                 form={form}
                 name="email"
@@ -129,7 +129,7 @@ export default function CreateTicketForm({
                 )}
               </FormField>
 
-              <Button className="w-[160px] h-10 bg-black rounded-[4px]">
+              <Button className="w-[100px] md:w-[160px] h-10 bg-black rounded-[4px]">
                 SEND TEST
               </Button>
             </div>

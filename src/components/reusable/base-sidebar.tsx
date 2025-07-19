@@ -21,6 +21,7 @@ export function BaseSideBar({
   contentClassName,
   sidebar_links,
   collapsibleOnMobile = false,
+  children,
 }: IBaseSidebar) {
   const location = useLocation();
   const isMobile = useIsMobile();
@@ -57,6 +58,8 @@ export function BaseSideBar({
                   />
                 );
               })}
+
+              {children}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -119,4 +122,5 @@ interface IBaseSidebar {
   contentClassName?: string;
   sidebar_links?: ICreatorSidebarLinks[];
   collapsibleOnMobile?: boolean;
+  children?: React.ReactNode;
 }

@@ -73,7 +73,7 @@ function ThemePreviewCards({
     <Label
       htmlFor={name}
       className={cn(
-        "flex flex-col p-5 gap-3 rounded-[8px] !w-[400px] !h-[252px] bg-medium-gray border-2",
+        "flex flex-col p-5 gap-3 rounded-[8px] w-full md:!w-[400px] !h-[252px] bg-medium-gray border-2",
         {
           "border-deep-red": isChecked,
           "border-transparent": !isChecked,

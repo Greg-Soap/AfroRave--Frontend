@@ -9,6 +9,7 @@ import ThemeTab from "./tabs/theme-tab";
 import SettingsTab from "./tabs/settings-tab";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function EditEventPage() {
   const { eventId } = useParams();
@@ -69,35 +70,35 @@ export default function EditEventPage() {
       onValueChange={setActiveTabState}
       className="w-full min-h-screen flex flex-col items-center bg-white overflow-x-hidden"
     >
-      <div className="w-full flex items-center justify-between py-4 px-8">
-        <img src="/assets/event/ar-black.png" alt="AR" width={60} height={32} />
+      <div className="w-full flex flex-col gap-6">
+        <div className="w-full flex items-center justify-between py-4 px-8">
+          <img
+            src="/assets/event/ar-black.png"
+            alt="AR"
+            width={60}
+            height={32}
+          />
 
-        <TabsList className="flex items-center gap-24 w-fit h-fit bg-transparent p-0">
-          {edit_tabs.map((tab) => (
-            <TabsTrigger
-              disabled
-              key={tab.value}
-              value={tab.value}
-              className="bg-transparent p-0 font-sf-pro-rounded font-normal text-sm text-black data-[state=active]:text-deep-red data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100"
-            >
-              {tab.name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+          <CustomTabTrigger tabs={edit_tabs} className="p-0 hidden md:flex" />
 
-        <p className="size-10 rounded-full border border-black text-black flex items-center justify-center font-sf-pro-text text-sm font-black uppercase">
-          EA
-        </p>
+          <p className="size-10 rounded-full border border-black text-black flex items-center justify-center font-sf-pro-text text-sm font-black uppercase">
+            EA
+          </p>
+        </div>
+        <CustomTabTrigger
+          tabs={edit_tabs}
+          className="flex md:hidden w-full justify-between px-5"
+        />
       </div>
       {edit_tabs.map((tab) => (
         <TabsContent
           key={tab.value}
           value={tab.value}
-          className="w-full max-w-screen overflow-x-hidden bg-[#f8f8f8]"
+          className="w-full max-w-screen overflow-x-hidden bg-[#f8f8f8] mb-[50px]"
         >
           <div className="w-full h-fit flex flex-col items-center">
             {/** Nav */}
-            <div className="w-full flex items-center justify-between py-3 px-8">
+            <div className="w-full flex items-center justify-between py-3 pr-5 md:px-8">
               <Button
                 variant="ghost"
                 className="w-fit h-fit hover:bg-black/10"
@@ -118,7 +119,7 @@ export default function EditEventPage() {
 
             {/**Content */}
             <div className="container h-fit gap-2 flex">
-              <div className="flex flex-col py-16 px-14 gap-14 max-w-[612px]">
+              <div className="hidden md:flex flex-col py-16 px-14 gap-14 max-w-[612px]">
                 <EventDetails {...event} isTheme={activeTab === "theme"} />
 
                 <SalesSummary />
@@ -130,6 +131,34 @@ export default function EditEventPage() {
         </TabsContent>
       ))}
     </Tabs>
+  );
+}
+
+function CustomTabTrigger({
+  tabs,
+  className,
+}: {
+  tabs: IEditTabProps[];
+  className?: string;
+}) {
+  return (
+    <TabsList
+      className={cn(
+        "items-center gap-[35px] md:gap-24 w-fit h-fit bg-transparent md:p-0",
+        className
+      )}
+    >
+      {tabs.map((tab) => (
+        <TabsTrigger
+          disabled
+          key={tab.value}
+          value={tab.value}
+          className="bg-transparent p-0 font-sf-pro-rounded font-normal text-xs md:text-sm text-black data-[state=active]:text-deep-red data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100"
+        >
+          {tab.name}
+        </TabsTrigger>
+      ))}
+    </TabsList>
   );
 }
 

@@ -118,13 +118,17 @@ function BannerImagesForm({
   }
 
   return (
-    <TabContainer form={form} onSubmit={onSubmit} className="gap-[100px]">
+    <TabContainer
+      form={form}
+      onSubmit={onSubmit}
+      className="gap-10 md:gap-[100px]"
+    >
       {bannerForm.map((item) => (
         <div key={item.type} className="w-full flex flex-col gap-3">
-          <p className="font-sf-pro-text text-black text-2xl uppercase">
+          <p className="font-sf-pro-display text-medium-gray text-sm md:text-2xl uppercase">
             {item.type} VIEW
           </p>
-          <div className="w-full flex gap-14">
+          <div className="w-full flex gap-3 md:gap-14">
             <FormField form={form} name={item.flyer_name} className="w-[162px]">
               {(field) => (
                 <>
@@ -187,14 +191,14 @@ function FileInputWithPreview({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center border border-black ${
+      className={`flex flex-col items-center justify-center rounded-[5px] shadow-2xl ${
         type === "flyer" ? "w-[162px] h-[216px]" : "w-full h-[200px]"
       } relative ${className || ""}`}
     >
       <Input
         type="file"
         accept="image/*"
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer px-3"
         onChange={handleFileChange}
       />
       {preview ? (
@@ -223,7 +227,7 @@ function InnerText({ type }: { type: "background" | "flyer" }) {
 
 function FieldDescription({ description }: { description: string }) {
   return (
-    <FormDescription className="text-black text-sm text-center">
+    <FormDescription className="text-mid-dark-gray text-sm text-center font-semibold">
       {description}
     </FormDescription>
   );

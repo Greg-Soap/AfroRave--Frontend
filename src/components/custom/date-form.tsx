@@ -13,19 +13,19 @@ export function DateForm<T extends FieldValues>({
 }: IDateFormProps<T>) {
   return (
     <div className="flex flex-col gap-2.5">
-      <p className="text-xs text-black font-sf-pro-text">{name}</p>
-      <div className="w-[448px] flex items-center gap-2 justify-between">
+      <p className="w-fit text-xs text-black font-sf-pro-text">{name}</p>
+      <div className="w-full md:w-[448px] flex flex-col md:flex-row md:items-center gap-y-3.5 gap-x-2 md:justify-between">
         <FormField
           form={form}
           name={input_name}
-          className="w-[316px] flex flex-col gap-1 text-black text-xs uppercase font-sf-pro-text"
+          className="w-full md:w-[316px] flex flex-col gap-1 text-black text-xs uppercase font-sf-pro-text"
         >
           {(field) => (
             <BaseDatePicker
               value={field.value as Date}
               onChange={field.onChange}
               onBlur={field.onBlur}
-              className="min-h-10 bg-white border-mid-dark-gray/50 rounded-[4px] hover:bg-black/10 font-sf-pro-display"
+              className="w-full min-h-10 bg-white border-mid-dark-gray/50 rounded-[4px] hover:bg-black/10 font-sf-pro-display"
             />
           )}
         </FormField>

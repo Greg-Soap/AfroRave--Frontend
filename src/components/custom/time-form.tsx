@@ -1,7 +1,7 @@
 import type { FieldValues, UseFormReturn, Path } from "react-hook-form";
 import { FormField } from "../reusable";
 import { Button } from "../ui/button";
-import { Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { Clock, ChevronDown, ChevronUp, type LucideIcon } from "lucide-react";
 import { Input } from "../ui/input";
 
 export function TimeForm<T extends FieldValues>({
@@ -17,7 +17,7 @@ export function TimeForm<T extends FieldValues>({
   };
 
   return (
-    <div className="relative w-full h-10 flex gap-1 items-center">
+    <div className="relative h-10 flex flex-row gap-1 items-center">
       <div className="h-10 flex items-center bg-white justify-between border border-mid-dark-gray/50 w-full rounded-l-[4px] px-3 py-2">
         <Clock className="h-[18px] min-w-4 mr-2 text-muted-foreground" />
 
@@ -55,15 +55,7 @@ export function TimeForm<T extends FieldValues>({
       </div>
 
       <div className="ml-auto flex flex-col items-center justify-center">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={togglePeriod}
-          className="h-3 w-8 p-0 hover:bg-black/10"
-        >
-          <ChevronUp className="h-3 w-1.5" color="#000000" />
-        </Button>
+        <ToggleBtn action={togglePeriod} Icon={ChevronUp} />
 
         <FormField
           form={form}
@@ -80,17 +72,23 @@ export function TimeForm<T extends FieldValues>({
           )}
         </FormField>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={togglePeriod}
-          className="h-3 w-8 p-0 hover:bg-black/10"
-        >
-          <ChevronDown className="h-3 w-1.5" color="#000000" />
-        </Button>
+        <ToggleBtn action={togglePeriod} Icon={ChevronDown} />
       </div>
     </div>
+  );
+}
+
+function ToggleBtn({ action, Icon }: { action: () => void; Icon: LucideIcon }) {
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
+      onClick={action}
+      className="h-3 w-8 p-0 hover:bg-black/10"
+    >
+      <Icon className="h-3 w-1.5" color="#000000" />
+    </Button>
   );
 }
 
