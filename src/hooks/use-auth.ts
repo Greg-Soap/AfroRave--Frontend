@@ -110,8 +110,8 @@ export function useRegisterVendor() {
         // Close auth modal
         closeAuthModal()
 
-        // Redirect to vendor dashboard
-        navigate(getRoutePath('service_vendor'))
+        // Redirect to creators dashboard (temporary until vendor dashboard is ready)
+        navigate(getRoutePath('standalone'))
       }
 
       queryClient.invalidateQueries({ queryKey: authKeys.user() })
@@ -179,7 +179,7 @@ export function useLogin() {
             navigate(getRoutePath('my_tickets'))
             break
           case 'Vendor':
-            navigate(getRoutePath('service_vendor'))
+            navigate(getRoutePath('standalone'))
             break
           case 'Organizer':
             navigate(getRoutePath('standalone'))

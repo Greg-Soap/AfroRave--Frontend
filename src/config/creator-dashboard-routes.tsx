@@ -1,5 +1,4 @@
 import { OrganizerAuthGuard } from '@/components/auth/organizer-auth-guard'
-import { VendorAuthGuard } from '@/components/auth/vendor-auth-guard'
 import { LoadingFallback } from '@/components/loading-fallback'
 import { Suspense, lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
@@ -96,35 +95,35 @@ export const creator_dashboard_routes: RouteObject[] = [
     ),
   },
 
-  // Vendor routes (Vendor account type)
+  // Vendor routes (Vendor account type) - Temporarily using OrganizerAuthGuard
   {
     path: getRoutePath('revenue_vendor'),
     element: (
-      <VendorAuthGuard>
+      <OrganizerAuthGuard>
         <Suspense fallback={<LoadingFallback />}>
           <RevenueVendorPage />
         </Suspense>
-      </VendorAuthGuard>
+      </OrganizerAuthGuard>
     ),
   },
   {
     path: getRoutePath('revenue_vendor_slot', { slotId: ':slotId' }),
     element: (
-      <VendorAuthGuard>
+      <OrganizerAuthGuard>
         <Suspense fallback={<LoadingFallback />}>
           <IndividualSlotsPage />
         </Suspense>
-      </VendorAuthGuard>
+      </OrganizerAuthGuard>
     ),
   },
   {
     path: getRoutePath('service_vendor'),
     element: (
-      <VendorAuthGuard>
+      <OrganizerAuthGuard>
         <Suspense fallback={<LoadingFallback />}>
           <ServiceVendorPage />
         </Suspense>
-      </VendorAuthGuard>
+      </OrganizerAuthGuard>
     ),
   },
   {
@@ -132,21 +131,21 @@ export const creator_dashboard_routes: RouteObject[] = [
       serviceId: ':serviceId',
     }),
     element: (
-      <VendorAuthGuard>
+      <OrganizerAuthGuard>
         <Suspense fallback={<LoadingFallback />}>
           <IndividualServicePage />
         </Suspense>
-      </VendorAuthGuard>
+      </OrganizerAuthGuard>
     ),
   },
   {
     path: getRoutePath('seating_maps'),
     element: (
-      <VendorAuthGuard>
+      <OrganizerAuthGuard>
         <Suspense fallback={<LoadingFallback />}>
           <SeatingMapsPage />
         </Suspense>
-      </VendorAuthGuard>
+      </OrganizerAuthGuard>
     ),
   },
 ]

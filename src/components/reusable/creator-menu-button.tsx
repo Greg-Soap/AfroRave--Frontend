@@ -36,7 +36,7 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
         navigate(getRoutePath('standalone'))
         break
       case 'Vendor':
-        navigate(getRoutePath('service_vendor'))
+        navigate(getRoutePath('standalone'))
         break
       default:
         navigate(getRoutePath('home'))
