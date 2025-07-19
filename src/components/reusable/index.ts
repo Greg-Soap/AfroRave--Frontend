@@ -1,12 +1,13 @@
+import BaseAvatar from './base-avatar'
 import { BaseCarousel } from './base-carousel'
+import BaseDialog from './base-dialog'
+import BaseDropdown from './base-dropdown'
+import { FormBase, FormField, FormFooter } from './base-form'
 import { BasePopover } from './base-popover'
 import { BaseSelect } from './base-select'
 import BaseSheet from './base-sheet'
 import BaseTooltip from './base-tooltip'
-import { FormBase, FormField, FormFooter } from './base-form'
-import BaseDropdown from './base-dropdown'
-import BaseDialog from './base-dialog'
-import BaseAvatar from './base-avatar'
+import { ComingSoon } from './coming-soon'
 
 export {
   BaseCarousel,
@@ -20,4 +21,5 @@ export {
   BaseDropdown,
   BaseDialog,
   BaseAvatar,
+  ComingSoon,
 }
