@@ -1,6 +1,7 @@
 import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getRoutePath } from '@/config/get-route-path'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -42,7 +43,7 @@ export default function AddEventPage() {
       RenderHeadline('event-details', setHeading, setDescription)
     }
 
-    if (tabParam === 'theme' && formParam === 'layout') {
+    if (tabParam === 'theme' && formParam === 'banner') {
       setThemeBtnVisibility(true)
     } else {
       setThemeBtnVisibility(false)
@@ -59,7 +60,7 @@ export default function AddEventPage() {
     if (currentIndex > 0) {
       const previousTab = tabs[currentIndex - 1].value
       setActiveTab(previousTab)
-      setSearchParams({ account: previousTab })
+      setSearchParams({ tab: previousTab })
     } else {
       navigate(-1)
     }
@@ -105,7 +106,6 @@ export default function AddEventPage() {
         <TabsList className='flex items-center gap-24 w-fit h-fit bg-transparent p-0'>
           {tabs.map((tab) => (
             <TabsTrigger
-              disabled
               key={tab.value}
               value={tab.value}
               className='bg-transparent p-0 font-sf-pro-rounded font-normal text-sm text-white/50 data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100 uppercase'>
@@ -127,13 +127,15 @@ export default function AddEventPage() {
               handleBackClick={handleBackClick}
               activeTab={activeTab}
               themeBtnVisibility={themeBtnVisibility}
+              setActiveTabState={setActiveTabState}
+              navigate={navigate}
             />
 
             <section className='container w-full flex flex-col gap-10'>
               <div className='flex flex-col gap-2 py-10 px-14 text-black font-sf-pro-display'>
                 <p className='font-black text-4xl uppercase'>{heading}</p>
                 <p className='text-[13px] max-w-[351px] uppercase'>{description}</p>
-                <p className='text-xl font-black'>STEP {step}</p>
+                <p className='text-xl font-black'>STEP {step || 1}</p>
               </div>
 
               {tab.element}
@@ -149,10 +151,14 @@ function TabNav({
   activeTab,
   handleBackClick,
   themeBtnVisibility,
+  setActiveTabState,
+  navigate,
 }: {
   activeTab: string
   handleBackClick: () => void
   themeBtnVisibility: boolean
+  setActiveTabState: (incomingTab: string) => void
+  navigate: (path: string) => void
 }) {
   return (
     <div className='w-full h-fit flex items-center justify-between py-3 px-8'>
@@ -160,13 +166,13 @@ function TabNav({
         variant='ghost'
         className='w-fit h-fit hover:bg-black/10'
         onClick={handleBackClick}
-        disabled={activeTab !== 'publish'}>
+        disabled={activeTab === 'event-details'}>
         <ChevronLeft color='#000000' className='min-w-1.5 min-h-3' />
       </Button>
 
       <div className='flex gap-8'>
         {themeBtnVisibility && (
-          <NavBtn name={activeTab} action={() => console.log('hello world')} />
+          <NavBtn name={activeTab} action={() => setActiveTabState('vendor')} />
         )}
 
         {activeTab === 'publish' && (
@@ -175,7 +181,8 @@ function TabNav({
 
         <Button
           variant='destructive'
-          className='h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]'>
+          className='h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]'
+          onClick={() => navigate(getRoutePath('standalone'))}>
           Save and Exit
         </Button>
       </div>

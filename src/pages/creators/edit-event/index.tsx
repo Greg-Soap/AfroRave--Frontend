@@ -1,12 +1,14 @@
 import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getRoutePath } from '@/config/get-route-path'
 import { events, type IEvents } from '@/data/events'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import EventDetailsTab from './tabs/event-details-tab'
 import SettingsTab from './tabs/settings-tab'
 import ThemeTab from './tabs/theme-tab'
@@ -16,6 +18,7 @@ export default function EditEventPage() {
   const { user } = useAfroStore()
   const { eventId } = useParams()
   const event = events.find((item) => item.id === Number(eventId))
+  const navigate = useNavigate()
 
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState<string>('event-details')
@@ -42,7 +45,7 @@ export default function EditEventPage() {
 
   const setActiveTabState = (tab: string) => {
     setActiveTab(tab)
-    setSearchParams({ account: tab })
+    setSearchParams({ editTab: tab })
   }
 
   const handleBackClick = () => {
@@ -50,7 +53,9 @@ export default function EditEventPage() {
     if (currentIndex > 0) {
       const previousTab = edit_tabs[currentIndex - 1].value
       setActiveTab(previousTab)
-      setSearchParams({ account: previousTab })
+      setSearchParams({ editTab: previousTab })
+    } else {
+      navigate(getRoutePath('standalone'))
     }
   }
 
@@ -77,7 +82,6 @@ export default function EditEventPage() {
         <TabsList className='flex items-center gap-24 w-fit h-fit bg-transparent p-0'>
           {edit_tabs.map((tab) => (
             <TabsTrigger
-              disabled
               key={tab.value}
               value={tab.value}
               className='bg-transparent p-0 font-sf-pro-rounded font-normal text-sm text-black data-[state=active]:text-deep-red data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100'>
@@ -106,8 +110,8 @@ export default function EditEventPage() {
 
               <Button
                 variant='destructive'
-                disabled
-                className='h-8 w-24 text-xs font-sf-pro-text font-black rounded-[5px]'>
+                className='h-8 w-24 text-xs font-sf-pro-text font-black rounded-[5px]'
+                onClick={() => navigate(getRoutePath('standalone'))}>
                 SAVE
               </Button>
             </div>
