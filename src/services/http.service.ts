@@ -20,6 +20,7 @@ const api = axios.create({
   headers: {
     'X-Device-Type': 'web',
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
   },
   withCredentials: false, // Changed to false to avoid CORS preflight issues
 })
