@@ -12,7 +12,7 @@ export default function RevenueVendorPage() {
         <div className="w-full h-full bg-white flex flex-col gap-2.5 rounded-[4px]">
           <SearchData />
 
-          <div className="w-full flex flex-col">
+          <div className="w-full h-full flex flex-col">
             {slots.map((item) => (
               <VendorItem key={item.id} {...item} />
             ))}

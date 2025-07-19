@@ -54,19 +54,16 @@ function LogOutBtn() {
   return (
     <Button
       variant="ghost"
-      className="w-full py-7 border-t border-white flex justify-start items-center gap-2 rounded-none opacity-50 hover:opacity-100 hover:bg-white/20"
+      className="w-fit md:w-full py-7 md:border-t border-white flex justify-start items-center gap-2 rounded-none opacity-100 md:opacity-50 hover:opacity-100 hover:bg-white/20"
     >
       <img
         src="/assets/harmburger/logout.png"
         alt="Logout"
         width={17}
         height={18}
-        className="opacity-60 group-hover:opacity-100 group-data-[state=active]:opacity-100"
       />
 
-      <span className="opacity-60 group-hover:opacity-100 group-data-[state=active]:opacity-100">
-        LOGOUT
-      </span>
+      <span>LOGOUT</span>
     </Button>
   );
 }

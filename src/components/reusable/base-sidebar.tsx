@@ -1,8 +1,6 @@
 import {
   Sidebar,
   SidebarMenu,
-  // SidebarMenuItem,
-  // SidebarMenuButton,
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
@@ -10,10 +8,10 @@ import {
 } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import { BaseAccordion } from "./base-accordion";
-//import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { ICreatorSidebarLinks } from "@/layouts/creator-dashboard-layout/creator-side-bar";
 import { useLocation } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function BaseSideBar({
   side = "left",
@@ -22,14 +20,19 @@ export function BaseSideBar({
   className,
   contentClassName,
   sidebar_links,
+  collapsibleOnMobile = false,
 }: IBaseSidebar) {
   const location = useLocation();
+  const isMobile = useIsMobile();
+
+  const effectiveCollapsible =
+    collapsibleOnMobile && isMobile ? "offcanvas" : collapsible;
 
   return (
     <Sidebar
       side={side}
       variant={variant}
-      collapsible={collapsible}
+      collapsible={effectiveCollapsible}
       className={cn(className, "w-[320px] min-h-screen h-fit bg-white")}
     >
       <SidebarContent className={cn(contentClassName, "flex flex-col")}>
@@ -37,7 +40,7 @@ export function BaseSideBar({
           <SidebarGroupLabel className="sr-only">Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {sidebar_links?.map((item, index) => {
+              {sidebar_links?.map((item) => {
                 const isActive = item.links.some(
                   (link) =>
                     location.pathname === link.path ||
@@ -46,7 +49,7 @@ export function BaseSideBar({
 
                 return (
                   <AccordionSidebarMenuItem
-                    key={index}
+                    key={item.trigger.text}
                     links={item.links}
                     trigger={item.trigger.text}
                     isActive={isActive}
@@ -108,23 +111,6 @@ function AccordionSidebarMenuItem({
   );
 }
 
-// function DefaultSidebarMenuItem({ items }: { items: IDefaultItem[] }) {
-//   return (
-//     <>
-//       {items.map((item) => (
-//         <SidebarMenuItem key={item.title}>
-//           <SidebarMenuButton asChild>
-//             <a href={item.url}>
-//               <item.icon />
-//               <span>{item.title}</span>
-//             </a>
-//           </SidebarMenuButton>
-//         </SidebarMenuItem>
-//       ))}
-//     </>
-//   );
-// }
-
 interface IBaseSidebar {
   side?: "left" | "right";
   variant?: "sidebar" | "floating" | "inset";
@@ -132,10 +118,5 @@ interface IBaseSidebar {
   className?: string;
   contentClassName?: string;
   sidebar_links?: ICreatorSidebarLinks[];
+  collapsibleOnMobile?: boolean;
 }
-
-// interface IDefaultItem {
-//   title: string;
-//   icon: LucideIcon;
-//   url: string;
-// }

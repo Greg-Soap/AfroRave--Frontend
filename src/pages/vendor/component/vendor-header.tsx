@@ -9,10 +9,10 @@ export function VendorHeader({
   type?: "service" | "revenue" | "access-control";
 }) {
   return (
-    <div className="w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray">
+    <div className="w-full flex flex-wrap items-center justify-between bg-white h-36 md:h-14 px-8 border-l border-light-gray">
       <AddFilterBUtton />
 
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-2 md:gap-8">
         <Button
           variant="ghost"
           disabled={type === "revenue"}
@@ -36,11 +36,6 @@ export function VendorHeader({
     </div>
   );
 }
-
-// function RenderBtnName(text: "service" | "revenue" | "access-control") {
-//   if (text === "revenue" || text === "service") return " Blackmarket Flea";
-//   if (text === "access-control") return "Afro Fest";
-// }
 
 function RenderText(text: "service" | "revenue" | "access-control") {
   if (text === "revenue") return "Slot";

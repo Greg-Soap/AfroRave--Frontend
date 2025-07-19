@@ -11,10 +11,10 @@ import VendorSelect from "@/components/custom/vendor-select";
 
 export default function StandalonePage() {
   return (
-    <section className="w-full h-full flex flex-col items-center gap-24 mb-[200px]">
+    <section className="w-full h-full flex flex-col items-center gap-14 lg:gap-24 mb-[75px]">
       <StandAloneHeader />
 
-      <div className="max-w-[836px] w-full flex flex-wrap gap-7">
+      <div className="max-w-[836px] w-full flex flex-wrap justify-center gap-7">
         {standalone_events.map((item) => (
           <StandAloneEvents key={item.id} {...item} />
         ))}
@@ -25,15 +25,15 @@ export default function StandalonePage() {
 
 function StandAloneHeader() {
   return (
-    <div className="w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray">
+    <div className="w-full flex items-center justify-between bg-white h-14 px-5 lg:px-8 border-l border-light-gray">
       <AddFilterBUtton />
 
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-3 md:gap-8">
         <VendorSelect />
 
         <Button
           variant="destructive"
-          className="p-3 rounded-[6px] gap-8"
+          className="p-3 rounded-[6px] gap-2 md:gap-8"
           asChild
         >
           <Link to={getRoutePath("add_event")}>

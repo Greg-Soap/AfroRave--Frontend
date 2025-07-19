@@ -38,23 +38,25 @@ export default function ChartPage() {
     <Tabs
       value={activeTab}
       onValueChange={handleTabChange}
-      className="w-full h-full flex flex-row gap-1"
+      className="w-full h-full flex flex-col lg:flex-row gap-1 overflow-hidden"
     >
-      <TabsList className="w-[208px] min-h-full flex flex-col items-start py-14 px-0 bg-secondary-white rounded-none">
+      <TabsList className="lg:w-[208px] h-fit lg:min-h-full flex flex-row lg:flex-col justify-start items-start lg:py-14 px-0 lg:bg-secondary-white rounded-none overflow-x-scroll scrollbar-none">
         {chartTabs.map((item) => (
           <div key={item.section} className="w-full flex flex-col">
             <p className="py-5 px-3 font-medium font-sf-pro-display text-black">
               {item.section}
             </p>
-            {item.tabs.map((tab) => (
-              <TabsTrigger
-                key={tab.value}
-                value={tab.value}
-                className="w-full min-h-[60px] flex justify-start rounded-none text-mid-dark-gray data-[state=active]:text-black bg-transparent border-l-2 border-l-transparent data-[state=active]:border-l-[4px] data-[state=active]:border-l-deep-red data-[state=active]:bg-deep-red/15 data-[state=active]:shadow-none"
-              >
-                {tab.name}
-              </TabsTrigger>
-            ))}
+            <div className="flex lg:flex-col">
+              {item.tabs.map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="w-full lg:min-h-[60px] flex justify-start rounded-none text-mid-dark-gray data-[state=active]:text-black bg-transparent border-l-2 border-l-transparent data-[state=active]:border-l-[4px] data-[state=active]:border-l-deep-red data-[state=active]:bg-deep-red/15 data-[state=active]:shadow-none"
+                >
+                  {tab.name}
+                </TabsTrigger>
+              ))}
+            </div>
           </div>
         ))}
       </TabsList>
