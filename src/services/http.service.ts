@@ -1,14 +1,17 @@
-import axios from 'axios'
 import { useAuthStore } from '@/stores/auth-store'
+import axios from 'axios'
 
 export const multipartHeaders = {
   headers: { 'Content-Type': 'multipart/form-data' },
 }
 
 // Force development mode for now to use proxy
-const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development' || window.location.hostname === 'localhost'
+const isDev =
+  import.meta.env.DEV ||
+  import.meta.env.MODE === 'development' ||
+  window.location.hostname === 'localhost'
 
-const apiUrl = isDev 
+const apiUrl = isDev
   ? '' // Use relative URLs in development (proxy will handle it)
   : import.meta.env.VITE_API_PROD || 'https://afro-revive-latest.onrender.com'
 
@@ -17,7 +20,6 @@ const api = axios.create({
   headers: {
     'X-Device-Type': 'web',
     'Content-Type': 'application/json',
-    tokenId: import.meta.env.TOKEN_ID,
   },
   withCredentials: false, // Changed to false to avoid CORS preflight issues
 })
