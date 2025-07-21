@@ -13,24 +13,21 @@ export default function OwnTheStage() {
       <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)_opacity(25%)]' />
       <div className='absolute inset-0 bg-gradient-to-t  [background-position:0%_41%]' />
 
-      {/* Lightning bolt
-      <img
-        src="/assets/landing-page/bolt.png"
-        alt="BOLT"
-        width={644}
-        height={880}
-        className="hidden md:block absolute left-[62%] top-1/2 -translate-x-1/2 -translate-y-1/2 h-[80%] w-auto scale-x-[1.5] scale-y-[1.2] opacity-40"
-      /> */}
-
       {/* Content container */}
       <div className='relative px-5 md:px-14'>
-        <div className='mb-[124px] overflow-x-hidden'>
+        <div className='mb-[124px] overflow-x-hidden '>
           <Suspense fallback={<CategoryBlockSkeleton />}>
-            <CategoryBlock name='Trending' data={events} showLocation={true} layout='start' />
+            <CategoryBlock
+              name='Trending'
+              data={events}
+              showLocation={true}
+              layout='start'
+              homePage={true}
+            />
           </Suspense>
         </div>
         {/* First row - blocks 1 and 3 */}
-        <div className='flex max-lg;flex-col lg:justify-between items-center lg:items-start gap-10 mb-10 md:mb-24'>
+        <div className='flex max-lg:flex-col items-center lg:items-start justify-center gap-10 lg:gap-[100px] mb-10 md:mb-24'>
           <DetailsBlock {...details[0]} position='first' />
           <DetailsBlock {...details[2]} position='third' />
         </div>
@@ -47,25 +44,22 @@ export default function OwnTheStage() {
 function DetailsBlock({ title, href, linkName, details, position = 'first' }: IDetailsBlockProps) {
   return (
     <div
-      className={cn('max-w-[554px] flex flex-col max-lg:items-center gap-2 max-md:gap-5', {
-        'items-center z-10 lg:max-w-[375px]': position === 'second',
-        'items-end': position === 'third',
+      className={cn('max-w-[554px] flex flex-col items-center gap-2 max-md:gap-5', {
+        ' z-10 lg:max-w-[375px]': position === 'second',
       })}>
       <span
         className={cn(
-          'inline-block text-2xl md:text-[30px] leading-[110%] lg:text-[36px] max-md:text-center font-phosphate-inline text-white max-lg:text-center text-wrap',
+          'inline-block text-2xl md:text-[30px] leading-[110%] lg:text-[36px] text-center font-phosphate-inline text-white max-lg:text-center text-wrap',
           {
-            'text-right lg:w-[426px]': position === 'third',
-            'text-center w-full': position === 'second',
-            'text-left w-full': position === 'first',
+            'lg:w-[426px]': position === 'third' || position === 'first',
+            'w-full': position === 'second',
           },
         )}>
         {title}
       </span>
       <p
-        className={cn('text-xl uppercase max-md:text-center font-phosphate max-lg:text-center', {
-          'text-center mb-2 max-w-[444px]': position === 'second',
-          'text-right': position === 'third',
+        className={cn('text-xl uppercase text-center font-phosphate max-lg:text-center', {
+          ' mb-2 max-w-[444px]': position === 'second',
         })}>
         {details}
       </p>

@@ -17,64 +17,64 @@
  */
 import {
   Carousel,
+  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/carousel'
+import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 
 interface BaseCarouselProps {
   /** Array of items to display in the carousel */
   items: {
     /** Unique identifier for the item */
-    id: string;
+    id: string
     /** React node to render as the carousel item content */
-    content: React.ReactNode;
-  }[];
+    content: React.ReactNode
+  }[]
   /** Whether to show the slide indicators */
-  showIndicators?: boolean;
+  showIndicators?: boolean
   /** Whether to show the navigation arrows */
-  showNavigation?: boolean;
+  showNavigation?: boolean
   /** Additional CSS classes for the carousel container */
-  className?: string;
+  className?: string
   /** Additional CSS classes for individual carousel items */
-  itemClassName?: string;
+  itemClassName?: string
   /** CSS position for the indicators (default: 'bottom-4') */
-  indicatorsPosition?: string;
+  indicatorsPosition?: string
   /** Callback function triggered when the active slide changes */
-  onSlideChange?: (index: number) => void;
+  onSlideChange?: (index: number) => void
 }
 
 export function BaseCarousel({
   items,
   showIndicators = true,
   showNavigation = true,
-  className = "",
-  itemClassName = "",
-  indicatorsPosition = "bottom-4",
+  className = '',
+  itemClassName = '',
+  indicatorsPosition = 'bottom-4',
   onSlideChange,
 }: BaseCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [api, setApi] = useState<CarouselApi>();
+  const [activeIndex, setActiveIndex] = useState<number>(0)
+  const [api, setApi] = useState<CarouselApi>()
 
   useEffect(() => {
-    if (!api) return;
+    if (!api) return
 
-    api.on("select", () => {
-      const newIndex = api.selectedScrollSnap();
-      setActiveIndex(newIndex);
-      onSlideChange?.(newIndex);
-    });
-  }, [api, onSlideChange]);
+    api.on('select', () => {
+      const newIndex = api.selectedScrollSnap()
+      setActiveIndex(newIndex)
+      onSlideChange?.(newIndex)
+    })
+  }, [api, onSlideChange])
 
   return (
-    <Carousel className={cn("relative w-full", className)} setApi={setApi}>
-      <CarouselContent className="min-h-screen">
+    <Carousel className={cn('relative w-full', className)} setApi={setApi}>
+      <CarouselContent className='min-h-screen'>
         {items.map((item) => (
-          <CarouselItem key={item.id} className={cn("w-full ", itemClassName)}>
+          <CarouselItem key={item.id} className={cn('w-full ', itemClassName)}>
             {item.content}
           </CarouselItem>
         ))}
@@ -83,16 +83,15 @@ export function BaseCarousel({
       {showIndicators && (
         <div
           className={cn(
-            "absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 z-[99999]",
-            indicatorsPosition
-          )}
-        >
+            'absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 z-[99999]',
+            indicatorsPosition,
+          )}>
           {items.map((item, index) => (
             <div
               key={item.id}
-              className={cn("rounded-full transition-all duration-150", {
-                "bg-soft-gray size-2": index !== activeIndex,
-                "outline-white outline-2 size-5": index === activeIndex,
+              className={cn('rounded-full transition-all duration-150', {
+                'bg-soft-gray size-2': index !== activeIndex,
+                'outline-white outline-2 size-5': index === activeIndex,
               })}
             />
           ))}
@@ -101,10 +100,10 @@ export function BaseCarousel({
 
       {showNavigation && (
         <>
-          <CarouselPrevious className="z-20 border-none bg-transparent hover:bg-white/10 hover:text-white " />
-          <CarouselNext className="z-20 border-none bg-transparent hover:bg-white/10 hover:text-white " />
+          <CarouselPrevious className='text-white z-20 border-none bg-transparent hover:bg-transparent hover:text-white/80 ' />
+          <CarouselNext className='text-white z-20 border-none bg-transparent hover:bg-transparent hover:text-white/80 ' />
         </>
       )}
     </Carousel>
-  );
+  )
 }

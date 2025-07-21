@@ -35,9 +35,4 @@ const carouselItems = [
     image: '/assets/landing-page/c1.png',
     alt: 'Rave',
   },
-  {
-    id: '7',
-    image: '/assets/landing-page/c1.png',
-    alt: 'Rave',
-  },
 ]
