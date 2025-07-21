@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { getRoutePath } from "@/config/get-route-path";
 import { FooterLinks } from "../components/footer-links";
 import { Socials } from "../components/socials";
+import {
+  FooterLinkBlock,
+  type IFooterLinks,
+} from "../components/footer-links-block";
 
 export default function Footer() {
   return (
@@ -24,7 +27,7 @@ export default function Footer() {
         className="w-full bg-[#686868] max-md:mt-7"
       />
 
-      <div className="  w-full flex max-md:flex-col gap-[120px] px-[1rem] md:px-[2rem] justify-start md:pr-[160px]">
+      <div className="w-full flex max-md:flex-col gap-[120px] px-[1rem] md:px-[2rem] justify-start md:pr-[160px]">
         {footer_links.map((footer_link) => (
           <FooterLinkBlock key={footer_link.title} {...footer_link} />
         ))}
@@ -32,26 +35,6 @@ export default function Footer() {
 
       <Socials className="md:!justify-end px-[1rem] md:px-[2rem]" />
     </footer>
-  );
-}
-
-function FooterLinkBlock({ title, links }: IFooterLinks) {
-  return (
-    <div className="flex flex-col gap-4 font-sf-pro-rounded">
-      <p>{title}</p>
-
-      <div className="flex flex-col gap-2">
-        {links.map((item) => (
-          <Link
-            key={item.name}
-            to={item.href}
-            className="font-light text-[14px] hover:underline"
-          >
-            {item.name}
-          </Link>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -75,8 +58,3 @@ const footer_links: IFooterLinks[] = [
     ],
   },
 ];
-
-interface IFooterLinks {
-  title: string;
-  links: { href: string; name: string }[];
-}

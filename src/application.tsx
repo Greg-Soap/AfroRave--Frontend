@@ -1,23 +1,25 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { Suspense, lazy } from 'react'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import { Toaster } from 'sonner'
-import { OrganizerAuthGuard } from './components/auth/organizer-auth-guard'
-import { LoadingFallback } from './components/loading-fallback'
-import { creator_dashboard_routes } from './config/creator-dashboard-routes'
-import { getRoutePath } from './config/get-route-path'
-import { routes } from './config/routes'
-import { support_routes } from './config/support-routes'
-import { user_dashboard_routes } from './config/user-dashboard-routes'
-import { useScrollToTop } from './hooks/use-scroll-to-top'
-import CreatorDashboardLayout from './layouts/creator-dashboard-layout'
-import IndexLayout from './layouts/root-layout'
-import SupportLayout from './layouts/support-layout'
-import UserDashboardLayout from './layouts/user-dashboard-layout'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Suspense, lazy } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Toaster } from "sonner";
+import { OrganizerAuthGuard } from "./components/auth/organizer-auth-guard";
+import { LoadingFallback } from "./components/loading-fallback";
+import { creator_dashboard_routes } from "./config/creator-dashboard-routes";
+import { getRoutePath } from "./config/get-route-path";
+import { routes } from "./config/routes";
+import { support_routes } from "./config/support-routes";
+import { user_dashboard_routes } from "./config/user-dashboard-routes";
+import { useScrollToTop } from "./hooks/use-scroll-to-top";
+import CreatorDashboardLayout from "./layouts/creator-dashboard-layout";
+import IndexLayout from "./layouts/root-layout";
+import SupportLayout from "./layouts/support-layout";
+import UserDashboardLayout from "./layouts/user-dashboard-layout";
+import CreatorsLandingPageLayout from "./layouts/creators-landing-page-layout";
+import { creator_landing_page_routes } from "./config/creators-landing-page-routes";
 
-const EditEventPage = lazy(() => import('./pages/creators/edit-event'))
-const AddEventPage = lazy(() => import('./pages/creators/add-event'))
+const EditEventPage = lazy(() => import("./pages/creators/edit-event"));
+const AddEventPage = lazy(() => import("./pages/creators/add-event"));
 
 // Create a client
 const queryClient = new QueryClient({
@@ -27,10 +29,10 @@ const queryClient = new QueryClient({
       retry: 1,
     },
   },
-})
+});
 
 function AppRoutes() {
-  useScrollToTop()
+  useScrollToTop();
 
   return (
     <Routes>
@@ -58,8 +60,14 @@ function AppRoutes() {
         ))}
       </Route>
 
+      <Route element={<CreatorsLandingPageLayout />}>
+        {creator_landing_page_routes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+      </Route>
+
       <Route
-        path={getRoutePath('edit_event', { eventId: ':eventId' })}
+        path={getRoutePath("edit_event", { eventId: ":eventId" })}
         element={
           <OrganizerAuthGuard>
             <Suspense fallback={<LoadingFallback />}>
@@ -70,7 +78,7 @@ function AppRoutes() {
       />
 
       <Route
-        path={getRoutePath('add_event')}
+        path={getRoutePath("add_event")}
         element={
           <OrganizerAuthGuard>
             <Suspense fallback={<LoadingFallback />}>
@@ -80,7 +88,7 @@ function AppRoutes() {
         }
       />
     </Routes>
-  )
+  );
 }
 
 export default function Application() {
@@ -90,7 +98,7 @@ export default function Application() {
         <AppRoutes />
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
-      <Toaster position='top-right' richColors closeButton duration={4000} />
+      <Toaster position="top-right" richColors closeButton duration={4000} />
     </QueryClientProvider>
-  )
+  );
 }
