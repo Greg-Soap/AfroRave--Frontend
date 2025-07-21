@@ -31,11 +31,11 @@ export function BaseAccordion({
         >
           <div
             className={cn("flex items-center gap-1", {
-              "opacity-100": isActive && style === "dashboard",
-              "opacity-50": !isActive && style === "dashboard",
+              "opacity-100 stroke-deep-red": isActive && style === "dashboard",
+              "opacity-50 stroke-black": !isActive && style === "dashboard",
             })}
           >
-            <img src={icon} alt={trigger} width={16} height={16} />
+            {icon}
             <p className="font-sf-pro-display text-sm text-black">{trigger}</p>
           </div>
 
@@ -59,5 +59,5 @@ interface IBaseAccordion {
   stringContent?: string;
   children?: React.ReactNode;
   isActive?: boolean;
-  icon?: string;
+  icon?: React.ReactNode;
 }

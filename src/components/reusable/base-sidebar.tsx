@@ -77,7 +77,7 @@ function AccordionSidebarMenuItem({
   links: ICreatorSidebarLinks["links"];
   trigger: string;
   isActive: boolean;
-  icon: string;
+  icon: React.ReactNode;
 }) {
   const location = useLocation();
 

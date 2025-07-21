@@ -12,10 +12,15 @@ export function VendorItem({
   date,
   count,
   status,
+  type = "revenue",
 }: IVendorItem) {
   return (
     <Link
-      to={getRoutePath("revenue_vendor_slot", { slotId: id })}
+      to={
+        type === "revenue"
+          ? getRoutePath("revenue_vendor_slot", { slotId: id })
+          : getRoutePath("service_vendor_slot", { slotId: id })
+      }
       className="flex items-center justify-between px-8 py-5 border-t border-mid-dark-gray/30 last:border-y hover:bg-black/5"
     >
       <div className="flex flex-col gap-3 font-sf-pro-display text-black">
@@ -54,4 +59,5 @@ interface IVendorItem {
   date: string;
   count?: string;
   status: IVendor["status"];
+  type?: "revenue" | "service";
 }

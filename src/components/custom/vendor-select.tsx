@@ -5,16 +5,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CircleChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 export default function VendorSelect() {
   return (
     <Select>
-      <SelectTrigger className="dlex items-center gap-[9px] max-w-[180px] text-xs text-black font-sf-pro-display border-none outline-none bg-transparent shadow-none placeholder:text-black [&>svg]:hidden">
-        <SelectValue placeholder="Afro fest" />
-
+      <SelectTrigger className="flex items-center gap-[9px] !w-[122px] !h-8 text-xs text-white uppercase font-sf-pro-display bg-black border-none outline-none shadow-none placeholder:text-white [&>svg]:hidden">
+        <SelectValue placeholder="Afro fest" className="text-white" />
         <div>
-          <CircleChevronDown color="#000000" size={16} />
+          <ChevronDown color="#ffffff" size={12} />
         </div>
       </SelectTrigger>
       <SelectContent>

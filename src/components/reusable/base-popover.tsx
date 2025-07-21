@@ -19,23 +19,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface IPopoverProps {
   /** The trigger element that opens the popover (usually a button) */
   trigger: React.ReactNode;
   /** The content to display in the popover */
   content: React.ReactNode;
+  className?: string;
 }
 
 /**
  * Base popover component that provides a consistent way to display floating content.
  * The popover appears when the trigger element is clicked and is positioned relative to it.
  */
-export function BasePopover({ trigger, content }: IPopoverProps) {
+export function BasePopover({
+  trigger,
+  content,
+  className = "bg-medium-gray",
+}: IPopoverProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent className="max-w-fit border-none flex flex-col bg-medium-gray p-0">
+      <PopoverContent
+        className={cn("max-w-fit border-none flex flex-col p-0", className)}
+      >
         {content}
       </PopoverContent>
     </Popover>

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { getRoutePath } from "@/config/get-route-path";
 import StandAloneModal from "./components/standalone-modal";
 import VendorSelect from "@/components/custom/vendor-select";
+import { BasePopover } from "@/components/reusable";
 
 export default function StandalonePage() {
   return (
@@ -33,7 +34,7 @@ function StandAloneHeader() {
 
         <Button
           variant="destructive"
-          className="p-3 rounded-[6px] gap-2 md:gap-8"
+          className="p-3 h-8 rounded-[6px] gap-2 md:gap-8"
           asChild
         >
           <Link to={getRoutePath("add_event")}>
@@ -120,7 +121,23 @@ function StandAloneEvents({
           <EventButtons key={item.alt} {...item} className="border-r" />
         ))}
 
-        <StandAloneModal id={id} />
+        <BasePopover
+          className="bg-black/50"
+          trigger={
+            <Button
+              variant="ghost"
+              className="flex items-center justify-center hover:bg-black/10 rounded-none border-r-semi-light-gray/28"
+            >
+              <img
+                src="/assets/dashboard/creator/ellipses.png"
+                alt="Ellipses"
+                width={12}
+                height={10}
+              />
+            </Button>
+          }
+          content={<PopoverContent id={id} />}
+        />
       </div>
     </div>
   );
@@ -148,6 +165,32 @@ function EventButtons({
     >
       <img src={icon} alt={alt} width={12} height={10} />
     </Button>
+  );
+}
+
+function PopoverContent({ id }: { id: number }) {
+  return (
+    <div className="w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text">
+      <Link
+        to={getRoutePath("edit_event", { eventId: id })}
+        className="border-b border-white text-white border-b border-white h-[22px] hover:bg-black/80"
+      >
+        Edit Event
+      </Link>
+      <Link
+        to={getRoutePath("individual_event", { eventId: id })}
+        className="border-b border-white text-white h-[22px] hover:bg-black/80"
+      >
+        View Event
+      </Link>
+      <StandAloneModal id={id} />
+      <Button
+        variant="ghost"
+        className="flex h-[22px] items-center justify-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-0 justify-start hover:bg-black/80 hover:text-white"
+      >
+        Copy Link
+      </Button>
+    </div>
   );
 }
 

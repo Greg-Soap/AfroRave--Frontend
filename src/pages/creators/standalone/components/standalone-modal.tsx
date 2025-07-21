@@ -14,14 +14,9 @@ export default function StandAloneModal({ id }: { id: number }) {
       trigger={
         <Button
           variant="ghost"
-          className="flex items-center justify-center hover:bg-black/10 rounded-none border-r-semi-light-gray/28"
+          className="flex h-[22px] items-center justify-center bg-transparent rounded-none border-b border-white text-xs text-white font-sf-pro-text px-0 justify-start hover:bg-black/80 hover:text-white"
         >
-          <img
-            src="/assets/dashboard/creator/ellipses.png"
-            alt="Ellipses"
-            width={12}
-            height={10}
-          />
+          <span>Event Summary</span>
         </Button>
       }
     >
