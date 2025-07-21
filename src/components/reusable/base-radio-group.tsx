@@ -14,7 +14,7 @@ export function BaseRadioGroup({
     <RadioGroup
       value={value}
       onValueChange={onChange}
-      className="grid grid-cols-2 gap-6"
+      className="grid md:grid-cols-2 gap-6"
     >
       {data.map((item) => (
         <div key={item.value} className="w-full flex items-center">

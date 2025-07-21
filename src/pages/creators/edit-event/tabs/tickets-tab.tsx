@@ -12,7 +12,7 @@ import {
 
 export default function TicketsTab() {
   return (
-    <div className="w-full flex flex-col gap-14 p-14">
+    <div className="w-full flex flex-col-reverse md:flex-col gap-14 md:p-14">
       <div className="flex flex-col pl-2 gap-[13px]">
         <div className="flex items-center justify-between">
           <p className="font-sf-pro-display font-black text-black text-xl">
@@ -37,7 +37,7 @@ export default function TicketsTab() {
 
 function TicketSales() {
   return (
-    <div className="w-full bg-white p-8 flex flex-col gap-5 rounded-[10px]">
+    <div className="w-full bg-white p-3 md:p-8 flex flex-col gap-5 rounded-[10px]">
       <div className="flex items-center gap-1">
         <img
           src="/assets/harmburger/ticket.png"

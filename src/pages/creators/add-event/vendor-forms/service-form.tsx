@@ -77,7 +77,7 @@ export default function ServiceForm({
             name={`service.${idx}.type`}
             label="Vendor Type"
             placeholder="Select a type."
-            triggerClassName="text-deep-red w-[480px]"
+            triggerClassName="text-deep-red w-full md:w-[480px]"
             data={vendorTypes}
           />
 
@@ -86,7 +86,7 @@ export default function ServiceForm({
             name={`service.${idx}.category`}
             label="Category"
             placeholder="Select a category."
-            triggerClassName="text-deep-red w-[480px]"
+            triggerClassName="text-deep-red w-full md:w-[480px]"
             data={categoryOptions}
           />
 
@@ -128,8 +128,8 @@ export default function ServiceForm({
           </div>
 
           <div className="flex flex-col gap-5">
-            <div className="flex gap-4 items-center">
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              <div className="w-full flex flex-col gap-2">
                 <p className="uppercase text-black text-xs font-sf-pro-text">
                   Start
                 </p>
@@ -141,7 +141,7 @@ export default function ServiceForm({
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2">
                 <p className="uppercase text-black text-xs font-sf-pro-text">
                   Stop
                 </p>

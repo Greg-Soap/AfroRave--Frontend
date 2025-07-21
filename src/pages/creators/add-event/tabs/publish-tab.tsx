@@ -40,8 +40,8 @@ export default function PublishTab({
 
   return (
     <FormBase form={form} onSubmit={onSubmit} className="flex flex-col gap-8">
-      <div className="flex gap-[100px] justify-center">
-        <div className="w-[520px] h-[260px] flex bg-charcoal py-[25px] px-[22px] rounded-[10px] gap-[22px]">
+      <div className="flex flex-wrap gap-[100px] justify-center">
+        <div className="w-full md:w-[520px] h-fit md:h-[260px] flex flex-col md:flex-row bg-charcoal py-[25px] px-[22px] rounded-[10px] gap-[22px]">
           <img
             src="/assets/landing-page/s1.png"
             alt="Flyer"

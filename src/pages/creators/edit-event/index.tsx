@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
 import { events, type IEvents } from '@/data/events'
+import { cn } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -76,21 +77,15 @@ export default function EditEventPage() {
       value={activeTab}
       onValueChange={setActiveTabState}
       className='w-full min-h-screen flex flex-col items-center bg-white overflow-x-hidden'>
-      <div className='w-full flex items-center justify-between py-4 px-8'>
-        <img src='/assets/event/ar-black.png' alt='AR' width={60} height={32} />
+      <div className='w-full flex flex-col gap-6'>
+        <div className='w-full flex items-center justify-between py-4 px-8'>
+          <img src='/assets/event/ar-black.png' alt='AR' width={60} height={32} />
 
-        <TabsList className='flex items-center gap-24 w-fit h-fit bg-transparent p-0'>
-          {edit_tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className='bg-transparent p-0 font-sf-pro-rounded font-normal text-sm text-black data-[state=active]:text-deep-red data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100'>
-              {tab.name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+          <CustomTabTrigger tabs={edit_tabs} className='p-0 hidden md:flex' />
 
-        <CreatorMenuButton user={user} />
+          <CreatorMenuButton user={user} variant='dark' />
+          <CustomTabTrigger tabs={edit_tabs} className='flex md:hidden px-5' />
+        </div>
       </div>
       {edit_tabs.map((tab) => (
         <TabsContent
@@ -130,6 +125,32 @@ export default function EditEventPage() {
         </TabsContent>
       ))}
     </Tabs>
+  )
+}
+
+function CustomTabTrigger({
+  tabs,
+  className,
+}: {
+  tabs: IEditTabProps[]
+  className?: string
+}) {
+  return (
+    <TabsList
+      className={cn(
+        'items-center gap-[35px] md:gap-24 w-fit h-fit bg-transparent md:p-0',
+        className,
+      )}>
+      {tabs.map((tab) => (
+        <TabsTrigger
+          disabled
+          key={tab.value}
+          value={tab.value}
+          className='bg-transparent p-0 font-sf-pro-rounded font-normal text-xs md:text-sm text-black data-[state=active]:text-deep-red data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100'>
+          {tab.name}
+        </TabsTrigger>
+      ))}
+    </TabsList>
   )
 }
 

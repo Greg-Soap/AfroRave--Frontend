@@ -17,8 +17,8 @@ import {
 
 export default function EventDetailsTab({ event }: { event: IEvents }) {
   return (
-    <div className="flex flex-col p-14 gap-2.5">
-      <div className="flex flex-col gap-4 min-w-[560px] max-w-[800px]">
+    <div className="w-full flex flex-col p-0 md:p-14 gap-2.5">
+      <div className="flex flex-col gap-4 w-full md:min-w-[560px] max-w-[800px]">
         <p className="uppercase font-sf-pro-display font-black text-black text-xl">
           Event Details
         </p>
@@ -218,7 +218,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       <div className="flex flex-col gap-5">
         <SectionHeader name="SOCIALS" />
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-5">
+        <div className="grid md:grid-cols-2 gap-x-8 gap-y-5">
           {[
             { name: "socials.instagram" as const, label: "Instagram" },
             { name: "socials.x" as const, label: "X" },

@@ -2,6 +2,7 @@ import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
+import { cn } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -100,21 +101,15 @@ export default function AddEventPage() {
       value={activeTab}
       onValueChange={setActiveTabState}
       className='w-full min-h-screen flex flex-col items-center bg-black overflow-x-hidden'>
-      <div className='w-full h-[72px] flex items-center justify-between py-4 px-8'>
-        <img src='/assets/landing-page/AR.png' alt='AR' width={60} height={32} />
+      <div className='w-full flex flex-col'>
+        <div className='w-full h-[72px] flex items-center justify-between py-4 px-8'>
+          <img src='/assets/landing-page/AR.png' alt='AR' width={60} height={32} />
 
-        <TabsList className='flex items-center gap-24 w-fit h-fit bg-transparent p-0'>
-          {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className='bg-transparent p-0 font-sf-pro-rounded font-normal text-sm text-white/50 data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100 uppercase'>
-              {tab.name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+          <CustomTabTriggers tabs={tabs} className='hidden md:flex p-0' />
 
-        <CreatorMenuButton user={user} variant='dark' />
+          <CreatorMenuButton user={user} variant='dark' />
+          <CustomTabTriggers tabs={tabs} className='flex md:hidden px-5' />
+        </div>
       </div>
       {tabs.map((tab) => (
         <TabsContent
@@ -132,8 +127,8 @@ export default function AddEventPage() {
             />
 
             <section className='container w-full flex flex-col gap-10'>
-              <div className='flex flex-col gap-2 py-10 px-14 text-black font-sf-pro-display'>
-                <p className='font-black text-4xl uppercase'>{heading}</p>
+              <div className='flex flex-col gap-2 md:py-10 p-0 md:px-14 text-black font-sf-pro-display'>
+                <p className='font-black text-2xl md:text-4xl uppercase'>{heading}</p>
                 <p className='text-[13px] max-w-[351px] uppercase'>{description}</p>
                 <p className='text-xl font-black'>STEP {step || 1}</p>
               </div>
@@ -144,6 +139,28 @@ export default function AddEventPage() {
         </TabsContent>
       ))}
     </Tabs>
+  )
+}
+
+function CustomTabTriggers({
+  tabs,
+  className,
+}: {
+  tabs: IEditTabProps[]
+  className?: string
+}) {
+  return (
+    <TabsList className={cn('items-center gap-5 md:gap-24 w-fit h-fit bg-transparent', className)}>
+      {tabs.map((tab) => (
+        <TabsTrigger
+          disabled
+          key={tab.value}
+          value={tab.value}
+          className='bg-transparent p-0 font-sf-pro-rounded font-normal text-xs md:text-sm text-white/50 data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:shadow-none disabled:opacity-100 uppercase'>
+          {tab.name}
+        </TabsTrigger>
+      ))}
+    </TabsList>
   )
 }
 
@@ -161,7 +178,7 @@ function TabNav({
   navigate: (path: string) => void
 }) {
   return (
-    <div className='w-full h-fit flex items-center justify-between py-3 px-8'>
+    <div className='w-full h-fit flex items-center justify-between py-3 px-5 md:px-8'>
       <Button
         variant='ghost'
         className='w-fit h-fit hover:bg-black/10'
