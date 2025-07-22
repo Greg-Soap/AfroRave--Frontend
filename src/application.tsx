@@ -17,6 +17,8 @@ import SupportLayout from "./layouts/support-layout";
 import UserDashboardLayout from "./layouts/user-dashboard-layout";
 import CreatorsLandingPageLayout from "./layouts/creators-landing-page-layout";
 import { creator_landing_page_routes } from "./config/creators-landing-page-routes";
+import { vendor_dashboard_routes } from "./config/vendor-dashboard-routes";
+import VendorDashboardLayout from "./layouts/vendor-dashboard-layout";
 
 const EditEventPage = lazy(() => import("./pages/creators/edit-event"));
 const AddEventPage = lazy(() => import("./pages/creators/add-event"));
@@ -62,6 +64,12 @@ function AppRoutes() {
 
       <Route element={<CreatorsLandingPageLayout />}>
         {creator_landing_page_routes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+      </Route>
+
+      <Route element={<VendorDashboardLayout />}>
+        {vendor_dashboard_routes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Route>

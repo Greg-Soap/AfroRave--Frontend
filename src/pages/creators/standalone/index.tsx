@@ -2,13 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatNaira } from "@/lib/format-price";
-import { cn } from "@/lib/utils";
 import { AddFilterBUtton } from "./components/add-filter-btn";
-import { Badge } from "@/components/ui/badge";
 import { getRoutePath } from "@/config/get-route-path";
 import StandAloneModal from "./components/standalone-modal";
 import VendorSelect from "@/components/custom/vendor-select";
 import { BasePopover } from "@/components/reusable";
+import { DashboardCards } from "@/components/custom/dashboard-cards";
 
 export default function StandalonePage() {
   return (
@@ -56,77 +55,38 @@ function StandAloneEvents({
   status,
 }: IStandaloneEventProps) {
   return (
-    <div className="w-[260px] h-fit flex flex-col shadow-xl">
-      <Link
-        to={`/events/${id}`}
-        className="relative flex flex-col items-start justify-end h-[172px] group overflow-hidden"
-      >
-        <img
-          src={image}
-          alt={name}
-          className={cn(
-            "w-full h-full absolute group-hover:scale-105 transition-all duration-300",
-            {
-              "grayscale-100": status === "ended",
-            }
-          )}
-        />
-
-        <img
-          src="/assets/dashboard/creator/link.png"
-          alt="Link"
-          width={10}
-          height={10}
-          className="absolute top-1 right-1 z-10"
-        />
-
-        {status && (
-          <Badge
-            className={cn(
-              "py-1.5 px-2 rounded-full text-xs font-black text-white font-sf-pro-text absolute top-1 left-1 z-10 uppercase",
-              {
-                "bg-tech-blue": status === "drafts",
-                "bg-deep-red": status === "ended",
-              }
-            )}
-          >
-            {status}
-          </Badge>
-        )}
-
-        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors duration-300" />
-
-        <p className="capitalize font-sf-pro-text font-medium text-sm z-10 px-1">
-          blackmarket flea
-        </p>
-        <p className="text-[10px] font-sf-pro-display z-10 px-1 mb-1">
-          Fri, 6th October, 2025
-        </p>
-      </Link>
-      <div className="flex items-center gap-6 px-[26px] py-4 bg-white">
-        <p className="font-sf-pro-rounded text-xs text-mid-dark-gray">
+    <DashboardCards
+      image={image}
+      name={name}
+      status={status}
+      cardInfo={[
+        <p
+          key="sold_items"
+          className="font-sf-pro-rounded text-xs text-mid-dark-gray"
+        >
           Sold: <span className="text-black font-medium">{sold.unit}</span> /{" "}
           {sold.total}
-        </p>
+        </p>,
 
-        <p className="font-sf-pro-rounded text-xs text-mid-dark-gray">
+        <p
+          key="profit"
+          className="font-sf-pro-rounded text-xs text-mid-dark-gray"
+        >
           Net Profit:{" "}
           <span className="text-black font-medium">
             {formatNaira(net_profit)}
           </span>
-        </p>
-      </div>
-      <div className="grid grid-cols-3 border-t border-t-semi-light-gray/28 h-fit bg-white">
-        {event_buttons.map((item) => (
-          <EventButtons key={item.alt} {...item} className="border-r" />
-        ))}
-
+        </p>,
+      ]}
+      cardButtons={event_buttons}
+      customButton={[
         <BasePopover
+          key="popover_trigger"
           className="bg-black/50"
           trigger={
             <Button
               variant="ghost"
-              className="flex items-center justify-center hover:bg-black/10 rounded-none border-r-semi-light-gray/28"
+              className="flex items-center justify-center hover:bg-black/10 rounded-none border-l border-semi-light-gray/28"
             >
               <img
                 src="/assets/dashboard/creator/ellipses.png"
@@ -137,34 +97,9 @@ function StandAloneEvents({
             </Button>
           }
           content={<PopoverContent id={id} />}
-        />
-      </div>
-    </div>
-  );
-}
-
-function EventButtons({
-  icon,
-  alt,
-  className,
-  action,
-}: {
-  icon: string;
-  alt: string;
-  className?: string;
-  action?: () => void;
-}) {
-  return (
-    <Button
-      onClick={action}
-      variant="ghost"
-      className={cn(
-        "flex items-center justify-center hover:bg-black/10 rounded-none border-r-semi-light-gray/28",
-        className
-      )}
-    >
-      <img src={icon} alt={alt} width={12} height={10} />
-    </Button>
+        />,
+      ]}
+    />
   );
 }
 
@@ -173,7 +108,7 @@ function PopoverContent({ id }: { id: number }) {
     <div className="w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text">
       <Link
         to={getRoutePath("edit_event", { eventId: id })}
-        className="border-b border-white text-white border-b border-white h-[22px] hover:bg-black/80"
+        className="text-white border-b border-white h-[22px] hover:bg-black/80"
       >
         Edit Event
       </Link>
@@ -186,7 +121,7 @@ function PopoverContent({ id }: { id: number }) {
       <StandAloneModal id={id} />
       <Button
         variant="ghost"
-        className="flex h-[22px] items-center justify-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-0 justify-start hover:bg-black/80 hover:text-white"
+        className="flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-0 justify-start hover:bg-black/80 hover:text-white"
       >
         Copy Link
       </Button>
@@ -194,10 +129,10 @@ function PopoverContent({ id }: { id: number }) {
   );
 }
 
-const event_buttons: IEventButtons[] = [
-  { icon: "/assets/dashboard/creator/chart2.png", alt: "Chart" },
+const event_buttons: { src: string; alt: string }[] = [
+  { src: "/assets/dashboard/creator/chart2.png", alt: "Chart" },
   {
-    icon: "/assets/dashboard/creator/group-user.png",
+    src: "/assets/dashboard/creator/group-user.png",
     alt: "Group User",
   },
 ];
@@ -256,9 +191,4 @@ interface IStandaloneEventProps {
   status?: "drafts" | "ended";
   sold: { unit: number; total: number };
   net_profit: number;
-}
-
-interface IEventButtons {
-  icon: string;
-  alt: string;
 }

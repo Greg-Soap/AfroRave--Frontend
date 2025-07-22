@@ -59,6 +59,9 @@ export const ROUTE_PATHS = {
 
   // Vendor dashboard routes
   vendor_not_found: "/vendor/*",
+  vendor_profile: "/vendor/profile",
+  vendor_discover: "/vendor/discover",
+  vendor_slots: "/vendor/slots",
 } as const;
 
 /**
@@ -130,4 +133,7 @@ export interface RouteParams {
   revenue_vendor_slot: { slotId: string | number };
   service_vendor_slot: { slotId: string | number };
   vendor_not_found: never;
+  vendor_profile: never;
+  vendor_discover: never;
+  vendor_slots: never;
 }

@@ -1,14 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Plus, EllipsisVertical } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import BaseTable from "@/components/reusable/base-table";
 
 export default function TicketsTab() {
   return (
@@ -49,43 +41,12 @@ function TicketSales() {
         </p>
       </div>
 
-      <TicketSalesTable />
+      <BaseTable
+        caption="A table of your ticket sales"
+        columns={columns}
+        data={ticketData}
+      />
     </div>
-  );
-}
-
-function TicketSalesTable() {
-  return (
-    <Table className="w-full">
-      <TableCaption className="sr-only text-black">
-        A table of your ticket sales.
-      </TableCaption>
-      <TableHeader className="bg-charcoal">
-        <TableRow className="hover:bg-charcoal">
-          {["Ticket Name", "Ticket Sold", "Price", "Status"].map((item) => (
-            <TableHead
-              key={item}
-              className="text-xs font-sf-pro-rounded font-semibold capitalize first:rounded-tl-[5px] last:rounded-tr-[5px]"
-            >
-              {item}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody className="border-x border-b border-charcoal/50 rounded-b-[5px]">
-        {ticketData.map((ticket) => (
-          <TableRow
-            key={ticket.ticketName}
-            className="text-xs text-black font-sf-pro-rounded capitalize"
-          >
-            <TableCell className="text-inherit">{ticket.ticketName}</TableCell>
-            <TableCell className="text-inherit">{ticket.ticketSold}</TableCell>
-            <TableCell className="text-inherit">{ticket.price}</TableCell>
-            <TableCell className="text-inherit">{ticket.status}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
   );
 }
 
@@ -108,6 +69,13 @@ function TicketCard() {
     </div>
   );
 }
+
+const columns: { key: string; label: string }[] = [
+  { key: "ticketName", label: "Ticket Name" },
+  { key: "ticketSold", label: "Ticket Sold" },
+  { key: "price", label: "Price" },
+  { key: "status", label: "Status" },
+];
 
 const ticketData: ITicketData[] = [
   {
