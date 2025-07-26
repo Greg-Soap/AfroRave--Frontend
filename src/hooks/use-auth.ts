@@ -179,7 +179,7 @@ export function useLogin() {
             navigate(getRoutePath('my_tickets'))
             break
           case 'Vendor':
-            navigate(getRoutePath('standalone'))
+            navigate(getRoutePath('vendor_profile'))
             break
           case 'Organizer':
             navigate(getRoutePath('standalone'))

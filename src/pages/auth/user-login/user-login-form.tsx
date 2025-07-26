@@ -2,10 +2,11 @@ import { FormBase, FormField } from '@/components/reusable'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
-import { useAuth } from '@/contexts/auth-context'
+import { type LoginType, useAuth } from '@/contexts/auth-context'
 import { useLogin } from '@/hooks/use-auth'
 import type { LoginData } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -45,9 +46,19 @@ export function UserLoginForm() {
   }
 
   const handleSwitchToSignup = () => {
-    // Use the login type to determine the signup type
     switchToSignup(loginType)
   }
+
+  useEffect(() => {
+    // Find the matching dummy data for the current login type
+    const dummyData = dummyLoginData.find((data) => data.type === loginType)
+
+    if (dummyData) {
+      // Set form values
+      form.setValue('email', dummyData.email)
+      form.setValue('password', dummyData.password)
+    }
+  }, [loginType, form])
 
   return (
     <div className='relative flex justify-center'>
@@ -105,3 +116,21 @@ export function UserLoginForm() {
     </div>
   )
 }
+
+const dummyLoginData: { type: LoginType; email: string; password: string }[] = [
+  {
+    type: 'creator',
+    email: 'organizer@gmail.com',
+    password: 'password',
+  },
+  {
+    type: 'vendor',
+    email: 'vendor@gmail.com',
+    password: 'password',
+  },
+  {
+    type: 'guest',
+    email: 'fans@gmail.com',
+    password: 'password',
+  },
+]

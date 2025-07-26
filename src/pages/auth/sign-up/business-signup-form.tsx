@@ -60,7 +60,7 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
       email: '',
       password: '',
       phone_number: '',
-      country_code: '',
+      country_code: '+234',
       business_name: '',
       web_url: '',
       gender: '',
@@ -226,7 +226,7 @@ function SelectField<T extends FieldValues>({
     <FormField form={form} name={name} className={className}>
       {(field) => (
         <BaseSelect
-          type='auth'
+          type='others'
           placeholder={placeholder}
           width={width}
           value={field.value}

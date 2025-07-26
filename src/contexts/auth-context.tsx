@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { useSearchParams } from 'react-router-dom'
 
 type AuthType = 'login' | 'signup'
-type LoginType = 'guest' | 'creator' | 'vendor'
+export type LoginType = 'guest' | 'creator' | 'vendor'
 type SignupType = 'guest' | 'creator' | 'vendor'
 
 interface AuthContextType {

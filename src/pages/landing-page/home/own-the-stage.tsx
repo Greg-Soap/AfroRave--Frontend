@@ -11,7 +11,7 @@ export default function OwnTheStage() {
     <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-[182px] w-full overflow-hidden'>
       {/* Background layers */}
       <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)_opacity(25%)]' />
-      <div className='absolute inset-0 bg-gradient-to-t  [background-position:0%_41%]' />
+      <div className='absolute inset-0 bg-gradient-to-b from-[#1e1f1f] via-transparent to-[#1e1f1f] from-[5%] via-50% to-[96%]' />
 
       {/* Content container */}
       <div className='relative px-5 md:px-14'>
@@ -81,7 +81,7 @@ function LinkToAuth({ href, linkName }: { href: string; linkName: string }) {
 const details: IDetails[] = [
   {
     title: 'OWN THE STAGE!',
-    href: '/?login=creator',
+    href: getRoutePath('creators_home'),
     linkName: 'Create Your Event',
     details:
       'Ready to bring your event to life? With Afro Revive, creating and managing your event has never been easier! From ticket sales to attendee insights, we give you all the tools you need to sell out your event and make it unforgettable.',
@@ -95,7 +95,7 @@ const details: IDetails[] = [
   },
   {
     title: 'READY TO CONNECT WITH MORE EVENTS?',
-    href: '/?login=vendor',
+    href: '/?signup=vendor',
     linkName: 'REGISTER AS A VENDOR',
     details:
       "Get notified about open slots, express interest, and let organizers come to you. Whether you're offering food, tech, logistics, or entertainment—we'll help you stay booked and busy!",

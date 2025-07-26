@@ -34,7 +34,7 @@ export function AuthGuard({ children, requiredAccountType }: AuthGuardProps) {
           navigate(getRoutePath('account'), { replace: true })
           break
         case 'Vendor':
-          navigate(getRoutePath('standalone'), { replace: true })
+          navigate(getRoutePath('vendor_profile'), { replace: true })
           break
         case 'Organizer':
           navigate(getRoutePath('standalone'), { replace: true })
