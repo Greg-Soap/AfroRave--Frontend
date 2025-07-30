@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { getRoutePath } from '@/config/get-route-path'
+import { isDev } from '@/lib/environment'
 import { getUserInitials } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import type { User } from '@/types/auth'
@@ -43,7 +44,7 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
     }
   }
 
-  return (
+  return isDev ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
@@ -60,7 +61,6 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
             }`}>
             {getUserInitials(user)}
           </span>
-          {/* <img src='/assets/landing-page/menu.svg' alt='' className='!w-4 !h-4' /> */}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
@@ -77,5 +77,9 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
         <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  ) : (
+    <>
+      <img src='/assets/landing-page/menu.svg' alt='' className='!w-4 !h-4' />
+    </>
   )
 }
