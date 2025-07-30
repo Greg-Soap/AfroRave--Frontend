@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
-export function FooterLinkBlock({ title, links }: IFooterLinks) {
+export function FooterLinkBlock({ title, links, className }: IFooterLinks) {
   return (
-    <div className="flex flex-col gap-4 font-sf-pro-rounded">
+    <div className={cn("flex flex-col gap-4 font-sf-pro-rounded", className)}>
       <p>{title}</p>
 
       <div className="flex flex-col gap-2">
@@ -23,4 +24,5 @@ export function FooterLinkBlock({ title, links }: IFooterLinks) {
 export interface IFooterLinks {
   title: string;
   links: { href: string; name: string }[];
+  className?: string;
 }

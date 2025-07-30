@@ -21,7 +21,7 @@ export function FooterLinks({
 
       <Separator
         orientation="vertical"
-        className={cn("h-full max-md:hidden", {
+        className={cn("h-full", {
           "bg-white": type === "default",
           "bg-black": type === "support",
         })}

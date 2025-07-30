@@ -54,7 +54,7 @@ export default function VendorProfilePage() {
         <div className="grid grid-cols-2 gap-y-3 gap-x-2">
           <ProfileSection user={user} />
           <div className="w-full flex flex-col gap-2">
-            <VendorSummarySection user={user} />
+            <VendorSummarySection />
             <InboxSection user={user} />
           </div>
           <div className="col-span-2">

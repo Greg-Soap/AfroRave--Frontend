@@ -52,7 +52,7 @@ export function EventLocation({
       <BlockName name="location" />
 
       <div className="flex flex-col gap-8">
-        <div className="w-full lg:w-[525px] xl:w-[722px] h-[452px]">
+        <div className="w-full lg:w-[525px] xl:w-[722px] h-[300px] md:h-[452px]">
           <MapContainer
             center={position}
             zoom={13}

@@ -9,17 +9,17 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="w-full flex flex-col items-center gap-7 pt-[50px] pb-16 bg-primary font-input-mono">
-      <div className=" w-full flex flex-col  gap-5 px-[1rem] md:px-[2rem]">
+    <footer className="w-full flex flex-col items-center md:gap-6 px-8 md:px-[60px] pb-3 md:pb-5 bg-primary font-sf-pro-rounded">
+      <div className=" w-full flex flex-col gap-1 pb-3 md:gap-5 md:px-[2rem]">
         <img
           src="/assets/landing-page/AR.png"
           alt="AR"
           width={83}
           height={33}
-          className="self-center"
+          className="self-center py-3 ms:py-5 md:pb-3"
         />
 
-        <FooterLinks className="max-md:flex-col md:items-center md:h-5" />
+        <FooterLinks className="max-md:justify-center items-center h-5" />
       </div>
 
       <Separator
@@ -27,13 +27,17 @@ export default function Footer() {
         className="w-full bg-[#686868] max-md:mt-7"
       />
 
-      <div className="w-full flex max-md:flex-col gap-[120px] px-[1rem] md:px-[2rem] justify-start md:pr-[160px]">
+      <div className="w-full flex justify-between md:gap-[120px] md:px-[2rem] md:justify-start md:pr-[160px]">
         {footer_links.map((footer_link) => (
-          <FooterLinkBlock key={footer_link.title} {...footer_link} />
+          <FooterLinkBlock
+            key={footer_link.title}
+            {...footer_link}
+            className="max-md:py-4"
+          />
         ))}
       </div>
 
-      <Socials className="md:!justify-end px-[1rem] md:px-[2rem]" />
+      <Socials className="justify-end pr-8 max-md:py-3 md:px-[2rem]" />
     </footer>
   );
 }

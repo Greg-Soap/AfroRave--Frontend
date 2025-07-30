@@ -33,7 +33,7 @@ export default function Cart({
   return (
     <>
       <Button
-        className="h-14 bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80"
+        className="w-full h-14 flex items-center justify-between bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80"
         onClick={() => setIsOpen(true)}
       >
         <span className="text-sm">Checkout</span>
