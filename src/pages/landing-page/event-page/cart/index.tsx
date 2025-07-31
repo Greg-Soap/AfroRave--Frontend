@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import CartContainer from "./cart-container";
 import { NavLogo } from "@/layouts/root-layout/header/nav-logo";
 import { useState, useEffect } from "react";
+import CheckoutPage from "../../checkout";
+import { X } from "lucide-react";
+import { DialogClose } from "@/components/ui/dialog";
 
 interface CartTicket {
   name: string;
@@ -25,6 +28,7 @@ export default function Cart({
 }: CartProps) {
   const [totalPrice, setTotalPrice] = useState(initialPrice);
   const [isOpen, setIsOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   useEffect(() => {
     setTotalPrice(initialPrice);
@@ -48,16 +52,13 @@ export default function Cart({
         open={isOpen}
         hasFooter
         footerContent={
-          <footer className="w-[595px] flex flex-col items-center gap-2 pl-[81px] pr-[51px] py-[30px] rounded-t-[20px] self-end ml-auto right-[73px] bg-secondary">
-            <div className="w-full flex items-center justify-between font-sf-pro-display">
-              <span className="font-light text-2xl">
-                {formatNaira(totalPrice)}
-              </span>
-              <Button className="bg-white text-black hover:bg-white/90">
-                Continue
-              </Button>
-            </div>
-          </footer>
+          <FooterContent
+            totalPrice={totalPrice}
+            action={() => {
+              setIsOpen(false);
+              setCheckoutOpen(true);
+            }}
+          />
         }
       >
         <div className="fixed top-0 left-0 w-full pointer-events-none">
@@ -71,6 +72,46 @@ export default function Cart({
           />
         </div>
       </BaseModal>
+
+      <BaseModal
+        size="full"
+        className="bg-transparent"
+        floatingCancel
+        removeCancel
+        onClose={() => setCheckoutOpen(false)}
+        open={checkoutOpen}
+      >
+        <div className="w-full flex justify-between items-center px-8 !bg-transparent">
+          <NavLogo />
+
+          <DialogClose className="bg-transparent !p-1 shadow-none !z-[1000]">
+            <X size={16} color="#000000" strokeWidth={2} />
+          </DialogClose>
+        </div>
+        <CheckoutPage {...event} tickets={initialTickets} />
+      </BaseModal>
     </>
+  );
+}
+
+function FooterContent({
+  totalPrice,
+  action,
+}: {
+  totalPrice: number;
+  action: () => void;
+}) {
+  return (
+    <footer className="w-[595px] flex flex-col items-center gap-2 pl-[81px] pr-[51px] py-[30px] rounded-t-[20px] self-end ml-auto right-[73px] bg-secondary">
+      <div className="w-full flex items-center justify-between font-sf-pro-display">
+        <span className="font-light text-2xl">{formatNaira(totalPrice)}</span>
+        <Button
+          onClick={action}
+          className="bg-white text-black hover:bg-white/90"
+        >
+          Continue
+        </Button>
+      </div>
+    </footer>
   );
 }

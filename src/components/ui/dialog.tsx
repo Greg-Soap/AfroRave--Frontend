@@ -79,7 +79,7 @@ const DialogContent = React.forwardRef<
         {!noCancel && !cancelOnOverlay && (
           <DialogPrimitive.Close
             className={cn(
-              "font-bold opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+              "z-50 font-bold opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
               floatingCancel
                 ? "absolute top-10 right-10"
                 : "w-full flex justify-end px-10 pt-6"

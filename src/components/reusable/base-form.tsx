@@ -143,7 +143,11 @@ export function FormField<T extends FieldValues>({
 
         return (
           <FormItem className={cn("flex flex-col items-start", className)}>
-            {label && <FormLabel className="text-inherit" htmlFor={name}>{label}</FormLabel>}
+            {label && (
+              <FormLabel className="text-inherit" htmlFor={name}>
+                {label}
+              </FormLabel>
+            )}
             <FormControl>
               {typeof children === "function"
                 ? children(field)
