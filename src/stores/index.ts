@@ -1,3 +1,4 @@
+import type { CreateEventRequest } from '@/types'
 import type { User } from '@/types/auth'
 import { create } from 'zustand'
 
@@ -11,6 +12,14 @@ interface AfroState {
   get isCreator(): boolean
   get isFan(): boolean
   get isVendor(): boolean
+}
+
+interface EventState {
+  eventId: string | null
+  eventData: CreateEventRequest | null
+  setEventId: (id: string) => void
+  setEventData: (data: CreateEventRequest) => void
+  resetEventData: () => void
 }
 
 // Load initial state from localStorage
@@ -80,4 +89,12 @@ export const useAfroStore = create<AfroState>()((set, get) => ({
   get isVendor() {
     return get().user?.accountType === 'Vendor'
   },
+}))
+
+export const useEventStore = create<EventState>()((set) => ({
+  eventId: null,
+  eventData: null,
+  setEventId: (id: string) => set({ eventId: id }),
+  setEventData: (data: CreateEventRequest) => set({ eventData: data }),
+  resetEventData: () => set({ eventId: null, eventData: null }),
 }))

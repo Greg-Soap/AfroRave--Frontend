@@ -4,8 +4,12 @@ import { FormFieldWithAbsoluteText } from '@/components/custom/field-with-absolu
 import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreateEvent } from '@/hooks/use-event-mutations'
+import { transformEventDetailsToCreateRequest } from '@/lib/event-transforms'
+import { FakeDataGenerator } from '@/lib/fake-data-generator'
 import { africanTimezones, ageRatings, eventCategories } from '@/pages/creators/edit-event/constant'
 import { EditEventDetailsSchema } from '@/schema/edit-event-details'
+import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -22,6 +26,9 @@ export default function EventDetailsTab({
   setActiveTabState: (tab: string) => void
 }) {
   useEffect(() => setStep(1), [])
+
+  const createEventMutation = useCreateEvent()
+  const { setEventId, setEventData } = useEventStore()
 
   const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
     resolver: zodResolver(EditEventDetailsSchema),
@@ -53,9 +60,30 @@ export default function EventDetailsTab({
     },
   })
 
-  function onSubmit(values: z.infer<typeof EditEventDetailsSchema>) {
-    console.log(values)
-    setActiveTabState('tickets')
+  async function onSubmit(values: z.infer<typeof EditEventDetailsSchema>) {
+    try {
+      // Transform form data to API format
+      const eventData = transformEventDetailsToCreateRequest(values)
+
+      // Create the event
+      const result = await createEventMutation.mutateAsync(eventData)
+
+      // Store the event ID and data for use in subsequent tabs
+      if (result && typeof result === 'object' && 'eventId' in result) {
+        setEventId(result.eventId as string)
+      } else {
+        setEventId(eventData.eventId)
+      }
+      setEventData(eventData)
+
+      console.log('Event created successfully:', result)
+
+      // Navigate to the next tab
+      setActiveTabState('tickets')
+    } catch (error) {
+      console.error('Failed to create event:', error)
+      // Error handling is already done in the mutation
+    }
   }
 
   return (
@@ -64,6 +92,13 @@ export default function EventDetailsTab({
       className='w-full flex flex-col gap-8'
       form={form}
       onSubmit={onSubmit}>
+      <FakeDataGenerator
+        type='eventDetails'
+        onGenerate={form.reset}
+        buttonText='🎲 Fill with sample data'
+        variant='outline'
+        className='mb-4'
+      />
       <FormFieldWithCounter
         name='EVENT NAME'
         field_name='name'
@@ -242,7 +277,7 @@ export default function EventDetailsTab({
         </div>
       </div>
 
-      <SubmitBtn />
+      <SubmitBtn isLoading={createEventMutation.isPending} />
     </TabContainer>
   )
 }
