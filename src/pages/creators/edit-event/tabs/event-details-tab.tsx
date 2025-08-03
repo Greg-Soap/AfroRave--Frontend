@@ -67,7 +67,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
     <FormBase
       form={form}
       onSubmit={onSubmit}
-      className="w-full flex flex-col gap-8"
+      className="w-full flex flex-col space-y-5 md:space-y-8"
     >
       <FormFieldWithCounter
         name="NAME"
@@ -85,6 +85,35 @@ function EventDetailsForm({ event }: { event: IEvents }) {
         )}
       </FormFieldWithCounter>
 
+      <div className="w-full grid grid-cols-2 gap-5 md:gap-8">
+        <FormField form={form} name="age_rating" label="Age Rating">
+          {(field) => (
+            <BaseSelect
+              type="auth"
+              items={ageRatings}
+              defaultValue="PG"
+              placeholder="Select an age rating."
+              triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+              value={field.value as string}
+              onChange={field.onChange}
+            />
+          )}
+        </FormField>
+
+        <FormField form={form} name="category" label="Event Category">
+          {(field) => (
+            <BaseSelect
+              type="auth"
+              items={eventCategories}
+              placeholder="Select a Category."
+              triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
+              value={field.value as string}
+              onChange={field.onChange}
+            />
+          )}
+        </FormField>
+      </div>
+
       <FormField form={form} name="venue" label="Venue">
         {(field) => (
           <Input
@@ -92,33 +121,6 @@ function EventDetailsForm({ event }: { event: IEvents }) {
             className="uppercase"
             {...field}
             value={field.value == null ? "" : String(field.value)}
-          />
-        )}
-      </FormField>
-
-      <FormField form={form} name="age_rating" label="Age Rating">
-        {(field) => (
-          <BaseSelect
-            type="auth"
-            items={ageRatings}
-            defaultValue="PG"
-            placeholder="Select an age rating."
-            triggerClassName="w-[302px] h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-            value={field.value as string}
-            onChange={field.onChange}
-          />
-        )}
-      </FormField>
-
-      <FormField form={form} name="category" label="Event Category">
-        {(field) => (
-          <BaseSelect
-            type="auth"
-            items={eventCategories}
-            placeholder="Select a Category."
-            triggerClassName="w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display"
-            value={field.value as string}
-            onChange={field.onChange}
           />
         )}
       </FormField>

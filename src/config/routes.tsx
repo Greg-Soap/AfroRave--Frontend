@@ -13,17 +13,24 @@ const NotFoundPage = lazy(() => import("../pages/landing-page/not-found"));
 const AboutUsPage = lazy(() => import("../pages/landing-page/about-us"));
 const BlogPage = lazy(() => import("../pages/landing-page/blog"));
 const CreatorsPage = lazy(() => import("../pages/landing-page/creators"));
-const RefundPolicyPage = lazy(() => import("../pages/landing-page/refund-policy"));
+const RefundPolicyPage = lazy(
+  () => import("../pages/landing-page/refund-policy")
+);
 const WorkWithUsPage = lazy(() => import("../pages/landing-page/work-with-us"));
-const ResaleMarketPlacePage = lazy(() => import("../pages/landing-page/resale-marketplace"));
+const ResaleMarketPlacePage = lazy(
+  () => import("../pages/landing-page/resale-marketplace")
+);
 const IndividualResaleTicket = lazy(
-  () => import("../pages/landing-page/resale-marketplace/individual-resale-event")
+  () =>
+    import("../pages/landing-page/resale-marketplace/individual-resale-event")
 );
 const SellPage = lazy(() => import("../pages/landing-page/sell"));
 const TermsAndConditionPage = lazy(
   () => import("../pages/landing-page/terms-and-condition")
 );
-const PrivacyPolicyPage = lazy(() => import("../pages/landing-page/privacy-policy"));
+const PrivacyPolicyPage = lazy(
+  () => import("../pages/landing-page/privacy-policy")
+);
 
 export const routes: RouteObject[] = [
   {
