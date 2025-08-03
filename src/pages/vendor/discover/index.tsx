@@ -1,24 +1,22 @@
-import { AddFilterBUtton } from "@/pages/creators/standalone/components/add-filter-btn";
-import WishListBtn from "../component/wishlist-button";
-import { Bookmark } from "lucide-react";
-import { DashboardCards } from "@/components/custom/dashboard-cards";
-import { CalendarIcon } from "@/components/icons/calendar";
+// import { DashboardCards } from '@/components/custom/dashboard-cards'
+import { CalendarIcon } from '@/components/icons/calendar'
+import { AddFilterBUtton } from '@/pages/creators/standalone/components/add-filter-btn'
+// import { Bookmark } from 'lucide-react'
+import WishListBtn from '../component/wishlist-button'
 
 export default function VendorDiscoverPage() {
   return (
-    <section className="w-full h-full flex flex-col justify-start items-start px-[1px]">
-      <div className="w-full h-14 flex items-center justify-between px-8 bg-white">
+    <section className='w-full h-full flex flex-col justify-start items-start px-[1px]'>
+      <div className='w-full h-14 flex items-center justify-between px-8 bg-white'>
         <AddFilterBUtton />
 
         <WishListBtn />
       </div>
 
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <div className="w-fit flex items-center gap-1 stroke-medium-gray text-medium-gray">
-          <CalendarIcon stroke="inherit" className="size-8" />
-          <p className="text-2xl font-bold font-sf-pro-display uppercase">
-            no scheduled events
-          </p>
+      <div className='w-full h-full flex flex-col items-center justify-center'>
+        <div className='w-fit flex items-center gap-1 stroke-medium-gray text-medium-gray'>
+          <CalendarIcon stroke='inherit' className='size-8' />
+          <p className='text-2xl font-bold font-sf-pro-display uppercase'>no scheduled events</p>
         </div>
       </div>
 
@@ -32,34 +30,34 @@ export default function VendorDiscoverPage() {
         />
       </div> */}
     </section>
-  );
+  )
 }
 
-function DiscoverCards({ image, name, available_slots }: IDiscoverCardProps) {
-  return (
-    <DashboardCards
-      image={image}
-      name={name}
-      className="grid-cols-2"
-      cardButtons={[
-        { Icon: Bookmark, alt: "Bookmark" },
-        { src: "/assets/dashboard/creator/ellipses.png", alt: "Ellipses" },
-      ]}
-      cardInfo={[
-        <p
-          key="available_slot"
-          className="font-sf-pro-rounded text-xs text-mid-dark-gray"
-        >
-          Available Slots:{" "}
-          <span className="text-[#34C759] font-medium">{available_slots}</span>
-        </p>,
-      ]}
-    />
-  );
-}
+// function DiscoverCards({ image, name, available_slots }: IDiscoverCardProps) {
+//   return (
+//     <DashboardCards
+//       image={image}
+//       name={name}
+//       className="grid-cols-2"
+//       cardButtons={[
+//         { Icon: Bookmark, alt: "Bookmark" },
+//         { src: "/assets/dashboard/creator/ellipses.png", alt: "Ellipses" },
+//       ]}
+//       cardInfo={[
+//         <p
+//           key="available_slot"
+//           className="font-sf-pro-rounded text-xs text-mid-dark-gray"
+//         >
+//           Available Slots:{" "}
+//           <span className="text-[#34C759] font-medium">{available_slots}</span>
+//         </p>,
+//       ]}
+//     />
+//   );
+// }
 
-interface IDiscoverCardProps {
-  image: string;
-  name: string;
-  available_slots: number;
-}
+// interface IDiscoverCardProps {
+//   image: string;
+//   name: string;
+//   available_slots: number;
+// }
