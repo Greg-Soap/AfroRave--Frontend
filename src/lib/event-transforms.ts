@@ -1,5 +1,14 @@
+import type { bannerSchema, themeSchema } from '@/pages/creators/add-event/schemas/theme-schema'
+import type { ticketSchema } from '@/pages/creators/add-event/schemas/tickets-schema'
+import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
+import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
-import type { CreateEventRequest } from '@/types'
+import type {
+  CreateEventRequest,
+  CreateThemeRequest,
+  CreateTicketRequest,
+  CreateVendorRequest,
+} from '@/types'
 import type { z } from 'zod'
 
 /**
@@ -119,4 +128,175 @@ export function transformCreateRequestToEventDetails(
       facebook: eventData.eventDetails.socials.facebook,
     },
   }
+}
+
+/**
+ * Transform form data from CreateTicketForm to CreateTicketRequest format
+ */
+export function transformTicketsToCreateRequest(
+  formData: z.infer<typeof ticketSchema>,
+  eventId: string,
+): CreateTicketRequest[] {
+  // Convert time format from 12-hour to 24-hour
+  const convertTo24Hour = (hour: string, minute: string, period: 'AM' | 'PM'): string => {
+    let hour24 = Number.parseInt(hour, 10)
+    if (period === 'PM' && hour24 !== 12) hour24 += 12
+    if (period === 'AM' && hour24 === 12) hour24 = 0
+    return `${hour24.toString().padStart(2, '0')}:${minute}`
+  }
+
+  // Format date to YYYY-MM-DD
+  const formatDate = (date: Date): string => {
+    return date.toISOString().split('T')[0]
+  }
+
+  // Convert form data to API format for each ticket
+  return formData.tickets.map((ticket) => ({
+    ticketName: ticket.ticketName,
+    accessType: ticket.type,
+    salesType: ticket.salesType,
+    ticketType: ticket.ticketType,
+    quantity: Number.parseInt(ticket.quantity.amount, 10),
+    price: Number.parseFloat(ticket.price),
+    purchaseLimit: 10, // Default value, can be made configurable
+    groupSize: 1, // Default value, can be made configurable
+    validDays: 365, // Default value, can be made configurable
+    description: ticket.description,
+    eventId,
+    ticketDetails: {
+      saleImmediately: formData.whenToStart === 'immediately',
+      saleBegins: formData.scheduledDate
+        ? `${formatDate(formData.scheduledDate.date)}T${convertTo24Hour(
+            formData.scheduledDate.hour,
+            formData.scheduledDate.minute,
+            formData.scheduledDate.period,
+          )}:00`
+        : new Date().toISOString(),
+      allowResell: ticket.allowResell === 'allow',
+      mail: {
+        body: formData.confirmationMailText || '',
+      },
+    },
+  }))
+}
+
+/**
+ * Transform form data from ThemeTab to CreateThemeRequest format
+ */
+export function transformThemeToCreateRequest(
+  themeData: z.infer<typeof themeSchema>,
+  bannerData: z.infer<typeof bannerSchema>,
+  eventId: string,
+): CreateThemeRequest {
+  // Convert files to base64 strings (this is a simplified approach)
+  // In a real implementation, you might want to upload files to a CDN first
+  const convertFileToBase64 = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+  }
+
+  // For now, we'll return a placeholder structure
+  // In a real implementation, you'd convert the files to base64 or upload them
+  return {
+    mobileMedia: {
+      flyer: 'placeholder-flyer-url', // Replace with actual file upload logic
+      background: 'placeholder-background-url',
+    },
+    desktopMedia: {
+      flyer: 'placeholder-flyer-url', // Replace with actual file upload logic
+      background: 'placeholder-background-url',
+    },
+    theme: {
+      themeName: `Theme ${themeData.theme}`,
+    },
+    eventId,
+  }
+}
+
+/**
+ * Transform form data from ServiceForm to CreateVendorRequest format
+ */
+export function transformServiceToCreateRequest(
+  formData: z.infer<typeof serviceSchema>,
+  eventId: string,
+): CreateVendorRequest[] {
+  // Convert time format from 12-hour to 24-hour
+  const convertTo24Hour = (hour: string, minute: string, period: 'AM' | 'PM'): string => {
+    let hour24 = Number.parseInt(hour, 10)
+    if (period === 'PM' && hour24 !== 12) hour24 += 12
+    if (period === 'AM' && hour24 === 12) hour24 = 0
+    return `${hour24.toString().padStart(2, '0')}:${minute}`
+  }
+
+  // Convert form data to API format for each service
+  return formData.service.map((service) => ({
+    vendorType: service.type,
+    category: service.category,
+    description: service.description,
+    eventId,
+    vendorDetails: {
+      slotData: {
+        slotName: '', // Not applicable for services
+        slotNumber: 0,
+        price: 0,
+      },
+      serviceData: {
+        serviceName: service.name,
+        minBudget: 0, // This could be made configurable
+        maxBudget: 0, // This could be made configurable
+        startDate: `${new Date().toISOString().split('T')[0]}T${convertTo24Hour(
+          service.start.hour,
+          service.start.minute,
+          service.start.period,
+        )}:00`,
+        endDate: `${new Date().toISOString().split('T')[0]}T${convertTo24Hour(
+          service.stop.hour,
+          service.stop.minute,
+          service.stop.period,
+        )}:00`,
+      },
+      contact: {
+        email: formData.email,
+        phoneNumbers: formData.phone.map((phone) => `${phone.countryCode}${phone.number}`),
+      },
+    },
+  }))
+}
+
+/**
+ * Transform form data from SlotForm to CreateVendorRequest format
+ */
+export function transformSlotToCreateRequest(
+  formData: z.infer<typeof slotSchema>,
+  eventId: string,
+): CreateVendorRequest[] {
+  // Convert form data to API format for each slot
+  return formData.slot.map((slot) => ({
+    vendorType: slot.type,
+    category: slot.category,
+    description: slot.description,
+    eventId,
+    vendorDetails: {
+      slotData: {
+        slotName: slot.name,
+        slotNumber: Number.parseInt(slot.slotAmount, 10),
+        price: Number.parseFloat(slot.pricePerSlot),
+      },
+      serviceData: {
+        serviceName: '', // Not applicable for slots
+        minBudget: 0,
+        maxBudget: 0,
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+      },
+      contact: {
+        email: formData.email,
+        phoneNumbers: formData.phone.map((phone) => `${phone.countryCode}${phone.number}`),
+      },
+    },
+  }))
 }

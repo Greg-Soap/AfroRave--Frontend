@@ -3,6 +3,7 @@ import type { ticketSchema } from '@/pages/creators/add-event/schemas/tickets-sc
 import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
+import type { ProfileSchema } from '@/schema/profile-shema'
 import { faker } from '@faker-js/faker'
 import type { UseFormReset } from 'react-hook-form'
 import type { z } from 'zod'
@@ -301,6 +302,34 @@ const fakeDataGenerators = {
     })),
     showSocialHandles: faker.datatype.boolean(),
   }),
+
+  profile: (): z.infer<typeof ProfileSchema> => ({
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password({ length: 8 }),
+    gender: faker.helpers.arrayElement(['Male', 'Female', 'Other']),
+    birthday: {
+      month: faker.number.int({ min: 1, max: 12 }).toString(),
+      day: faker.number.int({ min: 1, max: 28 }).toString(),
+      year: faker.number.int({ min: 1980, max: 2005 }).toString(),
+    },
+    country: faker.helpers.arrayElement([
+      'Nigeria',
+      'Kenya',
+      'South Africa',
+      'Ghana',
+      'Egypt',
+      'Ethiopia',
+      'Tanzania',
+      'Uganda',
+    ]),
+    state: faker.location.state(),
+    number: {
+      country_code: faker.helpers.arrayElement(['+234', '+254', '+27', '+20', '+233']),
+      digits: faker.number.int({ min: 7000000000, max: 9999999999 }).toString(),
+    },
+  }),
 }
 
 type FakeDataType = keyof typeof fakeDataGenerators
@@ -367,3 +396,4 @@ export const generateFakeEventDetails = fakeDataGenerators.eventDetails
 export const generateFakeTickets = fakeDataGenerators.tickets
 export const generateFakeVendorSlots = fakeDataGenerators.vendorSlots
 export const generateFakeVendorServices = fakeDataGenerators.vendorServices
+export const generateFakeProfile = fakeDataGenerators.profile

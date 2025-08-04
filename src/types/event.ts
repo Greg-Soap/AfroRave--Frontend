@@ -39,6 +39,146 @@ export interface CreateEventRequest {
   eventDetails: EventDetails
 }
 
+// API Response Types
+export interface ApiResponse<T> {
+  message: string
+  data: T
+  cursor?: string
+  id?: string
+  status: boolean
+  statusCode: number
+}
+
+// Event Data Types
+export interface EventData {
+  eventId: string
+  eventName: string
+  venue: string
+  startDate: string
+  endDate: string
+  isPublished: boolean
+  customUrl: string
+}
+
+export type EventsResponse = ApiResponse<EventData[]>
+
+// Detailed Event Data for GET /api/Event/{eventId}
+export interface EventDetailData {
+  eventId: string
+  eventName: string
+  venue: string
+  description: string
+  ageRating: string
+  customUrl: string
+  isPublished: boolean
+  eventDate: {
+    startDate: string
+    endDate: string
+    startTime: string
+    endTime: string
+    timezone: string
+    frequency: string
+    occurance: number
+  }
+  eventDetails: {
+    termsOfRefund: string
+    eventContact: string
+    socials: string
+    mobileMedia: string
+    desktopMedia: string
+    theme: string
+  }
+}
+
+export type EventDetailResponse = ApiResponse<EventDetailData>
+
+// Ticket Data for GET /api/Event/ticket/{ticketId}
+export interface TicketData {
+  ticketId: string
+  ticketName: string
+  price: number
+  quantity: number
+  availableQuantity: number
+  eventId: string
+  eventName: string
+  ticketDetails: {
+    description: string
+    benefits: string
+    restrictions: string
+  }
+}
+
+export type TicketResponse = ApiResponse<TicketData>
+
+// Vendor Data for GET /api/Event/vendor/{vendorId}
+export interface VendorData {
+  vendorId: string
+  vendorName: string
+  description: string
+  contactEmail: string
+  contactPhone: string
+  eventId: string
+  eventName: string
+  vendorDetails: {
+    website: string
+    socialMedia: string
+    services: string
+    location: string
+  }
+}
+
+export type VendorResponse = ApiResponse<VendorData>
+
+// Promo Code Data for GET /api/Event/promocode/{promoId}
+export interface PromoCodeData {
+  promoCode: string
+  discountType: string
+  discountValue: number
+  discountUsage: number
+  startDate: string
+  endDate: string
+  eventId: string
+  eventName: string
+  promoDetails: {
+    description: string
+    terms: string
+    restrictions: string
+  }
+}
+
+export type PromoCodeResponse = ApiResponse<PromoCodeData>
+
+// Theme Data for GET /api/Event/theme/{eventId}
+export interface ThemeData {
+  termsOfRefund: string
+  eventContact: string
+  socials: string
+  mobileMedia: string
+  desktopMedia: string
+  theme: string
+}
+
+export type ThemeResponse = ApiResponse<ThemeData>
+
+// Trending Event Data for GET /api/Event/trending
+export interface TrendingEventData {
+  eventId: string
+  eventName: string
+  venue: string
+  startDate: string
+  endDate: string
+  views: number
+  ticketsSold: number
+  customUrl: string
+}
+
+export type TrendingEventsResponse = ApiResponse<TrendingEventData[]>
+
+// List Response Types
+export type EventTicketsResponse = ApiResponse<TicketData[]>
+export type EventPromoCodesResponse = ApiResponse<PromoCodeData[]>
+export type EventVendorsResponse = ApiResponse<VendorData[]>
+
 // Ticket creation interfaces
 export interface TicketMail {
   body: string
