@@ -2,8 +2,9 @@ import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
+import { usePublishEvent } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
-import { useAfroStore } from '@/stores'
+import { useAfroStore, useEventStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -16,6 +17,8 @@ import VendorTab from './tabs/vendor-tab'
 
 export default function AddEventPage() {
   const { user } = useAfroStore()
+  const { eventId } = useEventStore()
+  const publishEventMutation = usePublishEvent()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState<string>('event-details')
   const [heading, setHeading] = useState<string>('')
@@ -64,6 +67,21 @@ export default function AddEventPage() {
       setSearchParams({ tab: previousTab })
     } else {
       navigate(-1)
+    }
+  }
+
+  const handlePublishEvent = async () => {
+    if (!eventId) {
+      console.error('No event ID found')
+      return
+    }
+
+    try {
+      await publishEventMutation.mutateAsync(eventId)
+      // Navigate to creator dashboard after successful publish
+      navigate(getRoutePath('creators_home'))
+    } catch (error) {
+      console.error('Failed to publish event:', error)
     }
   }
 
@@ -124,6 +142,8 @@ export default function AddEventPage() {
               themeBtnVisibility={themeBtnVisibility}
               setActiveTabState={setActiveTabState}
               navigate={navigate}
+              handlePublishEvent={handlePublishEvent}
+              isPublishing={publishEventMutation.isPending}
             />
 
             <section className='container w-full flex flex-col gap-10'>
@@ -170,12 +190,16 @@ function TabNav({
   themeBtnVisibility,
   setActiveTabState,
   navigate,
+  handlePublishEvent,
+  isPublishing,
 }: {
   activeTab: string
   handleBackClick: () => void
   themeBtnVisibility: boolean
   setActiveTabState: (incomingTab: string) => void
   navigate: (path: string) => void
+  handlePublishEvent: () => void
+  isPublishing: boolean
 }) {
   return (
     <div className='w-full h-fit flex items-center justify-between py-3 px-5 md:px-8'>
@@ -193,7 +217,7 @@ function TabNav({
         )}
 
         {activeTab === 'publish' && (
-          <NavBtn name={activeTab} action={() => console.log('hello world')} />
+          <NavBtn name={isPublishing ? 'PUBLISHING...' : 'PUBLISH'} action={handlePublishEvent} />
         )}
 
         <Button
