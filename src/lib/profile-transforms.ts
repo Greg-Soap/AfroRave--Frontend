@@ -1,6 +1,5 @@
 import type { ProfileSchema } from '@/schema/profile-shema'
-import type { UserProfileResponse } from '@/services/profile.service'
-import type { UpdateUserProfileRequest } from '@/types'
+import type { UpdateUserProfileRequest, UserProfileData } from '@/types'
 import type { z } from 'zod'
 
 /**
@@ -32,16 +31,16 @@ export function transformProfileToUpdateRequest(
  * Transforms API response data to form format
  */
 export function transformProfileFromResponse(
-  apiData: UserProfileResponse,
+  apiData: UserProfileData,
 ): z.infer<typeof ProfileSchema> {
   // Parse date of birth
-  const dateOfBirth = new Date(apiData.dateOfBirth)
+  const dateOfBirth = new Date(apiData.createdDate)
   const year = dateOfBirth.getFullYear().toString()
   const month = (dateOfBirth.getMonth() + 1).toString()
   const day = dateOfBirth.getDate().toString()
 
   // Parse phone number
-  const phoneNumber = apiData.telphone || ''
+  const phoneNumber = apiData.phoneNumber || ''
   const countryCode = phoneNumber.startsWith('+') ? phoneNumber.substring(0, 4) : ''
   const digits = phoneNumber.startsWith('+') ? phoneNumber.substring(4) : phoneNumber
 
@@ -50,14 +49,14 @@ export function transformProfileFromResponse(
     last_name: apiData.lastName || '',
     email: apiData.email || '',
     password: '', // Don't populate password from API
-    gender: apiData.gender || '',
+    gender: apiData.userType || '',
     birthday: {
       month,
       day,
       year,
     },
-    country: apiData.country || '',
-    state: apiData.state || '',
+    country: '',
+    state: '',
     number: {
       country_code: countryCode,
       digits,

@@ -69,7 +69,6 @@ export function useDeleteEvent() {
   return useMutation({
     mutationFn: (eventId: string) => eventService.deleteEvent(eventId),
     onSuccess: (data, eventId) => {
-      // Remove the event from cache and invalidate lists
       queryClient.removeQueries({ queryKey: eventKeys.detail(eventId) })
       queryClient.invalidateQueries({ queryKey: eventKeys.organizer() })
 
@@ -106,8 +105,6 @@ export function usePublishEvent() {
 
 // Ticket mutations
 export function useCreateTicket() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (data: CreateTicketRequest) => eventService.createTicket(data),
     onSuccess: (data) => {
@@ -122,8 +119,6 @@ export function useCreateTicket() {
 }
 
 export function useUpdateTicket() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: ({ ticketId, data }: { ticketId: string; data: CreateTicketRequest }) =>
       eventService.updateTicket(ticketId, data),
@@ -139,8 +134,6 @@ export function useUpdateTicket() {
 }
 
 export function useDeleteTicket() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (ticketId: string) => eventService.deleteTicket(ticketId),
     onSuccess: (data) => {
@@ -156,8 +149,6 @@ export function useDeleteTicket() {
 
 // Vendor mutations
 export function useCreateVendor() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (data: CreateVendorRequest) => eventService.createVendor(data),
     onSuccess: (data) => {
@@ -172,8 +163,6 @@ export function useCreateVendor() {
 }
 
 export function useUpdateVendor() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: ({ vendorId, data }: { vendorId: string; data: CreateVendorRequest }) =>
       eventService.updateVendor(vendorId, data),
@@ -189,8 +178,6 @@ export function useUpdateVendor() {
 }
 
 export function useDeleteVendor() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (vendorId: string) => eventService.deleteVendor(vendorId),
     onSuccess: (data) => {
@@ -206,8 +193,6 @@ export function useDeleteVendor() {
 
 // Promo code mutations
 export function useCreatePromoCode() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (data: CreatePromoCodeRequest) => eventService.createPromoCode(data),
     onSuccess: (data) => {
@@ -222,8 +207,6 @@ export function useCreatePromoCode() {
 }
 
 export function useUpdatePromoCode() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: ({ promoId, data }: { promoId: string; data: CreatePromoCodeRequest }) =>
       eventService.updatePromoCode(promoId, data),
@@ -239,8 +222,6 @@ export function useUpdatePromoCode() {
 }
 
 export function useDeletePromoCode() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (promoId: string) => eventService.deletePromoCode(promoId),
     onSuccess: (data) => {
@@ -256,8 +237,6 @@ export function useDeletePromoCode() {
 
 // Theme mutations
 export function useCreateTheme() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (data: CreateThemeRequest) => eventService.createTheme(data),
     onSuccess: (data) => {
@@ -272,8 +251,6 @@ export function useCreateTheme() {
 }
 
 export function useUpdateTheme() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: ({ eventId, data }: { eventId: string; data: CreateThemeRequest }) =>
       eventService.updateTheme(eventId, data),

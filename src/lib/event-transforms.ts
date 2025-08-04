@@ -1,4 +1,4 @@
-import type { bannerSchema, themeSchema } from '@/pages/creators/add-event/schemas/theme-schema'
+import type { themeSchema } from '@/pages/creators/add-event/schemas/theme-schema'
 import type { ticketSchema } from '@/pages/creators/add-event/schemas/tickets-schema'
 import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
@@ -185,29 +185,16 @@ export function transformTicketsToCreateRequest(
  */
 export function transformThemeToCreateRequest(
   themeData: z.infer<typeof themeSchema>,
-  bannerData: z.infer<typeof bannerSchema>,
+  // bannerData: z.infer<typeof bannerSchema>,
   eventId: string,
 ): CreateThemeRequest {
-  // Convert files to base64 strings (this is a simplified approach)
-  // In a real implementation, you might want to upload files to a CDN first
-  const convertFileToBase64 = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = reject
-      reader.readAsDataURL(file)
-    })
-  }
-
-  // For now, we'll return a placeholder structure
-  // In a real implementation, you'd convert the files to base64 or upload them
   return {
     mobileMedia: {
-      flyer: 'placeholder-flyer-url', // Replace with actual file upload logic
+      flyer: 'placeholder-flyer-url',
       background: 'placeholder-background-url',
     },
     desktopMedia: {
-      flyer: 'placeholder-flyer-url', // Replace with actual file upload logic
+      flyer: 'placeholder-flyer-url',
       background: 'placeholder-background-url',
     },
     theme: {

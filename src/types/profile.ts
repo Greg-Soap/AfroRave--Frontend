@@ -1,3 +1,5 @@
+import type { ApiResponse } from './api'
+
 // Profile update interfaces
 export interface UpdateUserProfileRequest {
   firstName: string
@@ -9,16 +11,6 @@ export interface UpdateUserProfileRequest {
   country: string
   state: string
   password: string
-}
-
-// API Response Types
-export interface ApiResponse<T> {
-  message: string
-  data: T
-  cursor?: string
-  id?: string
-  status: boolean
-  statusCode: number
 }
 
 // User Profile Data for GET /api/Profile/user

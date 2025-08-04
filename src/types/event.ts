@@ -1,3 +1,5 @@
+import type { ApiResponse } from './api'
+
 // Event creation interfaces
 export interface EventContact {
   email: string
@@ -37,16 +39,6 @@ export interface CreateEventRequest {
   eventId: string
   eventDate: EventDate
   eventDetails: EventDetails
-}
-
-// API Response Types
-export interface ApiResponse<T> {
-  message: string
-  data: T
-  cursor?: string
-  id?: string
-  status: boolean
-  statusCode: number
 }
 
 // Event Data Types

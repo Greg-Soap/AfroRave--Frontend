@@ -132,11 +132,7 @@ function CombinedThemeForm({
         return
       }
 
-      const themeRequest = transformThemeToCreateRequest(
-        { theme: values.theme },
-        values.banner,
-        eventId,
-      )
+      const themeRequest = transformThemeToCreateRequest({ theme: values.theme }, eventId)
 
       const result = await createThemeMutation.mutateAsync(themeRequest)
 

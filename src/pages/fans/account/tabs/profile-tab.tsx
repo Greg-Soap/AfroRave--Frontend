@@ -29,7 +29,7 @@ export default function ProfileTab() {
   // Load profile data into form when available
   useEffect(() => {
     if (profileData) {
-      const transformedData = transformProfileFromResponse(profileData)
+      const transformedData = transformProfileFromResponse(profileData.data)
       form.reset(transformedData)
     }
   }, [profileData, form])
