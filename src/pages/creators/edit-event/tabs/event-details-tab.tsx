@@ -73,7 +73,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       const eventData = {
         eventName: values.name,
         ageRating: values.age_rating,
-        categoryId: values.category,
+        category: values.category,
         venue: values.venue,
         description: values.description,
         customUrl: values.custom_url || '',

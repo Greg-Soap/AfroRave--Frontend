@@ -12,6 +12,33 @@ import type {
 import type { z } from 'zod'
 
 /**
+ * Convert timezone name to UTC offset format (e.g., "Africa/Lagos" -> "+1")
+ * @param timezoneName - The timezone name (e.g., "Africa/Lagos")
+ * @returns The UTC offset in format "+H" or "-H" (just the hour)
+ */
+export function convertTimezoneToUTCOffset(timezoneName: string): string {
+  try {
+    const date = new Date()
+    const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))
+    const tzDate = new Date(date.toLocaleString('en-US', { timeZone: timezoneName }))
+
+    // Calculate the difference in minutes
+    const diffInMinutes = (tzDate.getTime() - utcDate.getTime()) / (1000 * 60)
+
+    // Convert to hours (rounded to nearest hour)
+    const hours = Math.round(diffInMinutes / 60)
+
+    // Format as +H or -H (just the hour)
+    const sign = hours >= 0 ? '+' : '-'
+    return `${sign}${Math.abs(hours)}`
+  } catch {
+    // Fallback to GMT if timezone is invalid
+    console.warn(`Invalid timezone: ${timezoneName}, falling back to GMT`)
+    return '+0'
+  }
+}
+
+/**
  * Transform form data from EventDetailsTab to CreateEventRequest format
  */
 export function transformEventDetailsToCreateRequest(
@@ -34,16 +61,19 @@ export function transformEventDetailsToCreateRequest(
   // Generate a unique event ID if not provided
   const generatedEventId = eventId || crypto.randomUUID()
 
+  // Convert timezone to UTC offset format
+  const timezoneOffset = convertTimezoneToUTCOffset(formData.time_zone)
+
   return {
     eventName: formData.name,
     ageRating: formData.age_rating,
-    categoryId: formData.category, // This might need to be a UUID in the actual API
+    category: formData.category,
     venue: formData.venue,
     description: formData.description,
     customUrl: formData.custom_url,
     eventId: generatedEventId,
     eventDate: {
-      timezone: formData.time_zone,
+      timezone: timezoneOffset, // Use UTC offset instead of timezone name
       startDate: formatDate(formData.start_date.date),
       endDate: formatDate(formData.end_date.date),
       frequency: 'once', // Default to once, can be made configurable
@@ -102,7 +132,7 @@ export function transformCreateRequestToEventDetails(
   return {
     name: eventData.eventName,
     age_rating: eventData.ageRating,
-    category: eventData.categoryId,
+    category: eventData.category,
     venue: eventData.venue,
     description: eventData.description,
     custom_url: eventData.customUrl,

@@ -31,8 +31,8 @@ export interface EventDate {
 
 export interface CreateEventRequest {
   eventName: string
-  ageRating: string
-  categoryId: string
+  ageRating: 'PG' | '16+' | '18+'
+  category: string
   venue: string
   description: string
   customUrl: string
@@ -60,7 +60,7 @@ export interface EventDetailData {
   eventName: string
   venue: string
   description: string
-  ageRating: string
+  ageRating: 'PG' | '16+' | '18+'
   customUrl: string
   isPublished: boolean
   eventDate: {

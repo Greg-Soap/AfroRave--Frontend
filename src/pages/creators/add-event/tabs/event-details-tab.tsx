@@ -64,9 +64,11 @@ export default function EventDetailsTab({
     try {
       // Transform form data to API format
       const eventData = transformEventDetailsToCreateRequest(values)
+      console.log('eventData', eventData)
 
       // Create the event
       const result = await createEventMutation.mutateAsync(eventData)
+      console.log('result', result)
 
       // Store the event ID and data for use in subsequent tabs
       if (result && typeof result === 'object' && 'eventId' in result) {
