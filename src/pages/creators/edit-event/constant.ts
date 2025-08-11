@@ -92,3 +92,9 @@ export const africanTimezones: { value: string; label: string }[] = [
   { value: 'Africa/Tunis', label: 'CET – Tunis' },
   { value: 'Africa/Windhoek', label: 'CAT – Windhoek' },
 ]
+
+export const frequencyOptions: { value: string; label: string }[] = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+]

@@ -5,13 +5,15 @@ import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateEvent } from '@/hooks/use-event-mutations'
+import { OnlyShowIf } from '@/lib/environment'
 import { transformEventDetailsToCreateRequest } from '@/lib/event-transforms'
 import { FakeDataGenerator } from '@/lib/fake-data-generator'
+import { frequencyOptions } from '@/pages/creators/add-event/constant'
 import { africanTimezones, ageRatings, eventCategories } from '@/pages/creators/edit-event/constant'
 import { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 import { SelectField } from '../component/select-field'
@@ -29,6 +31,7 @@ export default function EventDetailsTab({
 
   const createEventMutation = useCreateEvent()
   const { setEventId, setEventData } = useEventStore()
+  const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
 
   const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
     resolver: zodResolver(EditEventDetailsSchema),
@@ -38,6 +41,9 @@ export default function EventDetailsTab({
       category: 'festival',
       venue: '',
       description: '',
+      event_type: 'standalone',
+      frequency: 'weekly',
+      occurrence: 1,
       start_date: {
         date: new Date(),
         hour: '12',
@@ -59,6 +65,18 @@ export default function EventDetailsTab({
       },
     },
   })
+
+  // Update form values when event type changes
+  useEffect(() => {
+    form.setValue('event_type', eventType)
+    if (eventType === 'standalone') {
+      form.setValue('frequency', undefined)
+      form.setValue('occurrence', undefined)
+    } else {
+      form.setValue('frequency', 'weekly')
+      form.setValue('occurrence', 1)
+    }
+  }, [eventType, form])
 
   async function onSubmit(values: z.infer<typeof EditEventDetailsSchema>) {
     try {
@@ -182,14 +200,17 @@ export default function EventDetailsTab({
           </p>
           <div className='flex gap-2'>
             <Button
-              variant='destructive'
+              variant={eventType === 'standalone' ? 'destructive' : 'outline'}
               type='button'
+              onClick={() => setEventType('standalone')}
               className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text'>
               Standalone
             </Button>
             <Button
+              variant={eventType === 'season' ? 'destructive' : 'outline'}
               type='button'
-              className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text bg-[#DDDDDD] text-black hover:bg-black/20'>
+              onClick={() => setEventType('season')}
+              className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text'>
               Season
             </Button>
           </div>
@@ -203,6 +224,38 @@ export default function EventDetailsTab({
           placeholder='Select a time zone.'
           triggerClassName='w-full'
         />
+
+        <OnlyShowIf condition={eventType === 'season'}>
+          <div className='grid grid-cols-2 gap-4'>
+            <SelectField
+              form={form}
+              name='frequency'
+              label='Frequency'
+              data={frequencyOptions}
+              placeholder='Select frequency.'
+              triggerClassName='w-full'
+            />
+
+            <FormField form={form} name='occurrence' label='Occurrence'>
+              {(field) => (
+                <Input
+                  type='number'
+                  min={1}
+                  max={365}
+                  placeholder='Enter number of occurrences.'
+                  {...field}
+                  value={field.value == null ? '' : String(field.value)}
+                  onChange={(e) => {
+                    const value = Number.parseInt(e.target.value, 10)
+                    if (value >= 1 && value <= 365) {
+                      field.onChange(value)
+                    }
+                  }}
+                />
+              )}
+            </FormField>
+          </div>
+        </OnlyShowIf>
       </div>
 
       <div className='grid grid-cols-2 gap-2 md:flex flex-col md:gap-4'>

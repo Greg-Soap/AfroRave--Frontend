@@ -11,3 +11,11 @@ export function runOnlyOnProd(fn: () => void) {
 }
 
 export const isDev = process.env.NODE_ENV === 'development'
+
+export function OnlyShowIf({
+  condition,
+  children,
+}: { condition: boolean; children: React.ReactNode }) {
+  if (!condition) return null
+  return children
+}

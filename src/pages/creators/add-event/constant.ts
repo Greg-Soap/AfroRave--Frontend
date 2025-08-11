@@ -98,3 +98,9 @@ export const vendorCheckboxData: IBaseCheckbox[] = [
   },
   { items: [{ label: 'SHOW SOCIAL HANDLES', id: 'showSocialHandles' }] },
 ]
+
+export const frequencyOptions: { value: string; label: string }[] = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+]

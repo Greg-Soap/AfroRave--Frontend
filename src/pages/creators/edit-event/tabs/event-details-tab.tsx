@@ -9,13 +9,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { getRoutePath } from '@/config/get-route-path'
 import type { IEvents } from '@/data/events'
 import { useUpdateEvent } from '@/hooks/use-event-mutations'
+import { OnlyShowIf } from '@/lib/environment'
 import { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import type { z } from 'zod'
-import { africanTimezones, ageRatings, eventCategories } from '../constant'
+import { africanTimezones, ageRatings, eventCategories, frequencyOptions } from '../constant'
 
 export default function EventDetailsTab({ event }: { event: IEvents }) {
   return (
@@ -33,14 +35,19 @@ function EventDetailsForm({ event }: { event: IEvents }) {
   const { eventId } = useParams()
   const updateEventMutation = useUpdateEvent()
   const navigate = useNavigate()
+  const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
 
   const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
     resolver: zodResolver(EditEventDetailsSchema),
     defaultValues: {
       name: event.event_name,
+      age_rating: 'PG',
       category: 'FASHION & LIFESTYLE',
       venue: event.event_location,
       description: event.description.join('\n'),
+      event_type: 'standalone',
+      frequency: 'weekly',
+      occurrence: 1,
       start_date: {
         date: new Date(),
         hour: '12',
@@ -63,6 +70,18 @@ function EventDetailsForm({ event }: { event: IEvents }) {
     },
   })
 
+  // Update form values when event type changes
+  useEffect(() => {
+    form.setValue('event_type', eventType)
+    if (eventType === 'standalone') {
+      form.setValue('frequency', undefined)
+      form.setValue('occurrence', undefined)
+    } else {
+      form.setValue('frequency', 'weekly')
+      form.setValue('occurrence', 1)
+    }
+  }, [eventType, form])
+
   async function onSubmit(values: z.infer<typeof EditEventDetailsSchema>) {
     if (!eventId) {
       console.error('No event ID found')
@@ -82,10 +101,10 @@ function EventDetailsForm({ event }: { event: IEvents }) {
           timezone: values.time_zone || 'Africa/Lagos',
           startDate: values.start_date.date.toISOString(),
           endDate: values.end_date.date.toISOString(),
-          frequency: 'once',
+          frequency: values.frequency || 'weekly',
           startTime: `${values.start_date.hour}:${values.start_date.minute} ${values.start_date.period}`,
           endTime: `${values.end_date.hour}:${values.end_date.minute} ${values.end_date.period}`,
-          occurance: 1,
+          occurance: values.occurrence || 1,
         },
         eventDetails: {
           termsOfRefund: '',
@@ -202,14 +221,17 @@ function EventDetailsForm({ event }: { event: IEvents }) {
           </p>
           <div className='flex gap-2'>
             <Button
-              variant='destructive'
+              variant={eventType === 'standalone' ? 'destructive' : 'outline'}
               type='button'
+              onClick={() => setEventType('standalone')}
               className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text'>
               Standalone
             </Button>
             <Button
+              variant={eventType === 'season' ? 'destructive' : 'outline'}
               type='button'
-              className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text bg-[#DDDDDD] text-black hover:bg-black/20'>
+              onClick={() => setEventType('season')}
+              className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text'>
               Season
             </Button>
           </div>
@@ -228,6 +250,42 @@ function EventDetailsForm({ event }: { event: IEvents }) {
             />
           )}
         </FormField>
+
+        <OnlyShowIf condition={eventType === 'season'}>
+          <div className='grid grid-cols-2 gap-4'>
+            <FormField form={form} name='frequency' label='Frequency'>
+              {(field) => (
+                <BaseSelect
+                  type='auth'
+                  items={frequencyOptions}
+                  placeholder='Select frequency.'
+                  triggerClassName='w-full h-10 text-black px-3 py-[11px] bg-white rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+                  value={field.value as string}
+                  onChange={field.onChange}
+                />
+              )}
+            </FormField>
+
+            <FormField form={form} name='occurrence' label='Occurrence'>
+              {(field) => (
+                <Input
+                  type='number'
+                  min={1}
+                  max={365}
+                  placeholder='Enter number of occurrences.'
+                  {...field}
+                  value={field.value == null ? '' : String(field.value)}
+                  onChange={(e) => {
+                    const value = Number.parseInt(e.target.value, 10)
+                    if (value >= 1 && value <= 365) {
+                      field.onChange(value)
+                    }
+                  }}
+                />
+              )}
+            </FormField>
+          </div>
+        </OnlyShowIf>
       </div>
 
       <div className='grid grid-cols-2 gap-2 md:flex flex-col md:gap-4'>
