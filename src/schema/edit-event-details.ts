@@ -13,7 +13,7 @@ export const EditEventDetailsSchema = z.object({
   custom_url: z.string().min(3, { message: 'URL too short.' }),
   time_zone: z.string({ required_error: 'Select a time zone.' }),
   event_type: z.enum(['standalone', 'season'], { required_error: 'Select event type.' }),
-  frequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
+  frequency: z.enum(['Daily', 'Weekly', 'Monthly']).optional(),
   occurrence: z.number().min(1).max(365).optional(),
   start_date: z.object({
     date: z.date({ required_error: 'A start date is required.' }),

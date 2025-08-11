@@ -76,7 +76,7 @@ export function transformEventDetailsToCreateRequest(
       timezone: timezoneOffset, // Use UTC offset instead of timezone name
       startDate: formatDate(formData.start_date.date),
       endDate: formatDate(formData.end_date.date),
-      frequency: formData.frequency || 'weekly',
+      frequency: formData.frequency || 'Weekly',
       startTime: convertTo24Hour(
         formData.start_date.hour,
         formData.start_date.minute,
@@ -137,7 +137,7 @@ export function transformCreateRequestToEventDetails(
     description: eventData.description,
     custom_url: eventData.customUrl,
     event_type:
-      eventData.eventDate.frequency === 'weekly' && eventData.eventDate.occurance > 1
+      eventData.eventDate.frequency === 'Weekly' && eventData.eventDate.occurance > 1
         ? 'season'
         : 'standalone',
     frequency: eventData.eventDate.frequency,

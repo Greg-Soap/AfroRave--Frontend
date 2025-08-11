@@ -46,7 +46,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       venue: event.event_location,
       description: event.description.join('\n'),
       event_type: 'standalone',
-      frequency: 'weekly',
+      frequency: 'Weekly',
       occurrence: 1,
       start_date: {
         date: new Date(),
@@ -77,7 +77,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
       form.setValue('frequency', undefined)
       form.setValue('occurrence', undefined)
     } else {
-      form.setValue('frequency', 'weekly')
+      form.setValue('frequency', 'Weekly')
       form.setValue('occurrence', 1)
     }
   }, [eventType, form])
@@ -101,7 +101,7 @@ function EventDetailsForm({ event }: { event: IEvents }) {
           timezone: values.time_zone || 'Africa/Lagos',
           startDate: values.start_date.date.toISOString(),
           endDate: values.end_date.date.toISOString(),
-          frequency: values.frequency || 'weekly',
+          frequency: values.frequency || 'Weekly',
           startTime: `${values.start_date.hour}:${values.start_date.minute} ${values.start_date.period}`,
           endTime: `${values.end_date.hour}:${values.end_date.minute} ${values.end_date.period}`,
           occurance: values.occurrence || 1,

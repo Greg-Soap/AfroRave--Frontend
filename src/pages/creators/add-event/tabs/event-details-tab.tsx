@@ -42,7 +42,7 @@ export default function EventDetailsTab({
       venue: '',
       description: '',
       event_type: 'standalone',
-      frequency: 'weekly',
+      frequency: 'Weekly',
       occurrence: 1,
       start_date: {
         date: new Date(),
@@ -73,7 +73,7 @@ export default function EventDetailsTab({
       form.setValue('frequency', undefined)
       form.setValue('occurrence', undefined)
     } else {
-      form.setValue('frequency', 'weekly')
+      form.setValue('frequency', 'Weekly')
       form.setValue('occurrence', 1)
     }
   }, [eventType, form])

@@ -43,7 +43,7 @@ const eventCategories = [
   'other',
 ]
 
-const ageRatings = ['G', 'PG', 'PG-13', 'R', 'NC-17', 'NR']
+const ageRatings = ['PG', '16+', '18+'] as const
 
 const africanTimezones = [
   'Africa/Lagos',
@@ -159,6 +159,9 @@ const fakeDataGenerators = {
       'youth-summit',
       'dance-festival',
     ]),
+    event_type: faker.helpers.arrayElement(['standalone', 'season'] as const),
+    frequency: faker.helpers.arrayElement(['Daily', 'Weekly', 'Monthly'] as const),
+    occurrence: faker.number.int({ min: 1, max: 12 }),
     time_zone: faker.helpers.arrayElement(africanTimezones),
     start_date: {
       date: generateFutureDate(30),

@@ -23,7 +23,7 @@ export interface EventDate {
   timezone: string
   startDate: string
   endDate: string
-  frequency: 'daily' | 'weekly' | 'monthly'
+  frequency: 'Daily' | 'Weekly' | 'Monthly'
   startTime: string
   endTime: string
   occurance: number
