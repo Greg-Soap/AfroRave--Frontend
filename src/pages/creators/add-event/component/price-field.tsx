@@ -1,33 +1,30 @@
-import {
-  CustomFormField as FormField,
-  CustomInput as Input,
-} from "@/components/custom/custom-form";
-import type { FieldValues, UseFormReturn, Path } from "react-hook-form";
+import { CustomFormField as FormField, CustomInput as Input } from '@/components/custom/custom-form'
+import type { FieldValues, UseFormReturn, Path } from 'react-hook-form'
 
 export function PriceField<T extends FieldValues>({
   form,
   name,
-  label = "PRICE",
+  label = 'PRICE',
 }: {
-  form: UseFormReturn<T>;
-  name: Path<T>;
-  label?: string;
+  form: UseFormReturn<T>
+  name: Path<T>
+  label?: string
 }) {
   return (
-    <FormField form={form} name={name} label={label}>
+    <FormField form={form} name={name} label={label} className='w-full'>
       {(field) => (
-        <div className="flex items-center gap-3">
-          <p className="py-[11px] px-[66px] w-[140px] h-10 flex items-center justify-center bg-[#acacac] rounded-[5px]">
+        <div className='w-full h-9 flex items-center gap-3'>
+          <p className='py-[11px] w-14 h-full flex items-center justify-center bg-[#acacac] rounded-[5px]'>
             ₦
           </p>
           <Input
-            type="number"
-            className="w-[200px]"
+            type='number'
+            className='w-full h-9'
             {...field}
-            value={field.value == null ? "" : String(field.value)}
+            value={field.value == null ? '' : String(field.value)}
           />
         </div>
       )}
     </FormField>
-  );
+  )
 }

@@ -1,6 +1,6 @@
-import { FormBase } from "@/components/reusable";
-import type { FormBaseProps } from "@/components/reusable/base-form";
-import type { FieldErrors, FieldValues, UseFormReturn } from "react-hook-form";
+import { FormBase } from '@/components/reusable'
+import type { FormBaseProps } from '@/components/reusable/base-form'
+import type { FieldErrors, FieldValues, UseFormReturn } from 'react-hook-form'
 
 export function TabContainer<TFormValues extends FieldValues>({
   heading,
@@ -9,31 +9,22 @@ export function TabContainer<TFormValues extends FieldValues>({
   children,
   form,
   onSubmit,
+  actionOnError,
   ...props
-}: {
-  heading?: string;
-  description?: string;
-  headerButton?: React.ReactNode;
-  children: React.ReactNode;
-  form: UseFormReturn<TFormValues>;
-  onSubmit: (data: TFormValues) => void;
-} & Omit<FormBaseProps<TFormValues>, "form" | "onSubmit" | "onError">) {
+}: ITabContainer<TFormValues> & Omit<FormBaseProps<TFormValues>, 'form' | 'onSubmit' | 'onError'>) {
   function onError(errors: FieldErrors) {
-    console.log("Form validation failed!");
-    console.log("Validation errors:", errors);
+    actionOnError?.()
+    console.log('Form validation failed!')
+    console.log('Validation errors:', errors)
   }
 
   return (
-    <div className="flex flex-col gap-5 md:px-[50px] xl:px-[402px] mb-[50px]">
-      <div className="flex flex-col md:flex-row gap-y-4 md:items-center justify-between">
-        <div className="flex flex-col gap-1">
-          <p className="text-xl font-black font-sf-pro-display uppercase text-black">
-            {heading}
-          </p>
+    <div className='flex flex-col gap-5 md:px-[50px] xl:px-[402px] mb-[50px]'>
+      <div className='flex flex-col md:flex-row gap-y-4 md:items-center justify-between'>
+        <div className='flex flex-col gap-1'>
+          <p className='text-xl font-black font-sf-pro-display uppercase text-black'>{heading}</p>
           {description && (
-            <p className="text-xs font-sf-pro-display text-mid-dark-gray">
-              {description}
-            </p>
+            <p className='text-xs font-sf-pro-display text-mid-dark-gray'>{description}</p>
           )}
         </div>
 
@@ -44,5 +35,15 @@ export function TabContainer<TFormValues extends FieldValues>({
         {children}
       </FormBase>
     </div>
-  );
+  )
+}
+
+interface ITabContainer<TFormValues extends FieldValues> {
+  heading?: string
+  description?: string
+  headerButton?: React.ReactNode
+  children: React.ReactNode
+  form: UseFormReturn<TFormValues>
+  onSubmit: (data: TFormValues) => void
+  actionOnError?: () => void
 }

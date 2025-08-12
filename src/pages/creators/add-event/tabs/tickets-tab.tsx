@@ -2,16 +2,18 @@ import { Button } from '@/components/ui/button'
 import { useEventStore } from '@/stores'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import CreateTicketForm from '../ticket-forms/create-ticket-form'
 import PromoCodeForm from '../ticket-forms/promo-code-form'
 import UpgradeForm from '../ticket-forms/upgrade-form'
+import CreateTicketForm from '../ticket-forms/create'
 
 export default function TicketsTab({
   setStep,
   setActiveTabState,
+  showError,
 }: {
   setStep: (step: number) => void
   setActiveTabState: (activeTab: string) => void
+  showError: () => void
 }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
@@ -66,6 +68,6 @@ export default function TicketsTab({
 
   if (currentForm === 'create') {
     setStep(2)
-    return <CreateTicketForm handleFormChange={handleFormChange} />
+    return <CreateTicketForm handleFormChange={handleFormChange} showError={showError} />
   }
 }

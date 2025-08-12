@@ -19,6 +19,7 @@ import type { z } from 'zod'
 import { SelectField } from '../component/select-field'
 import { SubmitBtn } from '../component/submit-btn'
 import { TabContainer } from '../component/tab-ctn'
+import { cn } from '@/lib/utils'
 
 export default function EventDetailsTab({
   setStep,
@@ -199,20 +200,26 @@ export default function EventDetailsTab({
             Select all the dates of your event
           </p>
           <div className='flex gap-2'>
-            <Button
-              variant={eventType === 'standalone' ? 'destructive' : 'outline'}
-              type='button'
-              onClick={() => setEventType('standalone')}
-              className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text'>
-              Standalone
-            </Button>
-            <Button
-              variant={eventType === 'season' ? 'destructive' : 'outline'}
-              type='button'
-              onClick={() => setEventType('season')}
-              className='w-[160px] h-10 rounded-4px text-sm font-sf-pro-text'>
-              Season
-            </Button>
+            {[
+              { name: 'Standalone', action: () => setEventType('standalone') },
+              { name: 'Season', action: () => setEventType('season') },
+            ].map((item) => {
+              const isActive = eventType === item.name.toLocaleLowerCase()
+
+              return (
+                <Button
+                  key={item.name}
+                  variant={eventType === item.name.toLocaleLowerCase() ? 'destructive' : 'default'}
+                  type='button'
+                  onClick={item.action}
+                  className={cn('w-[146px] h-10 rounded-[4px] text-sm font-sf-pro-text', {
+                    'opacity-70 bg-[#ACACAC] text-charcoal hover:bg-[#ACACAC] hover:opacity-80':
+                      !isActive,
+                  })}>
+                  {item.name}
+                </Button>
+              )
+            })}
           </div>
         </div>
 
@@ -243,6 +250,7 @@ export default function EventDetailsTab({
                   min={1}
                   max={365}
                   placeholder='Enter number of occurrences.'
+                  className='h-9'
                   {...field}
                   value={field.value == null ? '' : String(field.value)}
                   onChange={(e) => {

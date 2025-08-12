@@ -5,7 +5,7 @@ import { getRoutePath } from '@/config/get-route-path'
 import { usePublishEvent } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useAfroStore, useEventStore } from '@/stores'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Info } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -14,6 +14,7 @@ import PublishTab from './tabs/publish-tab'
 import ThemeTab from './tabs/theme-tab'
 import TicketsTab from './tabs/tickets-tab'
 import VendorTab from './tabs/vendor-tab'
+import { OnlyShowIf } from '@/lib/environment'
 
 export default function AddEventPage() {
   const { user } = useAfroStore()
@@ -25,6 +26,7 @@ export default function AddEventPage() {
   const [description, setDescription] = useState<string>('')
   const [step, setStep] = useState<number>()
   const [themeBtnVisibility, setThemeBtnVisibility] = useState<boolean>(false)
+  const [showError, setShowError] = useState(false)
 
   const navigate = useNavigate()
 
@@ -94,7 +96,13 @@ export default function AddEventPage() {
     {
       value: 'tickets',
       name: 'Tickets',
-      element: <TicketsTab setStep={setStep} setActiveTabState={setActiveTabState} />,
+      element: (
+        <TicketsTab
+          setStep={setStep}
+          setActiveTabState={setActiveTabState}
+          showError={() => setShowError(true)}
+        />
+      ),
     },
     {
       value: 'theme',
@@ -147,10 +155,20 @@ export default function AddEventPage() {
             />
 
             <section className='container w-full flex flex-col gap-10'>
-              <div className='flex flex-col gap-2 md:py-10 p-0 md:px-14 text-black font-sf-pro-display'>
-                <p className='font-black text-2xl md:text-4xl uppercase'>{heading}</p>
-                <p className='text-[13px] max-w-[351px] uppercase'>{description}</p>
-                <p className='text-xl font-black'>STEP {step || 1}</p>
+              <div className='flex flex-col gap-6 md:py-10 p-0 md:px-14'>
+                <div className='flex flex-col gap-2 text-black font-sf-pro-display'>
+                  <p className='font-black text-2xl md:text-4xl uppercase'>{heading}</p>
+                  <p className='text-[13px] max-w-[351px] uppercase'>{description}</p>
+                  <p className='text-xl font-black'>STEP {step || 1}</p>
+                </div>
+
+                <OnlyShowIf condition={showError}>
+                  <MoreTabDetails />
+                </OnlyShowIf>
+
+                <OnlyShowIf condition={activeTab === 'theme'}>
+                  <MoreTabDetails type='theme' />
+                </OnlyShowIf>
               </div>
 
               {tab.element}
@@ -238,6 +256,28 @@ function NavBtn({ name, action }: { name: string; action: () => void }) {
       className='h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px] bg-white text-deep-red hover:bg-black/10 uppercase'>
       {name}
     </Button>
+  )
+}
+
+function MoreTabDetails({ type = 'error' }: { type?: 'error' | 'theme' }) {
+  return (
+    <div
+      className={cn('w-[253px] flec flex-col text-charcoal', {
+        'text-deep-red': type === 'error',
+        'text-charcoal': type === 'theme',
+      })}>
+      <div className='flex items-center gap-2'>
+        <Info size={16} className='text-inherit' />
+        <p className='text-sm font-medium leading-[100%] font-sf-pro-display'>
+          {type === 'error' ? 'Changes will be lost' : 'You can come back to this later'}
+        </p>
+      </div>
+      <p className='text-[13px] font-sf-pro-display'>
+        {type === 'error'
+          ? 'If you leave now any changes will not be saved.'
+          : `No worries if you’re not ready to complete this step now. You can always return to it at anytime from your dashboard.`}
+      </p>
+    </div>
   )
 }
 
