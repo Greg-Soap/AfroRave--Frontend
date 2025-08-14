@@ -187,7 +187,7 @@ export function transformTicketsToCreateRequest(
   }
 
   // Convert form data to API format for each ticket
-  return formData.tickets.map((ticket) => ({
+  return formData.tickets.map((ticket: z.infer<typeof unifiedTicketFormSchema>['tickets'][0]) => ({
     ticketName: ticket.ticketName,
     accessType: ticket.type,
     salesType: ticket.salesType,
@@ -195,21 +195,44 @@ export function transformTicketsToCreateRequest(
     quantity: Number.parseInt(ticket.quantity.amount, 10),
     price: Number.parseFloat(ticket.price),
     purchaseLimit: ticket.purchase_limit ? Number.parseInt(ticket.purchase_limit, 10) : 10,
-    groupSize: ticket.ticketType === 'group_ticket' && ticket.group_size 
-      ? Number.parseInt(ticket.group_size, 10) 
-      : 1,
-    validDays: ticket.ticketType === 'multi_day' && ticket.days_valid 
-      ? Number.parseInt(ticket.days_valid, 10) 
-      : 365,
+    groupSize:
+      ticket.ticketType === 'group_ticket' && ticket.group_size
+        ? Number.parseInt(ticket.group_size, 10)
+        : 1,
+    validDays:
+      ticket.ticketType === 'multi_day' && ticket.days_valid
+        ? Number.parseInt(ticket.days_valid, 10)
+        : 365,
     description: ticket.description,
     eventId,
     ticketDetails: {
       saleImmediately: formData.whenToStart === 'immediately',
       saleBegins: formData.scheduledDate
-        ? `${formatDate(formData.scheduledDate.date)}T${convertTo24Hour(
-            formData.scheduledDate.hour,
-            formData.scheduledDate.minute,
-            formData.scheduledDate.period,
+        ? `${formatDate((formData.scheduledDate as { date: Date; hour: string; minute: string; period: 'AM' | 'PM' }).date)}T${convertTo24Hour(
+            (
+              formData.scheduledDate as {
+                date: Date
+                hour: string
+                minute: string
+                period: 'AM' | 'PM'
+              }
+            ).hour,
+            (
+              formData.scheduledDate as {
+                date: Date
+                hour: string
+                minute: string
+                period: 'AM' | 'PM'
+              }
+            ).minute,
+            (
+              formData.scheduledDate as {
+                date: Date
+                hour: string
+                minute: string
+                period: 'AM' | 'PM'
+              }
+            ).period,
           )}:00`
         : new Date().toISOString(),
       allowResell: false, // Default value since it's not in the current form
