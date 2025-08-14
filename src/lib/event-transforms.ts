@@ -1,5 +1,5 @@
 import type { themeSchema } from '@/pages/creators/add-event/schemas/theme-schema'
-import type { ticketSchema } from '@/pages/creators/add-event/schemas/tickets-schema'
+import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
 import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
@@ -170,7 +170,7 @@ export function transformCreateRequestToEventDetails(
  * Transform form data from CreateTicketForm to CreateTicketRequest format
  */
 export function transformTicketsToCreateRequest(
-  formData: z.infer<typeof ticketSchema>,
+  formData: z.infer<typeof unifiedTicketFormSchema>,
   eventId: string,
 ): CreateTicketRequest[] {
   // Convert time format from 12-hour to 24-hour
@@ -194,9 +194,13 @@ export function transformTicketsToCreateRequest(
     ticketType: ticket.ticketType,
     quantity: Number.parseInt(ticket.quantity.amount, 10),
     price: Number.parseFloat(ticket.price),
-    purchaseLimit: 10, // Default value, can be made configurable
-    groupSize: 1, // Default value, can be made configurable
-    validDays: 365, // Default value, can be made configurable
+    purchaseLimit: ticket.purchase_limit ? Number.parseInt(ticket.purchase_limit, 10) : 10,
+    groupSize: ticket.ticketType === 'group_ticket' && ticket.group_size 
+      ? Number.parseInt(ticket.group_size, 10) 
+      : 1,
+    validDays: ticket.ticketType === 'multi_day' && ticket.days_valid 
+      ? Number.parseInt(ticket.days_valid, 10) 
+      : 365,
     description: ticket.description,
     eventId,
     ticketDetails: {
@@ -208,9 +212,9 @@ export function transformTicketsToCreateRequest(
             formData.scheduledDate.period,
           )}:00`
         : new Date().toISOString(),
-      allowResell: ticket.allowResell === 'allow',
+      allowResell: false, // Default value since it's not in the current form
       mail: {
-        body: formData.confirmationMailText || '',
+        body: '', // This field is not in the current form
       },
     },
   }))

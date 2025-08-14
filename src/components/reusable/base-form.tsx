@@ -1,3 +1,13 @@
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormField as ShadcnFormField,
+} from '@/components/ui/form'
+import { cn } from '@/lib/utils'
 /**
  * A collection of form components built on top of react-hook-form and shadcn/ui Form.
  * Provides a consistent way to handle form validation, error states, and form layout.
@@ -25,36 +35,26 @@
  * )
  * ```
  */
-import React, { type ReactElement, type ReactNode } from "react";
-import {
-  FormControl,
-  FormDescription,
-  FormField as ShadcnFormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Form,
-} from "@/components/ui/form";
+import React, { type ReactElement, type ReactNode } from 'react'
 import type {
   ControllerRenderProps,
   FieldErrors,
   FieldValues,
   Path,
   UseFormReturn,
-} from "react-hook-form";
-import { cn } from "@/lib/utils";
+} from 'react-hook-form'
 
 export interface FormBaseProps<T extends FieldValues> {
   /** React Hook Form instance */
-  form: UseFormReturn<T>;
+  form: UseFormReturn<T>
   /** Form submission handler */
-  onSubmit: (data: T) => void;
+  onSubmit: (data: T) => void
   /** Form content */
   /** Form error handler */
-  onError?: (errors: FieldErrors<T>) => void;
-  children: ReactNode;
+  onError?: (errors: FieldErrors<T>) => void
+  children: ReactNode
   /** Additional CSS classes for the form */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -70,35 +70,30 @@ export function FormBase<T extends FieldValues>({
 }: FormBaseProps<T>) {
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit, onError)}
-        className={cn("space-y-8", className)}
-      >
+      <form onSubmit={form.handleSubmit(onSubmit, onError)} className={cn('space-y-8', className)}>
         {children}
       </form>
     </Form>
-  );
+  )
 }
 
 export interface FormFieldProps<T extends FieldValues> {
   /** Field name (must match form values type) */
-  name: Path<T>;
+  name: Path<T>
   /** Field label text */
-  label?: string;
+  label?: string
   /** Field description text */
-  description?: string;
+  description?: string
   /** Whether to show validation messages */
-  showMessage?: boolean;
+  showMessage?: boolean
   /** Whether to show error styling */
-  showError?: boolean;
+  showError?: boolean
   /** Field input component or render function */
-  children:
-    | ReactElement
-    | ((field: ControllerRenderProps<T, Path<T>>) => ReactElement);
+  children: ReactElement | ((field: ControllerRenderProps<T, Path<T>>) => ReactElement)
   /** React Hook Form instance */
-  form: UseFormReturn<T>;
+  form: UseFormReturn<T>
   /** Additional CSS classes for the field container */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -107,8 +102,8 @@ export interface FormFieldProps<T extends FieldValues> {
  */
 export function FormField<T extends FieldValues>({
   name,
-  label = "",
-  description = "",
+  label = '',
+  description = '',
   showMessage = false,
   showError = false,
   children,
@@ -121,75 +116,68 @@ export function FormField<T extends FieldValues>({
       name={name}
       render={({ field, fieldState }) => {
         const errorClass =
-          showError && fieldState.invalid
-            ? "border-red-500 focus-visible:ring-red-500"
-            : "";
+          showError && fieldState.invalid ? 'border-red-500 focus-visible:ring-red-500' : ''
 
         const isSelectComponent = (element: React.ReactElement) => {
-          if (
-            element.type &&
-            typeof element.type === "function" &&
-            "displayName" in element.type
-          ) {
-            return element.type.displayName === "BaseSelect";
+          if (element.type && typeof element.type === 'function' && 'displayName' in element.type) {
+            return element.type.displayName === 'BaseSelect'
           }
 
-          if (element.type && typeof element.type === "function") {
-            return element.type.name === "BaseSelect";
+          if (element.type && typeof element.type === 'function') {
+            return element.type.name === 'BaseSelect'
           }
 
-          return false;
-        };
+          return false
+        }
 
         return (
-          <FormItem className={cn("flex flex-col items-start", className)}>
+          <FormItem className={cn('flex flex-col items-start', className)}>
             {label && (
-              <FormLabel className="text-inherit" htmlFor={name}>
+              <FormLabel className='text-[#1E1E1E]' htmlFor={name}>
                 {label}
               </FormLabel>
             )}
             <FormControl>
-              {typeof children === "function"
+              {typeof children === 'function'
                 ? children(field)
                 : React.isValidElement(children)
-                ? React.cloneElement(children, {
-                    ...field,
-                    ...(isSelectComponent(children)
-                      ? {
-                          triggerClassName: cn(
-                            errorClass,
-                            (children.props as { triggerClassName?: string })
-                              ?.triggerClassName ?? ""
-                          ),
-                        }
-                      : {
-                          className: cn(
-                            errorClass,
-                            (children.props as { className?: string })
-                              ?.className ?? ""
-                          ),
-                        }),
-                  } as React.HTMLAttributes<HTMLElement>)
-                : null}
+                  ? React.cloneElement(children, {
+                      ...field,
+                      ...(isSelectComponent(children)
+                        ? {
+                            triggerClassName: cn(
+                              errorClass,
+                              (children.props as { triggerClassName?: string })?.triggerClassName ??
+                                '',
+                            ),
+                          }
+                        : {
+                            className: cn(
+                              errorClass,
+                              (children.props as { className?: string })?.className ?? '',
+                            ),
+                          }),
+                    } as React.HTMLAttributes<HTMLElement>)
+                  : null}
             </FormControl>
             {description && (
-              <FormDescription className="self-end uppercase text-xs font-light font-sf-pro-text text-mid-dark-gray">
+              <FormDescription className='self-end uppercase text-xs font-light font-sf-pro-text text-mid-dark-gray'>
                 {description}
               </FormDescription>
             )}
-            {showMessage && <FormMessage className="text-end" />}
+            {showMessage && <FormMessage className='text-end' />}
           </FormItem>
-        );
+        )
       }}
     />
-  );
+  )
 }
 
 interface FormFooterProps {
   /** Footer content (usually buttons) */
-  children: ReactNode;
+  children: ReactNode
   /** Additional CSS classes for the footer */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -197,9 +185,5 @@ interface FormFooterProps {
  * Typically used to group submit/cancel buttons.
  */
 export function FormFooter({ children, className }: FormFooterProps) {
-  return (
-    <div className={cn("flex justify-end space-x-2", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn('flex justify-end space-x-2', className)}>{children}</div>
 }

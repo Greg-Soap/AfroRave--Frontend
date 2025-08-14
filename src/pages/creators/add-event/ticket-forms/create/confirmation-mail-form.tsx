@@ -1,13 +1,13 @@
-import { FormBase, FormField } from '@/components/reusable'
-import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { useForm } from 'react-hook-form'
-import type { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { confirmationMailSchema } from '../../schemas/ticket-schema'
 import { CustomInput as Input } from '@/components/custom/custom-form'
+import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
+import { FormBase, FormField } from '@/components/reusable'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { useFormState } from 'react-hook-form'
+import type { z } from 'zod'
+import { confirmationMailSchema } from '../../schemas/ticket-schema'
 
 export function ConfirmationMailForm() {
   const form = useForm<z.infer<typeof confirmationMailSchema>>({
@@ -44,7 +44,7 @@ export function ConfirmationMailForm() {
           description='optional'>
           {(field) => (
             <Textarea
-              placeholder="Nice one! You're locked in"
+              placeholder='NICE ONE! YOU’RE LOCKED IN'
               className='w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
               {...field}
               value={field.value == null ? '' : String(field.value)}
@@ -53,7 +53,7 @@ export function ConfirmationMailForm() {
         </FormFieldWithCounter>
         <div className='w-full flex flex-col gap-4'>
           <div className='flex items-end gap-2 md:gap-6'>
-            <FormField showError form={form} name='email' label='EMAIL' className='max-w-[360px]'>
+            <FormField showError form={form} name='email' label='EMAIL' className='w-full'>
               {(field) => (
                 <Input {...field} value={field.value == null ? '' : String(field.value)} />
               )}

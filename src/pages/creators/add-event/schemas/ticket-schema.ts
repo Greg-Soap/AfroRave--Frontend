@@ -36,7 +36,7 @@ const ticketBaseFields = {
     availability: z.enum(['limited', 'unlimited']),
     amount: z.string().min(2, { message: 'Provide a valid quantity.' }),
   }),
-  price: z.string().min(3, { message: 'Provide a valid amount.' }),
+  price: z.string().optional(),
   purchase_limit: z.string(),
   description: z
     .string()
@@ -71,7 +71,23 @@ export const unifiedTicketFormSchema = withScheduledStart(
   z.object({
     tickets: z.array(TicketItemSchema),
   }),
-)
+).refine((data) => {
+  // Validate that at least one ticket is added
+  if (data.tickets.length === 0) {
+    return false
+  }
+  
+  // Validate that paid tickets have a price
+  for (const ticket of data.tickets) {
+    if (ticket.type === 'paid' && (!ticket.price || ticket.price.length < 3)) {
+      return false
+    }
+  }
+  return true
+}, {
+  message: 'At least one ticket is required, and paid tickets must have a valid price',
+  path: ['tickets'],
+})
 
 export const confirmationMailSchema = z.object({
   confirmationEmail: z.string().max(250, { message: 'Message too long' }).optional(),
@@ -97,6 +113,4 @@ export const defaultUnifiedTicketValues: UnifiedTicketForm = {
     minute: '00',
     period: 'AM',
   },
-  confirmationMailText: '',
-  email: undefined,
 }

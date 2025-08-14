@@ -6,7 +6,7 @@ import type {
   CreateTicketRequest,
   CreateVendorRequest,
 } from '@/types'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 // Query keys for event-related queries
@@ -18,6 +18,7 @@ export const eventKeys = {
   detail: (id: string) => [...eventKeys.details(), id] as const,
   organizer: () => [...eventKeys.all, 'organizer'] as const,
   trending: () => [...eventKeys.all, 'trending'] as const,
+  tickets: (eventId: string) => [...eventKeys.detail(eventId), 'tickets'] as const,
 }
 
 export function useCreateEvent() {
@@ -262,5 +263,17 @@ export function useUpdateTheme() {
       console.error('Failed to update theme:', error)
       toast.error('Failed to update theme. Please try again.')
     },
+  })
+}
+
+// Ticket queries
+export function useGetEventTickets(eventId: string | undefined) {
+  return useQuery({
+    queryKey: eventId ? eventKeys.tickets(eventId) : ['tickets', 'disabled'],
+    queryFn: () => {
+      if (!eventId) throw new Error('Event ID is required')
+      return eventService.getEventTickets(eventId)
+    },
+    enabled: !!eventId,
   })
 }

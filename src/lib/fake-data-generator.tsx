@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import type { ticketSchema } from '@/pages/creators/add-event/schemas/tickets-schema'
+import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
 import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
@@ -181,7 +181,7 @@ const fakeDataGenerators = {
     },
   }),
 
-  tickets: (): z.infer<typeof ticketSchema> => ({
+  tickets: (): z.infer<typeof unifiedTicketFormSchema> => ({
     tickets: Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
       ticketName: faker.helpers.arrayElement([
         'Early Bird Ticket',
@@ -195,43 +195,27 @@ const fakeDataGenerators = {
         'Artist Pass',
         'Sponsor Package',
       ]),
-      type: faker.helpers.arrayElement(['paid', 'free', 'invite-only'] as const),
+      type: faker.helpers.arrayElement(['paid', 'free'] as const),
+      invite_only: faker.datatype.boolean(),
       salesType: faker.helpers.arrayElement(['online', 'offline', 'both'] as const),
       ticketType: faker.helpers.arrayElement([
         'single_ticket',
         'group_ticket',
-        'vip_ticket',
-        'early_bird',
+        'multi_day',
       ] as const),
       quantity: {
         availability: faker.helpers.arrayElement(['limited', 'unlimited'] as const),
         amount: faker.number.int({ min: 50, max: 1000 }).toString(),
       },
       price: faker.number.int({ min: 1000, max: 50000 }).toString(),
+      purchase_limit: faker.number.int({ min: 1, max: 10 }).toString(),
       description: faker.lorem.paragraph(),
-      perks: Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, () =>
-        faker.helpers.arrayElement([
-          'Free parking',
-          'Complimentary drinks',
-          'Meet & greet access',
-          'Exclusive seating',
-          'Backstage tour',
-          'Merchandise package',
-          'Photo opportunity',
-          'Priority entry',
-          'Food voucher',
-          'Swag bag',
-        ]),
-      ),
-      tags: faker.helpers.arrayElement([
-        'popular',
-        'trending',
-        'featured',
-        'new',
-        'limited-time',
-      ] as const),
-      advancedOptions: faker.helpers.arrayElement(['allow', 'dont-allow'] as const),
-      allowResell: faker.helpers.arrayElement(['allow', 'dont-allow'] as const),
+      ...(faker.helpers.arrayElement(['group_ticket'] as const) === 'group_ticket' && {
+        group_size: faker.number.int({ min: 2, max: 10 }).toString(),
+      }),
+      ...(faker.helpers.arrayElement(['multi_day'] as const) === 'multi_day' && {
+        days_valid: faker.number.int({ min: 1, max: 30 }).toString(),
+      }),
     })),
     whenToStart: faker.helpers.arrayElement(['immediately', 'at-a-scheduled-date']),
     scheduledDate: {
