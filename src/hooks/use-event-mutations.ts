@@ -1,3 +1,4 @@
+import { eventKeys } from '@/lib/event-keys'
 import { eventService } from '@/services/event.service'
 import type {
   CreateEventRequest,
@@ -9,32 +10,17 @@ import type {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-// Query keys for event-related queries
-export const eventKeys = {
-  all: ['events'] as const,
-  lists: () => [...eventKeys.all, 'list'] as const,
-  list: (filters: string) => [...eventKeys.lists(), { filters }] as const,
-  details: () => [...eventKeys.all, 'detail'] as const,
-  detail: (id: string) => [...eventKeys.details(), id] as const,
-  organizer: () => [...eventKeys.all, 'organizer'] as const,
-  trending: () => [...eventKeys.all, 'trending'] as const,
-  tickets: (eventId: string) => [...eventKeys.detail(eventId), 'tickets'] as const,
-}
-
+// Event mutations
 export function useCreateEvent() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (data: CreateEventRequest) => eventService.createEvent(data),
     onSuccess: (data) => {
-      // Invalidate and refetch organizer events
-      queryClient.invalidateQueries({ queryKey: eventKeys.organizer() })
-
-      // Show success message
       toast.success('Event created successfully!')
-
-      // You can also navigate to the next tab or return the created event data
       console.log('Event created:', data)
+      // Invalidate and refetch events list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to create event:', error)
@@ -50,12 +36,11 @@ export function useUpdateEvent() {
     mutationFn: ({ eventId, data }: { eventId: string; data: CreateEventRequest }) =>
       eventService.updateEvent(eventId, data),
     onSuccess: (data, variables) => {
-      // Invalidate specific event and organizer events
-      queryClient.invalidateQueries({ queryKey: eventKeys.detail(variables.eventId) })
-      queryClient.invalidateQueries({ queryKey: eventKeys.organizer() })
-
       toast.success('Event updated successfully!')
       console.log('Event updated:', data)
+      // Invalidate and refetch specific event and events list
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(variables.eventId) })
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to update event:', error)
@@ -69,12 +54,11 @@ export function useDeleteEvent() {
 
   return useMutation({
     mutationFn: (eventId: string) => eventService.deleteEvent(eventId),
-    onSuccess: (data, eventId) => {
-      queryClient.removeQueries({ queryKey: eventKeys.detail(eventId) })
-      queryClient.invalidateQueries({ queryKey: eventKeys.organizer() })
-
+    onSuccess: (data) => {
       toast.success('Event deleted successfully!')
       console.log('Event deleted:', data)
+      // Invalidate and refetch events list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to delete event:', error)
@@ -89,13 +73,10 @@ export function usePublishEvent() {
   return useMutation({
     mutationFn: (eventId: string) => eventService.publishEvent(eventId),
     onSuccess: (data, eventId) => {
-      // Invalidate specific event and trending events
-      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
-      queryClient.invalidateQueries({ queryKey: eventKeys.trending() })
-      queryClient.invalidateQueries({ queryKey: eventKeys.organizer() })
-
       toast.success('Event published successfully!')
       console.log('Event published:', data)
+      // Invalidate and refetch specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
     },
     onError: (error) => {
       console.error('Failed to publish event:', error)
@@ -105,12 +86,18 @@ export function usePublishEvent() {
 }
 
 // Ticket mutations
-export function useCreateTicket() {
+export function useCreateTicket(eventId: string) {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (data: CreateTicketRequest) => eventService.createTicket(data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Ticket created successfully!')
-      console.log('Ticket created:', data)
+      console.log('Ticket created successfully')
+      // Invalidate and refetch tickets for the specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.tickets(eventId) })
+      // Also invalidate event details since tickets are part of event data
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
     },
     onError: (error) => {
       console.error('Failed to create ticket:', error)
@@ -119,13 +106,19 @@ export function useCreateTicket() {
   })
 }
 
-export function useUpdateTicket() {
+export function useUpdateTicket(eventId: string) {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ ticketId, data }: { ticketId: string; data: CreateTicketRequest }) =>
       eventService.updateTicket(ticketId, data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Ticket updated successfully!')
-      console.log('Ticket updated:', data)
+      console.log('Ticket updated successfully')
+      // Invalidate and refetch tickets for the specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.tickets(eventId) })
+      // Also invalidate event details since tickets are part of event data
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
     },
     onError: (error) => {
       console.error('Failed to update ticket:', error)
@@ -134,12 +127,18 @@ export function useUpdateTicket() {
   })
 }
 
-export function useDeleteTicket() {
+export function useDeleteTicket(eventId: string) {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (ticketId: string) => eventService.deleteTicket(ticketId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Ticket deleted successfully!')
-      console.log('Ticket deleted:', data)
+      console.log('Ticket deleted successfully')
+      // Invalidate and refetch tickets for the specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.tickets(eventId) })
+      // Also invalidate event details since tickets are part of event data
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
     },
     onError: (error) => {
       console.error('Failed to delete ticket:', error)
@@ -148,13 +147,79 @@ export function useDeleteTicket() {
   })
 }
 
+// Promo code mutations
+export function useCreatePromoCode(eventId: string) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data: CreatePromoCodeRequest) => eventService.createPromoCode(data),
+    onSuccess: () => {
+      toast.success('Promo code created successfully!')
+      console.log('Promo code created successfully')
+      // Invalidate and refetch promo codes for the specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.promoCodes(eventId) })
+      // Also invalidate event details since promo codes are part of event data
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
+    },
+    onError: (error) => {
+      console.error('Failed to create promo code:', error)
+      toast.error('Failed to create promo code. Please try again.')
+    },
+  })
+}
+
+export function useUpdatePromoCode(eventId: string) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ promoId, data }: { promoId: string; data: CreatePromoCodeRequest }) =>
+      eventService.updatePromoCode(promoId, data),
+    onSuccess: () => {
+      toast.success('Promo code updated successfully!')
+      console.log('Promo code updated successfully')
+      // Invalidate and refetch promo codes for the specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.promoCodes(eventId) })
+      // Also invalidate event details since promo codes are part of event data
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
+    },
+    onError: (error) => {
+      console.error('Failed to update promo code:', error)
+      toast.error('Failed to update promo code. Please try again.')
+    },
+  })
+}
+
+export function useDeletePromoCode(eventId: string) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (promoId: string) => eventService.deletePromoCode(promoId),
+    onSuccess: () => {
+      toast.success('Promo code deleted successfully!')
+      console.log('Promo code deleted successfully')
+      // Invalidate and refetch promo codes for the specific event
+      queryClient.invalidateQueries({ queryKey: eventKeys.promoCodes(eventId) })
+      // Also invalidate event details since promo codes are part of event data
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(eventId) })
+    },
+    onError: (error) => {
+      console.error('Failed to delete promo code:', error)
+      toast.error('Failed to delete promo code. Please try again.')
+    },
+  })
+}
+
 // Vendor mutations
 export function useCreateVendor() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (data: CreateVendorRequest) => eventService.createVendor(data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Vendor created successfully!')
-      console.log('Vendor created:', data)
+      console.log('Vendor created successfully')
+      // Invalidate and refetch vendors list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to create vendor:', error)
@@ -164,12 +229,16 @@ export function useCreateVendor() {
 }
 
 export function useUpdateVendor() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ vendorId, data }: { vendorId: string; data: CreateVendorRequest }) =>
       eventService.updateVendor(vendorId, data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Vendor updated successfully!')
-      console.log('Vendor updated:', data)
+      console.log('Vendor updated successfully')
+      // Invalidate and refetch vendors list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to update vendor:', error)
@@ -179,11 +248,15 @@ export function useUpdateVendor() {
 }
 
 export function useDeleteVendor() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (vendorId: string) => eventService.deleteVendor(vendorId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Vendor deleted successfully!')
-      console.log('Vendor deleted:', data)
+      console.log('Vendor deleted successfully')
+      // Invalidate and refetch vendors list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to delete vendor:', error)
@@ -192,57 +265,17 @@ export function useDeleteVendor() {
   })
 }
 
-// Promo code mutations
-export function useCreatePromoCode() {
-  return useMutation({
-    mutationFn: (data: CreatePromoCodeRequest) => eventService.createPromoCode(data),
-    onSuccess: (data) => {
-      toast.success('Promo code created successfully!')
-      console.log('Promo code created:', data)
-    },
-    onError: (error) => {
-      console.error('Failed to create promo code:', error)
-      toast.error('Failed to create promo code. Please try again.')
-    },
-  })
-}
-
-export function useUpdatePromoCode() {
-  return useMutation({
-    mutationFn: ({ promoId, data }: { promoId: string; data: CreatePromoCodeRequest }) =>
-      eventService.updatePromoCode(promoId, data),
-    onSuccess: (data) => {
-      toast.success('Promo code updated successfully!')
-      console.log('Promo code updated:', data)
-    },
-    onError: (error) => {
-      console.error('Failed to update promo code:', error)
-      toast.error('Failed to update promo code. Please try again.')
-    },
-  })
-}
-
-export function useDeletePromoCode() {
-  return useMutation({
-    mutationFn: (promoId: string) => eventService.deletePromoCode(promoId),
-    onSuccess: (data) => {
-      toast.success('Promo code deleted successfully!')
-      console.log('Promo code deleted:', data)
-    },
-    onError: (error) => {
-      console.error('Failed to delete promo code:', error)
-      toast.error('Failed to delete promo code. Please try again.')
-    },
-  })
-}
-
 // Theme mutations
 export function useCreateTheme() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (data: CreateThemeRequest) => eventService.createTheme(data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Theme created successfully!')
-      console.log('Theme created:', data)
+      console.log('Theme created successfully')
+      // Invalidate and refetch themes list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to create theme:', error)
@@ -252,12 +285,16 @@ export function useCreateTheme() {
 }
 
 export function useUpdateTheme() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ eventId, data }: { eventId: string; data: CreateThemeRequest }) =>
       eventService.updateTheme(eventId, data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('Theme updated successfully!')
-      console.log('Theme updated:', data)
+      console.log('Theme updated successfully')
+      // Invalidate and refetch themes list
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() })
     },
     onError: (error) => {
       console.error('Failed to update theme:', error)
@@ -266,14 +303,65 @@ export function useUpdateTheme() {
   })
 }
 
-// Ticket queries
-export function useGetEventTickets(eventId: string | undefined) {
+// Queries
+export function useGetEvent(eventId: string) {
   return useQuery({
-    queryKey: eventId ? eventKeys.tickets(eventId) : ['tickets', 'disabled'],
+    queryKey: eventKeys.detail(eventId),
+    queryFn: () => eventService.getEvent(eventId),
+    enabled: !!eventId,
+  })
+}
+
+export function useGetEventTickets(eventId?: string) {
+  return useQuery({
+    queryKey: eventKeys.tickets(eventId || ''),
     queryFn: () => {
       if (!eventId) throw new Error('Event ID is required')
       return eventService.getEventTickets(eventId)
     },
     enabled: !!eventId,
+  })
+}
+
+export function useGetEventPromoCodes(eventId?: string) {
+  return useQuery({
+    queryKey: eventKeys.promoCodes(eventId || ''),
+    queryFn: () => {
+      if (!eventId) throw new Error('Event ID is required')
+      return eventService.getEventPromoCodes(eventId)
+    },
+    enabled: !!eventId,
+  })
+}
+
+export function useGetEventVendors(eventId?: string) {
+  return useQuery({
+    queryKey: eventKeys.vendors(eventId || ''),
+    queryFn: () => {
+      if (!eventId) throw new Error('Event ID is required')
+      return eventService.getEventVendors(eventId)
+    },
+    enabled: !!eventId,
+  })
+}
+
+export function useGetAllEvents() {
+  return useQuery({
+    queryKey: eventKeys.lists(),
+    queryFn: () => eventService.getAllEvents(),
+  })
+}
+
+export function useGetOrganizerEvents() {
+  return useQuery({
+    queryKey: eventKeys.organizer(),
+    queryFn: () => eventService.getOrganizerEvents(),
+  })
+}
+
+export function useGetTrendingEvents() {
+  return useQuery({
+    queryKey: eventKeys.trending(),
+    queryFn: () => eventService.getTrendingEvents(),
   })
 }

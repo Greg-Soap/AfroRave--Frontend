@@ -185,9 +185,9 @@ export interface TicketDetails {
 
 export interface CreateTicketRequest {
   ticketName: string
-  accessType: string
-  salesType: string
-  ticketType: string
+  accessType: 'Free' | 'Paid' | 'Invite'
+  salesType: 'Online' | 'Door'
+  ticketType: 'Single' | 'Group' | 'MultiDay'
   quantity: number
   price: number
   purchaseLimit: number
@@ -225,7 +225,7 @@ export interface VendorDetails {
 }
 
 export interface CreateVendorRequest {
-  vendorType: string
+  vendorType: 'Revenue' | 'Service'
   category: string
   description: string
   eventId: string
@@ -253,7 +253,7 @@ export interface PromoCodeDetails {
 
 export interface CreatePromoCodeRequest {
   promoCode: string
-  discountType: string
+  discountType: 'Flat' | 'Percentage'
   discountValue: number
   discountUsage: number
   startDate: string

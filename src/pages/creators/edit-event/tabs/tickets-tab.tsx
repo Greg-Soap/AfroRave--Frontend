@@ -155,7 +155,12 @@ export default function TicketsTab() {
           <EmptyTicketState onAddTicket={() => handleFormChange('create')} />
         ) : (
           tickets.map((ticket) => (
-            <TicketCard key={ticket.ticketId} ticket={ticket} onTicketDeleted={() => refetch()} />
+            <TicketCard
+              key={ticket.ticketId}
+              ticket={ticket}
+              onTicketDeleted={() => refetch()}
+              eventId={eventId}
+            />
           ))
         )}
       </div>
@@ -205,11 +210,13 @@ function TicketSales({ tickets }: { tickets: TicketData[] }) {
 function TicketCard({
   ticket,
   onTicketDeleted,
+  eventId,
 }: {
   ticket: TicketData
   onTicketDeleted: () => void
+  eventId: string
 }) {
-  const deleteTicketMutation = useDeleteTicket()
+  const deleteTicketMutation = useDeleteTicket(eventId)
 
   const handleDeleteTicket = async () => {
     try {

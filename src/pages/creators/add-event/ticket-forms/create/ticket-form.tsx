@@ -16,7 +16,15 @@ import { PriceField } from '../../component/price-field'
 import { SelectField } from '../../component/select-field'
 import type { unifiedTicketFormSchema } from '../../schemas/ticket-schema'
 
-export function TicketForm({ form, idx, type, onSubmit, isLoading }: ITicketFormProps) {
+export function TicketForm({
+  form,
+  idx,
+  type,
+  onSubmit,
+  isLoading,
+  isEditMode = false,
+  onCancel,
+}: ITicketFormProps) {
   const [openAdvancedOptions, setOpenAdvancedOptions] = useState(false)
 
   return (
@@ -205,12 +213,30 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
         </OnlyShowIf>
       </div>
 
-      <Button
-        type='button'
-        onClick={onSubmit}
-        className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
-        {isLoading ? 'CREATING...' : 'CREATE TICKET'}
-      </Button>
+      <div className='flex gap-3'>
+        <Button
+          type='button'
+          onClick={onSubmit}
+          className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
+          {isLoading
+            ? isEditMode
+              ? 'UPDATING...'
+              : 'CREATING...'
+            : isEditMode
+              ? 'UPDATE TICKET'
+              : 'CREATE TICKET'}
+        </Button>
+
+        {isEditMode && onCancel && (
+          <Button
+            type='button'
+            variant='destructive'
+            onClick={onCancel}
+            className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white'>
+            CANCEL
+          </Button>
+        )}
+      </div>
     </>
   )
 }
@@ -298,4 +324,6 @@ interface ITicketFormProps {
   type: 'single_ticket' | 'group_ticket' | 'multi_day'
   onSubmit: () => void
   isLoading: boolean
+  isEditMode?: boolean
+  onCancel?: () => void
 }

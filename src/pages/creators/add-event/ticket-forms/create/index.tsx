@@ -7,36 +7,35 @@ import {
   useGetEventTickets,
   useUpdateTicket,
 } from '@/hooks/use-event-mutations'
-import { transformTicketsToCreateRequest } from '@/lib/event-transforms'
 import { FakeDataGenerator } from '@/lib/fake-data-generator'
 import { cn } from '@/lib/utils'
 import { useEventStore } from '@/stores'
-import type { TicketData } from '@/types/event'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Ellipsis } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 import type { z } from 'zod'
-import { SubmitBtn } from '../../component/submit-btn'
 import { TabContainer } from '../../component/tab-ctn'
 import { defaultUnifiedTicketValues, unifiedTicketFormSchema } from '../../schemas/ticket-schema'
 import { ConfirmationMailForm } from './confirmation-mail-form'
+import {
+  type SavedTicket,
+  type TicketType,
+  addTicket,
+  createTicket,
+  fillCurrentFormWithSampleData,
+  handleCancelEdit,
+  handleDeleteTicket,
+  handleEditTicket,
+  onSubmit,
+  transformTicketsResponse,
+  updateTicket,
+} from './helper'
 import { TicketForm } from './ticket-form'
 import { TicketModal } from './ticket-modal'
 
 type TForm = z.infer<typeof unifiedTicketFormSchema>
-
-interface SavedTicket {
-  ticketId: string
-  ticketName: string
-  ticketType: string
-  invite_only?: boolean
-  price?: number
-  quantity?: number
-  description?: string
-}
-
-type TicketType = 'single_ticket' | 'group_ticket' | 'multi_day'
 
 export default function CreateTicketForm({
   handleFormChange,
@@ -45,24 +44,17 @@ export default function CreateTicketForm({
   handleFormChange: (form: string) => void
   showError: () => void
 }) {
-  const createTicketMutation = useCreateTicket()
-  const updateTicketMutation = useUpdateTicket()
-  const deleteTicketMutation = useDeleteTicket()
   const { eventId } = useEventStore()
+
+  const createTicketMutation = useCreateTicket(eventId || '')
+  const updateTicketMutation = useUpdateTicket(eventId || '')
+  const deleteTicketMutation = useDeleteTicket(eventId || '')
 
   const { data: ticketsResponse, isLoading: isLoadingTickets } = useGetEventTickets(
     eventId || undefined,
   )
 
-  const savedTickets: SavedTicket[] = (ticketsResponse?.data || []).map((ticket: TicketData) => ({
-    ticketId: ticket.ticketId,
-    ticketName: ticket.ticketName,
-    ticketType: 'single_ticket',
-    invite_only: false,
-    price: ticket.price,
-    quantity: ticket.quantity,
-    description: ticket.ticketDetails?.description,
-  }))
+  const savedTickets: SavedTicket[] = transformTicketsResponse(ticketsResponse)
 
   const form = useForm<TForm>({
     resolver: zodResolver(unifiedTicketFormSchema),
@@ -71,59 +63,45 @@ export default function CreateTicketForm({
 
   const tickets = useWatch({ control: form.control, name: 'tickets' }) ?? []
 
-  const createTicket = async () => {
-    const currentTicket = tickets[tickets.length - 1]
-    if (!currentTicket || !eventId) return
+  const [editingTicketId, setEditingTicketId] = useState<string | null>(null)
+  const [currentTicketType, setCurrentTicketType] = useState<TicketType | null>(null)
 
-    const ticketRequests = transformTicketsToCreateRequest({ tickets: [currentTicket] }, eventId)
-    const result = await createTicketMutation.mutateAsync(ticketRequests[0])
+  const handleCreateTicket = () =>
+    createTicket(
+      tickets,
+      eventId,
+      form,
+      createTicketMutation,
+      setEditingTicketId,
+      setCurrentTicketType,
+    )
 
-    console.log('result', result)
+  const handleUpdateTicket = () =>
+    updateTicket(
+      tickets,
+      eventId,
+      editingTicketId,
+      form,
+      updateTicketMutation,
+      setEditingTicketId,
+      setCurrentTicketType,
+    )
 
-    form.setValue('tickets', [], { shouldDirty: true })
-  }
+  const handleAddTicket = (selectedType: TicketType) =>
+    addTicket(selectedType, form, setEditingTicketId, setCurrentTicketType)
 
-  const addTicket = (selectedType: TicketType) => {
-    const current = tickets
-    const base = {
-      ticketType: selectedType,
-      ticketName: '',
-      type: 'paid',
-      invite_only: false,
-      salesType: 'online',
-      quantity: { availability: 'limited', amount: '' },
-      price: '',
-      purchase_limit: '',
-      description: '',
-    }
-    const withTypeFields =
-      selectedType === 'group_ticket'
-        ? { ...base, group_size: '' }
-        : selectedType === 'multi_day'
-          ? { ...base, days_valid: '' }
-          : base
+  const handleEditTicketWrapper = (ticket: SavedTicket) =>
+    handleEditTicket(ticket, form, setEditingTicketId, setCurrentTicketType)
 
-    form.setValue('tickets', [...current, withTypeFields], { shouldDirty: true })
-  }
+  const handleDeleteTicketWrapper = (ticketId: string) =>
+    handleDeleteTicket(ticketId, deleteTicketMutation)
 
-  const handleEditTicket = async (ticket: SavedTicket) => {
-    // TODO: Open edit modal or form with pre-filled data
-    console.log('Edit ticket:', ticket)
-  }
+  const handleCancelEditWrapper = () =>
+    handleCancelEdit(form, setEditingTicketId, setCurrentTicketType)
 
-  // const handleUpdateTicket = async (ticketId: string, updatedData: Partial<SavedTicket>) => {
-  //   await updateTicketMutation.mutateAsync({ ticketId, data: updatedData })
-  // }
+  const handleFillSampleData = () => fillCurrentFormWithSampleData(tickets, currentTicketType, form)
 
-  const handleDeleteTicket = async (ticketId: string) => {
-    await deleteTicketMutation.mutateAsync(ticketId)
-  }
-
-  async function onSubmit() {
-    if (!eventId) return
-
-    handleFormChange('promocode')
-  }
+  const handleSubmit = () => onSubmit(eventId, handleFormChange)
 
   return (
     <div className='w-full flex flex-col gap-8'>
@@ -131,17 +109,17 @@ export default function CreateTicketForm({
         heading='CREATE TICKETS'
         className='w-full flex flex-col'
         form={form}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         actionOnError={showError}>
-        <FakeDataGenerator
-          type='tickets'
-          onGenerate={(data) => {
-            form.reset(data as unknown as TForm)
-          }}
-          buttonText='🎲 Fill with sample data'
-          variant='outline'
-          className='mb-4'
-        />
+        {tickets.length > 0 && currentTicketType && (
+          <FakeDataGenerator
+            type='tickets'
+            onGenerate={handleFillSampleData}
+            buttonText='🎲 Fill with sample data'
+            variant='outline'
+            className='mb-4'
+          />
+        )}
 
         {savedTickets.length > 0 && (
           <div className='w-full flex flex-col gap-3'>
@@ -155,8 +133,8 @@ export default function CreateTicketForm({
               <CreatedTicketCard
                 key={`created-${ticket.ticketId}-${idx}`}
                 ticket={ticket}
-                onEdit={() => handleEditTicket(ticket)}
-                onDelete={() => handleDeleteTicket(ticket.ticketId)}
+                onEdit={() => handleEditTicketWrapper(ticket)}
+                onDelete={() => handleDeleteTicketWrapper(ticket.ticketId)}
                 isUpdating={updateTicketMutation.isPending}
                 isDeleting={deleteTicketMutation.isPending}
               />
@@ -164,27 +142,35 @@ export default function CreateTicketForm({
           </div>
         )}
 
-        {tickets.map((ticket: TForm['tickets'][number], idx: number) => (
-          <div
-            key={`ticket-${idx}-${ticket.ticketType}`}
-            id={`ticket-${idx}`}
-            className='w-full flex flex-col gap-8'>
+        {tickets.length > 0 && (
+          <div className='w-full flex flex-col gap-8'>
             <TicketForm
               form={form}
-              type={ticket.ticketType}
-              idx={idx}
-              onSubmit={createTicket}
-              isLoading={createTicketMutation.isPending}
+              type={tickets[0].ticketType}
+              idx={0}
+              onSubmit={editingTicketId ? handleUpdateTicket : handleCreateTicket}
+              isLoading={
+                editingTicketId ? updateTicketMutation.isPending : createTicketMutation.isPending
+              }
+              isEditMode={!!editingTicketId}
+              onCancel={editingTicketId ? handleCancelEditWrapper : undefined}
             />
           </div>
-        ))}
+        )}
 
-        <TicketModal onContinue={addTicket} />
+        {tickets.length === 0 && <TicketModal onContinue={handleAddTicket} />}
       </TabContainer>
 
       <ConfirmationMailForm />
-
-      <SubmitBtn />
+      <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
+        <Button
+          type='submit'
+          variant='destructive'
+          onClick={() => handleFormChange('promocode')}
+          className='w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase'>
+          Continue
+        </Button>
+      </div>
     </div>
   )
 }
@@ -214,7 +200,7 @@ function CreatedTicketCard({
             {ticket.quantity && <p className='text-xs text-gray-600'>Qty: {ticket.quantity}</p>}
           </div>
           <div className='flex items-center gap-3'>
-            <CustomBadge text={ticket.ticketType} />
+            <CustomBadge text={ticket.ticketType.replace('_', ' ')} />
             {ticket.invite_only && <CustomBadge type='invite-only' />}
             <BasePopover
               trigger={

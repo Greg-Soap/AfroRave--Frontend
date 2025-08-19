@@ -1,3 +1,4 @@
+import type { promoCodeSchema } from '@/pages/creators/add-event/schemas/promo-code-schema'
 import type { themeSchema } from '@/pages/creators/add-event/schemas/theme-schema'
 import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
 import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
@@ -5,6 +6,7 @@ import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import type {
   CreateEventRequest,
+  CreatePromoCodeRequest,
   CreateThemeRequest,
   CreateTicketRequest,
   CreateVendorRequest,
@@ -186,14 +188,39 @@ export function transformTicketsToCreateRequest(
     return date.toISOString().split('T')[0]
   }
 
+  // Map ticket types from form schema to API literal types
+  const mapTicketType = (ticketType: string): 'Single' | 'Group' | 'MultiDay' => {
+    switch (ticketType) {
+      case 'single_ticket':
+        return 'Single'
+      case 'group_ticket':
+        return 'Group'
+      case 'multi_day':
+        return 'MultiDay'
+      default:
+        return 'Single'
+    }
+  }
+
+  // Map access types from form schema to API literal types
+  const mapAccessType = (type: string, inviteOnly?: boolean): 'Free' | 'Paid' | 'Invite' => {
+    if (inviteOnly) return 'Invite'
+    return type === 'paid' ? 'Paid' : 'Free'
+  }
+
+  // Map sales types from form schema to API literal types
+  const mapSalesType = (salesType: string): 'Online' | 'Door' => {
+    return salesType === 'door_sales' ? 'Door' : 'Online'
+  }
+
   // Convert form data to API format for each ticket
   return formData.tickets.map((ticket: z.infer<typeof unifiedTicketFormSchema>['tickets'][0]) => ({
     ticketName: ticket.ticketName,
-    accessType: ticket.type,
-    salesType: ticket.salesType,
-    ticketType: ticket.ticketType,
+    accessType: mapAccessType(ticket.type, ticket.invite_only),
+    salesType: mapSalesType(ticket.salesType),
+    ticketType: mapTicketType(ticket.ticketType),
     quantity: Number.parseInt(ticket.quantity.amount, 10),
-    price: Number.parseFloat(ticket.price),
+    price: Number.parseFloat(ticket.price || '0'),
     purchaseLimit: ticket.purchase_limit ? Number.parseInt(ticket.purchase_limit, 10) : 10,
     groupSize:
       ticket.ticketType === 'group_ticket' && ticket.group_size
@@ -282,9 +309,14 @@ export function transformServiceToCreateRequest(
     return `${hour24.toString().padStart(2, '0')}:${minute}`
   }
 
+  // Map vendor type from form string to API literal type
+  const mapVendorType = (type: string): 'Revenue' | 'Service' => {
+    return type === 'revenue_vendor' ? 'Revenue' : 'Service'
+  }
+
   // Convert form data to API format for each service
   return formData.service.map((service) => ({
-    vendorType: service.type,
+    vendorType: mapVendorType(service.type),
     category: service.category,
     description: service.description,
     eventId,
@@ -324,9 +356,14 @@ export function transformSlotToCreateRequest(
   formData: z.infer<typeof slotSchema>,
   eventId: string,
 ): CreateVendorRequest[] {
+  // Map vendor type from form string to API literal type
+  const mapVendorType = (type: string): 'Revenue' | 'Service' => {
+    return type === 'revenue_vendor' ? 'Revenue' : 'Service'
+  }
+
   // Convert form data to API format for each slot
   return formData.slot.map((slot) => ({
-    vendorType: slot.type,
+    vendorType: mapVendorType(slot.type),
     category: slot.category,
     description: slot.description,
     eventId,
@@ -347,6 +384,68 @@ export function transformSlotToCreateRequest(
         email: formData.email,
         phoneNumbers: formData.phone.map((phone) => `${phone.countryCode}${phone.number}`),
       },
+    },
+  }))
+}
+
+/**
+ * Transform form data from PromoCodeForm to CreatePromoCodeRequest format
+ */
+export function transformPromoCodeToCreateRequest(
+  formData: z.infer<typeof promoCodeSchema>,
+  eventId: string,
+): CreatePromoCodeRequest[] {
+  // Convert time format from 12-hour to 24-hour
+  const convertTo24Hour = (hour: string, minute: string, period: 'AM' | 'PM'): string => {
+    let hour24 = Number.parseInt(hour, 10)
+    if (period === 'PM' && hour24 !== 12) hour24 += 12
+    if (period === 'AM' && hour24 === 12) hour24 = 0
+    return `${hour24.toString().padStart(2, '0')}:${minute}`
+  }
+
+  // Format date to YYYY-MM-DD
+  const formatDate = (date: Date): string => {
+    return date.toISOString().split('T')[0]
+  }
+
+  // Map discount type from form schema to API literal type
+  const mapDiscountType = (type: string): 'Flat' | 'Percentage' => {
+    return type === 'percentage' ? 'Percentage' : 'Flat'
+  }
+
+  // Convert form data to API format for each promocode
+  return formData.map((promo) => ({
+    promoCode: promo.code,
+    discountType: mapDiscountType(promo.discount.type),
+    discountValue: Number.parseFloat(promo.discount.amount),
+    discountUsage: Number.parseInt(promo.usageLimit, 10),
+    startDate: `${formatDate(promo.startDate.date)}T${convertTo24Hour(
+      promo.startDate.hour,
+      promo.startDate.minute,
+      promo.startDate.period,
+    )}:00`,
+    endDate: `${formatDate(promo.endDate.date)}T${convertTo24Hour(
+      promo.endDate.hour,
+      promo.endDate.minute,
+      promo.endDate.period,
+    )}:00`,
+    eventId,
+    promoCodeDetails: {
+      tickets: [], // This could be mapped from form data if available
+      isMinimumSpend: promo.conditions.spend.minimum || false,
+      minimumSpend: promo.conditions.spend.amount
+        ? Number.parseFloat(promo.conditions.spend.amount)
+        : 0,
+      isMinimumTicket: promo.conditions.purchased.minimum || false,
+      minimumTicket: promo.conditions.purchased.amount
+        ? Number.parseInt(promo.conditions.purchased.amount, 10)
+        : 0,
+      note: promo.notes || '',
+      isPrivate: promo.private || false,
+      isPartnership: promo.partnershipCode || false,
+      partnerName: '', // This could be mapped from form data if available
+      commisionType: '', // This could be mapped from form data if available
+      commission: 0, // This could be mapped from form data if available
     },
   }))
 }
