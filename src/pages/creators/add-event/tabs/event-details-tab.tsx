@@ -266,7 +266,7 @@ export default function EventDetailsTab({
         </OnlyShowIf>
       </div>
 
-      <div className='grid grid-cols-2 gap-2 md:flex flex-col md:gap-4'>
+      <div className='grid grid-cols-2 gap-2 md:gap-5'>
         <DateForm
           form={form}
           name='START DATE'
@@ -274,6 +274,8 @@ export default function EventDetailsTab({
           hour_name='start_date.hour'
           minute_name='start_date.minute'
           period_name='start_date.period'
+          date_label='Start Date'
+          time_label='Start Time'
         />
 
         <DateForm
@@ -283,6 +285,8 @@ export default function EventDetailsTab({
           hour_name='end_date.hour'
           minute_name='end_date.minute'
           period_name='end_date.period'
+          date_label='End Date'
+          time_label='End Time'
         />
       </div>
 

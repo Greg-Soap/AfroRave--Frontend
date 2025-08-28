@@ -89,13 +89,13 @@ export function TicketForm({
         <TicketType type={type} />
       </div>
 
-      <div className='grid grid-cols-2 gap-8 items-end'>
+      <div className='grid grid-cols-2 gap-8'>
         <div className='flex items-end gap-3'>
           <SelectField
             form={form}
             name={`tickets.${idx}.quantity.availability`}
             label='QUANTITY'
-            className='w-fit'
+            className='max-w-fit'
             data={availability}
             placeholder='Select availability.'
           />
@@ -208,6 +208,7 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
               hour_name='scheduledDate.hour'
               minute_name='scheduledDate.minute'
               period_name='scheduledDate.period'
+              flow='row'
             />
           </OnlyShowIf>
         </OnlyShowIf>

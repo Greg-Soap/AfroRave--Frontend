@@ -14,47 +14,45 @@ export function BaseBooleanCheckbox({
   showCheckbox = true,
 }: IBaseBooleanCheckbox & Partial<ControllerRenderProps>) {
   return (
-    <div className='flex items-center gap-4'>
-      <div className='flex flex-col items-start gap-2'>
-        <div
-          className={cn('flex', {
-            'flex-col gap-5': orientation === 'vertical',
-            'flex-row items-center gap-3': orientation === 'horizontal',
-          })}>
-          {data.items.map((item) => (
-            <div key={item.id} className='flex flex-col gap-1'>
-              <div className='flex items-center gap-1'>
-                {showCheckbox && (
-                  <Checkbox
-                    defaultChecked={defaultChecked ? defaultChecked : false}
-                    name={item.id}
-                    checked={value}
-                    onCheckedChange={(checked) => {
-                      onChange?.(checked === true)
-                    }}
-                    className='size-4'
-                  />
-                )}
-
-                <Label
-                  htmlFor={item.id}
-                  className={cn('text-sm uppercase font-sf-pro-text', labelClassName)}>
-                  {item.label}
-                </Label>
-              </div>
-              {item.description && (
-                <p className='text-xs font-light font-sf-pro-display'>{item.description}</p>
+    <div className='flex flex-col items-start gap-2'>
+      <div
+        className={cn('flex', {
+          'flex-col gap-5': orientation === 'vertical',
+          'flex-row items-center gap-3': orientation === 'horizontal',
+        })}>
+        {data.items.map((item) => (
+          <div key={item.id} className='flex flex-col gap-1'>
+            <div className='flex items-center gap-1'>
+              {showCheckbox && (
+                <Checkbox
+                  defaultChecked={defaultChecked ? defaultChecked : false}
+                  name={item.id}
+                  checked={value}
+                  onCheckedChange={(checked) => {
+                    onChange?.(checked === true)
+                  }}
+                  className='size-4'
+                />
               )}
-            </div>
-          ))}
-        </div>
 
-        {data.description && (
-          <p className={cn('text-xs font-light font-sf-pro-display', descriptionClassName)}>
-            {data.description}
-          </p>
-        )}
+              <Label
+                htmlFor={item.id}
+                className={cn('text-sm uppercase font-sf-pro-text', labelClassName)}>
+                {item.label}
+              </Label>
+            </div>
+            {item.description && (
+              <p className='text-sm font-light font-sf-pro-display'>{item.description}</p>
+            )}
+          </div>
+        ))}
       </div>
+
+      {data.description && (
+        <p className={cn('text-xs font-light font-sf-pro-display', descriptionClassName)}>
+          {data.description}
+        </p>
+      )}
     </div>
   )
 }

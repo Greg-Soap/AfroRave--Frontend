@@ -13,10 +13,7 @@ import { Ellipsis } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { AddBtn } from '../component/add-btn'
-import { FormCount } from '../component/form-count'
 import { PriceField } from '../component/price-field'
-import { SelectField } from '../component/select-field'
 import { TabContainer } from '../component/tab-ctn'
 import { defaultPromoCodeValues, promoCodeSchema } from '../schemas/promo-code-schema'
 import {
@@ -37,7 +34,6 @@ export default function PromoCodeForm({
 }: {
   handleFormChange: (form: string) => void
 }) {
-  const [perksCount, setPerksCount] = useState<number>(1)
   const [editingPromoId, setEditingPromoId] = useState<string | null>(null)
   const [currentPromoCode, setCurrentPromoCode] = useState<boolean>(false)
 
@@ -118,8 +114,6 @@ export default function PromoCodeForm({
           <div className='w-full flex flex-col gap-8'>
             <PromoCodeFormFields
               form={form}
-              perksCount={perksCount}
-              setPerksCount={setPerksCount}
               onSubmit={editingPromoId ? handleUpdatePromoCode : handleCreatePromoCode}
               isEditMode={!!editingPromoId}
               onCancel={editingPromoId ? handleCancelEditWrapper : undefined}
@@ -155,26 +149,20 @@ export default function PromoCodeForm({
 
 function PromoCodeFormFields({
   form,
-  perksCount,
-  setPerksCount,
   onSubmit,
   isEditMode = false,
   onCancel,
 }: {
   form: ReturnType<typeof useForm<{ promoCodes: z.infer<typeof promoCodeSchema> }>>
-  perksCount: number
-  setPerksCount: (count: number) => void
   onSubmit: () => void
   isEditMode?: boolean
   onCancel?: () => void
 }) {
   return (
     <>
-      <FormCount name='PROMO CODE' idx={0} />
-
       <FormFieldWithCounter
         name='promo code'
-        field_name='promoCodes.0.code'
+        field_name='promoCodes.code'
         form={form}
         className='font-normal'
         maxLength={20}>
@@ -187,21 +175,32 @@ function PromoCodeFormFields({
         )}
       </FormFieldWithCounter>
 
-      <div className='flex items-end gap-3'>
-        <SelectField
-          form={form}
-          name='promoCodes.0.discount.type'
-          label='SALES TYPE'
-          className='w-fit'
-          data={discountTypes}
-          placeholder='Select a type of sale.'
-        />
+      <div className='grid grid-cols-2 gap-5 items-end'>
+        <div className='flex flex-col gap-2'>
+          <p className='text-sm font-sf-pro-text font-medium text-system-black'>DISCOUNT VALUE</p>
+          <div className='grid grid-cols-2 gap-3'>
+            <p className='py-[11px] w-full h-9 flex items-center justify-center bg-[#acacac] rounded-[5px] border border-mid-dark-gray text-xs text-system-black font-sf-pro-text'>
+              % OFF
+            </p>
 
-        <FormField form={form} name='promoCodes.0.discount.amount' className='mb-2'>
+            <FormField form={form} name='promoCodes.discount' className='mb-2'>
+              {(field) => (
+                <Input
+                  type='number'
+                  className='w-full h-9'
+                  {...field}
+                  value={field.value == null ? '' : String(field.value)}
+                />
+              )}
+            </FormField>
+          </div>
+        </div>
+
+        <FormField form={form} name='promoCodes.usageLimit' label='usage limit' className='mb-2'>
           {(field) => (
             <Input
               type='number'
-              className='w-[120px] h-9'
+              className='w-full h-9'
               {...field}
               value={field.value == null ? '' : String(field.value)}
             />
@@ -209,58 +208,52 @@ function PromoCodeFormFields({
         </FormField>
       </div>
 
-      <FormField form={form} name='promoCodes.0.usageLimit' label='usage limit' className='mb-2'>
-        {(field) => (
-          <Input
-            type='number'
-            className='w-[120px] h-9'
-            {...field}
-            value={field.value == null ? '' : String(field.value)}
-          />
-        )}
-      </FormField>
-
-      <FormField form={form} name='promoCodes.0.onePerCustomer'>
+      <FormField form={form} name='promoCodes.onePerCustomer'>
         {(field) => <BaseBooleanCheckbox data={checkboxData[0]} {...field} />}
       </FormField>
 
-      <div className='flex flex-col gap-4'>
+      <div className='grid grid-cols-2 gap-5'>
         <DateForm
           form={form}
           name='START DATE'
-          input_name='promoCodes.0.startDate.date'
-          hour_name='promoCodes.0.startDate.hour'
-          minute_name='promoCodes.0.startDate.minute'
-          period_name='promoCodes.0.startDate.period'
+          input_name='promoCodes.startDate.date'
+          hour_name='promoCodes.startDate.hour'
+          minute_name='promoCodes.startDate.minute'
+          period_name='promoCodes.startDate.period'
+          date_label='START DATE'
         />
 
         <DateForm
           form={form}
           name='END DATE'
-          input_name='promoCodes.0.endDate.date'
-          hour_name='promoCodes.0.endDate.hour'
-          minute_name='promoCodes.0.endDate.minute'
-          period_name='promoCodes.0.endDate.period'
+          input_name='promoCodes.endDate.date'
+          hour_name='promoCodes.endDate.hour'
+          minute_name='promoCodes.endDate.minute'
+          period_name='promoCodes.endDate.period'
+          date_label='END DATE'
         />
       </div>
 
       <div className='flex flex-col gap-4'>
-        <FormField form={form} name='promoCodes.0.conditions.spend.minimum'>
+        <FormField form={form} name='promoCodes.conditions.spend.minimum'>
           {(field) => <BaseBooleanCheckbox data={checkboxData[1]} {...field} />}
         </FormField>
 
-        <PriceField form={form} name='promoCodes.0.conditions.spend.amount' />
+        <PriceField form={form} name='promoCodes.conditions.spend.amount' />
       </div>
 
       <div className='flex flex-col gap-4'>
-        <FormField form={form} name='promoCodes.0.conditions.purchased.minimum'>
+        <FormField form={form} name='promoCodes.conditions.tickets.minimum'>
           {(field) => <BaseBooleanCheckbox data={checkboxData[2]} {...field} />}
         </FormField>
 
-        <FormField form={form} name='promoCodes.0.conditions.purchased.amount' label='PRICE'>
+        <FormField
+          form={form}
+          name='promoCodes.conditions.tickets.quantity'
+          label='TICKET QUANTITY'>
           {(field) => (
             <Input
-              className='w-[200px]'
+              className='w-full'
               type='number'
               {...field}
               value={field.value == null ? '' : String(field.value)}
@@ -269,13 +262,9 @@ function PromoCodeFormFields({
         </FormField>
       </div>
 
-      <FormField form={form} name='promoCodes.0.private'>
-        {(field) => <BaseBooleanCheckbox data={checkboxData[3]} {...field} />}
-      </FormField>
-
       <FormFieldWithCounter
-        name='DESCRIPTION'
-        field_name='promoCodes.0.notes'
+        name='NOTES'
+        field_name='promoCodes.notes'
         form={form}
         maxLength={450}
         description='Optional'>
@@ -289,29 +278,52 @@ function PromoCodeFormFields({
         )}
       </FormFieldWithCounter>
 
-      <div className='flex flex-col gap-3.5'>
-        {Array.from({ length: perksCount }).map((_, index) => (
-          <FormField
-            key={`perk-${index}-${Date.now()}`}
-            form={form}
-            name={`promoCodes.0.perks.${index}`}
-            label={index === 0 ? 'Perks' : undefined}>
-            {(field) => <Input {...field} value={field.value == null ? '' : String(field.value)} />}
-          </FormField>
-        ))}
-
-        <AddBtn name='Perks' onClick={() => setPerksCount(perksCount + 1)} />
-      </div>
-
-      <FormField form={form} name='promoCodes.0.partnershipCode'>
+      <FormField form={form} name='promoCodes.partnership.partnershipCode'>
         {(field) => <BaseBooleanCheckbox data={checkboxData[4]} {...field} />}
       </FormField>
+
+      <FormFieldWithCounter
+        form={form}
+        field_name='promoCodes.partnership.name'
+        name='NAME'
+        maxLength={20}>
+        {(field) => (
+          <Input
+            className='w-full'
+            {...field}
+            value={field.value == null ? '' : String(field.value)}
+          />
+        )}
+      </FormFieldWithCounter>
+
+      <div className='flex flex-col gap-1'>
+        <FormField form={form} name='promoCodes.partnership.comission'>
+          {(field) => <BaseBooleanCheckbox data={checkboxData[5]} {...field} />}
+        </FormField>
+
+        <div className='w-full grid grid-cols-2 gap-3'>
+          <p className='py-[11px] w-full h-9 flex items-center justify-center bg-[#acacac] rounded-[5px] border border-mid-dark-gray text-xs text-system-black font-sf-pro-text'>
+            % OFF
+          </p>
+
+          <FormField form={form} name='promoCodes.partnership.comissionRate'>
+            {(field) => (
+              <Input
+                type='number'
+                className='w-full h-9'
+                {...field}
+                value={field.value == null ? '' : String(field.value)}
+              />
+            )}
+          </FormField>
+        </div>
+      </div>
 
       <div className='flex gap-3'>
         <Button
           type='button'
           onClick={onSubmit}
-          className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
+          className='w-fit h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
           {isEditMode ? 'UPDATE PROMO CODE' : 'CREATE PROMO CODE'}
         </Button>
 
@@ -419,9 +431,7 @@ const checkboxData: IBaseCheckbox[] = [
     description: 'Link THIS code to a partner or influencer for sales tracking.',
     items: [{ label: 'partnership code?', id: 'partnershipCode' }],
   },
-]
-
-const discountTypes: { value: string; label: string }[] = [
-  { value: 'percentage', label: '% OFF' },
-  { value: 'fixed', label: 'Fixed Amount' },
+  {
+    items: [{ label: 'commission', id: 'comission' }],
+  },
 ]
