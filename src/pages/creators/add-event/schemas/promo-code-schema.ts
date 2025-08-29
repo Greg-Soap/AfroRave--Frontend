@@ -18,6 +18,7 @@ export const promoCodeSchema = z
       minute: z.string().min(1).max(2),
       period: z.enum(['AM', 'PM']),
     }),
+    tickets: z.array(z.object({ id: z.string({ required_error: 'Kindly select a ticket.' }) })),
     conditions: z.object({
       spend: z.object({
         minimum: z.boolean().optional(),
@@ -85,6 +86,8 @@ export const promoCodeSchema = z
     },
   )
 
+export type TPromoCodeSchema = z.infer<typeof promoCodeSchema>
+
 export const defaultPromoCodeValues: z.infer<typeof promoCodeSchema> = {
   code: '',
   discount: '',
@@ -102,6 +105,7 @@ export const defaultPromoCodeValues: z.infer<typeof promoCodeSchema> = {
     minute: '00',
     period: 'AM',
   },
+  tickets: [],
   conditions: {
     spend: {
       minimum: false,

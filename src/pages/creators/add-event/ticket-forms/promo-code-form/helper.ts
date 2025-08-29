@@ -1,56 +1,79 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { defaultPromoCodeValues } from '../../schemas/promo-code-schema'
+import type { UseFormReturn } from 'react-hook-form'
+import type { TPromoCodeSchema } from '../../schemas/promo-code-schema'
+import type { CreatePromoCodeRequest as TPromoCode } from '@/types'
+import type { useCreatePromoCode } from '@/hooks/use-event-mutations'
 
-export interface SavedPromoCode {
-  id: string
-  code: string
-  discountType: string
-  discountAmount: number
-  usageLimit: number
-  onePerCustomer: boolean
-  startDate: string
-  endDate: string
-  private: boolean
-  notes?: string
+interface IHelperFunctionProps {
+  form: UseFormReturn<{ promoCodes: TPromoCodeSchema }>
+  setSavedPromoCodes: (updater: (prev: TPromoCode[]) => TPromoCode[]) => void
+  setCurrentPromoCode: (value: boolean) => void
+  setEditingPromoId: (id: string | null) => void
+}
+
+function populatePromoCodeJson(form: IHelperFunctionProps['form']) {
+  const formData = form.getValues().promoCodes
+
+  const promoCodeJson: TPromoCode = {
+    id: Date.now().toString(),
+    promocode: formData.code,
+    discountType: 'Percentage',
+    discountValue: Number(formData.discount),
+    discountUsage: Number(formData.usageLimit),
+    startDate: formData.startDate.date.toISOString().split('T')[0],
+    endDate: formData.endDate.date.toISOString().split('T')[0],
+    promoCodedetails: {
+      tickets: Array.isArray(formData.tickets)
+        ? formData.tickets.map((ticket) => ({ id: ticket.id }))
+        : [],
+    },
+    isMinimunSpend: formData.conditions.spend.minimum || false,
+    minimumSpend: Number(formData.conditions.spend.amount) || 0,
+    isMinimunTickets: formData.conditions.tickets.minimum || false,
+    minimumTickets: Number(formData.conditions.tickets.quantity) || 0,
+    note: formData.notes || '',
+    isPrivate: false,
+    isPartnership: formData.partnership.partnershipCode || false,
+    partnerName: formData.partnership.name || '',
+    comissionType: 'Percentage',
+    comission: Number(formData.partnership.comissionRate) || 0,
+  }
+
+  return promoCodeJson
 }
 
 export function createPromoCode(
-  form: any,
-  setSavedPromoCodes: (updater: (prev: SavedPromoCode[]) => SavedPromoCode[]) => void,
-  setCurrentPromoCode: (value: boolean) => void,
-  setEditingPromoId: (id: string | null) => void,
+  form: IHelperFunctionProps['form'],
+  setSavedPromoCodes: IHelperFunctionProps['setSavedPromoCodes'],
+  setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
+  setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
+  eventId: string | null,
+  createPromoCodeMutation: ReturnType<typeof useCreatePromoCode>,
 ) {
-  const formData = form.getValues()
-  console.log('Creating promo code:', formData)
+  const newPromoCode: TPromoCode = populatePromoCodeJson(form)
 
-  // Mock creation - replace with actual API call
-  const newPromoCode: SavedPromoCode = {
-    id: Date.now().toString(),
-    code: formData.promoCodes[0].code,
-    discountType: formData.promoCodes[0].discount.type,
-    discountAmount: Number(formData.promoCodes[0].discount.amount),
-    usageLimit: Number(formData.promoCodes[0].usageLimit),
-    onePerCustomer: formData.promoCodes[0].onePerCustomer || false,
-    startDate: formData.promoCodes[0].startDate.date.toISOString().split('T')[0],
-    endDate: formData.promoCodes[0].endDate.date.toISOString().split('T')[0],
-    private: formData.promoCodes[0].private || false,
-    notes: formData.promoCodes[0].notes || '',
-  }
+  createPromoCodeMutation.mutate(
+    { ...newPromoCode, eventId: eventId || '' },
+    {
+      onSuccess: () => {
+        setSavedPromoCodes((prev) => [...prev, newPromoCode])
+        form.reset()
+        setCurrentPromoCode(false)
+        setEditingPromoId(null)
+      },
+    },
+  )
 
-  setSavedPromoCodes((prev) => [...prev, newPromoCode])
-
-  // Reset form
-  form.reset({ promoCodes: defaultPromoCodeValues })
+  form.reset()
   setCurrentPromoCode(false)
   setEditingPromoId(null)
 }
 
 export function updatePromoCode(
-  form: any,
+  form: IHelperFunctionProps['form'],
   editingPromoId: string | null,
-  setSavedPromoCodes: (updater: (prev: SavedPromoCode[]) => SavedPromoCode[]) => void,
-  setCurrentPromoCode: (value: boolean) => void,
-  setEditingPromoId: (id: string | null) => void,
+  setSavedPromoCodes: IHelperFunctionProps['setSavedPromoCodes'],
+  setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
+  setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
 ) {
   const formData = form.getValues()
   console.log('Updating promo code:', formData)
@@ -61,77 +84,65 @@ export function updatePromoCode(
       promo.id === editingPromoId
         ? {
             ...promo,
-            code: formData.promoCodes[0].code,
-            discountType: formData.promoCodes[0].discount.type,
-            discountAmount: Number(formData.promoCodes[0].discount.amount),
-            usageLimit: Number(formData.promoCodes[0].usageLimit),
-            onePerCustomer: formData.promoCodes[0].onePerCustomer || false,
-            startDate: formData.promoCodes[0].startDate.date.toISOString().split('T')[0],
-            endDate: formData.promoCodes[0].endDate.date.toISOString().split('T')[0],
-            private: formData.promoCodes[0].private || false,
-            notes: formData.promoCodes[0].notes || '',
+            ...populatePromoCodeJson(form),
           }
         : promo,
     ),
   )
 
-  // Reset form
-  form.reset({ promoCodes: defaultPromoCodeValues })
+  form.reset()
   setCurrentPromoCode(false)
   setEditingPromoId(null)
 }
 
 export function addPromoCode(
-  form: any,
-  setEditingPromoId: (id: string | null) => void,
-  setCurrentPromoCode: (value: boolean) => void,
+  form: IHelperFunctionProps['form'],
+  setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
+  setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
-  // Clear any existing form
-  form.reset({ promoCodes: defaultPromoCodeValues })
+  form.reset()
   setEditingPromoId(null)
   setCurrentPromoCode(true)
 }
 
 export function handleEditPromoCode(
-  promoCode: SavedPromoCode,
-  form: any,
-  setEditingPromoId: (id: string | null) => void,
-  setCurrentPromoCode: (value: boolean) => void,
+  promoCode: TPromoCode,
+  form: IHelperFunctionProps['form'],
+  setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
+  setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
-  // Convert saved promo code to form format
-  const formPromoCode = [
-    {
-      code: promoCode.code,
-      discount: {
-        type: promoCode.discountType as 'percentage' | 'fixed',
-        amount: promoCode.discountAmount.toString(),
-      },
-      usageLimit: promoCode.usageLimit.toString(),
-      onePerCustomer: promoCode.onePerCustomer,
-      startDate: {
-        date: new Date(promoCode.startDate),
-        hour: '12',
-        minute: '00',
-        period: 'AM' as const,
-      },
-      endDate: {
-        date: new Date(promoCode.endDate),
-        hour: '12',
-        minute: '00',
-        period: 'AM' as const,
-      },
-      conditions: {
-        spend: { minimum: false, amount: '' },
-        purchased: { minimum: false, amount: '' },
-      },
-      private: promoCode.private,
-      notes: promoCode.notes || '',
-      perks: [''],
-      partnershipCode: false,
+  const formPromoCode = {
+    code: promoCode.promocode,
+    discount: promoCode.discountValue.toString(),
+    usageLimit: promoCode.discountUsage.toString(),
+    startDate: {
+      date: new Date(promoCode.startDate),
+      hour: '12',
+      minute: '00',
+      period: 'AM' as const,
     },
-  ]
+    endDate: {
+      date: new Date(promoCode.endDate),
+      hour: '12',
+      minute: '00',
+      period: 'AM' as const,
+    },
+    conditions: {
+      spend: { minimum: promoCode.isMinimunSpend, amount: promoCode.minimumSpend.toString() },
+      tickets: {
+        minimum: promoCode.isMinimunTickets,
+        quantity: promoCode.minimumTickets.toString(),
+      },
+    },
+    notes: promoCode.note,
+    partnership: {
+      partnershipCode: promoCode.isPartnership,
+      name: promoCode.partnerName,
+      comission: promoCode.comission > 0,
+      comissionRate: promoCode.comission.toString(),
+    },
+  }
 
-  // Set form values and enter edit mode
   form.reset({ promoCodes: formPromoCode })
   setEditingPromoId(promoCode.id)
   setCurrentPromoCode(true)
@@ -139,18 +150,17 @@ export function handleEditPromoCode(
 
 export function handleDeletePromoCode(
   promoId: string,
-  setSavedPromoCodes: (updater: (prev: SavedPromoCode[]) => SavedPromoCode[]) => void,
+  setSavedPromoCodes: IHelperFunctionProps['setSavedPromoCodes'],
 ) {
-  // Mock deletion - replace with actual API call
   setSavedPromoCodes((prev) => prev.filter((promo) => promo.id !== promoId))
 }
 
 export function handleCancelEdit(
-  form: any,
-  setEditingPromoId: (id: string | null) => void,
-  setCurrentPromoCode: (value: boolean) => void,
+  form: IHelperFunctionProps['form'],
+  setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
+  setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
-  form.reset({ promoCodes: defaultPromoCodeValues })
+  form.reset()
   setEditingPromoId(null)
   setCurrentPromoCode(false)
 }

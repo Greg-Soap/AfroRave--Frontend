@@ -252,14 +252,26 @@ export interface PromoCodeDetails {
 }
 
 export interface CreatePromoCodeRequest {
-  promoCode: string
-  discountType: 'Flat' | 'Percentage'
+  id: string
+  promocode: string
+  discountType: string
   discountValue: number
   discountUsage: number
   startDate: string
   endDate: string
-  eventId: string
-  promoCodeDetails: PromoCodeDetails
+  promoCodedetails: {
+    tickets: { id: string }[]
+  }
+  isMinimunSpend: boolean
+  minimumSpend: number
+  isMinimunTickets: boolean
+  minimumTickets: number
+  note: string
+  isPrivate: boolean
+  isPartnership: boolean
+  partnerName: string
+  comissionType: string
+  comission: number
 }
 
 // Theme creation interfaces

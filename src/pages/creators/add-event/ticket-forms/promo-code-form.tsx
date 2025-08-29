@@ -15,9 +15,12 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { PriceField } from '../component/price-field'
 import { TabContainer } from '../component/tab-ctn'
-import { defaultPromoCodeValues, promoCodeSchema } from '../schemas/promo-code-schema'
 import {
-  type SavedPromoCode,
+  defaultPromoCodeValues,
+  promoCodeSchema,
+  type TPromoCodeSchema,
+} from '../schemas/promo-code-schema'
+import {
   addPromoCode,
   createPromoCode,
   handleCancelEdit,
@@ -26,8 +29,11 @@ import {
   onSubmit,
   updatePromoCode,
 } from './promo-code-form/helper'
-
-type PromoCodeForm = z.infer<typeof promoCodeSchema>
+import type { TicketData, CreatePromoCodeRequest as TPromoCode } from '@/types'
+import { useEventStore } from '@/stores'
+import { useGetEventTickets } from '@/hooks/use-event-mutations'
+import { BaseCheckbox } from '@/components/reusable/base-checkbox'
+import { useCreatePromoCode } from '@/hooks/use-event-mutations'
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -38,28 +44,25 @@ export default function PromoCodeForm({
   const [currentPromoCode, setCurrentPromoCode] = useState<boolean>(false)
 
   // Mock data for demonstration - replace with actual API call
-  const [savedPromoCodes, setSavedPromoCodes] = useState<SavedPromoCode[]>([
-    {
-      id: '1',
-      code: 'SAVE20',
-      discountType: 'percentage',
-      discountAmount: 20,
-      usageLimit: 100,
-      onePerCustomer: true,
-      startDate: '2024-01-01',
-      endDate: '2024-12-31',
-      private: false,
-      notes: '20% off for early birds',
-    },
-  ])
+  const [savedPromoCodes, setSavedPromoCodes] = useState<TPromoCode[]>([])
 
-  const form = useForm<{ promoCodes: z.infer<typeof promoCodeSchema> }>({
+  const { eventId } = useEventStore()
+  const createPromoCodeMutation = useCreatePromoCode(eventId || '')
+
+  const form = useForm<{ promoCodes: TPromoCodeSchema }>({
     resolver: zodResolver(z.object({ promoCodes: promoCodeSchema })),
     defaultValues: { promoCodes: defaultPromoCodeValues },
   })
 
   const handleCreatePromoCode = () =>
-    createPromoCode(form, setSavedPromoCodes, setCurrentPromoCode, setEditingPromoId)
+    createPromoCode(
+      form,
+      setSavedPromoCodes,
+      setCurrentPromoCode,
+      setEditingPromoId,
+      eventId,
+      createPromoCodeMutation,
+    )
 
   const handleUpdatePromoCode = () =>
     updatePromoCode(
@@ -72,7 +75,7 @@ export default function PromoCodeForm({
 
   const handleAddPromoCode = () => addPromoCode(form, setEditingPromoId, setCurrentPromoCode)
 
-  const handleEditPromoCodeWrapper = (promoCode: SavedPromoCode) =>
+  const handleEditPromoCodeWrapper = (promoCode: TPromoCode) =>
     handleEditPromoCode(promoCode, form, setEditingPromoId, setCurrentPromoCode)
 
   const handleDeletePromoCodeWrapper = (promoId: string) =>
@@ -83,9 +86,11 @@ export default function PromoCodeForm({
 
   const handleSubmit = () => onSubmit(handleFormChange)
 
+  const eventTickets = useGetEventTickets(eventId || '').data?.data
+
   return (
     <div className='w-full flex flex-col gap-8'>
-      <TabContainer<{ promoCodes: z.infer<typeof promoCodeSchema> }>
+      <TabContainer<{ promoCodes: TPromoCodeSchema }>
         heading='ENABLE PROMO CODES'
         description='Code names must be unique per event'
         className='w-full flex flex-col'
@@ -114,6 +119,7 @@ export default function PromoCodeForm({
           <div className='w-full flex flex-col gap-8'>
             <PromoCodeFormFields
               form={form}
+              eventTickets={eventTickets}
               onSubmit={editingPromoId ? handleUpdatePromoCode : handleCreatePromoCode}
               isEditMode={!!editingPromoId}
               onCancel={editingPromoId ? handleCancelEditWrapper : undefined}
@@ -152,12 +158,8 @@ function PromoCodeFormFields({
   onSubmit,
   isEditMode = false,
   onCancel,
-}: {
-  form: ReturnType<typeof useForm<{ promoCodes: z.infer<typeof promoCodeSchema> }>>
-  onSubmit: () => void
-  isEditMode?: boolean
-  onCancel?: () => void
-}) {
+  eventTickets,
+}: IPromoCodeFormFields) {
   return (
     <>
       <FormFieldWithCounter
@@ -175,13 +177,26 @@ function PromoCodeFormFields({
         )}
       </FormFieldWithCounter>
 
-      <div className='grid grid-cols-2 gap-5 items-end'>
+      <FormField form={form} name='promoCodes.tickets' label='APPLY TO'>
+        {(field) => (
+          <BaseCheckbox
+            data={{
+              items:
+                eventTickets?.map((ticket) => ({
+                  label: ticket.ticketName,
+                  id: ticket.ticketId,
+                })) || [],
+            }}
+            {...field}
+          />
+        )}
+      </FormField>
+
+      <div className='grid md:grid-cols-2 gap-5 items-end'>
         <div className='flex flex-col gap-2'>
           <p className='text-sm font-sf-pro-text font-medium text-system-black'>DISCOUNT VALUE</p>
           <div className='grid grid-cols-2 gap-3'>
-            <p className='py-[11px] w-full h-9 flex items-center justify-center bg-[#acacac] rounded-[5px] border border-mid-dark-gray text-xs text-system-black font-sf-pro-text'>
-              % OFF
-            </p>
+            <FieldText text='OFF' />
 
             <FormField form={form} name='promoCodes.discount' className='mb-2'>
               {(field) => (
@@ -302,9 +317,7 @@ function PromoCodeFormFields({
         </FormField>
 
         <div className='w-full grid grid-cols-2 gap-3'>
-          <p className='py-[11px] w-full h-9 flex items-center justify-center bg-[#acacac] rounded-[5px] border border-mid-dark-gray text-xs text-system-black font-sf-pro-text'>
-            % OFF
-          </p>
+          <FieldText text='AFTER SALES' />
 
           <FormField form={form} name='promoCodes.partnership.comissionRate'>
             {(field) => (
@@ -341,33 +354,25 @@ function PromoCodeFormFields({
   )
 }
 
-function CreatedPromoCard({
-  promoCode,
-  onEdit,
-  onDelete,
-}: {
-  promoCode: SavedPromoCode
-  onEdit: () => void
-  onDelete: () => void
-}) {
+function CreatedPromoCard({ promoCode, onEdit, onDelete }: ICreatedPromoCode) {
   return (
     <div className='w-full flex flex-col'>
       <div className='w-full flex flex-col gap-5'>
         <div className='w-full flex items-center justify-between border border-mid-dark-gray/30 px-3 py-[11px] shadow-[0px_2px_10px_2px_#0000001A] rounded-[5px]'>
           <div className='flex flex-col gap-1'>
             <p className='uppercase text-sm font-sf-pro-display leading-[100%] text-charcoal'>
-              {promoCode.code}
+              {promoCode.promocode}
             </p>
             <p className='text-xs text-gray-600'>
               {promoCode.discountType === 'percentage'
-                ? `${promoCode.discountAmount}% OFF`
-                : `$${promoCode.discountAmount} OFF`}
+                ? `${promoCode.discountValue}% OFF`
+                : `$${promoCode.discountValue} OFF`}
             </p>
-            <p className='text-xs text-gray-600'>Usage: {promoCode.usageLimit}</p>
+            <p className='text-xs text-gray-600'>Usage: {promoCode.discountUsage}</p>
           </div>
           <div className='flex items-center gap-3'>
             <CustomBadge text={promoCode.discountType} />
-            {promoCode.private && <CustomBadge type='private' text='Private' />}
+            {promoCode.isPrivate && <CustomBadge type='private' text='Private' />}
             <BasePopover
               trigger={
                 <Button variant='ghost' className='hover:bg-black/10'>
@@ -395,10 +400,7 @@ function CreatedPromoCard({
   )
 }
 
-function CustomBadge({
-  type = 'default',
-  text = 'default',
-}: { type?: 'default' | 'private'; text?: string }) {
+function CustomBadge({ type = 'default', text = 'default' }: ICustomBadge) {
   return (
     <Badge
       className={cn('py-1.5 px-2 rounded-[6px] text-xs font-sf-pro-rounded leading-[100%]', {
@@ -407,6 +409,14 @@ function CustomBadge({
       })}>
       {text}
     </Badge>
+  )
+}
+
+function FieldText({ text }: { text: string }) {
+  return (
+    <p className='py-[11px] w-full h-9 flex items-center justify-center bg-[#acacac] rounded-[5px] border border-mid-dark-gray text-xs text-system-black font-sf-pro-text'>
+      % {text}
+    </p>
   )
 }
 
@@ -435,3 +445,22 @@ const checkboxData: IBaseCheckbox[] = [
     items: [{ label: 'commission', id: 'comission' }],
   },
 ]
+
+interface IPromoCodeFormFields {
+  form: ReturnType<typeof useForm<{ promoCodes: TPromoCodeSchema }>>
+  onSubmit: () => void
+  isEditMode?: boolean
+  onCancel?: () => void
+  eventTickets?: TicketData[]
+}
+
+interface ICreatedPromoCode {
+  promoCode: TPromoCode
+  onEdit: () => void
+  onDelete: () => void
+}
+
+interface ICustomBadge {
+  type?: 'default' | 'private'
+  text?: string
+}

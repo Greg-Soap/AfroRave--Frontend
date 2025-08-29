@@ -152,7 +152,8 @@ export function useCreatePromoCode(eventId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreatePromoCodeRequest) => eventService.createPromoCode(data),
+    mutationFn: (data: CreatePromoCodeRequest & { eventId: string }) =>
+      eventService.createPromoCode(data),
     onSuccess: () => {
       toast.success('Promo code created successfully!')
       console.log('Promo code created successfully')
