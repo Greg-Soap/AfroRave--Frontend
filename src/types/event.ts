@@ -252,7 +252,6 @@ export interface PromoCodeDetails {
 }
 
 export interface CreatePromoCodeRequest {
-  id: string
   promocode: string
   discountType: string
   discountValue: number

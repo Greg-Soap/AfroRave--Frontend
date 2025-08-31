@@ -1,4 +1,3 @@
-import { BasePopover } from '@/components/reusable'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,7 +10,6 @@ import { FakeDataGenerator } from '@/lib/fake-data-generator'
 import { cn } from '@/lib/utils'
 import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Ellipsis } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
@@ -34,6 +32,7 @@ import {
 } from './helper'
 import { TicketForm } from './ticket-form'
 import { TicketModal } from './ticket-modal'
+import { ActionPopover } from '../../component/action-popover'
 
 type TForm = z.infer<typeof unifiedTicketFormSchema>
 
@@ -202,29 +201,11 @@ function CreatedTicketCard({
           <div className='flex items-center gap-3'>
             <CustomBadge text={ticket.ticketType.replace('_', ' ')} />
             {ticket.invite_only && <CustomBadge type='invite-only' />}
-            <BasePopover
-              trigger={
-                <Button
-                  variant='ghost'
-                  className='hover:bg-black/10'
-                  disabled={isUpdating || isDeleting}>
-                  <Ellipsis width={3} height={15} color='#1E1E1E' />
-                </Button>
-              }
-              content={
-                <>
-                  <Button variant='ghost' onClick={onEdit} disabled={isUpdating || isDeleting}>
-                    {isUpdating ? 'Updating...' : 'Edit'}
-                  </Button>
-                  <Button
-                    variant='ghost'
-                    onClick={onDelete}
-                    disabled={isUpdating || isDeleting}
-                    className='text-red-600 hover:text-red-700'>
-                    {isDeleting ? 'Deleting...' : 'Delete'}
-                  </Button>
-                </>
-              }
+            <ActionPopover
+              isDeleting={isDeleting}
+              isUpdating={isUpdating}
+              onEdit={onEdit}
+              onDelete={onDelete}
             />
           </div>
         </div>

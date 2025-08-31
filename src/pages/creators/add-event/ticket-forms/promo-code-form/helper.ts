@@ -1,26 +1,59 @@
 import type { UseFormReturn } from 'react-hook-form'
 import type { TPromoCodeSchema } from '../../schemas/promo-code-schema'
-import type { CreatePromoCodeRequest as TPromoCode } from '@/types'
-import type { useCreatePromoCode } from '@/hooks/use-event-mutations'
+import type { CreatePromoCodeRequest, PromoCodeData } from '@/types'
+import type {
+  useCreatePromoCode,
+  useDeletePromoCode,
+  useUpdatePromoCode,
+} from '@/hooks/use-event-mutations'
+
+//  type TPromoCode = CreatePromoCodeRequest & { id: string }
 
 interface IHelperFunctionProps {
   form: UseFormReturn<{ promoCodes: TPromoCodeSchema }>
-  setSavedPromoCodes: (updater: (prev: TPromoCode[]) => TPromoCode[]) => void
   setCurrentPromoCode: (value: boolean) => void
   setEditingPromoId: (id: string | null) => void
+}
+
+function toISODateTime(dateObj: {
+  date: Date
+  hour: string
+  minute: string
+  period: 'AM' | 'PM'
+}): string {
+  const year = dateObj.date.getFullYear()
+  const month = dateObj.date.getMonth()
+  const day = dateObj.date.getDate()
+
+  let hour = Number(dateObj.hour)
+  const minute = Number(dateObj.minute)
+
+  if (hour === 12 && dateObj.period === 'AM') {
+    hour = 0
+  } else if (hour !== 12 && dateObj.period === 'PM') {
+    hour += 12
+  }
+
+  const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(
+    2,
+    '0',
+  )} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`
+
+  console.log(formattedDate)
+
+  return formattedDate
 }
 
 function populatePromoCodeJson(form: IHelperFunctionProps['form']) {
   const formData = form.getValues().promoCodes
 
-  const promoCodeJson: TPromoCode = {
-    id: Date.now().toString(),
+  const promoCodeJson: CreatePromoCodeRequest = {
     promocode: formData.code,
     discountType: 'Percentage',
     discountValue: Number(formData.discount),
     discountUsage: Number(formData.usageLimit),
-    startDate: formData.startDate.date.toISOString().split('T')[0],
-    endDate: formData.endDate.date.toISOString().split('T')[0],
+    startDate: toISODateTime(formData.startDate),
+    endDate: toISODateTime(formData.endDate),
     promoCodedetails: {
       tickets: Array.isArray(formData.tickets)
         ? formData.tickets.map((ticket) => ({ id: ticket.id }))
@@ -43,56 +76,45 @@ function populatePromoCodeJson(form: IHelperFunctionProps['form']) {
 
 export function createPromoCode(
   form: IHelperFunctionProps['form'],
-  setSavedPromoCodes: IHelperFunctionProps['setSavedPromoCodes'],
   setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
   setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
   eventId: string | null,
   createPromoCodeMutation: ReturnType<typeof useCreatePromoCode>,
 ) {
-  const newPromoCode: TPromoCode = populatePromoCodeJson(form)
+  const newPromoCode: CreatePromoCodeRequest = populatePromoCodeJson(form)
 
   createPromoCodeMutation.mutate(
     { ...newPromoCode, eventId: eventId || '' },
     {
       onSuccess: () => {
-        setSavedPromoCodes((prev) => [...prev, newPromoCode])
         form.reset()
         setCurrentPromoCode(false)
         setEditingPromoId(null)
       },
     },
   )
-
-  form.reset()
-  setCurrentPromoCode(false)
-  setEditingPromoId(null)
 }
 
 export function updatePromoCode(
   form: IHelperFunctionProps['form'],
   editingPromoId: string | null,
-  setSavedPromoCodes: IHelperFunctionProps['setSavedPromoCodes'],
   setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
   setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
+  updatePromoCode: ReturnType<typeof useUpdatePromoCode>,
 ) {
-  const formData = form.getValues()
-  console.log('Updating promo code:', formData)
+  const updatedPromoCode: CreatePromoCodeRequest = populatePromoCodeJson(form)
+  console.log('Updating promo code:', updatedPromoCode)
 
-  // Mock update - replace with actual API call
-  setSavedPromoCodes((prev) =>
-    prev.map((promo) =>
-      promo.id === editingPromoId
-        ? {
-            ...promo,
-            ...populatePromoCodeJson(form),
-          }
-        : promo,
-    ),
+  updatePromoCode.mutate(
+    { promoId: editingPromoId || '', data: updatedPromoCode },
+    {
+      onSuccess: () => {
+        form.reset()
+        setCurrentPromoCode(false)
+        setEditingPromoId(null)
+      },
+    },
   )
-
-  form.reset()
-  setCurrentPromoCode(false)
-  setEditingPromoId(null)
 }
 
 export function addPromoCode(
@@ -106,13 +128,13 @@ export function addPromoCode(
 }
 
 export function handleEditPromoCode(
-  promoCode: TPromoCode,
+  promoCode: PromoCodeData,
   form: IHelperFunctionProps['form'],
   setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
   setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
   const formPromoCode = {
-    code: promoCode.promocode,
+    code: promoCode.promoCode,
     discount: promoCode.discountValue.toString(),
     usageLimit: promoCode.discountUsage.toString(),
     startDate: {
@@ -128,31 +150,31 @@ export function handleEditPromoCode(
       period: 'AM' as const,
     },
     conditions: {
-      spend: { minimum: promoCode.isMinimunSpend, amount: promoCode.minimumSpend.toString() },
+      spend: { minimum: false, amount: '0' },
       tickets: {
-        minimum: promoCode.isMinimunTickets,
-        quantity: promoCode.minimumTickets.toString(),
+        minimum: false,
+        quantity: '0',
       },
     },
-    notes: promoCode.note,
+    notes: '',
     partnership: {
-      partnershipCode: promoCode.isPartnership,
-      name: promoCode.partnerName,
-      comission: promoCode.comission > 0,
-      comissionRate: promoCode.comission.toString(),
+      partnershipCode: false,
+      name: '',
+      comission: false,
+      comissionRate: '0',
     },
   }
 
   form.reset({ promoCodes: formPromoCode })
-  setEditingPromoId(promoCode.id)
+  setEditingPromoId(promoCode.promoCode) // setEditingPromoId(promoCode.id)
   setCurrentPromoCode(true)
 }
 
 export function handleDeletePromoCode(
   promoId: string,
-  setSavedPromoCodes: IHelperFunctionProps['setSavedPromoCodes'],
+  deletePromoCode: ReturnType<typeof useDeletePromoCode>,
 ) {
-  setSavedPromoCodes((prev) => prev.filter((promo) => promo.id !== promoId))
+  deletePromoCode.mutate(promoId)
 }
 
 export function handleCancelEdit(
