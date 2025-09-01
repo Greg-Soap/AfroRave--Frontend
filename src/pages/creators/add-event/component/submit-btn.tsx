@@ -4,9 +4,14 @@ import { Loader2 } from 'lucide-react'
 interface SubmitBtnProps {
   children?: React.ReactNode
   isLoading?: boolean
+  updatingText?: string
 }
 
-export function SubmitBtn({ children, isLoading = false }: SubmitBtnProps) {
+export function SubmitBtn({
+  children,
+  isLoading = false,
+  updatingText = 'Creating Event...',
+}: SubmitBtnProps) {
   return (
     <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
       {children}
@@ -19,7 +24,7 @@ export function SubmitBtn({ children, isLoading = false }: SubmitBtnProps) {
         {isLoading ? (
           <>
             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            Creating Event...
+            {updatingText}
           </>
         ) : (
           'Continue'

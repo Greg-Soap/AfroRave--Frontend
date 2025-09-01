@@ -11,13 +11,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { PriceField } from '../component/price-field'
-import { TabContainer } from '../component/tab-ctn'
+import { PriceField } from '../../component/price-field'
+import { TabContainer } from '../../component/tab-ctn'
 import {
   defaultPromoCodeValues,
   promoCodeSchema,
   type TPromoCodeSchema,
-} from '../schemas/promo-code-schema'
+} from '../../schemas/promo-code-schema'
 import {
   addPromoCode,
   createPromoCode,
@@ -26,14 +26,14 @@ import {
   handleEditPromoCode,
   onSubmit,
   updatePromoCode,
-} from './promo-code-form/helper'
+} from './helper'
 import type { PromoCodeData, TicketData } from '@/types'
 import { useEventStore } from '@/stores'
 import { useGetEventPromoCodes, useGetEventTickets } from '@/hooks/use-event-mutations'
 import { BaseCheckbox } from '@/components/reusable/base-checkbox'
 import { useCreatePromoCode, useUpdatePromoCode } from '@/hooks/use-event-mutations'
 import { OnlyShowIf } from '@/lib/environment'
-import { ActionPopover } from '../component/action-popover'
+import { ActionPopover } from '../../component/action-popover'
 import { useDeletePromoCode } from '@/hooks/use-event-mutations'
 
 export default function PromoCodeForm({
@@ -86,7 +86,7 @@ export default function PromoCodeForm({
       <TabContainer<{ promoCodes: TPromoCodeSchema }>
         heading='ENABLE PROMO CODES'
         description='Code names must be unique per event'
-        className='w-full flex flex-col'
+        className='max-w-[560px] w-full flex flex-col'
         form={form}
         onSubmit={handleSubmit}>
         {createdPromoCodes?.data && createdPromoCodes.data.length > 0 && (
@@ -181,6 +181,7 @@ function PromoCodeFormFields({
                 data={{
                   items: [{ label: item.ticketName, id: item.ticketId }],
                 }}
+                multiSelect={true}
                 {...field}
               />
             ))}

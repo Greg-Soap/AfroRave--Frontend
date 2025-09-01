@@ -106,7 +106,7 @@ export default function CreateTicketForm({
     <div className='w-full flex flex-col gap-8'>
       <TabContainer<TForm>
         heading='CREATE TICKETS'
-        className='w-full flex flex-col'
+        className='max-w-[560px] w-full flex flex-col'
         form={form}
         onSubmit={handleSubmit}
         actionOnError={showError}>
@@ -180,13 +180,7 @@ function CreatedTicketCard({
   onDelete,
   isUpdating,
   isDeleting,
-}: {
-  ticket: SavedTicket
-  onEdit: () => void
-  onDelete: () => void
-  isUpdating: boolean
-  isDeleting: boolean
-}) {
+}: ICreatedTicketCard) {
   return (
     <div className='w-full flex flex-col'>
       <div className='w-full flex flex-col gap-5'>
@@ -231,4 +225,12 @@ function CustomBadge({
       {text}
     </Badge>
   )
+}
+
+interface ICreatedTicketCard {
+  ticket: SavedTicket
+  onEdit: () => void
+  onDelete: () => void
+  isUpdating: boolean
+  isDeleting: boolean
 }

@@ -7,43 +7,46 @@ import { transformThemeToCreateRequest } from '@/lib/event-transforms'
 import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
-import { type FieldValues, type Path, useForm } from 'react-hook-form'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
 import type { z } from 'zod'
 import { SubmitBtn } from '../component/submit-btn'
 import { TabContainer } from '../component/tab-ctn'
-import {
-  type bannerSchema,
-  defaultBannerValues,
-  defaultThemeValues,
-  themeAndBannerSchema,
-  themeSchema,
-} from '../schemas/theme-schema'
+import { themeAndBannerSchema } from '../schemas/theme-schema'
+import { NoEventId } from '../component/no-event-id'
+import { OnlyShowIf } from '@/lib/environment'
+import { SkipBtn } from '../component/skip-btn'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { X } from 'lucide-react'
 
-export default function ThemeTab({
-  setStep,
-  setActiveTabState,
-}: {
-  setStep: (step: number) => void
-  setActiveTabState: (activeTab: string) => void
-}) {
+export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeForm, setActiveForm] = useState<string>()
+
   const { eventId } = useEventStore()
+  const createThemeMutation = useCreateTheme()
+
+  const form = useForm<z.infer<typeof themeAndBannerSchema>>({
+    resolver: zodResolver(themeAndBannerSchema),
+  })
 
   useEffect(() => {
     const formParam = searchParams.get('form')
 
     if (formParam === 'layout' || formParam === 'banner') {
       setActiveForm(formParam)
+      setStep(formParam === 'layout' ? 3.5 : 3)
     } else if (searchParams.get('tab') === 'theme') {
-      setSearchParams({ tab: 'theme', form: 'layout' })
+      setSearchParams({ tab: 'theme', form: 'banner' })
+      setStep(3)
     }
   }, [searchParams, setSearchParams])
 
   function handleFormChange() {
-    setSearchParams({ tab: 'theme', form: 'banner' })
-    setActiveForm('banner')
+    setSearchParams({ tab: 'theme', form: 'layout' })
+    setActiveForm('layout')
+    setStep(3.5)
   }
 
   function renderVendorTab() {
@@ -52,85 +55,12 @@ export default function ThemeTab({
   }
 
   if (!eventId) {
-    return (
-      <div className='w-full flex flex-col items-center justify-center gap-4 py-8'>
-        <div className='text-center'>
-          <h2 className='text-xl font-bold text-black mb-2'>No Event Found</h2>
-          <p className='text-gray-600 mb-4'>Please create an event first before adding theme.</p>
-          <button
-            type='button'
-            onClick={() => setActiveTabState('event-details')}
-            className='bg-black text-white hover:bg-gray-800 px-4 py-2 rounded'>
-            Go to Event Details
-          </button>
-        </div>
-      </div>
-    )
+    return <NoEventId setActiveTabState={setActiveTabState} />
   }
-
-  if (activeForm === 'banner') {
-    setStep(3.5)
-    return <CombinedThemeForm renderVendorTab={renderVendorTab} />
-  }
-
-  setStep(3)
-  return <LayoutForm handleFormChange={handleFormChange} />
-}
-
-function LayoutForm({ handleFormChange }: { handleFormChange: () => void }) {
-  const { eventId } = useEventStore()
-
-  const form = useForm<z.infer<typeof themeSchema>>({
-    resolver: zodResolver(themeSchema),
-    defaultValues: defaultThemeValues,
-  })
-
-  async function onSubmit() {
-    try {
-      if (!eventId) {
-        console.error('No event ID found. Please create an event first.')
-        return
-      }
-
-      handleFormChange()
-    } catch (error) {
-      console.error('Failed to process theme selection:', error)
-    }
-  }
-
-  return (
-    <TabContainer form={form} onSubmit={onSubmit}>
-      <FormField form={form} name='theme'>
-        {(field) => <BaseRadioGroup {...field} data={data} />}
-      </FormField>
-
-      <SubmitBtn />
-    </TabContainer>
-  )
-}
-
-function CombinedThemeForm({
-  renderVendorTab,
-}: {
-  renderVendorTab: () => void
-}) {
-  const createThemeMutation = useCreateTheme()
-  const { eventId } = useEventStore()
-
-  const form = useForm<z.infer<typeof themeAndBannerSchema>>({
-    resolver: zodResolver(themeAndBannerSchema),
-    defaultValues: {
-      theme: '1',
-      banner: defaultBannerValues,
-    },
-  })
 
   async function onSubmit(values: z.infer<typeof themeAndBannerSchema>) {
     try {
-      if (!eventId) {
-        console.error('No event ID found. Please create an event first.')
-        return
-      }
+      if (!eventId) return
 
       const themeRequest = transformThemeToCreateRequest({ theme: values.theme }, eventId)
 
@@ -145,79 +75,98 @@ function CombinedThemeForm({
   }
 
   return (
-    <TabContainer form={form} onSubmit={onSubmit} className='gap-10 md:gap-[100px]'>
-      {/* Theme Selection */}
-      <div className='w-full flex flex-col gap-4'>
-        <p className='font-sf-pro-display text-medium-gray text-sm md:text-2xl uppercase'>
-          SELECT THEME
-        </p>
+    <TabContainer
+      form={form}
+      onSubmit={onSubmit}
+      className='max-w-[875px] w-full  gap-10 md:gap-[100px]'>
+      <OnlyShowIf condition={activeForm === 'layout'}>
         <FormField form={form} name='theme'>
           {(field) => <BaseRadioGroup {...field} data={data} />}
         </FormField>
-      </div>
+      </OnlyShowIf>
 
-      {/* Banner Images */}
-      {bannerForm.map((item) => (
-        <div key={item.type} className='w-full flex flex-col gap-3'>
-          <p className='font-sf-pro-display text-medium-gray text-sm md:text-2xl uppercase'>
-            {item.type} VIEW
-          </p>
-          <div className='w-full flex gap-3 md:gap-14'>
-            <FormField form={form} name={`banner.${item.flyer_name}`} className='w-[162px]'>
-              {(field) => (
-                <>
-                  <FileInputWithPreview onChange={field.onChange} type='flyer' />
-
-                  <FieldDescription description='Shown on Web page when in Flyer View. Also appears on the Ticket and Confirmation' />
-                </>
-              )}
-            </FormField>
-
-            <FormField form={form} name={`banner.${item.background_name}`} className='w-full'>
-              {(field) => (
-                <>
-                  <FileInputWithPreview onChange={field.onChange} type='background' />
-
-                  <FieldDescription description='Background image on Webpage when viewed from a desktop' />
-                </>
-              )}
-            </FormField>
-          </div>
-        </div>
-      ))}
-
-      <SubmitBtn isLoading={createThemeMutation.isPending} />
+      <OnlyShowIf condition={activeForm === 'banner'}>
+        <BannerForm form={form} />
+      </OnlyShowIf>
+      <SubmitBtn isLoading={createThemeMutation.isPending} updatingText='Uploading data...'>
+        <OnlyShowIf condition={activeForm === 'banner'}>
+          <SkipBtn action={handleFormChange} />
+        </OnlyShowIf>
+      </SubmitBtn>
     </TabContainer>
   )
 }
 
-function FileInputWithPreview({
-  onChange,
-  type,
-  className,
-}: {
-  onChange: (file: File | undefined) => void
-  type: 'flyer' | 'background'
-  className?: string
-}) {
+function BannerForm({ form }: IBannerForm) {
+  return (
+    <div className='w-full flex flex-col gap-3'>
+      <p className='text-xl font-black font-sf-pro-display uppercase text-black leading-[100%]'>
+        UPLOAD FLYERS
+      </p>
+      <p className='font-sf-pro-display text-medium-gray text-sm md:text-base'>
+        Upload a png or jpeg file
+      </p>
+      <div className='w-full flex gap-3 md:gap-14'>
+        <FormField form={form} name='banner.flyer' className='w-[162px]'>
+          {(field) => (
+            <>
+              <FileInputWithPreview onChange={field.onChange} type='flyer' />
+
+              <FieldDescription description='Shown on Web page when in Flyer View. Also appears on the Ticket and Confirmation' />
+            </>
+          )}
+        </FormField>
+
+        <FormField form={form} name='banner.background' className='w-full'>
+          {(field) => (
+            <>
+              <FileInputWithPreview onChange={field.onChange} type='background' />
+
+              <FieldDescription description='Background image' />
+            </>
+          )}
+        </FormField>
+      </div>
+    </div>
+  )
+}
+
+function FileInputWithPreview({ onChange, type, className }: IFileInputWithPreview) {
   const [preview, setPreview] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null)
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
+
     if (file) {
       setPreview(URL.createObjectURL(file))
+      setFile(file)
       onChange(file)
     } else {
-      setPreview(null)
-      onChange(undefined)
+      resetFile()
     }
+  }
+
+  function resetFile() {
+    setPreview(null)
+    setFile(null)
+    onChange(undefined)
   }
 
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-[5px] shadow-2xl ${
-        type === 'flyer' ? 'w-[162px] h-[216px]' : 'w-full h-[200px]'
-      } relative ${className || ''}`}>
+      className={cn(
+        'relative flex flex-col items-center justify-center rounded-[5px] shadow-[0px_4px_12px_0px_#0000001F] p-4',
+        { 'w-[162px] h-[216px]': type === 'flyer', 'w-full h-[200px]': type === 'background' },
+        className,
+      )}>
+      <OnlyShowIf condition={file !== null}>
+        <Button
+          onClick={resetFile}
+          className='absolute top-2 right-4 !h-fit !p-1 bg-transparent shadow-none hover:bg-black/20 z-50'>
+          <X color='#000' />
+        </Button>
+      </OnlyShowIf>
       <Input
         type='file'
         accept='image/*'
@@ -240,7 +189,9 @@ function FileInputWithPreview({
 function InnerText({ type }: { type: 'background' | 'flyer' }) {
   return (
     <div className='flex flex-col items-center justify-center font-sf-pro-text pointer-events-none'>
-      <span className='text-mid-dark-gray text-sm'>Insert {type} image</span>
+      <span className='text-mid-dark-gray text-sm text-center normal-case'>
+        Insert {type} image
+      </span>
       <span className='text-deep-red text-xs mt-2'>
         {type === 'background' ? ' 1600 X 500' : '550 x 770'} (PIXELS)
       </span>
@@ -250,34 +201,34 @@ function InnerText({ type }: { type: 'background' | 'flyer' }) {
 
 function FieldDescription({ description }: { description: string }) {
   return (
-    <FormDescription className='text-mid-dark-gray text-sm text-center font-semibold'>
+    <FormDescription className='text-mid-dark-gray/50 text-sm text-center font-semibold'>
       {description}
     </FormDescription>
   )
 }
 
-const bannerForm: IBannerForm<z.infer<typeof bannerSchema>>[] = [
-  {
-    type: 'desktop',
-    flyer_name: 'desktop.flyer',
-    background_name: 'desktop.background',
-  },
-  {
-    type: 'mobile',
-    flyer_name: 'mobile.flyer',
-    background_name: 'mobile.background',
-  },
-]
-
 const data: IRadioGroupProps[] = [
-  { value: '1', src: '/assets/event/1.png', alt: 'layout' },
-  { value: '2', src: '/assets/event/2.png', alt: 'layout' },
-  { value: '3', src: '/assets/event/3.png', alt: 'layout' },
-  { value: '4', src: '/assets/event/4.png', alt: 'layout' },
+  { value: 'default', label: 'DEFAULT', src: '/assets/event/1.png', alt: 'layout' },
+  {
+    value: 'standard-carousel',
+    label: 'STANDARD CAROUSEL',
+    src: '/assets/event/2.png',
+    alt: 'layout',
+  },
+  { value: 'with-flyer', label: 'WITH FLYER', src: '/assets/event/3.png', alt: 'layout' },
 ]
 
-interface IBannerForm<T extends FieldValues> {
-  type: 'mobile' | 'desktop'
-  flyer_name: Path<T>
-  background_name: Path<T>
+interface IThemeTab {
+  setStep: (step: number) => void
+  setActiveTabState: (activeTab: string) => void
+}
+
+interface IBannerForm {
+  form: UseFormReturn<z.infer<typeof themeAndBannerSchema>>
+}
+
+interface IFileInputWithPreview {
+  onChange: (file: File | undefined) => void
+  type: 'flyer' | 'background'
+  className?: string
 }

@@ -155,7 +155,7 @@ export default function AddEventPage() {
             />
 
             <section className='container w-full flex flex-col gap-10'>
-              <div className='flex flex-col gap-6 md:py-10 p-0 md:px-14'>
+              <div className='flex flex-col gap-6 md:py-10'>
                 <div className='flex flex-col gap-2 text-black font-sf-pro-display'>
                   <p className='font-black text-2xl md:text-4xl uppercase'>{heading}</p>
                   <p className='text-[13px] max-w-[351px] uppercase'>{description}</p>

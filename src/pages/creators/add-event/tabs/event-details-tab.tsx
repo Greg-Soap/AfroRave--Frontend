@@ -110,7 +110,7 @@ export default function EventDetailsTab({
   return (
     <TabContainer<z.infer<typeof EditEventDetailsSchema>>
       heading='EVENT DETAILS'
-      className='w-full flex flex-col gap-8'
+      className='max-w-[560px] w-full flex flex-col gap-8'
       form={form}
       onSubmit={onSubmit}>
       <FakeDataGenerator

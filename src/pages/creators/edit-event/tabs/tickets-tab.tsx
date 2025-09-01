@@ -12,7 +12,7 @@ import { EllipsisVertical, Plus, Ticket, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import CreateTicketForm from '../../add-event/ticket-forms/create'
-import PromoCodeForm from '../../add-event/ticket-forms/promo-code-form'
+import PromoCodeForm from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
 import UpgradeForm from '../../add-event/ticket-forms/upgrade-form'
 
 export default function TicketsTab() {

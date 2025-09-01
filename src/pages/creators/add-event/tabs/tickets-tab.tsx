@@ -1,20 +1,12 @@
-import { Button } from '@/components/ui/button'
 import { useEventStore } from '@/stores'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import PromoCodeForm from '../ticket-forms/promo-code-form'
-import UpgradeForm from '../ticket-forms/upgrade-form'
+import PromoCodeForm from '../ticket-forms/promo-code-form/promo-code-form'
+//  import UpgradeForm from '../ticket-forms/upgrade-form'
 import CreateTicketForm from '../ticket-forms/create'
+import { NoEventId } from '../component/no-event-id'
 
-export default function TicketsTab({
-  setStep,
-  setActiveTabState,
-  showError,
-}: {
-  setStep: (step: number) => void
-  setActiveTabState: (activeTab: string) => void
-  showError: () => void
-}) {
+export default function TicketsTab({ setStep, setActiveTabState, showError }: ITicketsTab) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
   const { eventId } = useEventStore()
@@ -39,35 +31,28 @@ export default function TicketsTab({
     searchParams.delete('form')
   }
 
-  // Check if event ID exists, if not show error message
   if (!eventId) {
-    return (
-      <div className='w-full flex flex-col items-center justify-center gap-4 py-8'>
-        <div className='text-center'>
-          <h2 className='text-xl font-bold text-black mb-2'>No Event Found</h2>
-          <p className='text-gray-600 mb-4'>Please create an event first before adding tickets.</p>
-          <Button
-            onClick={() => setActiveTabState('event-details')}
-            className='bg-black text-white hover:bg-gray-800'>
-            Go to Event Details
-          </Button>
-        </div>
-      </div>
-    )
+    return <NoEventId setActiveTabState={setActiveTabState} />
   }
 
   if (currentForm === 'promocode') {
     setStep(2.5)
-    return <PromoCodeForm handleFormChange={handleFormChange} />
+    return <PromoCodeForm handleFormChange={renderThemeTab} />
   }
 
-  if (currentForm === 'upgrades') {
-    setStep(2.5)
-    return <UpgradeForm renderThemeTab={renderThemeTab} />
-  }
+  // if (currentForm === 'upgrades') {
+  //   setStep(2.5)
+  //   return <UpgradeForm renderThemeTab={renderThemeTab} />
+  // }
 
   if (currentForm === 'create') {
     setStep(2)
     return <CreateTicketForm handleFormChange={handleFormChange} showError={showError} />
   }
+}
+
+interface ITicketsTab {
+  setStep: (step: number) => void
+  setActiveTabState: (activeTab: string) => void
+  showError: () => void
 }

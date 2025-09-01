@@ -11,13 +11,36 @@ export function BaseCheckbox({
   descriptionClassName,
   defaultChecked,
   orientation = 'horizontal',
-}: {
-  data: IBaseCheckbox
-  labelClassName?: string
-  descriptionClassName?: string
-  defaultChecked?: boolean
-  orientation?: 'horizontal' | 'vertical'
-} & Partial<ControllerRenderProps>) {
+  multiSelect = false,
+}: TBaseCheckbox & Partial<ControllerRenderProps>) {
+  const isChecked = (itemId: string) => {
+    if (multiSelect) {
+      if (Array.isArray(value)) {
+        return value.some((item: ItemProps) => item.id === itemId)
+      }
+      return false
+    }
+    return value === itemId
+  }
+
+  const handleCheckChange = (itemId: string, checked: boolean) => {
+    if (multiSelect) {
+      const currentValues = Array.isArray(value) ? value : []
+      let newValues: ItemProps[]
+
+      if (checked) {
+        const exists = currentValues.some((item: ItemProps) => item.id === itemId)
+        newValues = exists ? currentValues : [...currentValues, { id: itemId }]
+      } else {
+        newValues = currentValues.filter((item: ItemProps) => item.id !== itemId)
+      }
+
+      onChange?.(newValues)
+    } else {
+      onChange?.(checked ? itemId : undefined)
+    }
+  }
+
   return (
     <div className='flex items-center gap-4'>
       <div className='flex flex-col items-start gap-2'>
@@ -32,9 +55,9 @@ export function BaseCheckbox({
                 <Checkbox
                   defaultChecked={defaultChecked ? defaultChecked : false}
                   id={item.id}
-                  checked={value === item.id}
-                  onCheckedChange={() => {
-                    onChange?.(item.id)
+                  checked={isChecked(item.id)}
+                  onCheckedChange={(checked) => {
+                    handleCheckChange(item.id, checked as boolean)
                   }}
                   className='size-4'
                 />
@@ -64,7 +87,22 @@ export function BaseCheckbox({
   )
 }
 
+type TBaseCheckbox = {
+  data: IBaseCheckbox
+  labelClassName?: string
+  descriptionClassName?: string
+  defaultChecked?: boolean
+  orientation?: 'horizontal' | 'vertical'
+  multiSelect?: boolean
+}
+
+interface ItemProps {
+  label: string
+  id: string
+  description?: string
+}
+
 export interface IBaseCheckbox {
   description?: string
-  items: { label: string; id: string; description?: string }[]
+  items: ItemProps[]
 }
