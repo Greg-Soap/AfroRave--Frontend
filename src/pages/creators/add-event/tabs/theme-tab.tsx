@@ -7,18 +7,19 @@ import { transformThemeToCreateRequest } from '@/lib/event-transforms'
 import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
-import { useForm, type UseFormReturn } from 'react-hook-form'
+import { useForm, type UseFormReturn, type Path } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
 import type { z } from 'zod'
 import { SubmitBtn } from '../component/submit-btn'
 import { TabContainer } from '../component/tab-ctn'
-import { themeAndBannerSchema } from '../schemas/theme-schema'
+import { themeAndBannerSchema, type ThemeAndBannerSchema } from '../schemas/theme-schema'
 import { NoEventId } from '../component/no-event-id'
 import { OnlyShowIf } from '@/lib/environment'
 import { SkipBtn } from '../component/skip-btn'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
+import { useUploadImage } from '@/hooks/useCloudinaryUpload'
 
 export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -27,7 +28,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
   const { eventId } = useEventStore()
   const createThemeMutation = useCreateTheme()
 
-  const form = useForm<z.infer<typeof themeAndBannerSchema>>({
+  const form = useForm<ThemeAndBannerSchema>({
     resolver: zodResolver(themeAndBannerSchema),
   })
 
@@ -107,27 +108,41 @@ function BannerForm({ form }: IBannerForm) {
         Upload a png or jpeg file
       </p>
       <div className='w-full flex gap-3 md:gap-14'>
-        <FormField form={form} name='banner.flyer' className='w-[162px]'>
-          {(field) => (
-            <>
-              <FileInputWithPreview onChange={field.onChange} type='flyer' />
-
-              <FieldDescription description='Shown on Web page when in Flyer View. Also appears on the Ticket and Confirmation' />
-            </>
-          )}
-        </FormField>
-
-        <FormField form={form} name='banner.background' className='w-full'>
-          {(field) => (
-            <>
-              <FileInputWithPreview onChange={field.onChange} type='background' />
-
-              <FieldDescription description='Background image' />
-            </>
-          )}
-        </FormField>
+        <FileUploadField
+          form={form}
+          name='banner.flyer'
+          type='flyer'
+          description='Shown on Web page when in Flyer View. Also appears on the Ticket and Confirmation'
+        />
+        <FileUploadField
+          form={form}
+          name='banner.background'
+          type='background'
+          description='Background image'
+        />
       </div>
     </div>
+  )
+}
+
+function FileUploadField({ form, name, description, type }: IFileUploadField) {
+  const uploadImage = useUploadImage()
+
+  function handleFileChange(file: File) {
+    uploadImage.mutateAsync(file, {
+      onSuccess: (data) => {
+        form.setValue(name, data)
+      },
+    })
+  }
+
+  return (
+    <FormField form={form} name={name} className={type === 'flyer' ? 'w-[162px]' : 'w-full'}>
+      <>
+        <FileInputWithPreview onChange={handleFileChange} type={type} />
+        <FieldDescription description={description} />
+      </>
+    </FormField>
   )
 }
 
@@ -150,7 +165,6 @@ function FileInputWithPreview({ onChange, type, className }: IFileInputWithPrevi
   function resetFile() {
     setPreview(null)
     setFile(null)
-    onChange(undefined)
   }
 
   return (
@@ -224,11 +238,20 @@ interface IThemeTab {
 }
 
 interface IBannerForm {
-  form: UseFormReturn<z.infer<typeof themeAndBannerSchema>>
+  form: UseFormReturn<ThemeAndBannerSchema>
+}
+
+interface IFileUploadField {
+  form: UseFormReturn<ThemeAndBannerSchema>
+  name: Path<ThemeAndBannerSchema>
+  description: string
+  type: TFileType
 }
 
 interface IFileInputWithPreview {
-  onChange: (file: File | undefined) => void
-  type: 'flyer' | 'background'
+  onChange: (file: File) => void
+  type: TFileType
   className?: string
 }
+
+type TFileType = 'flyer' | 'background'

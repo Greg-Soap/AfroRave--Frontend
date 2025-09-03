@@ -1,95 +1,83 @@
-import { date_list } from "@/components/constants";
-import {
-  BaseSelect,
-  type ICustomSelectProps,
-} from "@/components/reusable/base-select";
-import { getRoutePath } from "@/config/get-route-path";
-import { events, type IEvents } from "@/data/events";
-import { cn } from "@/lib/utils";
-import { CalendarDays, MapPin } from "lucide-react";
-import { Suspense, useState } from "react";
-import { Link } from "react-router-dom";
+import { date_list } from '@/components/constants'
+import { BaseSelect, type ICustomSelectProps } from '@/components/reusable/base-select'
+import { getRoutePath } from '@/config/get-route-path'
+import { events, type IEvents } from '@/data/events'
+import { cn } from '@/lib/utils'
+import { CalendarDays, MapPin } from 'lucide-react'
+import { Suspense, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useGetTrendingEvents } from '@/hooks/use-event-mutations'
 
 export default function EventCategoryBlocks() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedDate, setSelectedDate] = useState<string>('')
+
+  const { data: trendingEvents } = useGetTrendingEvents()
+
+  console.log(trendingEvents)
 
   return (
-    <section className="w-full flex flex-col gap-10 md:gap-20 mt-[120px] md:mt-36 pb-16 px-3 md:px-8 lg:px-0 min-h-[calc(100vh-300px)]">
-      <div className="lg:pl-[60px]">
+    <section className='w-full flex flex-col gap-10 md:gap-20 mt-[120px] md:mt-36 pb-16 px-3 md:px-8 lg:px-0 min-h-[calc(100vh-300px)]'>
+      <div className='lg:pl-[60px]'>
         <Suspense fallback={<CategoryBlockSkeleton />}>
-          <CategoryBlock
-            name="Trending"
-            data={events}
-            showLocation={false}
-            layout="middle"
-          />
+          <CategoryBlock name='Trending' data={events} showLocation={false} layout='middle' />
         </Suspense>
       </div>
 
-      <div className="flex flex-col gap-[60px] lg:pl-[60px] xl:pl-[120px]">
-        <div className="flex items-center gap-3 md:gap-6 overflow-x-auto min-h-[40px]">
+      <div className='flex flex-col gap-[60px] lg:pl-[60px] xl:pl-[120px]'>
+        <div className='flex items-center gap-3 md:gap-6 overflow-x-auto min-h-[40px]'>
           <BaseSelect
-            type="others"
+            type='others'
             placeholder={category_list.placeholder}
             width={category_list.width}
             items={category_list.items}
             value={selectedCategory}
             onChange={(value) => {
-              setSelectedCategory(value);
-              console.log("Category changed:", value);
+              setSelectedCategory(value)
+              console.log('Category changed:', value)
             }}
           />
 
           <BaseSelect
-            type="others"
+            type='others'
             placeholder={date_list.placeholder}
             items={date_list.items}
             value={selectedDate}
             onChange={(value) => {
-              setSelectedDate(value);
-              console.log("Date changed:", value);
+              setSelectedDate(value)
+              console.log('Date changed:', value)
             }}
           />
         </div>
 
         <Suspense fallback={<CategoryBlockSkeleton />}>
-          <CategoryBlock data={events} showLocation={true} display="grid" />
+          <CategoryBlock data={events} showLocation={true} display='grid' />
         </Suspense>
       </div>
     </section>
-  );
+  )
 }
 
 export function CategoryBlock({
   name,
   data,
-  layout = "start",
+  layout = 'start',
   showLocation,
-  display = "flex",
+  display = 'flex',
   homePage = false,
-}: {
-  name?: string;
-  data: IEvents[];
-  layout?: IEventCardProps["layout"];
-  showLocation?: IEventCardProps["showLocation"];
-  display?: "flex" | "grid";
-  homePage?: boolean;
-}) {
-  const filteredData = homePage ? data.slice(0, 5) : data;
+}: ICategoryBlock) {
+  const filteredData = homePage ? data.slice(0, 5) : data
   return (
-    <div className="flex flex-col gap-5 w-full">
-      {name && <p className="text-xl font-bold font-sf-pro-display">{name}</p>}
+    <div className='flex flex-col gap-5 w-full'>
+      {name && <p className='text-xl font-bold font-sf-pro-display'>{name}</p>}
 
       <div
         className={cn({
-          "flex gap-5 overflow-x-scroll scrollbar-none w-full":
-            display === "flex",
-          flex: display === "flex" && homePage,
-          "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 justify-center":
-            display === "grid",
-        })}
-      >
+          'flex gap-5 overflow-x-scroll scrollbar-none w-full': display === 'flex',
+          flex: display === 'flex' && homePage,
+          'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8 justify-center':
+            display === 'grid',
+        })}>
         {filteredData.map((item) => (
           <EventCard
             key={item.id}
@@ -101,7 +89,7 @@ export function CategoryBlock({
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 function EventCard({
@@ -112,116 +100,113 @@ function EventCard({
   event_date,
   start_time,
   showLocation,
-  layout = "start",
+  layout = 'start',
 }: IEventCardProps) {
   return (
     <Link
-      to={getRoutePath("individual_event", { eventId: id })}
+      to={getRoutePath('individual_event', { eventId: id })}
       className={cn(
-        "flex flex-col gap-1 min-w-[148px] md:min-w-[243px] md:w-fit max-w-[243px]  md:max-w-full lg:min-w-[245px] lg:max-w-[284px]",
+        'flex flex-col gap-1 min-w-[148px] md:min-w-[243px] md:w-fit max-w-[243px]  md:max-w-full lg:min-w-[245px] lg:max-w-[284px]',
         {
-          "items-start": layout === "start",
-          "items-center": layout === "middle",
-        }
-      )}
-    >
+          'items-start': layout === 'start',
+          'items-center': layout === 'middle',
+        },
+      )}>
       <img
         src={image}
         alt={event_name}
-        className="rounded-[5px] md:rounded-[15px] h-[190px] md:h-[312px] object-cover"
+        className='rounded-[5px] md:rounded-[15px] h-[190px] md:h-[312px] object-cover'
       />
 
-      <div className="flex flex-col gap-1 md:gap-2 py-2 px-1">
+      <div className='flex flex-col gap-1 md:gap-2 py-2 px-1'>
         <p
-          className={cn(
-            "text-sm md:text-base font-bold font-sf-pro-display uppercase",
-            {
-              "text-start md:text-center": layout === "middle",
-              "text-start": layout === "start",
-            }
-          )}
-        >
+          className={cn('text-sm md:text-base font-bold font-sf-pro-display uppercase', {
+            'text-start md:text-center': layout === 'middle',
+            'text-start': layout === 'start',
+          })}>
           {event_name}
         </p>
 
-        <div className="flex flex-col gap-1">
+        <div className='flex flex-col gap-1'>
           {showLocation && (
             <div
-              className={cn("flex items-start gap-1.5 justify-center", {
-                "justify-center": layout === "middle",
-                "justify-start": layout === "start",
-              })}
-            >
-              <CalendarDays size={10} color="var(--foreground)" />
-              <p className="font-sf-pro-display text-xs font-normal text-start">
+              className={cn('flex items-start gap-1.5 justify-center', {
+                'justify-center': layout === 'middle',
+                'justify-start': layout === 'start',
+              })}>
+              <CalendarDays size={10} color='var(--foreground)' />
+              <p className='font-sf-pro-display text-xs font-normal text-start'>
                 {event_date} at {start_time}
               </p>
             </div>
           )}
 
           <div
-            className={cn("flex items-start gap-1.5", {
-              "justify-center": layout === "middle",
-            })}
-          >
-            {showLocation && <MapPin size={10} color="var(--foreground)" />}
-            <p className="font-sf-pro-display text-xs font-normal">
-              {event_location}
-            </p>
+            className={cn('flex items-start gap-1.5', {
+              'justify-center': layout === 'middle',
+            })}>
+            {showLocation && <MapPin size={10} color='var(--foreground)' />}
+            <p className='font-sf-pro-display text-xs font-normal'>{event_location}</p>
           </div>
         </div>
       </div>
     </Link>
-  );
+  )
 }
 
 export function CategoryBlockSkeleton() {
   return (
-    <div className="flex flex-col gap-6 w-full">
-      <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
+    <div className='flex flex-col gap-6 w-full'>
+      <div className='h-6 w-32 bg-gray-200 rounded animate-pulse' />
 
-      <div className={"gap-7 flex pr-7 overflow-x-auto scrollbar-none"}>
+      <div className={'gap-7 flex pr-7 overflow-x-auto scrollbar-none'}>
         {Array.from({ length: 4 }).map(() => (
-          <div
-            key={`event-skeleton-${crypto.randomUUID()}`}
-            className="flex flex-col gap-4"
-          >
-            <div className="aspect-square w-full bg-gray-200 rounded-[15px] animate-pulse" />
-            <div className="space-y-2">
-              <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse" />
-              <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse" />
-              <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse" />
+          <div key={`event-skeleton-${crypto.randomUUID()}`} className='flex flex-col gap-4'>
+            <div className='aspect-square w-full bg-gray-200 rounded-[15px] animate-pulse' />
+            <div className='space-y-2'>
+              <div className='h-6 w-3/4 bg-gray-200 rounded animate-pulse' />
+              <div className='h-4 w-1/2 bg-gray-200 rounded animate-pulse' />
+              <div className='h-4 w-2/3 bg-gray-200 rounded animate-pulse' />
             </div>
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 const category_list: ICustomSelectProps = {
   width: 368,
-  defaultValue: "sports",
-  placeholder: "Select Category",
+  defaultValue: 'sports',
+  placeholder: 'Select Category',
   items: [
-    { value: "concerts-and-festivals", label: "Concerts & Festivals" },
-    { value: "arts-and-performance", label: "Arts & Performance" },
-    { value: "children", label: "Children" },
-    { value: "sports", label: "Sports" },
-    { value: "career-and-business", label: "Career & Business" },
-    { value: "comedy", label: "Comedy" },
-    { value: "culture-and-religion", label: "Culture & Religion" },
+    { value: 'concerts-and-festivals', label: 'Concerts & Festivals' },
+    { value: 'arts-and-performance', label: 'Arts & Performance' },
+    { value: 'children', label: 'Children' },
+    { value: 'sports', label: 'Sports' },
+    { value: 'career-and-business', label: 'Career & Business' },
+    { value: 'comedy', label: 'Comedy' },
+    { value: 'culture-and-religion', label: 'Culture & Religion' },
   ],
-};
+}
+
+interface ICategoryBlock {
+  name?: string
+  data: IEvents[]
+  layout?: IEventCardProps['layout']
+  showLocation?: IEventCardProps['showLocation']
+  display?: 'flex' | 'grid'
+  homePage?: boolean
+}
 
 interface IEventCardProps {
-  id: number;
-  image: string;
-  event_name: string;
-  event_location: string;
-  event_date: string;
-  start_time: string;
-  isTrending?: boolean;
-  layout?: "start" | "middle";
-  showLocation?: boolean;
+  id: number
+  image: string
+  event_name: string
+  event_location: string
+  event_date: string
+  start_time: string
+  isTrending?: boolean
+  layout?: 'start' | 'middle'
+  showLocation?: boolean
 }

@@ -7,11 +7,13 @@ const themeSchema = z.object({
 })
 
 const bannerSchema = z.object({
-  flyer: z.instanceof(File, { message: 'Please upload a flyer image.' }).optional(),
-  background: z.instanceof(File, { message: 'Please upload a background image.' }).optional(),
+  flyer: z.string().optional(),
+  background: z.string().optional(),
 })
 
 export const themeAndBannerSchema = z.object({
   theme: themeSchema.shape.theme,
   banner: bannerSchema,
 })
+
+export type ThemeAndBannerSchema = z.infer<typeof themeAndBannerSchema>

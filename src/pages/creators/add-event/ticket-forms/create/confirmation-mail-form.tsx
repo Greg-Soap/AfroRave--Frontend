@@ -24,7 +24,7 @@ export function ConfirmationMailForm() {
     <FormBase
       form={form}
       onSubmit={onSubmit}
-      className='flex flex-col space-y-0 gap-4 md:px-[50px] xl:px-[402px]'>
+      className='max-w-[560px] w-full self-center flex flex-col space-y-0 gap-4'>
       <div className='flex flex-col gap-1 font-sf-pro-display text-black'>
         <div className='flex items-center justify-between'>
           <p className='text-xl font-bold'>Customize your confirmation email</p>
