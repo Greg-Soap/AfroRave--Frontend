@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm, type UseFormReturn, type Path } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
-import type { z } from 'zod'
 import { SubmitBtn } from '../component/submit-btn'
 import { TabContainer } from '../component/tab-ctn'
 import { themeAndBannerSchema, type ThemeAndBannerSchema } from '../schemas/theme-schema'
@@ -59,7 +58,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
     return <NoEventId setActiveTabState={setActiveTabState} />
   }
 
-  async function onSubmit(values: z.infer<typeof themeAndBannerSchema>) {
+  async function onSubmit(values: ThemeAndBannerSchema) {
     try {
       if (!eventId) return
 

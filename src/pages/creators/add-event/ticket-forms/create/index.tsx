@@ -165,6 +165,7 @@ export default function CreateTicketForm({
         <Button
           type='submit'
           variant='destructive'
+          disabled={savedTickets.length === 0}
           onClick={() => handleFormChange('promocode')}
           className='w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase'>
           Continue

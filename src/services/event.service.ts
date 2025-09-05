@@ -12,6 +12,7 @@ import type {
   EventVendorsResponse,
   EventsResponse,
   PromoCodeResponse,
+  PromoCodeResponseWithDetails,
   ThemeResponse,
   TicketResponse,
   TrendingEventsResponse,
@@ -160,7 +161,7 @@ class EventService {
   /**
    * Get a promo code by ID
    */
-  async getPromoCode(promoId: string): Promise<PromoCodeResponse> {
+  async getPromoCode(promoId: string): Promise<PromoCodeResponseWithDetails> {
     const response = await api.get(`/api/Event/promocode/${promoId}`)
     return response.data
   }

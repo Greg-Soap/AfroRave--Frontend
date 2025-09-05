@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { PriceField } from '../../component/price-field'
@@ -29,7 +29,11 @@ import {
 } from './helper'
 import type { PromoCodeData, TicketData } from '@/types'
 import { useEventStore } from '@/stores'
-import { useGetEventPromoCodes, useGetEventTickets } from '@/hooks/use-event-mutations'
+import {
+  useGetEventPromoCodes,
+  useGetEventTickets,
+  useGetPromoCode,
+} from '@/hooks/use-event-mutations'
 import { BaseCheckbox } from '@/components/reusable/base-checkbox'
 import { useCreatePromoCode, useUpdatePromoCode } from '@/hooks/use-event-mutations'
 import { OnlyShowIf } from '@/lib/environment'
@@ -50,11 +54,19 @@ export default function PromoCodeForm({
   const deletePromoCodeMutation = useDeletePromoCode(eventId || '')
   const eventTickets = useGetEventTickets(eventId || '').data?.data
   const { data: createdPromoCodes } = useGetEventPromoCodes(eventId || '')
+  const { data: promoCodeDetails } = useGetPromoCode(editingPromoId || '')
 
   const form = useForm<{ promoCodes: TPromoCodeSchema }>({
     resolver: zodResolver(z.object({ promoCodes: promoCodeSchema })),
     defaultValues: { promoCodes: defaultPromoCodeValues },
   })
+
+  useEffect(() => {
+    if (promoCodeDetails?.data && editingPromoId) {
+      console.log('Promo code details loaded:', promoCodeDetails.data)
+      handleEditPromoCode(promoCodeDetails.data, form, setEditingPromoId, setCurrentPromoCode)
+    }
+  }, [promoCodeDetails, editingPromoId])
 
   const handleCreatePromoCode = () =>
     createPromoCode(form, setCurrentPromoCode, setEditingPromoId, eventId, createPromoCodeMutation)
@@ -70,8 +82,11 @@ export default function PromoCodeForm({
 
   const handleAddPromoCode = () => addPromoCode(form, setEditingPromoId, setCurrentPromoCode)
 
-  const handleEditPromoCodeWrapper = (promoCode: PromoCodeData) =>
-    handleEditPromoCode(promoCode, form, setEditingPromoId, setCurrentPromoCode)
+  const handleEditPromoCodeWrapper = (promoCode: PromoCodeData) => {
+    console.log('Editing promo code:', promoCode)
+    setEditingPromoId(promoCode.promocodeId)
+    setCurrentPromoCode(true)
+  }
 
   const handleDeletePromoCodeWrapper = (promoId: string) =>
     handleDeletePromoCode(promoId, deletePromoCodeMutation)
@@ -101,7 +116,7 @@ export default function PromoCodeForm({
                 key={promoCode.promoCode}
                 promoCode={promoCode}
                 onEdit={() => handleEditPromoCodeWrapper(promoCode)}
-                onDelete={() => handleDeletePromoCodeWrapper(promoCode.promoCode)}
+                onDelete={() => handleDeletePromoCodeWrapper(promoCode.promocodeId)}
                 isUpdating={updatePromoCodeMutation.isPending}
                 isDeleting={deletePromoCodeMutation.isPending}
               />

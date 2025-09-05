@@ -335,6 +335,17 @@ export function useGetEventPromoCodes(eventId?: string) {
   })
 }
 
+export function useGetPromoCode(promocodeId?: string) {
+  return useQuery({
+    queryKey: eventKeys.promoCodes(promocodeId || ''),
+    queryFn: () => {
+      if (!promocodeId) throw new Error('Promocode ID is required')
+      return eventService.getPromoCode(promocodeId)
+    },
+    enabled: !!promocodeId,
+  })
+}
+
 export function useGetEventVendors(eventId?: string) {
   return useQuery({
     queryKey: eventKeys.vendors(eventId || ''),

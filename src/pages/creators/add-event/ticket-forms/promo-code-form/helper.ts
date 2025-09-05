@@ -1,13 +1,11 @@
 import type { UseFormReturn } from 'react-hook-form'
 import type { TPromoCodeSchema } from '../../schemas/promo-code-schema'
-import type { CreatePromoCodeRequest, PromoCodeData } from '@/types'
+import type { CreatePromoCodeRequest, PromoCodeWithDetailsResponse } from '@/types'
 import type {
   useCreatePromoCode,
   useDeletePromoCode,
   useUpdatePromoCode,
 } from '@/hooks/use-event-mutations'
-
-//  type TPromoCode = CreatePromoCodeRequest & { id: string }
 
 interface IHelperFunctionProps {
   form: UseFormReturn<{ promoCodes: TPromoCodeSchema }>
@@ -109,7 +107,7 @@ export function updatePromoCode(
     { promoId: editingPromoId || '', data: updatedPromoCode },
     {
       onSuccess: () => {
-        form.reset()
+        form.reset({ promoCodes: {} })
         setCurrentPromoCode(false)
         setEditingPromoId(null)
       },
@@ -128,45 +126,50 @@ export function addPromoCode(
 }
 
 export function handleEditPromoCode(
-  promoCode: PromoCodeData,
+  promoCode: PromoCodeWithDetailsResponse,
   form: IHelperFunctionProps['form'],
   setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
   setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
+  if (!promoCode) return
+
+  console.log('PromoCode object structure:', promoCode)
+
   const formPromoCode = {
     code: promoCode.promoCode,
-    discount: promoCode.discountValue.toString(),
-    usageLimit: promoCode.discountUsage.toString(),
+    discount: String(promoCode.discountValue),
+    usageLimit: String(promoCode.discountUsage),
+    tickets: promoCode.promoCodedetails?.tickets || [],
     startDate: {
       date: new Date(promoCode.startDate),
-      hour: '12',
-      minute: '00',
-      period: 'AM' as const,
+      hour: String(new Date(promoCode.startDate).getHours()),
+      minute: String(new Date(promoCode.startDate).getMinutes()),
+      period: new Date(promoCode.startDate).getHours() > 12 ? ('PM' as const) : ('AM' as const),
     },
     endDate: {
       date: new Date(promoCode.endDate),
-      hour: '12',
-      minute: '00',
-      period: 'AM' as const,
+      hour: String(new Date(promoCode.endDate).getHours()),
+      minute: String(new Date(promoCode.endDate).getMinutes()),
+      period: new Date(promoCode.endDate).getHours() > 12 ? ('PM' as const) : ('AM' as const),
     },
     conditions: {
-      spend: { minimum: false, amount: '0' },
+      spend: { minimum: promoCode.isMinimunSpend, amount: String(promoCode.minimumSpend) },
       tickets: {
-        minimum: false,
-        quantity: '0',
+        minimum: promoCode.isMinimunTickets,
+        quantity: String(promoCode.minimumTickets),
       },
     },
-    notes: '',
+    notes: promoCode.note,
     partnership: {
-      partnershipCode: false,
-      name: '',
-      comission: false,
-      comissionRate: '0',
+      partnershipCode: promoCode.isPartnership,
+      name: promoCode.partnerName,
+      comission: !!promoCode.comission,
+      comissionRate: String(promoCode.comission),
     },
   }
 
   form.reset({ promoCodes: formPromoCode })
-  setEditingPromoId(promoCode.promoCode) // setEditingPromoId(promoCode.id)
+  setEditingPromoId(promoCode.promocodeId)
   setCurrentPromoCode(true)
 }
 

@@ -121,8 +121,9 @@ export interface VendorData {
 
 export type VendorResponse = ApiResponse<VendorData>
 
-// Promo Code Data for GET /api/Event/promocode/{promoId}
+// Promo Code Data for GET /api/Event/promocode
 export interface PromoCodeData {
+  promocodeId: string
   promoCode: string
   discountType: string
   discountValue: number
@@ -139,6 +140,32 @@ export interface PromoCodeData {
 }
 
 export type PromoCodeResponse = ApiResponse<PromoCodeData>
+
+// Promo Code Data for GET /api/Event/promocode/{promoId}
+export interface PromoCodeWithDetailsResponse {
+  promocodeId: string
+  promoCode: string
+  discountType: string
+  discountValue: number
+  discountUsage: number
+  startDate: string
+  endDate: string
+  promoCodedetails: {
+    tickets: { id: string }[]
+  }
+  isMinimunSpend: boolean
+  minimumSpend: number
+  isMinimunTickets: boolean
+  minimumTickets: number
+  note: string
+  isPrivate: boolean
+  isPartnership: boolean
+  partnerName: string
+  comissionType: string
+  comission: number
+}
+
+export type PromoCodeResponseWithDetails = ApiResponse<PromoCodeWithDetailsResponse>
 
 // Theme Data for GET /api/Event/theme/{eventId}
 export interface ThemeData {
