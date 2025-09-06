@@ -15,17 +15,16 @@ export interface SavedTicket {
 export type TicketType = 'single_ticket' | 'group_ticket' | 'multi_day'
 
 export function createTicket(
-  tickets: any[],
+  ticket: any,
   eventId: string | null,
   form: any,
   createTicketMutation: any,
   setEditingTicketId: (id: string | null) => void,
   setCurrentTicketType: (type: TicketType | null) => void,
 ) {
-  const currentTicket = tickets[0]
-  if (!currentTicket || !eventId) return
+  if (!ticket || !eventId) return
 
-  const ticketRequests = transformTicketsToCreateRequest({ tickets: [currentTicket] }, eventId)
+  const ticketRequests = transformTicketsToCreateRequest({ tickets: [ticket] }, eventId)
   createTicketMutation.mutateAsync(ticketRequests[0])
 
   form.reset(defaultUnifiedTicketValues)
@@ -34,7 +33,7 @@ export function createTicket(
 }
 
 export function updateTicket(
-  tickets: any[],
+  ticket: any,
   eventId: string | null,
   editingTicketId: string | null,
   form: any,
@@ -42,10 +41,9 @@ export function updateTicket(
   setEditingTicketId: (id: string | null) => void,
   setCurrentTicketType: (type: TicketType | null) => void,
 ) {
-  const currentTicket = tickets[0]
-  if (!currentTicket || !eventId || !editingTicketId) return
+  if (!ticket || !eventId || !editingTicketId) return
 
-  const ticketRequests = transformTicketsToCreateRequest({ tickets: [currentTicket] }, eventId)
+  const ticketRequests = transformTicketsToCreateRequest({ tickets: [ticket] }, eventId)
   updateTicketMutation.mutateAsync({
     ticketId: editingTicketId,
     data: ticketRequests[0],
@@ -68,10 +66,10 @@ export function addTicket(
   const base = {
     ticketType: selectedType,
     ticketName: '',
-    type: 'paid',
+    type: 'paid' as const,
     invite_only: false,
-    salesType: 'online',
-    quantity: { availability: 'limited', amount: '' },
+    salesType: 'online' as const,
+    quantity: { availability: 'limited' as const, amount: '' },
     price: '',
     purchase_limit: '',
     description: '',
@@ -95,7 +93,7 @@ export function addTicket(
     { shouldDirty: true },
   )
 
-  form.setValue('tickets', [withTypeFields], { shouldDirty: true })
+  form.setValue('ticket', withTypeFields, { shouldDirty: true })
   setCurrentTicketType(selectedType)
 }
 
@@ -136,7 +134,7 @@ export function handleEditTicket(
     { shouldDirty: true },
   )
 
-  form.setValue('tickets', [formTicket], { shouldDirty: true })
+  form.setValue('ticket', formTicket, { shouldDirty: true })
   setEditingTicketId(ticket.ticketId)
   setCurrentTicketType(ticket.ticketType as TicketType)
 }
@@ -156,11 +154,11 @@ export function handleCancelEdit(
 }
 
 export function fillCurrentFormWithSampleData(
-  tickets: any[],
+  ticket: any,
   currentTicketType: TicketType | null,
   form: any,
 ) {
-  if (tickets.length === 0 || !currentTicketType) return
+  if (!currentTicketType) return
 
   const sampleTicket = {
     ticketName: `Sample ${currentTicketType.replace('_', ' ')}`,
@@ -193,7 +191,7 @@ export function fillCurrentFormWithSampleData(
     { shouldDirty: true },
   )
 
-  form.setValue('tickets', [sampleTicket], { shouldDirty: true })
+  form.setValue('ticket', sampleTicket, { shouldDirty: true })
 }
 
 export function onSubmit(eventId: string | null, handleFormChange: (form: string) => void) {

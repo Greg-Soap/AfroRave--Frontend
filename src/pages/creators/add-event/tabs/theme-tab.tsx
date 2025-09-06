@@ -62,7 +62,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
     try {
       if (!eventId) return
 
-      const themeRequest = transformThemeToCreateRequest({ theme: values.theme }, eventId)
+      const themeRequest = transformThemeToCreateRequest(values, eventId)
 
       const result = await createThemeMutation.mutateAsync(themeRequest)
 

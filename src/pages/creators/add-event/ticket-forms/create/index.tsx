@@ -60,14 +60,14 @@ export default function CreateTicketForm({
     defaultValues: defaultUnifiedTicketValues as TForm,
   })
 
-  const tickets = useWatch({ control: form.control, name: 'tickets' }) ?? []
+  const ticket = useWatch({ control: form.control, name: 'ticket' })
 
   const [editingTicketId, setEditingTicketId] = useState<string | null>(null)
   const [currentTicketType, setCurrentTicketType] = useState<TicketType | null>(null)
 
   const handleCreateTicket = () =>
     createTicket(
-      tickets,
+      ticket,
       eventId,
       form,
       createTicketMutation,
@@ -77,7 +77,7 @@ export default function CreateTicketForm({
 
   const handleUpdateTicket = () =>
     updateTicket(
-      tickets,
+      ticket,
       eventId,
       editingTicketId,
       form,
@@ -98,7 +98,7 @@ export default function CreateTicketForm({
   const handleCancelEditWrapper = () =>
     handleCancelEdit(form, setEditingTicketId, setCurrentTicketType)
 
-  const handleFillSampleData = () => fillCurrentFormWithSampleData(tickets, currentTicketType, form)
+  const handleFillSampleData = () => fillCurrentFormWithSampleData(ticket, currentTicketType, form)
 
   const handleSubmit = () => onSubmit(eventId, handleFormChange)
 
@@ -110,7 +110,7 @@ export default function CreateTicketForm({
         form={form}
         onSubmit={handleSubmit}
         actionOnError={showError}>
-        {tickets.length > 0 && currentTicketType && (
+        {currentTicketType && (
           <FakeDataGenerator
             type='tickets'
             onGenerate={handleFillSampleData}
@@ -141,12 +141,11 @@ export default function CreateTicketForm({
           </div>
         )}
 
-        {tickets.length > 0 && (
+        {currentTicketType && (
           <div className='w-full flex flex-col gap-8'>
             <TicketForm
               form={form}
-              type={tickets[0].ticketType}
-              idx={0}
+              type={currentTicketType}
               onSubmit={editingTicketId ? handleUpdateTicket : handleCreateTicket}
               isLoading={
                 editingTicketId ? updateTicketMutation.isPending : createTicketMutation.isPending
@@ -157,7 +156,7 @@ export default function CreateTicketForm({
           </div>
         )}
 
-        {tickets.length === 0 && <TicketModal onContinue={handleAddTicket} />}
+        {!currentTicketType && <TicketModal onContinue={handleAddTicket} />}
       </TabContainer>
 
       <ConfirmationMailForm />

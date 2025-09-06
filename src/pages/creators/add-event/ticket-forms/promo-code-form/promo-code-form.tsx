@@ -153,6 +153,7 @@ export default function PromoCodeForm({
       <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
         <Button
           type='submit'
+          disabled={createdPromoCodes?.data.length === 0}
           variant='destructive'
           onClick={() => handleFormChange('upgrades')}
           className='w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase'>
@@ -363,7 +364,7 @@ function PromoCodeFormFields({
         {isEditMode && onCancel && (
           <Button
             type='button'
-            variant='outline'
+            variant='destructive'
             onClick={onCancel}
             className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-charcoal border-mid-dark-gray/50'>
             CANCEL

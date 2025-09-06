@@ -6,6 +6,7 @@ import type {
   useDeletePromoCode,
   useUpdatePromoCode,
 } from '@/hooks/use-event-mutations'
+import { defaultPromoCodeValues } from '../../schemas/promo-code-schema'
 
 interface IHelperFunctionProps {
   form: UseFormReturn<{ promoCodes: TPromoCodeSchema }>
@@ -85,7 +86,7 @@ export function createPromoCode(
     { ...newPromoCode, eventId: eventId || '' },
     {
       onSuccess: () => {
-        form.reset()
+        form.reset({ promoCodes: defaultPromoCodeValues })
         setCurrentPromoCode(false)
         setEditingPromoId(null)
       },
@@ -107,7 +108,7 @@ export function updatePromoCode(
     { promoId: editingPromoId || '', data: updatedPromoCode },
     {
       onSuccess: () => {
-        form.reset({ promoCodes: {} })
+        form.reset({ promoCodes: defaultPromoCodeValues })
         setCurrentPromoCode(false)
         setEditingPromoId(null)
       },
@@ -120,7 +121,7 @@ export function addPromoCode(
   setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
   setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
-  form.reset()
+  form.reset({ promoCodes: defaultPromoCodeValues })
   setEditingPromoId(null)
   setCurrentPromoCode(true)
 }
@@ -139,7 +140,7 @@ export function handleEditPromoCode(
     code: promoCode.promoCode,
     discount: String(promoCode.discountValue),
     usageLimit: String(promoCode.discountUsage),
-    tickets: promoCode.promoCodedetails?.tickets || [],
+    tickets: promoCode.promoDetails.tickets,
     startDate: {
       date: new Date(promoCode.startDate),
       hour: String(new Date(promoCode.startDate).getHours()),
@@ -185,7 +186,7 @@ export function handleCancelEdit(
   setEditingPromoId: IHelperFunctionProps['setEditingPromoId'],
   setCurrentPromoCode: IHelperFunctionProps['setCurrentPromoCode'],
 ) {
-  form.reset()
+  form.reset({ promoCodes: defaultPromoCodeValues })
   setEditingPromoId(null)
   setCurrentPromoCode(false)
 }

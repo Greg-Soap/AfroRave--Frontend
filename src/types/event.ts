@@ -150,7 +150,7 @@ export interface PromoCodeWithDetailsResponse {
   discountUsage: number
   startDate: string
   endDate: string
-  promoCodedetails: {
+  promoDetails: {
     tickets: { id: string }[]
   }
   isMinimunSpend: boolean
@@ -311,7 +311,6 @@ export interface EventTheme {
 }
 
 export interface CreateThemeRequest {
-  mobileMedia: MediaAssets
   desktopMedia: MediaAssets
   theme: EventTheme
   eventId: string

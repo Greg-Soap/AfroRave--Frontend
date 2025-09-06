@@ -27,10 +27,10 @@ function withScheduledStart<T extends z.ZodObject<z.ZodRawShape>>(schema: T) {
   )
 }
 
-const ticketBaseFields = {
+const ticketBaseFields = z.object({
   ticketName: z.string().min(3, { message: 'Provide a valid ticket name.' }),
   type: z.enum(['paid', 'free'], { required_error: 'Pick an option.' }),
-  invite_only: z.boolean().optional(),
+  invite_only: z.boolean().optional().default(false),
   salesType: z.string({ required_error: 'Select a sale type.' }),
   quantity: z.object({
     availability: z.enum(['limited', 'unlimited']),
@@ -42,21 +42,21 @@ const ticketBaseFields = {
     .string()
     .min(10, { message: 'Description too short.' })
     .max(450, { message: 'Description too long.' }),
-} as const
+})
 
 const singleTicketObject = z.object({
-  ...ticketBaseFields,
+  ticketBaseFields,
   ticketType: z.literal('single_ticket'),
 })
 
 const groupTicketObject = z.object({
-  ...ticketBaseFields,
+  ticketBaseFields,
   ticketType: z.literal('group_ticket'),
   group_size: z.string(),
 })
 
 const multiDayObject = z.object({
-  ...ticketBaseFields,
+  ticketBaseFields,
   ticketType: z.literal('multi_day'),
   days_valid: z.string(),
 })
@@ -69,25 +69,21 @@ const TicketItemSchema = z.discriminatedUnion('ticketType', [
 
 export const unifiedTicketFormSchema = withScheduledStart(
   z.object({
-    tickets: z.array(TicketItemSchema),
+    ticket: TicketItemSchema,
   }),
-).refine((data) => {
-  // Validate that at least one ticket is added
-  if (data.tickets.length === 0) {
-    return false
-  }
-  
-  // Validate that paid tickets have a price
-  for (const ticket of data.tickets) {
-    if (ticket.type === 'paid' && (!ticket.price || ticket.price.length < 3)) {
+).refine(
+  (data) => {
+    // Validate that paid tickets have a price
+    if (data.ticket.type === 'paid' && (!data.ticket.price || data.ticket.price.length < 3)) {
       return false
     }
-  }
-  return true
-}, {
-  message: 'At least one ticket is required, and paid tickets must have a valid price',
-  path: ['tickets'],
-})
+    return true
+  },
+  {
+    message: 'Paid tickets must have a valid price',
+    path: ['ticket', 'price'],
+  },
+)
 
 export const confirmationMailSchema = z.object({
   confirmationEmail: z.string().max(250, { message: 'Message too long' }).optional(),
@@ -105,7 +101,20 @@ export const confirmationMailSchema = z.object({
 export type UnifiedTicketForm = z.infer<typeof unifiedTicketFormSchema>
 
 export const defaultUnifiedTicketValues: UnifiedTicketForm = {
-  tickets: [],
+  ticket: {
+    ticketName: '',
+    type: 'paid',
+    invite_only: false,
+    salesType: '',
+    quantity: {
+      availability: 'limited',
+      amount: '',
+    },
+    price: '',
+    purchase_limit: '',
+    description: '',
+    ticketType: 'single_ticket',
+  },
   whenToStart: 'at-a-scheduled-date',
   scheduledDate: {
     date: new Date(),

@@ -1,5 +1,4 @@
 import type { promoCodeSchema } from '@/pages/creators/add-event/schemas/promo-code-schema'
-import type { themeSchema } from '@/pages/creators/add-event/schemas/theme-schema'
 import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
 import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
@@ -12,6 +11,7 @@ import type {
   CreateVendorRequest,
 } from '@/types'
 import type { z } from 'zod'
+import type { ThemeAndBannerSchema } from '@/pages/creators/add-event/schemas/theme-schema'
 
 /**
  * Convert timezone name to UTC offset format (e.g., "Africa/Lagos" -> "+1")
@@ -274,21 +274,16 @@ export function transformTicketsToCreateRequest(
  * Transform form data from ThemeTab to CreateThemeRequest format
  */
 export function transformThemeToCreateRequest(
-  themeData: z.infer<typeof themeSchema>,
-  // bannerData: z.infer<typeof bannerSchema>,
+  themeData: ThemeAndBannerSchema,
   eventId: string,
 ): CreateThemeRequest {
   return {
-    mobileMedia: {
-      flyer: 'placeholder-flyer-url',
-      background: 'placeholder-background-url',
-    },
     desktopMedia: {
-      flyer: 'placeholder-flyer-url',
-      background: 'placeholder-background-url',
+      flyer: themeData.banner.flyer || '',
+      background: themeData.banner.background || '',
     },
     theme: {
-      themeName: `Theme ${themeData.theme}`,
+      themeName: themeData.theme,
     },
     eventId,
   }

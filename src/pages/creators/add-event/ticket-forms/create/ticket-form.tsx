@@ -11,14 +11,12 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
-import { FormCount } from '../../component/form-count'
 import { PriceField } from '../../component/price-field'
 import { SelectField } from '../../component/select-field'
 import type { unifiedTicketFormSchema } from '../../schemas/ticket-schema'
 
 export function TicketForm({
   form,
-  idx,
   type,
   onSubmit,
   isLoading,
@@ -29,12 +27,10 @@ export function TicketForm({
 
   return (
     <>
-      <FormCount name='TICKET' idx={idx} />
-
       <div className='flex flex-col gap-3'>
         <FormFieldWithCounter
           name='TICKET NAME'
-          field_name={`tickets.${idx}.ticketName`}
+          field_name='ticket.ticketName'
           form={form}
           className='font-normal'
           maxLength={65}>
@@ -48,7 +44,7 @@ export function TicketForm({
           )}
         </FormFieldWithCounter>
 
-        <FormField form={form} name={`tickets.${idx}.type`}>
+        <FormField form={form} name='ticket.type'>
           {(field) => (
             <BaseCheckbox
               data={{
@@ -64,12 +60,12 @@ export function TicketForm({
           )}
         </FormField>
 
-        <FormField form={form} name={`tickets.${idx}.invite_only`}>
+        <FormField form={form} name='ticket.invite_only'>
           {(field) => (
             <BaseBooleanCheckbox
               data={{ items: [{ label: 'Invite only', id: 'invite-only' }] }}
               showCheckbox={false}
-              labelClassName=' text-[12px] flex justify-center rounded-[5px] opacity-70 bg-white px-4 py-2 shadow-[0px_2px_10px_2px_#0000001A]'
+              labelClassName='text-[12px] flex justify-center rounded-[5px] opacity-70 bg-white px-4 py-2 shadow-[0px_2px_10px_2px_#0000001A]'
               {...field}
             />
           )}
@@ -79,7 +75,7 @@ export function TicketForm({
       <div className='grid grid-cols-2 gap-8 '>
         <SelectField
           form={form}
-          name={`tickets.${idx}.salesType`}
+          name='ticket.salesType'
           label='SALES TYPE'
           data={salesTypeItems}
           placeholder='CHOOSE YOUR SALES CHANNEL'
@@ -93,14 +89,14 @@ export function TicketForm({
         <div className='flex items-end gap-3'>
           <SelectField
             form={form}
-            name={`tickets.${idx}.quantity.availability`}
+            name='ticket.quantity.availability'
             label='QUANTITY'
             className='max-w-fit'
             data={availability}
             placeholder='Select availability.'
           />
 
-          <FormField form={form} name={`tickets.${idx}.quantity.amount`} className='mb-2'>
+          <FormField form={form} name='ticket.quantity.amount' className='mb-2'>
             {(field) => (
               <Input
                 className='w-full h-9'
@@ -111,16 +107,12 @@ export function TicketForm({
           </FormField>
         </div>
 
-        <PriceField
-          form={form}
-          name={`tickets.${idx}.price`}
-          ticketTypeName={`tickets.${idx}.type`}
-        />
+        <PriceField form={form} name='ticket.price' ticketTypeName='ticket.type' />
       </div>
 
       <SelectField
         form={form}
-        name={`tickets.${idx}.purchase_limit`}
+        name='ticket.purchase_limit'
         label='PURCHASE LIMIT'
         className='w-full'
         data={purchaseLimitOptions}
@@ -131,7 +123,7 @@ export function TicketForm({
       <OnlyShowIf condition={type === 'group_ticket'}>
         <SelectField
           form={form}
-          name={`tickets.${idx}.group_size`}
+          name='ticket.group_size'
           label='GROUP SIZE'
           className='w-full'
           data={groupSizeOptions}
@@ -143,7 +135,7 @@ export function TicketForm({
       <OnlyShowIf condition={type === 'multi_day'}>
         <SelectField
           form={form}
-          name={`tickets.${idx}.days_valid`}
+          name='ticket.days_valid'
           label='DAYS VALID'
           className='w-full'
           data={daysValidOptions}
@@ -154,7 +146,7 @@ export function TicketForm({
 
       <FormFieldWithCounter
         name='DESCRIPTION'
-        field_name={`tickets.${idx}.description`}
+        field_name='ticket.description'
         form={form}
         maxLength={450}>
         {(field) => (
@@ -321,7 +313,6 @@ const whenToStartOptions = [
 
 interface ITicketFormProps {
   form: UseFormReturn<z.infer<typeof unifiedTicketFormSchema>>
-  idx: number
   type: 'single_ticket' | 'group_ticket' | 'multi_day'
   onSubmit: () => void
   isLoading: boolean
