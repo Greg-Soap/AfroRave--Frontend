@@ -36,3 +36,5 @@ export const EditEventDetailsSchema = z.object({
     facebook: z.string().optional(),
   }),
 })
+
+export type EventDetailsSchema = z.infer<typeof EditEventDetailsSchema>

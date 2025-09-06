@@ -39,6 +39,8 @@ import { useCreatePromoCode, useUpdatePromoCode } from '@/hooks/use-event-mutati
 import { OnlyShowIf } from '@/lib/environment'
 import { ActionPopover } from '../../component/action-popover'
 import { useDeletePromoCode } from '@/hooks/use-event-mutations'
+import { AddButton } from '../../component/add-btn'
+import { ContinueButton } from '../../component/continue-button'
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -139,27 +141,14 @@ export default function PromoCodeForm({
 
         {/* Only show add promo code button when no form is active */}
         <OnlyShowIf condition={!currentPromoCode}>
-          <div className='flex justify-center'>
-            <Button
-              type='button'
-              onClick={handleAddPromoCode}
-              className='bg-deep-red text-white hover:bg-red-700 px-6 py-3 rounded-lg font-medium'>
-              + ADD PROMO CODE
-            </Button>
-          </div>
+          <AddButton onClick={handleAddPromoCode} name='ADD PROMO CODE' />
         </OnlyShowIf>
       </TabContainer>
 
-      <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
-        <Button
-          type='submit'
-          disabled={createdPromoCodes?.data.length === 0}
-          variant='destructive'
-          onClick={() => handleFormChange('upgrades')}
-          className='w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase'>
-          Continue
-        </Button>
-      </div>
+      <ContinueButton
+        disabled={createdPromoCodes?.data.length === 0}
+        onClick={() => handleFormChange('upgrades')}
+      />
     </div>
   )
 }

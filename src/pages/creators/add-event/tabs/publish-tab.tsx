@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { SkipBtn } from '../component/skip-btn'
-import { SubmitBtn } from '../component/submit-btn'
+import { ContinueButton } from '../component/continue-button'
 
 const notificationSchema = z.object({
   sales: z.boolean().optional(),
@@ -128,9 +128,9 @@ export default function PublishTab({
         </div>
       </div>
 
-      <SubmitBtn isLoading={publishEventMutation.isPending}>
+      <ContinueButton isLoading={publishEventMutation.isPending}>
         <SkipBtn name='VIEW' action={handlePublishEvent} />
-      </SubmitBtn>
+      </ContinueButton>
     </FormBase>
   )
 }

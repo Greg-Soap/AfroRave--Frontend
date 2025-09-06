@@ -2,17 +2,19 @@ import { CustomFormField as FormField, CustomInput as Input } from '@/components
 import type { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 
+interface IPriceField<T extends FieldValues> {
+  form: UseFormReturn<T>
+  name: Path<T>
+  label?: string
+  ticketTypeName?: Path<T>
+}
+
 export function PriceField<T extends FieldValues>({
   form,
   name,
   label = 'PRICE',
   ticketTypeName,
-}: {
-  form: UseFormReturn<T>
-  name: Path<T>
-  label?: string
-  ticketTypeName?: Path<T>
-}) {
+}: IPriceField<T>) {
   const ticketType = useWatch({ control: form.control, name: ticketTypeName || (name as Path<T>) })
   const isFreeTicket = ticketType === 'free'
 

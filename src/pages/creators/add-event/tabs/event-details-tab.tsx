@@ -10,14 +10,13 @@ import { transformEventDetailsToCreateRequest } from '@/lib/event-transforms'
 import { FakeDataGenerator } from '@/lib/fake-data-generator'
 import { frequencyOptions } from '@/pages/creators/add-event/constant'
 import { africanTimezones, ageRatings, eventCategories } from '@/pages/creators/edit-event/constant'
-import { EditEventDetailsSchema } from '@/schema/edit-event-details'
+import { EditEventDetailsSchema, type EventDetailsSchema } from '@/schema/edit-event-details'
 import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import type { z } from 'zod'
 import { SelectField } from '../component/select-field'
-import { SubmitBtn } from '../component/submit-btn'
+import { ContinueButton } from '../component/continue-button'
 import { TabContainer } from '../component/tab-ctn'
 import { cn } from '@/lib/utils'
 
@@ -34,7 +33,7 @@ export default function EventDetailsTab({
   const { setEventId, setEventData } = useEventStore()
   const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
 
-  const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
+  const form = useForm<EventDetailsSchema>({
     resolver: zodResolver(EditEventDetailsSchema),
     defaultValues: {
       name: '',
@@ -79,7 +78,7 @@ export default function EventDetailsTab({
     }
   }, [eventType, form])
 
-  async function onSubmit(values: z.infer<typeof EditEventDetailsSchema>) {
+  async function onSubmit(values: EventDetailsSchema) {
     try {
       // Transform form data to API format
       const eventData = transformEventDetailsToCreateRequest(values)
@@ -108,7 +107,7 @@ export default function EventDetailsTab({
   }
 
   return (
-    <TabContainer<z.infer<typeof EditEventDetailsSchema>>
+    <TabContainer<EventDetailsSchema>
       heading='EVENT DETAILS'
       className='max-w-[560px] w-full flex flex-col gap-8'
       form={form}
@@ -344,7 +343,7 @@ export default function EventDetailsTab({
         </div>
       </div>
 
-      <SubmitBtn isLoading={createEventMutation.isPending} />
+      <ContinueButton isLoading={createEventMutation.isPending} />
     </TabContainer>
   )
 }

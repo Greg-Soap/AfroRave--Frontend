@@ -1,6 +1,5 @@
 import { CustomFormField as FormField, CustomInput as Input } from '@/components/custom/custom-form'
 import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
-import { TimeForm } from '@/components/custom/time-form'
 import { BaseBooleanCheckbox } from '@/components/reusable/base-boolean-checkbox'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateVendor } from '@/hooks/use-event-mutations'
@@ -10,37 +9,55 @@ import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { type FieldValues, type Path, type UseFormReturn, useForm } from 'react-hook-form'
-import type { z } from 'zod'
-import { AddBtn } from '../component/add-btn'
+import { AddButton } from '../component/add-btn'
 import { QuantityDecreaseButton, QuantityIncreaseBtn } from '../component/quantity-buttons'
 import { SelectField } from '../component/select-field'
 import { SkipBtn } from '../component/skip-btn'
-import { SubmitBtn } from '../component/submit-btn'
 import { TabContainer } from '../component/tab-ctn'
 import {
   africanCountryCodes,
   categoryOptions,
   vendorCheckboxData as checkboxData,
-  vendorTypes,
 } from '../constant'
-import { defaultServiceValue, serviceSchema } from '../schemas/vendor-service-schema'
+import {
+  defaultServiceValue,
+  serviceDetails,
+  type ServiceDetails,
+  contactSchema,
+  type ContactSchema,
+  defaultContactValue,
+} from '../schemas/vendor-service-schema'
+import { OnlyShowIf } from '@/lib/environment'
+import { addVendor } from './helper'
+import { PriceField } from '../component/price-field'
+import { BaseDatePicker } from '@/components/reusable/base-date-picker'
+import { CreateButton } from '../component/create-button'
+import { ContinueButton } from '../component/continue-button'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default function ServiceForm({
   handleFormChange,
 }: {
   handleFormChange: () => void
 }) {
-  const [services, setServices] = useState([{ id: Date.now() + Math.random() }])
   const [phones, setPhones] = useState([{ id: Date.now() + Math.random() }])
+  const [currentVendor, setCurrentVendor] = useState<boolean>(false)
+
   const createVendorMutation = useCreateVendor()
   const { eventId } = useEventStore()
 
-  const form = useForm<z.infer<typeof serviceSchema>>({
-    resolver: zodResolver(serviceSchema),
+  const serviceForm = useForm<ServiceDetails>({
+    resolver: zodResolver(serviceDetails),
     defaultValues: defaultServiceValue,
   })
 
-  async function onSubmit(data: z.infer<typeof serviceSchema>) {
+  const contactForm = useForm<ContactSchema>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: defaultContactValue,
+  })
+
+  async function onServiceSubmit(data: ServiceDetails) {
     try {
       if (!eventId) {
         console.error('No event ID found. Please create an event first.')
@@ -67,8 +84,8 @@ export default function ServiceForm({
     }
   }
 
-  const addService = () => {
-    setServices((prev) => [...prev, { id: Date.now() + Math.random() }])
+  function handleAddVendor() {
+    addVendor(serviceForm, setCurrentVendor)
   }
 
   const addPhone = () => {
@@ -77,148 +94,162 @@ export default function ServiceForm({
 
   return (
     <TabContainer
-      form={form}
-      onSubmit={onSubmit}
+      form={serviceForm}
+      onSubmit={onServiceSubmit}
       heading='ADD VENDORS'
-      description='List your vendor slots and let the right vendors come to you'>
+      description='List your vendor slots and let the right vendors come to you'
+      className='max-w-[560px]'>
       <FakeDataGenerator
         type='vendorServices'
-        onGenerate={form.reset}
+        onGenerate={serviceForm.reset}
         buttonText='🎲 Fill with sample data'
         variant='outline'
         className='mb-4'
       />
-      {services.map((service, idx) => (
-        <div key={service.id} className='w-full flex flex-col gap-8'>
-          <SelectField
-            form={form}
-            name={`service.${idx}.type`}
-            label='Vendor Type'
-            placeholder='Select a type.'
-            triggerClassName='text-deep-red w-full md:w-[480px]'
-            data={vendorTypes}
-          />
 
-          <SelectField
-            form={form}
-            name={`service.${idx}.category`}
-            label='Category'
-            placeholder='Select a category.'
-            triggerClassName='text-deep-red w-full md:w-[480px]'
-            data={categoryOptions}
-          />
+      <OnlyShowIf condition={!currentVendor}>
+        <AddButton name='VENDOR SLOT' onClick={handleAddVendor} />
+      </OnlyShowIf>
 
-          <div className='flex flex-col gap-4'>
-            <p className='text-xl font-sf-pro-text text-black'>Service Details</p>
+      <div className='w-full flex flex-col gap-8'>
+        <div className='flex flex-col gap-2 font-sf-pro-text'>
+          <p className='uppercase text-sm font-medium leading-[100%] text-charcoal'>Vendor Type</p>
+          <p className='h-10 w-full text-[10px] text-mid-dark-gray font-light uppercase rounded-[5px] flex items-center justify-center border border-mid-dark-gray/50'>
+            {serviceForm.getValues('type') === 'revenue_vendor'
+              ? 'Revenue Vendor'
+              : 'Service Vendor'}
+          </p>
+        </div>
 
-            <FormField form={form} name={`service.${idx}.name`} label='SERVICE NAME'>
-              <Input />
-            </FormField>
-          </div>
+        <SelectField
+          form={serviceForm}
+          name='category'
+          label='Category'
+          placeholder='choose an applicable category'
+          triggerClassName='w-full uppercase'
+          data={categoryOptions}
+        />
 
-          <div className='flex flex-col gap-4'>
-            <FormField form={form} name={`service.${idx}.budgetRange`}>
-              {(field) => <BaseBooleanCheckbox data={checkboxData[0]} {...field} />}
-            </FormField>
+        <div className='flex flex-col gap-4'>
+          <p className='text-xl font-sf-pro-text text-black leading-[100%]'>SLOT DETAILS</p>
 
-            {/** A range is supposed to be here */}
-          </div>
+          <FormField form={serviceForm} name='slot_name' label='SLOT NAME'>
+            <Input />
+          </FormField>
+        </div>
 
-          <div className='flex flex-col gap-2'>
-            <p className='text-[13px] text-black uppercase font-sf-pro-text'>Work duration</p>
+        <div className='flex flex-col gap-7'>
+          <FormField form={serviceForm} name='number_of_slots' label='NUMBER OF SLOT'>
+            <Input />
+          </FormField>
 
-            <DetailedTimeForm
-              form={form}
-              hour_name={`service.${idx}.workDuration.hour`}
-              minute_name={`service.${idx}.workDuration.minute`}
-              second_name={`service.${idx}.workDuration.second`}
-            />
-          </div>
+          <div className='grid grid-cols-2 gap-7'>
+            <div className='flex flex-col gap-2'>
+              <PriceField form={serviceForm} name='price_per_slot' label='PRICE PER SLOT' />
+              <p className='text-[10px] font-sf-pro-text leading-[100%] text-medium-gray'>
+                There will be a 10% fee added to your slot price
+              </p>
+            </div>
 
-          <div className='flex flex-col gap-5'>
-            <div className='flex flex-col md:flex-row gap-4 items-center'>
-              <div className='w-full flex flex-col gap-2'>
-                <p className='uppercase text-black text-xs font-sf-pro-text'>Start</p>
-                <TimeForm
-                  form={form}
-                  hour_name={`service.${idx}.start.hour`}
-                  minute_name={`service.${idx}.start.minute`}
-                  period_name={`service.${idx}.start.period`}
-                />
-              </div>
+            <div className='flex flex-col gap-2 mt-1'>
+              <p className='uppercase text-sm font-medium leading-[100%] text-charcoal'>
+                TOTAL PRICE
+              </p>
 
-              <div className='w-full flex flex-col gap-2'>
-                <p className='uppercase text-black text-xs font-sf-pro-text'>Stop</p>
-                <TimeForm
-                  form={form}
-                  hour_name={`service.${idx}.stop.hour`}
-                  minute_name={`service.${idx}.stop.minute`}
-                  period_name={`service.${idx}.stop.period`}
-                />
+              <div className='w-full h-9 flex items-center gap-3'>
+                <p className='py-[11px] w-14 h-full flex items-center justify-center bg-[#acacac] rounded-[5px]'>
+                  ₦
+                </p>
+                <p className='flex items-center justify-center w-full h-9 rounded-[5px] bg-[#acacac]'>
+                  {}
+                </p>
               </div>
             </div>
           </div>
-
           <FormFieldWithCounter
             name='DESCRIPTION'
-            field_name={`service.${idx}.description`}
-            form={form}
+            field_name='description'
+            form={serviceForm}
             className='font-normal'
             maxLength={450}>
             {(field) => (
               <Textarea
-                placeholder='e.g., Bring your own setup'
-                className='uppercase h-[240px]'
+                placeholder='e.g, Power supply included
+booth size...'
+                className='uppercase h-[240px] p-3'
                 {...field}
                 value={field.value == null ? '' : String(field.value)}
               />
             )}
           </FormFieldWithCounter>
-        </div>
-      ))}
 
-      <AddBtn name='vendor slot' onClick={addService} />
+          <div className='flex flex-col gap-4'>
+            <p className='text-xl font-sf-pro-text leading-[100%] uppercase text-charcoal'>
+              application deadline
+            </p>
+
+            <FormField form={serviceForm} name='deadline' label='DATE'>
+              {(field) => <BaseDatePicker {...field} className='w-full h-9' />}
+            </FormField>
+
+            <CreateButton name='CREATE SLOT' />
+          </div>
+        </div>
+      </div>
 
       <div className='flex flex-col gap-3'>
-        <FormField form={form} name={`useDifferentContactDetails`}>
+        <FormField form={contactForm} name='useDifferentContactDetails'>
           {(field) => <BaseBooleanCheckbox data={checkboxData[1]} {...field} />}
         </FormField>
 
         <div className='flex flex-col gap-6'>
-          <FormField form={form} name='email' label='EMAIL'>
-            <Input />
-          </FormField>
+          <div className='grid md:grid-cols-2 gap-2'>
+            <FormField form={contactForm} name='email' label='EMAIL'>
+              <Input />
+            </FormField>
+
+            <div className='flex flex-col gap-4'>
+              {phones.map((phone, idx) => (
+                <div key={phone.id} className='flex items-end gap-3'>
+                  <SelectField
+                    form={contactForm}
+                    name={`phone.${idx}.countryCode`}
+                    label='PHONE NUMBER'
+                    placeholder=''
+                    className='w-fit'
+                    data={africanCountryCodes}
+                  />
+
+                  <FormField form={contactForm} name={`phone.${idx}.number`} className='mb-2'>
+                    <Input className='h-9' />
+                  </FormField>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className='flex flex-col gap-4'>
-            {phones.map((phone, idx) => (
-              <div key={phone.id} className='flex items-end gap-3'>
-                <SelectField
-                  form={form}
-                  name={`phone.${idx}.countryCode`}
-                  label='PHONE NUMBER'
-                  placeholder=''
-                  className='w-fit'
-                  data={africanCountryCodes}
-                />
+            <Button
+              onClick={addPhone}
+              className='w-fit shadow-none flex items-center gap-2 text-deep-red text-xs font-sf-pro-text bg-transparent leading-[100%]'>
+              <Plus /> PHONE NUMBER
+            </Button>
 
-                <FormField form={form} name={`phone.${idx}.number`} className='mb-2'>
-                  <Input className='h-9' />
-                </FormField>
-              </div>
-            ))}
-
-            <AddBtn custom name='PHONE NUMBER' onClick={addPhone} />
+            <p className='text-xs font-light leading-[100%] text-medium-gray'>
+              Your contact details will remain hidden until a revenue vendor successfully pays for a
+              slot. This ensures privacy and secure vendor interactions.
+            </p>
           </div>
-        </div>
 
-        <FormField form={form} name='showSocialHandles'>
-          {(field) => <BaseBooleanCheckbox data={checkboxData[2]} {...field} />}
-        </FormField>
+          <FormField form={contactForm} name='showSocialHandles'>
+            {(field) => <BaseBooleanCheckbox data={checkboxData[2]} {...field} />}
+          </FormField>
+        </div>
       </div>
 
-      <SubmitBtn isLoading={createVendorMutation.isPending}>
+      <ContinueButton isLoading={createVendorMutation.isPending}>
         <SkipBtn action={handleFormChange} />
-      </SubmitBtn>
+      </ContinueButton>
     </TabContainer>
   )
 }

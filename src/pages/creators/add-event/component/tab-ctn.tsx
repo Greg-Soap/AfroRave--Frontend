@@ -20,7 +20,7 @@ export function TabContainer<TFormValues extends FieldValues>({
 
   return (
     <div className='flex flex-col items-center gap-5 mb-[50px]'>
-      <div className='max-w-[560px] w-full flex flex-col md:flex-row gap-y-4 md:items-center md:px-10 justify-between'>
+      <div className='max-w-[560px] w-full flex flex-col md:flex-row gap-y-4 md:items-center max-md:px-5 justify-between'>
         <div className='flex flex-col gap-1'>
           <p className='text-xl font-black font-sf-pro-display uppercase text-black'>{heading}</p>
           {description && (

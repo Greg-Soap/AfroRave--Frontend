@@ -1,23 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Button } from '@/components/ui/button'
 
-export function AddBtn({
-  name,
-  onClick,
-  custom = false,
-}: {
-  name: string;
-  onClick: () => void;
-  custom?: boolean;
-}) {
+export function AddButton({ name, onClick }: IAddButton) {
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      className="text-deep-red flex items-center gap-2 text-xs font-sf-pro-text w-fit hover:bg-black/20 hover:text-deep-red uppercase"
-      onClick={onClick}
-    >
-      <Plus /> {!custom ? `add ${name}` : name}
-    </Button>
-  );
+    <div className='flex justify-center'>
+      <Button
+        type='button'
+        onClick={onClick}
+        className='bg-deep-red text-white hover:bg-red-700 px-6 py-3 rounded-lg font-medium'>
+        + {name}
+      </Button>
+    </div>
+  )
+}
+
+interface IAddButton {
+  name: string
+  onClick: () => void
 }

@@ -10,12 +10,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { type FieldValues, type Path, type UseFormReturn, useForm } from 'react-hook-form'
 import type { z } from 'zod'
-import { AddBtn } from '../component/add-btn'
 import { PriceField } from '../component/price-field'
 import { QuantityDecreaseButton, QuantityIncreaseBtn } from '../component/quantity-buttons'
 import { SelectField } from '../component/select-field'
 import { SkipBtn } from '../component/skip-btn'
-import { SubmitBtn } from '../component/submit-btn'
+import { ContinueButton } from '../component/continue-button'
 import { TabContainer } from '../component/tab-ctn'
 import {
   africanCountryCodes,
@@ -24,6 +23,8 @@ import {
   vendorTypes,
 } from '../constant'
 import { defaultSlotValue, slotSchema } from '../schemas/vendor-slot-schema'
+import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-react'
 
 export default function SlotForm({
   renderPublishTab,
@@ -144,7 +145,11 @@ export default function SlotForm({
         </div>
       ))}
 
-      <AddBtn name='vendor slot' onClick={addSlot} />
+      <Button
+        onClick={addSlot}
+        className='flex items-center gap-2 text-deep-red text-xs font-sf-pro-text bg-transparent leading-[100%]'>
+        <Plus /> VENDOR SLOT
+      </Button>
 
       <div className='flex flex-col gap-3'>
         <FormField form={form} name={`useDifferentContactDetails`}>
@@ -174,7 +179,11 @@ export default function SlotForm({
               </div>
             ))}
 
-            <AddBtn custom name='PHONE NUMBER' onClick={addPhone} />
+            <Button
+              onClick={addPhone}
+              className='flex items-center gap-2 text-deep-red text-xs font-sf-pro-text bg-transparent leading-[100%]'>
+              <Plus /> PHONE NUMBER
+            </Button>
           </div>
         </div>
 
@@ -183,9 +192,9 @@ export default function SlotForm({
         </FormField>
       </div>
 
-      <SubmitBtn isLoading={createVendorMutation.isPending}>
+      <ContinueButton isLoading={createVendorMutation.isPending}>
         <SkipBtn action={renderPublishTab} />
-      </SubmitBtn>
+      </ContinueButton>
     </TabContainer>
   )
 }

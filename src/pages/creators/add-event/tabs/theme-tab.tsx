@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm, type UseFormReturn, type Path } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
-import { SubmitBtn } from '../component/submit-btn'
+import { ContinueButton } from '../component/continue-button'
 import { TabContainer } from '../component/tab-ctn'
 import { themeAndBannerSchema, type ThemeAndBannerSchema } from '../schemas/theme-schema'
 import { NoEventId } from '../component/no-event-id'
@@ -88,11 +88,11 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
       <OnlyShowIf condition={activeForm === 'banner'}>
         <BannerForm form={form} />
       </OnlyShowIf>
-      <SubmitBtn isLoading={createThemeMutation.isPending} updatingText='Uploading data...'>
+      <ContinueButton isLoading={createThemeMutation.isPending} updatingText='Uploading data...'>
         <OnlyShowIf condition={activeForm === 'banner'}>
           <SkipBtn action={handleFormChange} />
         </OnlyShowIf>
-      </SubmitBtn>
+      </ContinueButton>
     </TabContainer>
   )
 }
