@@ -424,26 +424,26 @@ function FieldText({ text }: { text: string }) {
 const checkboxData: IBaseCheckbox[] = [
   {
     description: 'only 1 use per customer',
-    items: [{ label: 'limit per customer', id: 'onePerCustomer' }],
+    items: { label: 'limit per customer', id: 'onePerCustomer' },
   },
   {
     description: 'Only allow use if cart total exceeds this',
-    items: [{ label: 'minimum spend', id: 'spendMinimum' }],
+    items: { label: 'minimum spend', id: 'spendMinimum' },
   },
   {
     description: 'Only allow use if tickets total exceeds this',
-    items: [{ label: 'minimum tickets', id: 'purchasedMinimum' }],
+    items: { label: 'minimum tickets', id: 'purchasedMinimum' },
   },
   {
     description: "Promo code won't be displayed on the event page",
-    items: [{ label: 'private', id: 'private' }],
+    items: { label: 'private', id: 'private' },
   },
   {
     description: 'Link THIS code to a partner or influencer for sales tracking.',
-    items: [{ label: 'partnership code?', id: 'partnershipCode' }],
+    items: { label: 'partnership code?', id: 'partnershipCode' },
   },
   {
-    items: [{ label: 'commission', id: 'comission' }],
+    items: { label: 'commission', id: 'comission' },
   },
 ]
 

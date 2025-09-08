@@ -76,8 +76,7 @@ export interface EventDetailData {
     termsOfRefund: string
     eventContact: string
     socials: string
-    mobileMedia: string
-    desktopMedia: string
+    desktopMedia: { flyer: string; banner: string }
     theme: string
   }
 }
@@ -227,22 +226,22 @@ export interface CreateTicketRequest {
 
 // Vendor creation interfaces
 export interface VendorSlotData {
-  slotName: string
-  slotNumber: number
-  price: number
+  slotName: string | null
+  slotNumber: number | null
+  price: number | null
 }
 
 export interface VendorServiceData {
-  serviceName: string
-  minBudget: number
-  maxBudget: number
-  startDate: string
-  endDate: string
+  serviceName: string | null
+  minBudget: number | null
+  maxBudget: number | null
+  startDate: string | null
+  endDate: string | null
 }
 
 export interface VendorContact {
-  email: string
-  phoneNumbers: string[]
+  email: string | null
+  phoneNumbers: string[] | null
 }
 
 export interface VendorDetails {

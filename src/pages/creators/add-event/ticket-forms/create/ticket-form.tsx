@@ -63,9 +63,10 @@ export function TicketForm({
         <FormField form={form} name='ticket.invite_only'>
           {(field) => (
             <BaseBooleanCheckbox
-              data={{ items: [{ label: 'Invite only', id: 'invite-only' }] }}
+              data={{ items: { label: 'Invite only', id: 'invite-only' } }}
               showCheckbox={false}
               labelClassName='text-[12px] flex justify-center rounded-[5px] opacity-70 bg-white px-4 py-2 shadow-[0px_2px_10px_2px_#0000001A]'
+              checkedClassName='border border-red-800 bg-blue-900'
               {...field}
             />
           )}
@@ -85,7 +86,7 @@ export function TicketForm({
         <TicketType type={type} />
       </div>
 
-      <div className='grid grid-cols-2 gap-8'>
+      <div className='grid grid-cols-2 gap-8 items-end'>
         <div className='flex items-end gap-3'>
           <SelectField
             form={form}
@@ -100,6 +101,7 @@ export function TicketForm({
             {(field) => (
               <Input
                 className='w-full h-9'
+                type='number'
                 {...field}
                 value={field.value == null ? '' : String(field.value)}
               />
@@ -107,7 +109,9 @@ export function TicketForm({
           </FormField>
         </div>
 
-        <PriceField form={form} name='ticket.price' ticketTypeName='ticket.type' />
+        <div className='w-full mb-2'>
+          <PriceField form={form} name='ticket.price' ticketTypeName='ticket.type' />
+        </div>
       </div>
 
       <SelectField

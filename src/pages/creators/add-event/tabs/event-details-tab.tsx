@@ -109,7 +109,7 @@ export default function EventDetailsTab({
   return (
     <TabContainer<EventDetailsSchema>
       heading='EVENT DETAILS'
-      className='max-w-[560px] w-full flex flex-col gap-8'
+      className='max-w-[560px] w-full flex flex-col gap-8 space-y-0'
       form={form}
       onSubmit={onSubmit}>
       <FakeDataGenerator

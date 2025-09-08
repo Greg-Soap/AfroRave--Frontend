@@ -7,6 +7,8 @@ interface SubmitBtnProps {
   updatingText?: string
   disabled?: boolean
   onClick?: () => void
+  text?: string
+  type?: 'submit' | 'button'
 }
 
 export function ContinueButton({
@@ -14,6 +16,8 @@ export function ContinueButton({
   isLoading = false,
   updatingText = 'Creating Event...',
   disabled = false,
+  text = 'Continue',
+  type = 'submit',
   onClick,
 }: SubmitBtnProps) {
   return (
@@ -21,7 +25,7 @@ export function ContinueButton({
       {children}
 
       <Button
-        type='submit'
+        type={type}
         variant='destructive'
         onClick={onClick}
         disabled={isLoading || disabled}
@@ -32,7 +36,7 @@ export function ContinueButton({
             {updatingText}
           </>
         ) : (
-          'Continue'
+          text
         )}
       </Button>
     </div>

@@ -12,6 +12,7 @@ export function BaseBooleanCheckbox({
   defaultChecked,
   orientation = 'horizontal',
   showCheckbox = true,
+  checkedClassName,
 }: IBaseBooleanCheckbox & Partial<ControllerRenderProps>) {
   return (
     <div className='flex flex-col items-start gap-2'>
@@ -20,32 +21,34 @@ export function BaseBooleanCheckbox({
           'flex-col gap-5': orientation === 'vertical',
           'flex-row items-center gap-3': orientation === 'horizontal',
         })}>
-        {data.items.map((item) => (
-          <div key={item.id} className='flex flex-col gap-1'>
-            <div className='flex items-center gap-1'>
-              {showCheckbox && (
-                <Checkbox
-                  defaultChecked={defaultChecked ? defaultChecked : false}
-                  name={item.id}
-                  checked={value}
-                  onCheckedChange={(checked) => {
-                    onChange?.(checked === true)
-                  }}
-                  className='size-4'
-                />
-              )}
-
-              <Label
-                htmlFor={item.id}
-                className={cn('text-sm uppercase font-sf-pro-text', labelClassName)}>
-                {item.label}
-              </Label>
-            </div>
-            {item.description && (
-              <p className='text-sm font-light font-sf-pro-display'>{item.description}</p>
+        <div className='flex flex-col gap-1'>
+          <div className='flex items-center gap-1'>
+            {showCheckbox && (
+              <Checkbox
+                defaultChecked={defaultChecked ? defaultChecked : false}
+                name={data.items.id}
+                checked={value}
+                onCheckedChange={(checked) => {
+                  onChange?.(checked === true)
+                }}
+                className='size-4'
+              />
             )}
+
+            <Label
+              htmlFor={data.items.id}
+              className={cn(
+                'flex items-center justify-center text-sm text-charcoal uppercase font-sf-pro-text rounded-md px-2 py-1',
+                labelClassName,
+                value && checkedClassName, // only applied when checked
+              )}>
+              {data.items.label}
+            </Label>
           </div>
-        ))}
+          {data.items.description && (
+            <p className='text-sm font-light font-sf-pro-display'>{data.items.description}</p>
+          )}
+        </div>
       </div>
 
       {data.description && (
@@ -59,7 +62,7 @@ export function BaseBooleanCheckbox({
 
 export interface IBaseCheckbox {
   description?: string
-  items: { label: string; id: string; description?: string }[]
+  items: { label: string; id: string; description?: string }
 }
 
 interface IBaseBooleanCheckbox {
@@ -69,4 +72,5 @@ interface IBaseBooleanCheckbox {
   defaultChecked?: boolean
   orientation?: 'horizontal' | 'vertical'
   showCheckbox?: boolean
+  checkedClassName?: string
 }

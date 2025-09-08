@@ -1,6 +1,6 @@
 import type { promoCodeSchema } from '@/pages/creators/add-event/schemas/promo-code-schema'
 import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
-import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
+import type { VendorSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import type {
@@ -293,9 +293,9 @@ export function transformThemeToCreateRequest(
  * Transform form data from ServiceForm to CreateVendorRequest format
  */
 export function transformServiceToCreateRequest(
-  formData: z.infer<typeof serviceSchema>,
+  formData: VendorSchema,
   eventId: string,
-): CreateVendorRequest[] {
+): CreateVendorRequest {
   // Convert time format from 12-hour to 24-hour
   const convertTo24Hour = (hour: string, minute: string, period: 'AM' | 'PM'): string => {
     let hour24 = Number.parseInt(hour, 10)
@@ -310,38 +310,65 @@ export function transformServiceToCreateRequest(
   }
 
   // Convert form data to API format for each service
-  return formData.service.map((service) => ({
-    vendorType: mapVendorType(service.type),
-    category: service.category,
-    description: service.description,
+  return {
+    vendorType: mapVendorType(formData.vendor.type),
+    category: formData.vendor.baseVendorDetails.category,
+    description: formData.vendor.baseVendorDetails.description,
     eventId,
     vendorDetails: {
       slotData: {
-        slotName: '', // Not applicable for services
-        slotNumber: 0,
-        price: 0,
+        slotName:
+          formData.vendor.type === 'revenue_vendor' && formData.vendor.slot_name
+            ? formData.vendor.slot_name
+            : '',
+        slotNumber:
+          formData.vendor.type === 'revenue_vendor' && formData.vendor.number_of_slots
+            ? Number(formData.vendor.number_of_slots)
+            : 0,
+        price:
+          formData.vendor.type === 'revenue_vendor' && formData.vendor.price_per_slot
+            ? Number(formData.vendor.price_per_slot)
+            : 0,
       },
       serviceData: {
-        serviceName: service.name,
-        minBudget: 0, // This could be made configurable
-        maxBudget: 0, // This could be made configurable
-        startDate: `${new Date().toISOString().split('T')[0]}T${convertTo24Hour(
-          service.start.hour,
-          service.start.minute,
-          service.start.period,
-        )}:00`,
-        endDate: `${new Date().toISOString().split('T')[0]}T${convertTo24Hour(
-          service.stop.hour,
-          service.stop.minute,
-          service.stop.period,
-        )}:00`,
+        serviceName:
+          formData.vendor.type === 'service_vendor' && formData.vendor.service_name
+            ? formData.vendor.service_name
+            : '',
+        minBudget:
+          formData.vendor.type === 'service_vendor' && formData.vendor.budget.minBudget
+            ? Number(formData.vendor.budget.minBudget)
+            : 0,
+        maxBudget:
+          formData.vendor.type === 'service_vendor' && formData.vendor.budget.maxBudget
+            ? Number(formData.vendor.budget.maxBudget)
+            : 0,
+        startDate:
+          formData.vendor.type === 'service_vendor' && formData.vendor.startTime
+            ? `${new Date().toISOString().split('T')[0]}T${convertTo24Hour(
+                formData.vendor.startTime.hour,
+                formData.vendor.startTime.minute,
+                formData.vendor.startTime.period,
+              )}:00`
+            : new Date().toISOString(),
+        endDate:
+          formData.vendor.type === 'service_vendor' && formData.vendor.stopTime
+            ? `${new Date().toISOString().split('T')[0]}T${convertTo24Hour(
+                formData.vendor.stopTime.hour,
+                formData.vendor.stopTime.minute,
+                formData.vendor.stopTime.period,
+              )}:00`
+            : new Date().toISOString(),
       },
       contact: {
-        email: formData.email,
-        phoneNumbers: formData.phone.map((phone) => `${phone.countryCode}${phone.number}`),
+        email: formData.vendor.baseVendorDetails?.email || '',
+        phoneNumbers:
+          formData.vendor.baseVendorDetails?.phone?.map(
+            (phone) => `${phone.countryCode}${phone.number}`,
+          ) || [],
       },
     },
-  }))
+  }
 }
 
 /**
@@ -383,64 +410,64 @@ export function transformSlotToCreateRequest(
   }))
 }
 
-/**
- * Transform form data from PromoCodeForm to CreatePromoCodeRequest format
- */
-export function transformPromoCodeToCreateRequest(
-  formData: z.infer<typeof promoCodeSchema>,
-  eventId: string,
-): CreatePromoCodeRequest[] {
-  // Convert time format from 12-hour to 24-hour
-  const convertTo24Hour = (hour: string, minute: string, period: 'AM' | 'PM'): string => {
-    let hour24 = Number.parseInt(hour, 10)
-    if (period === 'PM' && hour24 !== 12) hour24 += 12
-    if (period === 'AM' && hour24 === 12) hour24 = 0
-    return `${hour24.toString().padStart(2, '0')}:${minute}`
-  }
+// /**
+//  * Transform form data from PromoCodeForm to CreatePromoCodeRequest format
+//  */
+// export function transformPromoCodeToCreateRequest(
+//   formData: z.infer<typeof promoCodeSchema>,
+//   eventId: string,
+// ): CreatePromoCodeRequest[] {
+//   // Convert time format from 12-hour to 24-hour
+//   const convertTo24Hour = (hour: string, minute: string, period: 'AM' | 'PM'): string => {
+//     let hour24 = Number.parseInt(hour, 10)
+//     if (period === 'PM' && hour24 !== 12) hour24 += 12
+//     if (period === 'AM' && hour24 === 12) hour24 = 0
+//     return `${hour24.toString().padStart(2, '0')}:${minute}`
+//   }
 
-  // Format date to YYYY-MM-DD
-  const formatDate = (date: Date): string => {
-    return date.toISOString().split('T')[0]
-  }
+//   // Format date to YYYY-MM-DD
+//   const formatDate = (date: Date): string => {
+//     return date.toISOString().split('T')[0]
+//   }
 
-  // Map discount type from form schema to API literal type
-  const mapDiscountType = (type: string): 'Flat' | 'Percentage' => {
-    return type === 'percentage' ? 'Percentage' : 'Flat'
-  }
+//   // Map discount type from form schema to API literal type
+//   const mapDiscountType = (type: string): 'Flat' | 'Percentage' => {
+//     return type === 'percentage' ? 'Percentage' : 'Flat'
+//   }
 
-  // Convert form data to API format for each promocode
-  return formData.map((promo) => ({
-    promoCode: promo.code,
-    discountType: mapDiscountType(promo.discount.type),
-    discountValue: Number.parseFloat(promo.discount.amount),
-    discountUsage: Number.parseInt(promo.usageLimit, 10),
-    startDate: `${formatDate(promo.startDate.date)}T${convertTo24Hour(
-      promo.startDate.hour,
-      promo.startDate.minute,
-      promo.startDate.period,
-    )}:00`,
-    endDate: `${formatDate(promo.endDate.date)}T${convertTo24Hour(
-      promo.endDate.hour,
-      promo.endDate.minute,
-      promo.endDate.period,
-    )}:00`,
-    eventId,
-    promoCodeDetails: {
-      tickets: [], // This could be mapped from form data if available
-      isMinimumSpend: promo.conditions.spend.minimum || false,
-      minimumSpend: promo.conditions.spend.amount
-        ? Number.parseFloat(promo.conditions.spend.amount)
-        : 0,
-      isMinimumTicket: promo.conditions.purchased.minimum || false,
-      minimumTicket: promo.conditions.purchased.amount
-        ? Number.parseInt(promo.conditions.purchased.amount, 10)
-        : 0,
-      note: promo.notes || '',
-      isPrivate: promo.private || false,
-      isPartnership: promo.partnershipCode || false,
-      partnerName: '', // This could be mapped from form data if available
-      commisionType: '', // This could be mapped from form data if available
-      commission: 0, // This could be mapped from form data if available
-    },
-  }))
-}
+//   // Convert form data to API format for each promocode
+//   return {
+//     promoCode: promo.code,
+//     discountType: mapDiscountType(promo.discount.type),
+//     discountValue: Number.parseFloat(promo.discount.amount),
+//     discountUsage: Number.parseInt(promo.usageLimit, 10),
+//     startDate: `${formatDate(promo.startDate.date)}T${convertTo24Hour(
+//       promo.startDate.hour,
+//       promo.startDate.minute,
+//       promo.startDate.period,
+//     )}:00`,
+//     endDate: `${formatDate(promo.endDate.date)}T${convertTo24Hour(
+//       promo.endDate.hour,
+//       promo.endDate.minute,
+//       promo.endDate.period,
+//     )}:00`,
+//     eventId,
+//     promoCodeDetails: {
+//       tickets: [], // This could be mapped from form data if available
+//       isMinimumSpend: promo.conditions.spend.minimum || false,
+//       minimumSpend: promo.conditions.spend.amount
+//         ? Number.parseFloat(promo.conditions.spend.amount)
+//         : 0,
+//       isMinimumTicket: promo.conditions.purchased.minimum || false,
+//       minimumTicket: promo.conditions.purchased.amount
+//         ? Number.parseInt(promo.conditions.purchased.amount, 10)
+//         : 0,
+//       note: promo.notes || '',
+//       isPrivate: promo.private || false,
+//       isPartnership: promo.partnershipCode || false,
+//       partnerName: '', // This could be mapped from form data if available
+//       commisionType: '', // This could be mapped from form data if available
+//       commission: 0, // This could be mapped from form data if available
+//     },
+//   }
+// }

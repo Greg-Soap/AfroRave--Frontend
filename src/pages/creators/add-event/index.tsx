@@ -141,7 +141,7 @@ export default function AddEventPage() {
         <TabsContent
           key={tab.value}
           value={tab.value}
-          className='w-full h-fit max-w-screen overflow-x-hidden bg-[#f8f8f8]'>
+          className='w-full h-fit max-w-screen overflow-x-hidden bg-white'>
           <div className='w-full h-fit flex flex-col items-center'>
             {/** Nav */}
             <TabNav

@@ -88,7 +88,13 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
       <OnlyShowIf condition={activeForm === 'banner'}>
         <BannerForm form={form} />
       </OnlyShowIf>
-      <ContinueButton isLoading={createThemeMutation.isPending} updatingText='Uploading data...'>
+      <ContinueButton
+        type='button'
+        isLoading={createThemeMutation.isPending}
+        onClick={
+          activeForm === 'banner' ? handleFormChange : form.handleSubmit((data) => onSubmit(data))
+        }
+        updatingText='Uploading data...'>
         <OnlyShowIf condition={activeForm === 'banner'}>
           <SkipBtn action={handleFormChange} />
         </OnlyShowIf>

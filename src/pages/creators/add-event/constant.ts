@@ -86,17 +86,15 @@ export const africanCountryCodes: { value: string; label: string }[] = [
   { value: '+263', label: 'Zimbabwe (+263)' },
 ]
 
-export const vendorCheckboxData: IBaseCheckbox[] = [
-  { items: [{ label: 'BUDGET RANGE', id: 'budgetRange' }] },
+export const vendorCheckboxData = [
+  { items: { label: 'BUDGET RANGE', id: 'budgetRange' } },
   {
-    items: [
-      {
-        label: 'use different CONTACT DETAILS',
-        id: 'useDifferentContactDetails',
-      },
-    ],
+    items: {
+      label: 'use different CONTACT DETAILS',
+      id: 'useDifferentContactDetails',
+    },
   },
-  { items: [{ label: 'SHOW SOCIAL HANDLES', id: 'showSocialHandles' }] },
+  { items: { label: 'SHOW SOCIAL HANDLES', id: 'showSocialHandles' } },
 ]
 
 export const frequencyOptions: { value: string; label: string }[] = [

@@ -5,13 +5,10 @@ import { toast } from 'sonner'
 async function uploadImageToCloudinary(file: File): Promise<string> {
   const data = new FormData()
   data.append('file', file)
-  data.append('upload_preset', 'my_unsigned_preset') // your preset name
+  data.append('upload_preset', 'afro-rave')
 
   try {
-    const res = await axios.post(
-      'https://api.cloudinary.com/v1_1/<your_cloud_name>/image/upload',
-      data,
-    )
+    const res = await axios.post('https://api.cloudinary.com/v1_1/dyuvjypyj/image/upload', data)
     console.log(res.data.secure_url)
     return res.data.secure_url
   } catch (err) {

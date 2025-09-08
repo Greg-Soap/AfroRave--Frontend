@@ -1,62 +1,43 @@
-import { CustomFormField as FormField } from '@/components/custom/custom-form'
-import { FormBase } from '@/components/reusable'
-import { BaseBooleanCheckbox } from '@/components/reusable/base-boolean-checkbox'
-import type { IBaseCheckbox } from '@/components/reusable/base-checkbox'
+import { BasePopover } from '@/components/reusable'
 import { getRoutePath } from '@/config/get-route-path'
-import { usePublishEvent } from '@/hooks/use-event-mutations'
+import { useGetEventPromoCodes, usePublishEvent } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useEventStore } from '@/stores'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { z } from 'zod'
-import { SkipBtn } from '../component/skip-btn'
+import { useMemo } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { ContinueButton } from '../component/continue-button'
-
-const notificationSchema = z.object({
-  sales: z.boolean().optional(),
-  promoCode: z.boolean().optional(),
-  vendorSlot: z.boolean().optional(),
-  ticketSalesStatus: z.boolean().optional(),
-})
+import { Button } from '@/components/ui/button'
+import { Ellipsis } from 'lucide-react'
+import { useGetEventVendors, useGetEvent, useGetEventTickets } from '@/hooks/use-event-mutations'
 
 export default function PublishTab({
   setStep,
 }: {
   setStep: (step: number) => void
 }) {
-  useEffect(() => setStep(5), [])
+  useEffect(() => setStep(5), [setStep])
 
   const { eventId } = useEventStore()
+
+  const vendors = useGetEventVendors(eventId || '').data?.data
+  const event = useGetEvent(eventId || '').data?.data
+  const tickets = useGetEventTickets(eventId || '').data?.data
+  const promoCodes = useGetEventPromoCodes(eventId || '').data?.data
+
   const publishEventMutation = usePublishEvent()
   const navigate = useNavigate()
 
-  const form = useForm<z.infer<typeof notificationSchema>>({
-    resolver: zodResolver(notificationSchema),
-    defaultValues: {
-      sales: true,
-      promoCode: true,
-      vendorSlot: true,
-      ticketSalesStatus: true,
-    },
-  })
+  const vendorNames = useMemo(() => {
+    if (!vendors || !Array.isArray(vendors)) return []
+    return vendors.map((v) => v.vendorName || '').filter((n: string) => n && typeof n === 'string')
+  }, [vendors])
 
-  async function onSubmit(data: z.infer<typeof notificationSchema>) {
-    console.log(data)
-    if (!eventId) {
-      console.error('No event ID found')
-      return
-    }
+  const ticketNames = useMemo(() => {
+    if (!tickets || !Array.isArray(tickets)) return []
 
-    try {
-      await publishEventMutation.mutateAsync(eventId)
-      // Navigate to creator dashboard after successful publish
-      navigate(getRoutePath('standalone'))
-    } catch (error) {
-      console.error('Failed to publish event:', error)
-    }
-  }
+    return tickets.map((item) => item.ticketName).filter((n: string) => n && typeof n === 'string')
+  }, [tickets])
 
   const handlePublishEvent = async () => {
     if (!eventId) {
@@ -66,7 +47,7 @@ export default function PublishTab({
 
     try {
       await publishEventMutation.mutateAsync(eventId)
-      // Navigate to creator dashboard after successful publish
+
       navigate(getRoutePath('creators_home'))
     } catch (error) {
       console.error('Failed to publish event:', error)
@@ -74,124 +55,116 @@ export default function PublishTab({
   }
 
   return (
-    <FormBase form={form} onSubmit={onSubmit} className='flex flex-col gap-8'>
-      <div className='flex flex-wrap gap-[100px] justify-center'>
-        <div className='w-full md:w-[520px] h-fit md:h-[260px] flex flex-col md:flex-row bg-charcoal py-[25px] px-[22px] rounded-[10px] gap-[22px]'>
-          <img
-            src='/assets/landing-page/s1.png'
-            alt='Flyer'
-            width={134}
-            height={188}
-            className='rounded-[10px]'
-          />
-
-          <div className='flex flex-col gap-5'>
-            <div className='flex flex-col gap-1 font-sf-pro-display'>
-              <p className='font-bold'>BLACKMARKET FLEA FESTIVAL</p>
-              <p className='text-xs font-light'>Harbour point, Vitoria Island, Lagos</p>
-              <p className='text-xs font-light'>Wed Oct 5 at 11am WAT</p>
+    <div className='max-w-[640px] w-full flex flex-col self-center rounded-[10px] py-10 px-5 bg-secondary-white mb-[75px]'>
+      <div className='w-full flex gap-3'>
+        <div className='w-full flex flex-col gap-3 '>
+          <div className='flex flex-col gap-2 px-1 font-sf-pro-display text-charcoal'>
+            <div className='flex items-center justify-between'>
+              <p className='text-xl font-bold leading-[100%] uppercase'>{event?.eventName}</p>
             </div>
-
-            <ul className='flex flex-col gap-3'>
-              <ListItem name='ticket status:' status='scheduled at August 5 at 11am' />
-              <ListItem name='theme:' status='scheduled at August 5 at 11am' />
-              <ListItem name='vendors slots:' status='active' />
-              <ListItem name='promo codes:' status='active' />
-              <ListItem name='ticket Upgrades:' status='active' />
-            </ul>
+            <p className='text-sm leading-[100%]'>{event?.venue}</p>
+            <p className='text-sm leading-[100%]'>
+              {event?.eventDate.startDate} at {event?.eventDate.startTime}
+            </p>
           </div>
+
+          <SectionContainer
+            name='Tickets'
+            quantity={tickets?.length || 0}
+            href={`${getRoutePath('add_event')}/?tab=tickets`}
+            data={ticketNames.map((item) => ({ tool: item, enabled: false }))}
+          />
         </div>
+        <img
+          src={event?.eventDetails.desktopMedia.flyer}
+          alt={event?.eventName}
+          className='rounded-[5px] w-[180px] min-h-[200px] max-h-[234px]'
+        />
+      </div>
 
-        <div className='max-w-[491px] flex flex-col gap-6 space-y-0'>
-          <div className='flex flex-col gap-1'>
-            <p className='text-xl font-black font-sf-pro-display uppercase text-black'>
-              notifications
-            </p>
-            <p className='text-xs font-sf-pro-display text-mid-dark-gray'>
-              Customize how you want to stay informed about your event's key updates. You can always
-              make changes later in your dashboard settings.
-            </p>
-          </div>
+      <SectionContainer
+        name='Vendor Listings'
+        quantity={vendors?.length || 0}
+        href={`${getRoutePath('add_event')}/?tab=vendor`}
+        data={vendorNames.map((name) => ({ tool: name, enabled: false }))}
+      />
 
-          <FormField form={form} name='sales'>
-            {(field) => <BaseBooleanCheckbox data={checkboxData[0]} {...field} />}
-          </FormField>
-          <FormField form={form} name='promoCode'>
-            {(field) => <BaseBooleanCheckbox data={checkboxData[1]} {...field} />}
-          </FormField>
-          <FormField form={form} name='vendorSlot'>
-            {(field) => <BaseBooleanCheckbox data={checkboxData[2]} {...field} />}
-          </FormField>
-          <FormField form={form} name='ticketSalesStatus'>
-            {(field) => <BaseBooleanCheckbox data={checkboxData[3]} {...field} />}
-          </FormField>
+      <SectionContainer
+        name='Advanced Options'
+        href={`${getRoutePath('add_event')}/?tab=tickets`}
+        data={[{ tool: 'Promo Codes', enabled: (promoCodes?.length ?? 0) > 0 }]}
+      />
+
+      <ContinueButton
+        isLoading={publishEventMutation.isPending}
+        onClick={handlePublishEvent}
+        text='Publish'
+        updatingText='Publishing'
+      />
+    </div>
+  )
+}
+
+function SectionContainer({ name, quantity, href, data }: ISectionContainer) {
+  return (
+    <div className='w-full flex flex-col p-1'>
+      <div className='w-full flex items-center justify-between border-b border-mid-dark-gray/50 py-4 px-1'>
+        <p className='font-sf-pro-display font-bold leading-[100%] text-charcoal capitalize'>
+          {name}
+        </p>
+
+        <div className='flex items-center'>
+          {quantity && (
+            <p className='size-6 rounded-full flex items-center justify-center bg-[#CB342C] text-white text-sm font-semibold leading-[100%] font-sf-pro-rounded'>
+              {quantity}
+            </p>
+          )}
+          <ActionPopover href={href} />
         </div>
       </div>
 
-      <ContinueButton isLoading={publishEventMutation.isPending}>
-        <SkipBtn name='VIEW' action={handlePublishEvent} />
-      </ContinueButton>
-    </FormBase>
+      {data.map((item) => (
+        <div
+          key={item.tool}
+          className='flex items-center justify-between border-b border-mid-dark-gray/50 py-4 px-1'>
+          <p className='text-sm font-sf-pro-display leading-[100%] capitalize text-charcoal'>
+            {item.tool}
+          </p>
+          {name === 'Advanced Options' && (
+            <p
+              className={cn('text-xs font-sf-pro-rounded leading-[100%] capitalize', {
+                'text-[#34C759]': item.enabled,
+                'text-deep-red': !item.enabled,
+              })}>
+              {item.enabled ? 'Enabled' : 'Disabled'}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
   )
 }
 
-function ListItem({
-  name,
-  status,
-}: {
-  name: string
-  status: 'active' | 'inactive' | (string & {})
-}) {
+function ActionPopover({ href }: { href: string }) {
   return (
-    <li className='flex items-center gap-4 text-xs font-sf-pro-display'>
-      <span className='font-medium capitalize'>{name}</span>
-      <span
-        className={cn('font-light', {
-          'text-[#00A023]': status === 'active',
-          'text-deep-red': status === 'inactive',
-        })}>
-        {status}
-      </span>
-    </li>
+    <BasePopover
+      trigger={
+        <Button variant='ghost' className='hover:bg-black/10'>
+          <Ellipsis width={3} height={15} color='#1E1E1E' />
+        </Button>
+      }
+      content={
+        <Button variant='ghost' asChild>
+          <Link to={href}>Edit</Link>
+        </Button>
+      }
+    />
   )
 }
 
-const checkboxData: IBaseCheckbox[] = [
-  {
-    items: [
-      {
-        label: 'Notify When Sales Start',
-        id: 'sales',
-        description: 'Get a notification when your tickets first go live',
-      },
-    ],
-  },
-  {
-    items: [
-      {
-        label: 'Promo Code Expiry Reminder',
-        id: 'promoCode',
-        description: 'Receive a notification 48 hours before your promo codes expire',
-      },
-    ],
-  },
-  {
-    items: [
-      {
-        label: 'NVendor Slot Request Alerts',
-        id: 'vendorSlot',
-        description: 'Get notifications when vendors apply for available slots',
-      },
-    ],
-  },
-  {
-    items: [
-      {
-        label: 'Ticket Sales Status',
-        id: 'ticketSalesStatus',
-        description:
-          'Get regular push notifications on your ticket sales performance, including milestones and key updates.',
-      },
-    ],
-  },
-]
+interface ISectionContainer {
+  name: string
+  quantity?: number
+  data: { tool: string; enabled: boolean }[]
+  href: string
+}

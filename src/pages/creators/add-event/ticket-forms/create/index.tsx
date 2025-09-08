@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import {
   useCreateTicket,
   useDeleteTicket,
@@ -33,6 +32,7 @@ import {
 import { TicketForm } from './ticket-form'
 import { TicketModal } from './ticket-modal'
 import { ActionPopover } from '../../component/action-popover'
+import { ContinueButton } from '../../component/continue-button'
 
 type TForm = z.infer<typeof unifiedTicketFormSchema>
 
@@ -43,12 +43,14 @@ export default function CreateTicketForm({
   handleFormChange: (form: string) => void
   showError: () => void
 }) {
+  const [editingTicketId, setEditingTicketId] = useState<string | null>(null)
+  const [currentTicketType, setCurrentTicketType] = useState<TicketType | null>(null)
+
   const { eventId } = useEventStore()
 
   const createTicketMutation = useCreateTicket(eventId || '')
   const updateTicketMutation = useUpdateTicket(eventId || '')
   const deleteTicketMutation = useDeleteTicket(eventId || '')
-
   const { data: ticketsResponse, isLoading: isLoadingTickets } = useGetEventTickets(
     eventId || undefined,
   )
@@ -61,9 +63,6 @@ export default function CreateTicketForm({
   })
 
   const ticket = useWatch({ control: form.control, name: 'ticket' })
-
-  const [editingTicketId, setEditingTicketId] = useState<string | null>(null)
-  const [currentTicketType, setCurrentTicketType] = useState<TicketType | null>(null)
 
   const handleCreateTicket = () =>
     createTicket(
@@ -160,16 +159,11 @@ export default function CreateTicketForm({
       </TabContainer>
 
       <ConfirmationMailForm />
-      <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
-        <Button
-          type='submit'
-          variant='destructive'
-          disabled={savedTickets.length === 0}
-          onClick={() => handleFormChange('promocode')}
-          className='w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase'>
-          Continue
-        </Button>
-      </div>
+
+      <ContinueButton
+        disabled={savedTickets.length === 0}
+        onClick={() => handleFormChange('promocode')}
+      />
     </div>
   )
 }

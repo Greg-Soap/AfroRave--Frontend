@@ -20,7 +20,7 @@ export function PriceField<T extends FieldValues>({
 
   if (isFreeTicket) {
     return (
-      <div className='w-full h-9 flex items-center gap-3 mb-2'>
+      <div className='w-full h-9 flex items-center gap-3'>
         <p className='py-[11px] w-14 h-full flex items-center justify-center bg-[#acacac] rounded-[5px]'>
           FREE
         </p>

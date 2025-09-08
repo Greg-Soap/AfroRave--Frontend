@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
-import type { serviceSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
+import type { VendorSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import type { ProfileSchema } from '@/schema/profile-shema'
@@ -257,40 +257,59 @@ const fakeDataGenerators = {
     showSocialHandles: faker.datatype.boolean(),
   }),
 
-  vendorServices: (): z.infer<typeof serviceSchema> => ({
-    service: Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
-      type: faker.helpers.arrayElement(vendorTypes),
+  vendorServices: (): VendorSchema => {
+    const vendorType = faker.helpers.arrayElement(['revenue_vendor', 'service_vendor'] as const)
+
+    const baseDetails = {
+      type: vendorType,
       category: faker.helpers.arrayElement(vendorCategories),
-      name: faker.helpers.arrayElement([
-        'Professional DJ Services',
-        'Event Photography',
-        'Catering Services',
-        'Event Decoration',
-        'Security Services',
-        'Transportation Services',
-        'Lighting & Sound',
-        'Makeup & Styling',
-        'Fashion & Accessories',
-        'Art & Crafts',
-      ]),
-      budgetRange: faker.datatype.boolean(),
-      workDuration: {
-        hour: faker.number.int({ min: 1, max: 12 }).toString(),
-        minute: faker.number.int({ min: 0, max: 59 }).toString().padStart(2, '0'),
-        second: faker.number.int({ min: 0, max: 59 }).toString().padStart(2, '0'),
-      },
-      start: generateTime(),
-      stop: generateTime(),
       description: faker.lorem.paragraph(),
-    })),
-    useDifferentContactDetails: faker.datatype.boolean(),
-    email: faker.internet.email(),
-    phone: Array.from({ length: faker.number.int({ min: 1, max: 2 }) }, () => ({
-      countryCode: faker.helpers.arrayElement(['+234', '+254', '+27', '+20', '+233']),
-      number: faker.number.int({ min: 7000000000, max: 9999999999 }).toString(),
-    })),
-    showSocialHandles: faker.datatype.boolean(),
-  }),
+      deadline: generateFutureDate(30),
+      useDifferentContactDetails: faker.datatype.boolean(),
+      email: faker.internet.email(),
+      phone: Array.from({ length: faker.number.int({ min: 1, max: 2 }) }, () => ({
+        countryCode: faker.helpers.arrayElement(['+234', '+254', '+27', '+20', '+233']),
+        number: faker.number.int({ min: 7000000000, max: 9999999999 }).toString(),
+      })),
+      showSocialHandles: faker.datatype.boolean(),
+    }
+
+    return {
+      vendor:
+        vendorType === 'revenue_vendor'
+          ? {
+              baseVendorDetails: baseDetails,
+              type: 'revenue_vendor' as const,
+              number_of_slots: faker.number.int({ min: 1, max: 10 }).toString(),
+              price_per_slot: faker.number.int({ min: 1000, max: 50000 }).toString(),
+              slot_name: faker.helpers.arrayElement([
+                'VIP Booth',
+                'Standard Booth',
+                'Food Stall',
+                'Merchandise Stand',
+                'Photo Booth',
+              ]),
+            }
+          : {
+              baseVendorDetails: baseDetails,
+              type: 'service_vendor' as const,
+              service_name: faker.helpers.arrayElement([
+                'Professional DJ Services',
+                'Event Photography',
+                'Catering Services',
+                'Event Decoration',
+                'Security Services',
+              ]),
+              budget: {
+                range: faker.datatype.boolean(),
+                minBudget: faker.number.int({ min: 5000, max: 50000 }).toString(),
+                maxBudget: faker.number.int({ min: 50000, max: 200000 }).toString(),
+              },
+              startTime: generateTime(),
+              stopTime: generateTime(),
+            },
+    }
+  },
 
   profile: (): z.infer<typeof ProfileSchema> => ({
     first_name: faker.person.firstName(),
