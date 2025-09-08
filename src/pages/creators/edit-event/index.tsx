@@ -2,7 +2,13 @@ import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
-import { useDeleteEvent, useGetEvent, useUpdateEvent } from '@/hooks/use-event-mutations'
+import {
+  useDeleteEvent,
+  useGetEvent,
+  useGetEventPromoCodes,
+  useGetEventTickets,
+  useUpdateEvent,
+} from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
@@ -47,7 +53,12 @@ export default function EditEventPage() {
   }, [searchParams, setSearchParams])
 
   if (!event) {
-    return <p>No Events Found</p>
+    return (
+      <div className='w-full h-screen flex flex-col gap-5 items-center justify-center bg-white'>
+        <p className='text-charcoal text-4xl font-semibold'>No Event Found</p>
+        <Button onClick={() => navigate(-1)}>Go Back</Button>
+      </div>
+    )
   }
 
   const setActiveTabState = (tab: string) => {
@@ -128,6 +139,7 @@ export default function EditEventPage() {
         </div>
         <CustomTabTrigger tabs={edit_tabs} className='w-full flex md:hidden px-5 justify-between' />
       </div>
+
       {edit_tabs.map((tab) => (
         <TabsContent
           key={tab.value}
@@ -158,7 +170,7 @@ export default function EditEventPage() {
               <div className='flex flex-col py-16 md:px-14 gap-14 max-w-[612px]'>
                 <EventDetails {...event} isTheme={activeTab === 'theme'} />
 
-                <SalesSummary />
+                <SalesSummary eventId={eventId || ''} />
               </div>
 
               {tab.element}
@@ -170,13 +182,7 @@ export default function EditEventPage() {
   )
 }
 
-function CustomTabTrigger({
-  tabs,
-  className,
-}: {
-  tabs: IEditTabProps[]
-  className?: string
-}) {
+function CustomTabTrigger({ tabs, className }: ICustomTabTrigger) {
   return (
     <TabsList
       className={cn(
@@ -234,7 +240,10 @@ function EventDetails({
   )
 }
 
-function SalesSummary() {
+function SalesSummary({ eventId }: { eventId: EventDetailData['eventId'] }) {
+  const promoCodes = useGetEventPromoCodes(eventId).data?.data
+  const tickets = useGetEventTickets(eventId).data?.data
+
   return (
     <div className='hidden md:flex flex-col gap-6 p-6 rounded-[10px]'>
       <p className='p-1 font-sf-pro-display text-2xl font-bold text-black capitalize'>
@@ -244,20 +253,14 @@ function SalesSummary() {
       <div className='grid grid-cols-2 gap-y-6 gap-x-3'>
         <IndividualSaleSummary title='total tickets sold' details='1250' />
         <IndividualSaleSummary title='total revenue' details='₦20,000,000' />
-        <IndividualSaleSummary title='total tickets' details='2500' />
-        <IndividualSaleSummary title='active promo codes' details='4' />
+        <IndividualSaleSummary title='total tickets' details={tickets?.length || 0} />
+        <IndividualSaleSummary title='active promo codes' details={promoCodes?.length || 0} />
       </div>
     </div>
   )
 }
 
-function IndividualSaleSummary({
-  title,
-  details,
-}: {
-  title: string
-  details: string
-}) {
+function IndividualSaleSummary({ title, details }: IndividualSaleSummary) {
   return (
     <div className='flex flex-col p-1 font-sf-pro-display text-pure-black'>
       <p className='text-sm capitalize'>{title}</p>
@@ -266,8 +269,18 @@ function IndividualSaleSummary({
   )
 }
 
+interface ICustomTabTrigger {
+  tabs: IEditTabProps[]
+  className?: string
+}
+
 interface IEditTabProps {
   value: string
   name: string
   element: React.ReactNode
+}
+
+interface IndividualSaleSummary {
+  title: string
+  details: string | number
 }

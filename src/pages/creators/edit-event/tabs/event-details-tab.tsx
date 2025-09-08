@@ -13,7 +13,6 @@ import { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import type { z } from 'zod'
 import { africanTimezones, ageRatings, eventCategories, frequencyOptions } from '../constant'
@@ -32,10 +31,13 @@ export default function EventDetailsTab({ event }: { event: EventDetailData }) {
 }
 
 function EventDetailsForm({ event }: { event: EventDetailData }) {
-  const { eventId } = useParams()
-  const updateEventMutation = useUpdateEvent()
-  const navigate = useNavigate()
   const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
+
+  const eventId = event.eventId
+
+  const updateEventMutation = useUpdateEvent()
+
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
     resolver: zodResolver(EditEventDetailsSchema),
@@ -50,22 +52,23 @@ function EventDetailsForm({ event }: { event: EventDetailData }) {
       occurrence: event.eventDate.occurance,
       start_date: {
         date: new Date(event.eventDate.startDate),
-        hour: '12',
-        minute: '00',
-        period: 'AM',
+        hour: convertTime(event.eventDate.startTime).hour,
+        minute: convertTime(event.eventDate.startTime).minute,
+        period: convertTime(event.eventDate.startTime).period as 'AM' | 'PM',
       },
       end_date: {
         date: new Date(event.eventDate.startDate),
-        hour: '12',
-        minute: '00',
-        period: 'AM',
+        hour: convertTime(event.eventDate.endTime).hour,
+        minute: convertTime(event.eventDate.endTime).minute,
+        period: convertTime(event.eventDate.endTime).period as 'AM' | 'PM',
       },
-      email: '',
-      website_url: event.customUrl,
+      email: event.eventDetails.eventContact.email,
+      website_url: event.eventDetails.eventContact.website,
       socials: {
-        instagram: '',
-        tiktok: '',
-        x: '',
+        instagram: event.eventDetails.socials.instagram,
+        tiktok: event.eventDetails.socials.tiktok,
+        x: event.eventDetails.socials.x,
+        facebook: event.eventDetails.socials.facebook,
       },
     },
   })
@@ -365,4 +368,11 @@ function EventDetailsForm({ event }: { event: EventDetailData }) {
 
 function SectionHeader({ name }: { name: string }) {
   return <p className='text-xl font-medium font-sf-pro-text text-black -mb-3'>{name}</p>
+}
+
+function convertTime(time: string) {
+  const [hm, period] = time.split(' ')
+  const [hour, minute] = hm.split(':')
+
+  return { hour, period, minute }
 }

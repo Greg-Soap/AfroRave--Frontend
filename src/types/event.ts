@@ -74,8 +74,13 @@ export interface EventDetailData {
   }
   eventDetails: {
     termsOfRefund: string
-    eventContact: string
-    socials: string
+    eventContact: { email: string; website: string }
+    socials: {
+      instagram: 'string'
+      x: 'string'
+      tiktok: 'string'
+      facebook: 'string'
+    }
     desktopMedia: { flyer: string; banner: string }
     theme: string
   }
