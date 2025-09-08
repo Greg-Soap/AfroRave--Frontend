@@ -2,13 +2,7 @@ import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
-import {
-  useDeleteEvent,
-  useGetEvent,
-  useGetEventPromoCodes,
-  useGetEventTickets,
-  useUpdateEvent,
-} from '@/hooks/use-event-mutations'
+import { useDeleteEvent, useGetEvent, useUpdateEvent } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
@@ -170,7 +164,12 @@ export default function EditEventPage() {
               <div className='flex flex-col py-16 md:px-14 gap-14 max-w-[612px]'>
                 <EventDetails {...event} isTheme={activeTab === 'theme'} />
 
-                <SalesSummary eventId={eventId || ''} />
+                <SalesSummary
+                  totalTicket={event.eventDetails.eventStat.totalTicket}
+                  promoCodes={event.eventDetails.eventStat.activePromoCodes}
+                  revenue={event.eventDetails.eventStat.netProfit}
+                  ticketSold={event.eventDetails.eventStat.ticketSold}
+                />
               </div>
 
               {tab.element}
@@ -240,10 +239,7 @@ function EventDetails({
   )
 }
 
-function SalesSummary({ eventId }: { eventId: EventDetailData['eventId'] }) {
-  const promoCodes = useGetEventPromoCodes(eventId).data?.data
-  const tickets = useGetEventTickets(eventId).data?.data
-
+function SalesSummary({ ticketSold, revenue, totalTicket, promoCodes }: ISalesSummary) {
   return (
     <div className='hidden md:flex flex-col gap-6 p-6 rounded-[10px]'>
       <p className='p-1 font-sf-pro-display text-2xl font-bold text-black capitalize'>
@@ -251,10 +247,10 @@ function SalesSummary({ eventId }: { eventId: EventDetailData['eventId'] }) {
       </p>
 
       <div className='grid grid-cols-2 gap-y-6 gap-x-3'>
-        <IndividualSaleSummary title='total tickets sold' details='1250' />
-        <IndividualSaleSummary title='total revenue' details='₦20,000,000' />
-        <IndividualSaleSummary title='total tickets' details={tickets?.length || 0} />
-        <IndividualSaleSummary title='active promo codes' details={promoCodes?.length || 0} />
+        <IndividualSaleSummary title='total tickets sold' details={ticketSold} />
+        <IndividualSaleSummary title='total revenue' details={revenue} />
+        <IndividualSaleSummary title='total tickets' details={totalTicket} />
+        <IndividualSaleSummary title='active promo codes' details={promoCodes} />
       </div>
     </div>
   )
@@ -278,6 +274,13 @@ interface IEditTabProps {
   value: string
   name: string
   element: React.ReactNode
+}
+
+interface ISalesSummary {
+  ticketSold: number
+  revenue: number
+  totalTicket: number
+  promoCodes: number
 }
 
 interface IndividualSaleSummary {
