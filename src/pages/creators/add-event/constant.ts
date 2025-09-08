@@ -1,5 +1,3 @@
-import type { IBaseCheckbox } from '@/components/reusable/base-checkbox'
-
 export const vendorTypes: { value: string; label: string }[] = [
   { value: 'service_vendor', label: 'Service Vendor' },
   { value: 'product_vendor', label: 'Product Vendor' },

@@ -7,7 +7,6 @@ import { BaseSelect } from '@/components/reusable'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { getRoutePath } from '@/config/get-route-path'
-import type { IEvents } from '@/data/events'
 import { useUpdateEvent } from '@/hooks/use-event-mutations'
 import { OnlyShowIf } from '@/lib/environment'
 import { EditEventDetailsSchema } from '@/schema/edit-event-details'
@@ -18,8 +17,9 @@ import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import type { z } from 'zod'
 import { africanTimezones, ageRatings, eventCategories, frequencyOptions } from '../constant'
+import type { EventDetailData } from '@/types'
 
-export default function EventDetailsTab({ event }: { event: IEvents }) {
+export default function EventDetailsTab({ event }: { event: EventDetailData }) {
   return (
     <div className='w-full flex flex-col p-0 md:p-14 gap-2.5'>
       <div className='flex flex-col gap-4 w-full md:min-w-[560px] max-w-[800px]'>
@@ -31,7 +31,7 @@ export default function EventDetailsTab({ event }: { event: IEvents }) {
   )
 }
 
-function EventDetailsForm({ event }: { event: IEvents }) {
+function EventDetailsForm({ event }: { event: EventDetailData }) {
   const { eventId } = useParams()
   const updateEventMutation = useUpdateEvent()
   const navigate = useNavigate()
@@ -40,32 +40,32 @@ function EventDetailsForm({ event }: { event: IEvents }) {
   const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
     resolver: zodResolver(EditEventDetailsSchema),
     defaultValues: {
-      name: event.event_name,
-      age_rating: 'PG',
-      category: 'FASHION & LIFESTYLE',
-      venue: event.event_location,
-      description: event.description.join('\n'),
+      name: event.eventName,
+      age_rating: event.ageRating,
+      category: event.ageRating,
+      venue: event.venue,
+      description: event.description,
       event_type: 'standalone',
-      frequency: 'Weekly',
-      occurrence: 1,
+      frequency: event.eventDate.frequency as 'Daily' | 'Weekly' | 'Monthly',
+      occurrence: event.eventDate.occurance,
       start_date: {
-        date: new Date(),
+        date: new Date(event.eventDate.startDate),
         hour: '12',
         minute: '00',
         period: 'AM',
       },
       end_date: {
-        date: new Date(),
+        date: new Date(event.eventDate.startDate),
         hour: '12',
         minute: '00',
         period: 'AM',
       },
       email: '',
-      website_url: event.socials.website,
+      website_url: event.customUrl,
       socials: {
-        instagram: event.socials.instagram_link,
-        tiktok: event.socials.tiktok_link,
-        x: event.socials.x_link,
+        instagram: '',
+        tiktok: '',
+        x: '',
       },
     },
   })

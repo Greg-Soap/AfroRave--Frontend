@@ -2,8 +2,7 @@ import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
-import { events, type IEvents } from '@/data/events'
-import { useDeleteEvent, useUpdateEvent } from '@/hooks/use-event-mutations'
+import { useDeleteEvent, useGetEvent, useUpdateEvent } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useAfroStore } from '@/stores'
 import { ChevronLeft } from 'lucide-react'
@@ -15,17 +14,21 @@ import EventDetailsTab from './tabs/event-details-tab'
 import SettingsTab from './tabs/settings-tab'
 import ThemeTab from './tabs/theme-tab'
 import TicketsTab from './tabs/tickets-tab'
+import type { EventDetailData } from '@/types'
 
 export default function EditEventPage() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [activeTab, setActiveTab] = useState<string>('event-details')
+
   const { user } = useAfroStore()
   const { eventId } = useParams()
-  const event = events.find((item) => item.id === Number(eventId))
-  const navigate = useNavigate()
+
   const updateEventMutation = useUpdateEvent()
   const deleteEventMutation = useDeleteEvent()
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [activeTab, setActiveTab] = useState<string>('event-details')
+  const navigate = useNavigate()
+
+  const event = useGetEvent(eventId || '').data?.data
 
   useEffect(() => {
     const editParam = searchParams.get('editTab')
@@ -70,10 +73,8 @@ export default function EditEventPage() {
     }
 
     try {
-      // This would need to be connected to the form data
-      // For now, we'll just show the mutation is available
-      console.log('Save event functionality available')
-      // await updateEventMutation.mutateAsync({ eventId, data: formData });
+      console.log('HElo world')
+      // await updateEventMutation.mutateAsync({ eventId, data: formData })
     } catch (error) {
       console.error('Failed to update event:', error)
     }
@@ -196,17 +197,22 @@ function CustomTabTrigger({
 }
 
 function EventDetails({
-  image,
-  event_name,
-  event_location,
-  event_date,
-  event_time,
+  eventDetails,
+  eventName,
+  venue,
+  eventDate,
   isTheme = false,
-}: IEvents & { isTheme?: boolean }) {
+}: EventDetailData & { isTheme?: boolean }) {
   return (
     <div className='hidden md:flex gap-6 text-black w-[465px]'>
       <div className='relative w-fit h-fit flex items-center justify-center'>
-        <img src={image} alt={event_name} width={240} height={285} className='rounded-[10px]' />
+        <img
+          src={eventDetails.desktopMedia.flyer}
+          alt={eventName}
+          width={240}
+          height={285}
+          className='rounded-[10px]'
+        />
         {isTheme && (
           <Button className='absolute w-[92px] h-10 bg-white text-deep-red text-[11px] font-medium hover:bg-medium-gray hover:text-white'>
             Edit Flyer
@@ -215,10 +221,10 @@ function EventDetails({
       </div>
 
       <div className='flex flex-col max-w-[237px] gap-2 py-3 font-sf-pro-display'>
-        <p className='text-xl font-bold uppercase'>{event_name}</p>
-        <p className='text-sm font-normal'>{event_location}</p>
+        <p className='text-xl font-bold uppercase'>{eventName}</p>
+        <p className='text-sm font-normal'>{venue}</p>
         <p className='text-sm font-normal'>
-          {event_date} {event_time.start_time}
+          {eventDate.startDate} {eventDate.startTime}
         </p>
         <p className='w-fit py-1 px-2 rounded-[5px] bg-[#f3f3f3] text-xs font-semibold capitalize font-sf-pro-rounded text-[#00AD2E]'>
           upcoming

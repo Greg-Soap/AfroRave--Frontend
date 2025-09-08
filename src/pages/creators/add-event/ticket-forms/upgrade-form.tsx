@@ -2,25 +2,25 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { type FieldValues, type Path, useForm, type UseFormReturn } from 'react-hook-form'
-import { CustomFormField as FormField } from '@/components/custom/custom-form'
+// import { CustomFormField as FormField } from '@/components/custom/custom-form'
 import { TabContainer } from '../component/tab-ctn'
-import { SubmitBtn } from '../component/continue-button'
-import type { IBaseCheckbox } from '@/components/reusable/base-checkbox'
-import { AddBtn } from '../component/add-btn'
+// import { SubmitBtn } from '../component/continue-button'
+// import type { IBaseCheckbox } from '@/components/reusable/base-checkbox'
+// import { AddBtn } from '../component/add-btn'
 import { defaultUgradeValues, upgradeSchema } from '../schemas/upgrade-schema'
-import { SkipBtn } from '../component/skip-btn'
+// import { SkipBtn } from '../component/skip-btn'
 import { PriceField } from '../component/price-field'
 import type { ICustomSelectProps } from '@/components/reusable/base-select'
 import { SelectField } from '../component/select-field'
 import { FormCount } from '../component/form-count'
-import { BaseBooleanCheckbox } from '@/components/reusable/base-boolean-checkbox'
+// import { BaseBooleanCheckbox } from '@/components/reusable/base-boolean-checkbox'
 
 export default function UpgradeForm({
   renderThemeTab,
 }: {
   renderThemeTab: () => void
 }) {
-  const [upgrades, setUpgrades] = useState([
+  const [upgrades] = useState([
     {
       id: Date.now() + Math.random(),
       options: [{ id: Date.now() + Math.random() }],
@@ -67,7 +67,7 @@ export default function UpgradeForm({
               </div>
             ))}
 
-            <AddBtn
+            {/* <AddBtn
               custom
               name='multiple upgrade options'
               onClick={() =>
@@ -82,13 +82,13 @@ export default function UpgradeForm({
                   ),
                 )
               }
-            />
+            /> */}
           </div>
 
           <div className='flex flex-col gap-4'>
-            <FormField form={form} name={`upgrades.${idx}.automaticFee`}>
+            {/* <FormField form={form} name={`upgrades.${idx}.automaticFee`}>
               {(field) => <BaseBooleanCheckbox data={checkboxData[0]} {...field} />}
-            </FormField>
+            </FormField> */}
 
             <p className='py-[11px] px-[66px] w-[140px] h-10 flex items-center justify-center bg-[#acacac] rounded-[5px]'>
               ₦0
@@ -96,16 +96,16 @@ export default function UpgradeForm({
           </div>
 
           <div className='flex flex-col gap-4'>
-            <FormField form={form} name={`upgrades.${idx}.customFee`}>
+            {/* <FormField form={form} name={`upgrades.${idx}.customFee`}>
               {(field) => <BaseBooleanCheckbox data={checkboxData[1]} {...field} />}
-            </FormField>
+            </FormField> */}
 
             <PriceField form={form} name={`upgrades.${idx}.customPrice`} />
           </div>
         </div>
       ))}
 
-      <AddBtn
+      {/* <AddBtn
         name='upgrade'
         onClick={() =>
           setUpgrades((prev) => [
@@ -119,7 +119,7 @@ export default function UpgradeForm({
       />
       <SubmitBtn>
         <SkipBtn action={() => renderThemeTab()} />
-      </SubmitBtn>
+      </SubmitBtn> */}
     </TabContainer>
   )
 }
@@ -154,12 +154,12 @@ const discountTypes: { value: string; label: string }[] = [
   { value: 'fixed', label: 'Fixed Amount' },
 ]
 
-const checkboxData: IBaseCheckbox[] = [
-  {
-    description: 'Subtracts original ticket price from target ticket price',
-    items: [{ label: 'automatic fee', id: 'automaticFee' }],
-  },
-  {
-    items: [{ label: 'Custom upgrade fee', id: 'customFee' }],
-  },
-]
+// const checkboxData: IBaseCheckbox[] = [
+//   {
+//     description: 'Subtracts original ticket price from target ticket price',
+//     items: [{ label: 'automatic fee', id: 'automaticFee' }],
+//   },
+//   {
+//     items: [{ label: 'Custom upgrade fee', id: 'customFee' }],
+//   },
+// ]

@@ -153,11 +153,7 @@ export function handleCancelEdit(
   setCurrentTicketType(null)
 }
 
-export function fillCurrentFormWithSampleData(
-  ticket: any,
-  currentTicketType: TicketType | null,
-  form: any,
-) {
+export function fillCurrentFormWithSampleData(currentTicketType: TicketType | null, form: any) {
   if (!currentTicketType) return
 
   const sampleTicket = {

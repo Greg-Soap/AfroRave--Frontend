@@ -97,7 +97,7 @@ export default function CreateTicketForm({
   const handleCancelEditWrapper = () =>
     handleCancelEdit(form, setEditingTicketId, setCurrentTicketType)
 
-  const handleFillSampleData = () => fillCurrentFormWithSampleData(ticket, currentTicketType, form)
+  const handleFillSampleData = () => fillCurrentFormWithSampleData(currentTicketType, form)
 
   const handleSubmit = () => onSubmit(eventId, handleFormChange)
 

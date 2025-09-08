@@ -168,6 +168,12 @@ export default function VendorForm({
       {/** Vendor Form Field */}
       <OnlyShowIf condition={currentVendor}>
         <div className='w-full flex flex-col gap-8'>
+          <Button
+            type='button'
+            className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
+            <Plus /> <span>ADD SECTION MAP</span>
+          </Button>
+
           <div className='flex flex-col gap-2 font-sf-pro-text'>
             <p className='uppercase text-sm font-medium leading-[100%] text-charcoal'>
               Vendor Type

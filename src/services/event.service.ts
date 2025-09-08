@@ -11,7 +11,6 @@ import type {
   EventTicketsResponse,
   EventVendorsResponse,
   EventsResponse,
-  PromoCodeResponse,
   PromoCodeResponseWithDetails,
   ThemeResponse,
   TicketResponse,

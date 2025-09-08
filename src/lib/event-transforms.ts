@@ -1,11 +1,9 @@
-import type { promoCodeSchema } from '@/pages/creators/add-event/schemas/promo-code-schema'
 import type { unifiedTicketFormSchema } from '@/pages/creators/add-event/schemas/ticket-schema'
 import type { VendorSchema } from '@/pages/creators/add-event/schemas/vendor-service-schema'
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import type {
   CreateEventRequest,
-  CreatePromoCodeRequest,
   CreateThemeRequest,
   CreateTicketRequest,
   CreateVendorRequest,
