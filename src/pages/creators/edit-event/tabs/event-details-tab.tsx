@@ -371,8 +371,15 @@ function SectionHeader({ name }: { name: string }) {
 }
 
 function convertTime(time: string) {
-  const [hm, period] = time.split(' ')
-  const [hour, minute] = hm.split(':')
+  const [hourStr, minute] = time.split(':')
+  let hour = Number.parseInt(hourStr, 10)
 
-  return { hour, period, minute }
+  const period = hour >= 12 ? 'PM' : 'AM'
+  hour = hour % 12 || 12
+
+  return {
+    hour: hour.toString().padStart(2, '0'),
+    minute,
+    period,
+  }
 }
