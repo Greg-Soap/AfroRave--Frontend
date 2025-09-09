@@ -1,128 +1,125 @@
-import { getRoutePath } from "@/config/get-route-path";
-import { events } from "@/data/events";
-import { cn } from "@/lib/utils";
-import { Suspense } from "react";
-import { Link } from "react-router-dom";
-import { CategoryBlockSkeleton } from "../event-page/event-category-blocks";
-import { CategoryBlock } from "../event-page/event-category-blocks";
+import { getRoutePath } from '@/config/get-route-path'
+import { cn } from '@/lib/utils'
+import { Suspense } from 'react'
+import { Link } from 'react-router-dom'
+import { useGetTrendingEvents } from '@/hooks/use-event-mutations'
+import { CategoryBlock, CategoryBlockSkeleton } from '@/components/shared/category-block'
 
 export default function OwnTheStage() {
+  const trendingEvents = useGetTrendingEvents().data?.data
+
   return (
-    <section className="relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-8 md:pb-[182px] w-full overflow-hidden">
+    <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-8 md:pb-[182px] w-full overflow-hidden'>
       {/* Background layers */}
-      <div className="absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)_opacity(25%)]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1e1f1f] via-transparent to-[#1e1f1f] from-[5%] via-50% to-[96%]" />
+      <div className='absolute inset-0 bg-[url(/assets/landing-page/section-bg.png)] bg-cover bg-center [filter:grayscale(100%)_opacity(25%)]' />
+      <div className='absolute inset-0 bg-gradient-to-b from-[#1e1f1f] via-transparent to-[#1e1f1f] from-[5%] via-50% to-[96%]' />
 
       {/* Content container */}
-      <div className="relative px-5 md:px-14">
-        <div className="mb-7 md:mb-10 overflow-x-hidden">
+      <div className='relative px-5 md:px-14'>
+        <div className='mb-7 md:mb-10 overflow-x-hidden'>
           <Suspense fallback={<CategoryBlockSkeleton />}>
             <CategoryBlock
-              name="Trending"
-              data={events}
+              name='Trending'
+              data={(trendingEvents ?? []).map((event) => ({
+                eventId: event.eventId,
+                eventName: event.eventName,
+                image: event.desktopMedia.flyer,
+                venue: event.venue,
+                startDate: event.startDate,
+                startTime: event.startTime,
+              }))}
               showLocation={true}
-              layout="start"
+              layout='start'
               homePage={true}
             />
           </Suspense>
         </div>
         {/* First row - blocks 1 and 3 */}
-        <div className="flex max-lg:flex-col items-center lg:items-start justify-center gap-[100px] mb-[100px]">
-          <DetailsBlock {...details[0]} position="first" />
-          <DetailsBlock {...details[2]} position="third" />
+        <div className='flex max-lg:flex-col items-center lg:items-start justify-center gap-[100px] mb-[100px]'>
+          <DetailsBlock {...details[0]} position='first' />
+          <DetailsBlock {...details[2]} position='third' />
         </div>
 
         {/* Second row - block 2 centered */}
-        <div className="flex justify-center">
-          <DetailsBlock {...details[1]} position="second" />
+        <div className='flex justify-center'>
+          <DetailsBlock {...details[1]} position='second' />
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-function DetailsBlock({
-  title,
-  href,
-  linkName,
-  details,
-  position = "first",
-}: IDetailsBlockProps) {
+function DetailsBlock({ title, href, linkName, details, position = 'first' }: IDetailsBlockProps) {
   return (
     <div
-      className={cn("max-w-[554px] flex flex-col items-center gap-2", {
-        "z-10 lg:max-w-[375px]": position === "second",
-      })}
-    >
+      className={cn('max-w-[554px] flex flex-col items-center gap-2', {
+        'z-10 lg:max-w-[375px]': position === 'second',
+      })}>
       <span
         className={cn(
-          "inline-block text-xl md:text-[28px] lg:leading-[88px] lg:text-[36px] text-center font-phosphate-inline text-white max-lg:text-center text-wrap",
+          'inline-block text-xl md:text-[28px] lg:leading-[88px] lg:text-[36px] text-center font-phosphate-inline text-white max-lg:text-center text-wrap',
           {
-            "max-md:max-w-[190px] lg:w-[426px]":
-              position === "third" || position === "first",
-            "max-md:max-w-[171px] md:w-full": position === "second",
-          }
-        )}
-      >
+            'max-md:max-w-[190px] lg:w-[426px]': position === 'third' || position === 'first',
+            'max-md:max-w-[171px] md:w-full': position === 'second',
+          },
+        )}>
         {title}
       </span>
       <p
         className={cn(
-          "text-sm md:text-xl uppercase text-center font-phosphate max-lg:text-center",
+          'text-sm md:text-xl uppercase text-center font-phosphate max-lg:text-center',
           {
-            "mb-1 max-w-[444px]": position === "second",
-          }
-        )}
-      >
+            'mb-1 max-w-[444px]': position === 'second',
+          },
+        )}>
         {details}
       </p>
       <LinkToAuth href={href} linkName={linkName} />
     </div>
-  );
+  )
 }
 
 function LinkToAuth({ href, linkName }: { href: string; linkName: string }) {
   return (
     <Link
       to={href}
-      className="w-fit bg-deep-red text-sm font-light uppercase rounded-[6px] flex items-center justify-center text-center font-sf-compact px-4 py-2"
-    >
+      className='w-fit bg-deep-red text-sm font-light uppercase rounded-[6px] flex items-center justify-center text-center font-sf-compact px-4 py-2'>
       <span>{linkName}</span>
     </Link>
-  );
+  )
 }
 
 const details: IDetails[] = [
   {
-    title: "OWN THE STAGE!",
-    href: getRoutePath("creators_home"),
-    linkName: "Create Your Event",
+    title: 'OWN THE STAGE!',
+    href: getRoutePath('creators_home'),
+    linkName: 'Create Your Event',
     details:
-      "Ready to bring your event to life? With Afro Revive, creating and managing your event has never been easier! From ticket sales to attendee insights, we give you all the tools you need to sell out your event and make it unforgettable.",
+      'Ready to bring your event to life? With Afro Revive, creating and managing your event has never been easier! From ticket sales to attendee insights, we give you all the tools you need to sell out your event and make it unforgettable.',
   },
   {
     title: "CAN'T MAKE IT TO A CONCERT?",
-    href: getRoutePath("resell"),
-    linkName: "RESELL YOUR TICKET",
+    href: getRoutePath('resell'),
+    linkName: 'RESELL YOUR TICKET',
     details:
-      "Our Ticket Resell feature lets you easily sell your tickets to other fans, safely and securely. List, set your price, and let us handle the rest!",
+      'Our Ticket Resell feature lets you easily sell your tickets to other fans, safely and securely. List, set your price, and let us handle the rest!',
   },
   {
-    title: "READY TO CONNECT WITH EVENTS?",
-    href: "/?signup=vendor",
-    linkName: "REGISTER AS A VENDOR",
+    title: 'READY TO CONNECT WITH EVENTS?',
+    href: '/?signup=vendor',
+    linkName: 'REGISTER AS A VENDOR',
     details:
       "Get notified about open slots, express interest, and let organizers come to you. Whether you're offering food, tech, logistics, or entertainment—we'll help you stay booked and busy!",
   },
-];
+]
 
 interface IDetails {
-  title: string;
-  href: string;
-  linkName: string;
-  details: string;
+  title: string
+  href: string
+  linkName: string
+  details: string
 }
 
 interface IDetailsBlockProps extends IDetails {
-  position: "first" | "second" | "third";
+  position: 'first' | 'second' | 'third'
 }

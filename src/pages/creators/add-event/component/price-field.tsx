@@ -1,4 +1,4 @@
-import { CustomFormField as FormField, CustomInput as Input } from '@/components/custom/custom-form'
+import { CustomFormField as FormField, CustomInput as Input } from '@/components/shared/custom-form'
 import type { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 

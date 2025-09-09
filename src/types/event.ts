@@ -47,6 +47,7 @@ export interface EventData {
   eventName: string
   venue: string
   startDate: string
+  startTime: string
   endDate: string
   isPublished: boolean
   customUrl: string
@@ -88,8 +89,8 @@ export interface EventDetailData {
       totalTicket: number
       activePromoCodes: number
     }
-    desktopMedia: { flyer: string; banner: string }
-    theme: string
+    desktopMedia: { flyer: string; background: string } | null
+    theme: { themeName: 'default' | 'standard-carousel' | 'with-flyer' }
   }
 }
 
@@ -196,8 +197,11 @@ export interface TrendingEventData {
   eventName: string
   venue: string
   startDate: string
+  startTime: string
   endDate: string
+  desktopMedia: { flyer: string; banner: string }
   views: number
+  theme: string
   ticketsSold: number
   customUrl: string
 }

@@ -1,5 +1,5 @@
-import { DateForm } from '@/components/custom/date-form'
-import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
+import { DateForm } from '@/components/shared/date-form'
+import { FormFieldWithCounter } from '@/components/shared/field-with-counter'
 import { FormField } from '@/components/reusable'
 import { BaseBooleanCheckbox } from '@/components/reusable/base-boolean-checkbox'
 import { BaseCheckbox } from '@/components/reusable/base-checkbox'

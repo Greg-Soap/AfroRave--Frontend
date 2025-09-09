@@ -1,23 +1,40 @@
-import { events } from "@/data/events";
-import { useParams } from "react-router-dom";
-import EventDetails from "./event-details";
-import { SEO } from "@/components/seo";
+import { useParams } from 'react-router-dom'
+import EventDetails from './event-details'
+import { SEO } from '@/components/seo'
+import { useGetEvent } from '@/hooks/use-event-mutations'
+import { LoadingFallback } from '@/components/loading-fallback'
+import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 export default function IndividualEventPage() {
-  const { eventId } = useParams();
-  const event = events.find((item) => item.id === Number(eventId));
+  const { eventId } = useParams()
+
+  const { data: eventResponse, isPending: isLoading } = useGetEvent(eventId || '')
+
+  const event = eventResponse?.data
+
+  const navigate = useNavigate()
+
+  if (isLoading) {
+    return <LoadingFallback />
+  }
 
   if (!event) {
-    return <p>No Events Found</p>;
+    return (
+      <div className='flex flex-col items-center gap-2.5 justify-center w-full h-screen'>
+        <p className='text-3xl font-semibold'>No Events Found</p>
+        <Button onClick={() => navigate(-1)}>Go back</Button>
+      </div>
+    )
   }
 
   return (
     <>
       <SEO
-        title={`${event.event_name} - Afro Revive`}
-        description={`Buy tickets for ${event.event_name} - Afro Revive`}
+        title={`${event.eventName} - Afro Revive`}
+        description={`Buy tickets for ${event.eventName} - Afro Revive`}
       />
-      <EventDetails event={event} layout="default" />
+      <EventDetails event={event} layout={event.eventDetails.theme.themeName} />
     </>
-  );
+  )
 }

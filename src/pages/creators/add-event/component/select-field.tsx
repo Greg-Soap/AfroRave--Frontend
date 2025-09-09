@@ -1,4 +1,4 @@
-import { CustomFormField as FormField } from '@/components/custom/custom-form'
+import { CustomFormField as FormField } from '@/components/shared/custom-form'
 import type { FieldValues, UseFormReturn, Path } from 'react-hook-form'
 import { BaseSelect } from '@/components/reusable'
 import type { ICustomSelectProps } from '@/components/reusable/base-select'

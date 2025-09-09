@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { Plus, Minus } from 'lucide-react'
 import { formatNaira } from '@/lib/format-price'
-import type { IEvents } from '@/data/events'
 import { useState, useEffect } from 'react'
+import type { EventDetailData } from '@/types'
+import { RenderEventImage } from '@/components/shared/render-event-flyer'
+import { useGetEventTickets } from '@/hooks/use-event-mutations'
 
 interface CartTicket {
   name: string
@@ -11,7 +13,7 @@ interface CartTicket {
 }
 
 interface CartContainerProps {
-  event: IEvents
+  event: EventDetailData
   onTotalPriceChange: (total: number) => void
   initialTickets?: CartTicket[]
 }
@@ -21,8 +23,18 @@ export default function CartContainer({
   onTotalPriceChange,
   initialTickets,
 }: CartContainerProps) {
-  const [tickets, setTickets] = useState<CartTicket[]>(
-    initialTickets || event.tickets.map((ticket) => ({ ...ticket, quantity: 0 })),
+  const eventTickets = useGetEventTickets(event.eventId).data?.data
+
+  const [tickets, setTickets] = useState<CartTicket[]>(() =>
+    initialTickets
+      ? initialTickets
+      : eventTickets
+        ? eventTickets.map((ticket) => ({
+            name: ticket.ticketName,
+            price: ticket.price,
+            quantity: 0,
+          }))
+        : [],
   )
 
   const totalPrice = tickets.reduce((sum, ticket) => sum + ticket.price * ticket.quantity, 0)
@@ -43,22 +55,17 @@ export default function CartContainer({
 
   return (
     <section className='container flex items-center justify-center gap-[192px] z-10 min-h-[calc(100vh-210px)]'>
-      <img
-        src={event.image}
-        alt={event.event_name}
-        width={217}
-        height={282}
-        className='rounded-[5px] w-[217px] h-[282px]'
+      <RenderEventImage
+        image={event.eventDetails.desktopMedia?.flyer}
+        event_name={event.eventName}
       />
 
       <div className='max-w-[703px] w-1/2 flex flex-col gap-[67px] px-5 py-[71px]'>
         <div className='flex flex-col items-center gap-1'>
           <p className='text-5xl uppercase text-center leading-normal font-phosphate'>
-            {event.event_name}
+            {event.eventName}
           </p>
-          <p className='font-extralight text-2xl font-sf-pro-display text-center'>
-            {event.event_location}
-          </p>
+          <p className='font-extralight text-2xl font-sf-pro-display text-center'>{event.venue}</p>
         </div>
 
         <ul className='flex flex-col gap-[72px]'>

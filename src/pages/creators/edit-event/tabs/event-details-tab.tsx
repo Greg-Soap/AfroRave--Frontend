@@ -1,43 +1,39 @@
-import { CustomFormField as FormField, CustomInput as Input } from '@/components/custom/custom-form'
-import { DateForm } from '@/components/custom/date-form'
-import { FormFieldWithAbsoluteText } from '@/components/custom/field-with-absolute-text'
-import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
+import { CustomFormField as FormField, CustomInput as Input } from '@/components/shared/custom-form'
+import { DateForm } from '@/components/shared/date-form'
+import { FormFieldWithAbsoluteText } from '@/components/shared/field-with-absolute-text'
+import { FormFieldWithCounter } from '@/components/shared/field-with-counter'
 import { FormBase } from '@/components/reusable'
 import { BaseSelect } from '@/components/reusable'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { getRoutePath } from '@/config/get-route-path'
 import { useUpdateEvent } from '@/hooks/use-event-mutations'
 import { OnlyShowIf } from '@/lib/environment'
 import { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import type { z } from 'zod'
 import { africanTimezones, ageRatings, eventCategories, frequencyOptions } from '../constant'
 import type { EventDetailData } from '@/types'
 
-export default function EventDetailsTab({ event }: { event: EventDetailData }) {
+export default function EventDetailsTab({ event, setActiveTab }: IEventDetailsTab) {
   return (
     <div className='w-full flex flex-col p-0 md:p-14 gap-2.5'>
       <div className='flex flex-col gap-4 w-full md:min-w-[560px] max-w-[800px]'>
         <p className='uppercase font-sf-pro-display font-black text-black text-xl'>Event Details</p>
 
-        <EventDetailsForm event={event} />
+        <EventDetailsForm event={event} setActiveTab={setActiveTab} />
       </div>
     </div>
   )
 }
 
-function EventDetailsForm({ event }: { event: EventDetailData }) {
+function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
   const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
 
   const eventId = event.eventId
 
   const updateEventMutation = useUpdateEvent()
-
-  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
     resolver: zodResolver(EditEventDetailsSchema),
@@ -91,47 +87,46 @@ function EventDetailsForm({ event }: { event: EventDetailData }) {
       return
     }
 
-    try {
-      const eventData = {
-        eventName: values.name,
-        ageRating: values.age_rating,
-        category: values.category,
-        venue: values.venue,
-        description: values.description,
-        customUrl: values.custom_url || '',
-        eventId: eventId,
-        eventDate: {
-          timezone: values.time_zone || 'Africa/Lagos',
-          startDate: values.start_date.date.toISOString(),
-          endDate: values.end_date.date.toISOString(),
-          frequency: values.frequency || 'Weekly',
-          startTime: `${values.start_date.hour}:${values.start_date.minute} ${values.start_date.period}`,
-          endTime: `${values.end_date.hour}:${values.end_date.minute} ${values.end_date.period}`,
-          occurance: values.occurrence || 1,
+    const eventData = {
+      eventName: values.name,
+      ageRating: values.age_rating,
+      category: values.category,
+      venue: values.venue,
+      description: values.description,
+      customUrl: values.custom_url || '',
+      eventId: eventId,
+      eventDate: {
+        timezone: values.time_zone || 'Africa/Lagos',
+        startDate: values.start_date.date.toISOString(),
+        endDate: values.end_date.date.toISOString(),
+        frequency: values.frequency || 'Weekly',
+        startTime: `${values.start_date.hour}:${values.start_date.minute} ${values.start_date.period}`,
+        endTime: `${values.end_date.hour}:${values.end_date.minute} ${values.end_date.period}`,
+        occurance: values.occurrence || 1,
+      },
+      eventDetails: {
+        termsOfRefund: '',
+        eventContact: {
+          email: values.email,
+          website: values.website_url,
         },
-        eventDetails: {
-          termsOfRefund: '',
-          eventContact: {
-            email: values.email,
-            website: values.website_url,
-          },
-          socials: {
-            instagram: values.socials.instagram || '',
-            x: values.socials.x || '',
-            tiktok: values.socials.tiktok || '',
-            facebook: '',
-          },
+        socials: {
+          instagram: values.socials.instagram || '',
+          x: values.socials.x || '',
+          tiktok: values.socials.tiktok || '',
+          facebook: '',
         },
-      }
-
-      await updateEventMutation.mutateAsync({ eventId, data: eventData })
-      console.log('Event updated successfully')
-
-      // Navigate to creator dashboard after successful update
-      navigate(getRoutePath('creators_home'))
-    } catch (error) {
-      console.error('Failed to update event:', error)
+      },
     }
+
+    await updateEventMutation.mutateAsync(
+      { eventId, data: eventData },
+      {
+        onSuccess: () => {
+          setActiveTab('tickets')
+        },
+      },
+    )
   }
 
   return (
@@ -382,4 +377,9 @@ function convertTime(time: string) {
     minute,
     period,
   }
+}
+
+interface IEventDetailsTab {
+  event: EventDetailData
+  setActiveTab: (tab: string) => void
 }

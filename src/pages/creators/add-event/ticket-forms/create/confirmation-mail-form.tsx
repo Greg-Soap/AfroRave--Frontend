@@ -1,5 +1,5 @@
-import { CustomInput as Input } from '@/components/custom/custom-form'
-import { FormFieldWithCounter } from '@/components/custom/field-with-counter'
+import { CustomInput as Input } from '@/components/shared/custom-form'
+import { FormFieldWithCounter } from '@/components/shared/field-with-counter'
 import { FormBase, FormField } from '@/components/reusable'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'

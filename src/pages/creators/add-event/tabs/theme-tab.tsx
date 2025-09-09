@@ -1,4 +1,4 @@
-import { CustomFormField as FormField } from '@/components/custom/custom-form'
+import { CustomFormField as FormField } from '@/components/shared/custom-form'
 import { BaseRadioGroup, type IRadioGroupProps } from '@/components/reusable/base-radio-group'
 import { FormDescription } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'

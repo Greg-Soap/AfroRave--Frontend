@@ -5,19 +5,40 @@ import { formatNaira } from '@/lib/format-price'
 import { AddFilterBUtton } from './components/add-filter-btn'
 import { getRoutePath } from '@/config/get-route-path'
 import StandAloneModal from './components/standalone-modal'
-import VendorSelect from '@/components/custom/vendor-select'
+import VendorSelect from '@/components/shared/vendor-select'
 import { BasePopover } from '@/components/reusable'
-import { DashboardCards } from '@/components/custom/dashboard-cards'
+import { DashboardCards, DashboardCardSkeleton } from '@/components/shared/dashboard-cards'
+import { useGetOrganizerEvents, useGetEvent } from '@/hooks/use-event-mutations'
+import { LoadingFallback } from '@/components/loading-fallback'
 
 export default function StandalonePage() {
+  const { data: response, isPending: isLoading } = useGetOrganizerEvents()
+
+  const events = response?.data
+
+  if (isLoading) {
+    return <LoadingFallback />
+  }
+
   return (
     <section className='w-full h-full flex flex-col items-center gap-14 lg:gap-24 mb-[75px]'>
       <StandAloneHeader />
 
       <div className='max-w-[836px] w-full flex flex-wrap justify-center gap-7'>
-        {standalone_events.map((item) => (
-          <StandAloneEvents key={item.id} {...item} />
-        ))}
+        {events ? (
+          <>
+            {events.map((item) => (
+              <StandAloneEvents key={item.eventId} id={item.eventId} />
+            ))}
+          </>
+        ) : (
+          <div className='w-full h-[300px] flex flex-col gap-2.5 items-center justify-center'>
+            <p className='text-3xl text-charcoal font-semibold'>No event found</p>
+            <Button asChild>
+              <Link to={getRoutePath('add_event')}>Create an event</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -42,19 +63,38 @@ function StandAloneHeader() {
   )
 }
 
-function StandAloneEvents({ id, image, name, sold, net_profit, status }: IStandaloneEventProps) {
+function StandAloneEvents({ id }: { id: string }) {
+  const { data: response, isPending: isLoading } = useGetEvent(id)
+
+  const event = response?.data
+
+  if (!event) {
+    return
+  }
+
+  if (isLoading) {
+    return <DashboardCardSkeleton />
+  }
+
   return (
     <DashboardCards
-      image={image}
-      name={name}
+      image={event.eventDetails.desktopMedia?.flyer}
+      name={event.eventName}
       status={status}
       cardInfo={[
         <p key='sold_items' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-          Sold: <span className='text-black font-medium'>{sold.unit}</span> / {sold.total}
+          Sold:{' '}
+          <span className='text-black font-medium'>
+            {event.eventDetails.eventStat.ticketSold || 0}
+          </span>{' '}
+          / {event.eventDetails.eventStat.totalTicket}
         </p>,
 
         <p key='profit' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-          Net Profit: <span className='text-black font-medium'>{formatNaira(net_profit)}</span>
+          Net Profit:{' '}
+          <span className='text-black font-medium'>
+            {formatNaira(event.eventDetails.eventStat.netProfit)}
+          </span>
         </p>,
       ]}
       cardButtons={event_buttons}
@@ -81,7 +121,7 @@ function StandAloneEvents({ id, image, name, sold, net_profit, status }: IStanda
   )
 }
 
-function PopoverContent({ id }: { id: number }) {
+function PopoverContent({ id }: { id: string }) {
   return (
     <div className='w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text'>
       <Link
@@ -111,59 +151,3 @@ const event_buttons: { src: string; alt: string }[] = [
     alt: 'Group User',
   },
 ]
-
-const standalone_events: IStandaloneEventProps[] = [
-  {
-    id: 1,
-    image: '/assets/landing-page/s1.png',
-    name: 'Punk fest, unleash your inner rebel',
-    status: 'drafts',
-    sold: { unit: 1200, total: 2000 },
-    net_profit: 5800000,
-  },
-  {
-    id: 2,
-    image: '/assets/landing-page/s2.png',
-    name: 'Punk fest, unleash your inner rebel',
-    status: 'ended',
-    sold: { unit: 1200, total: 2000 },
-    net_profit: 5800000,
-  },
-  {
-    id: 3,
-    image: '/assets/landing-page/s1.png',
-    name: 'Punk fest, unleash your inner rebel',
-    sold: { unit: 1200, total: 2000 },
-    net_profit: 5800000,
-  },
-  {
-    id: 4,
-    image: '/assets/landing-page/s1.png',
-    name: 'Punk fest, unleash your inner rebel',
-    sold: { unit: 1200, total: 2000 },
-    net_profit: 5800000,
-  },
-  {
-    id: 5,
-    image: '/assets/landing-page/s1.png',
-    name: 'Punk fest, unleash your inner rebel',
-    sold: { unit: 1200, total: 2000 },
-    net_profit: 5800000,
-  },
-  {
-    id: 6,
-    image: '/assets/landing-page/s1.png',
-    name: 'Punk fest, unleash your inner rebel',
-    sold: { unit: 1200, total: 2000 },
-    net_profit: 5800000,
-  },
-]
-
-interface IStandaloneEventProps {
-  id: number
-  image: string
-  name: string
-  status?: 'drafts' | 'ended'
-  sold: { unit: number; total: number }
-  net_profit: number
-}

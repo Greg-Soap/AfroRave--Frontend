@@ -1,81 +1,48 @@
-import { cn } from "@/lib/utils";
-import type { IEvents } from "@/data/events";
-import CartTrigger from "../_components/cart-trigger";
+import { cn } from '@/lib/utils'
+import CartTrigger from '../_components/cart-trigger'
+import type { EventDetailData } from '@/types'
+import { RenderEventImage } from '@/components/shared/render-event-flyer'
 
-export default function EventDetailsSection({
-  event,
-  layout,
-  totalQuantity,
-  tickets,
-  calculateTotalPrice,
-}: ComponentProps) {
+export default function EventDetailsSection({ event, layout }: ComponentProps) {
   return (
     <div
-      className={cn(
-        "relative w-full flex items-end justify-between px-5 lg:px-[120px]",
-        {
-          "mb-[220px]": layout === "no-flyer",
-        }
-      )}
-    >
-      <div className="flex flex-col gap-3">
-        {layout !== "no-flyer" && (
-          <img
-            src={event.image}
-            alt={event.event_name}
-            className="w-[142px] h-[182px] md:w-[284px] md:h-[364px] rounded-[10px]"
-          />
+      className={cn('relative w-full flex items-end justify-between px-5 lg:px-[120px]', {
+        'mb-[220px]': layout === 'standard-carousel',
+      })}>
+      <div className='flex flex-col gap-3'>
+        {layout === 'standard-carousel' && (
+          <>
+            <RenderEventImage
+              image={event.eventDetails.desktopMedia?.flyer}
+              event_name={event.eventName}
+              className='w-[142px] h-[182px] md:w-[284px] md:h-[364px] !text-base'
+            />
+          </>
         )}
 
-        <div className="flex flex-col gap-1">
-          <p className="text-2xl md:text-[30px] lg:text-[30px] uppercase font-sf-compact tracking-[-0.25px] font-bold">
-            {event.event_name}
+        <div className='flex flex-col gap-1'>
+          <p className='text-2xl md:text-[30px] lg:text-[30px] uppercase font-sf-compact tracking-[-0.25px] font-bold'>
+            {event.eventName}
           </p>
 
-          <div className="flex flex-col gap-2 font-sf-pro-display font-light">
-            <p className="text-lg md:text-2xl lg:text-xl">
-              {event.event_location}
-            </p>
-            <p>{event.event_date}</p>
+          <div className='flex flex-col gap-2 font-sf-pro-display font-light'>
+            <p className='text-lg md:text-2xl lg:text-xl'>{event.venue}</p>
+            <p>{event.eventDate.endDate}</p>
           </div>
         </div>
       </div>
 
-      {layout === "carousel-with-flyer" && (
+      {layout === 'with-flyer' && (
         <CartTrigger
           event={event}
-          totalQuantity={totalQuantity}
-          calculateTotalPrice={calculateTotalPrice}
-          tickets={tickets}
-          className="max-md:hidden py-6 px-4 rounded-t-[8px] bg-mid-dark-gray/50 absolute bottom-0 right-0 w-[562px]"
+          className='max-md:hidden py-6 px-4 rounded-t-[8px] bg-mid-dark-gray/50 absolute bottom-0 right-0 w-[562px]'
         />
       )}
     </div>
-  );
+  )
 }
 
-interface CartTicket {
-  name: string;
-  price: number;
-  quantity: number;
+type ComponentProps = {
+  layout: 'default' | 'standard-carousel' | 'with-flyer'
+  event: EventDetailData
 }
-
-interface IEventDetailsProp {
-  layout: "default" | "no-flyer" | "carousel-with-flyer";
-}
-
-type ComponentProps =
-  | {
-      layout: "carousel-with-flyer";
-      event: IEvents;
-      totalQuantity: number;
-      tickets: CartTicket[];
-      calculateTotalPrice: () => number;
-    }
-  | {
-      layout: Exclude<IEventDetailsProp["layout"], "carousel-with-flyer">;
-      event: IEvents;
-      totalQuantity?: never;
-      tickets?: never;
-      calculateTotalPrice?: never;
-    };

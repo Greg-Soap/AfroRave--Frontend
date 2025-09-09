@@ -31,7 +31,7 @@ export default function EditEventPage() {
   const event = useGetEvent(eventId || '').data?.data
 
   useEffect(() => {
-    const editParam = searchParams.get('editTab')
+    const editParam = searchParams.get('tab')
 
     if (
       editParam === 'event-details' ||
@@ -42,7 +42,7 @@ export default function EditEventPage() {
       setActiveTab(editParam)
     } else {
       setActiveTab('event-details')
-      setSearchParams({ editTab: 'event-details' })
+      setSearchParams({ tab: 'event-details' })
     }
   }, [searchParams, setSearchParams])
 
@@ -55,9 +55,9 @@ export default function EditEventPage() {
     )
   }
 
-  const setActiveTabState = (tab: string) => {
-    setActiveTab(tab)
-    setSearchParams({ editTab: tab })
+  const setActiveTabState = (nextTab: string) => {
+    setActiveTab(nextTab)
+    setSearchParams({ tab: nextTab })
   }
 
   const handleBackClick = () => {
@@ -77,12 +77,7 @@ export default function EditEventPage() {
       return
     }
 
-    try {
-      console.log('HElo world')
-      // await updateEventMutation.mutateAsync({ eventId, data: formData })
-    } catch (error) {
-      console.error('Failed to update event:', error)
-    }
+    // await updateEventMutation.mutateAsync({ eventId, data: formData })
   }
 
   const handleDeleteEvent = async () => {
@@ -91,20 +86,16 @@ export default function EditEventPage() {
       return
     }
 
-    try {
-      await deleteEventMutation.mutateAsync(eventId)
-      // Navigate to creator dashboard after successful delete
-      navigate(getRoutePath('creators_home'))
-    } catch (error) {
-      console.error('Failed to delete event:', error)
-    }
+    await deleteEventMutation.mutateAsync(eventId, {
+      onSuccess: () => navigate(getRoutePath('creators_home')),
+    })
   }
 
   const edit_tabs: IEditTabProps[] = [
     {
       value: 'event-details',
       name: 'Event Details',
-      element: <EventDetailsTab event={event} />,
+      element: <EventDetailsTab event={event} setActiveTab={setActiveTab} />,
     },
     { value: 'tickets', name: 'Tickets', element: <TicketsTab /> },
     { value: 'theme', name: 'Theme', element: <ThemeTab /> },
