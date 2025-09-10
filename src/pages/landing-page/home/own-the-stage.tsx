@@ -1,12 +1,13 @@
 import { getRoutePath } from '@/config/get-route-path'
 import { cn } from '@/lib/utils'
-import { Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { useGetTrendingEvents } from '@/hooks/use-event-mutations'
-import { CategoryBlock, CategoryBlockSkeleton } from '@/components/shared/category-block'
+import { CategoryBlock } from '@/components/shared/category-block'
 
 export default function OwnTheStage() {
-  const trendingEvents = useGetTrendingEvents().data?.data
+  const { data: trendingEventResponse, isPending: isLoadingTrending } = useGetTrendingEvents()
+
+  const trendingEvents = trendingEventResponse?.data
 
   return (
     <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-8 md:pb-[182px] w-full overflow-hidden'>
@@ -17,22 +18,21 @@ export default function OwnTheStage() {
       {/* Content container */}
       <div className='relative px-5 md:px-14'>
         <div className='mb-7 md:mb-10 overflow-x-hidden'>
-          <Suspense fallback={<CategoryBlockSkeleton />}>
-            <CategoryBlock
-              name='Trending'
-              data={(trendingEvents ?? []).map((event) => ({
-                eventId: event.eventId,
-                eventName: event.eventName,
-                image: event.desktopMedia.flyer,
-                venue: event.venue,
-                startDate: event.startDate,
-                startTime: event.startTime,
-              }))}
-              showLocation={true}
-              layout='start'
-              homePage={true}
-            />
-          </Suspense>
+          <CategoryBlock
+            name='Trending'
+            data={(trendingEvents ?? []).map((event) => ({
+              eventId: event.eventId,
+              eventName: event.eventName,
+              image: event.desktopMedia.flyer,
+              venue: event.venue,
+              startDate: event.startDate,
+              startTime: event.startTime,
+            }))}
+            showLocation={true}
+            isLoading={isLoadingTrending}
+            layout='start'
+            homePage={true}
+          />
         </div>
         {/* First row - blocks 1 and 3 */}
         <div className='flex max-lg:flex-col items-center lg:items-start justify-center gap-[100px] mb-[100px]'>

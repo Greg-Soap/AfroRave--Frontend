@@ -11,14 +11,19 @@ export function CategoryBlock({
   showLocation,
   display = 'flex',
   homePage = false,
+  isLoading = false,
 }: ICategoryBlock) {
   const filteredData = homePage ? data?.slice(0, 5) : data
 
+  if (isLoading) {
+    return <CategoryBlockSkeleton name={name} />
+  }
+
   return (
     <div className='flex flex-col gap-5 w-full'>
-      {name && <p className='text-xl font-bold font-sf-pro-display'>{name}</p>}
+      {name && <CategoryBlockName name={name} />}
 
-      {data ? (
+      {data && data.length > 0 ? (
         <div
           className={cn({
             'flex gap-5 overflow-x-scroll scrollbar-none w-full': display === 'flex',
@@ -30,7 +35,7 @@ export function CategoryBlock({
             <EventCard
               key={item.eventId}
               id={item.eventId}
-              image=''
+              image={item.image}
               event_location={item.venue}
               event_date={item.startDate}
               event_name={item.eventName}
@@ -41,7 +46,12 @@ export function CategoryBlock({
           ))}
         </div>
       ) : (
-        <p>Coming Soon....</p>
+        <div className='flex flex-col items-center justify-center py-12 w-full rounded-lg'>
+          <p className='text-lg font-semibold text-muted-foreground mb-1'>No events found</p>
+          <span className='text-sm text-muted-foreground'>
+            New events will be added soon. Stay tuned!
+          </span>
+        </div>
       )}
     </div>
   )
@@ -103,18 +113,24 @@ function EventCard({
   )
 }
 
+function CategoryBlockName({ name }: { name: string }) {
+  return <p className='text-xl font-bold font-sf-pro-display'>{name}</p>
+}
+
 function EventDetailsParagraph({ text }: { text: string }) {
   return <p className='font-sf-pro-display text-xs font-normal text-start -mt-0.5'>{text}</p>
 }
 
-export function CategoryBlockSkeleton() {
+export function CategoryBlockSkeleton({ name }: { name?: string }) {
   return (
     <div className='flex flex-col gap-6 w-full'>
-      <div className='h-6 w-32 bg-gray-200 rounded animate-pulse' />
+      {name && <CategoryBlockName name={name} />}
 
-      <div className={'gap-7 flex pr-7 overflow-x-auto scrollbar-none'}>
-        {Array.from({ length: 4 }).map(() => (
-          <div key={`event-skeleton-${crypto.randomUUID()}`} className='flex flex-col gap-4'>
+      <div className='gap-7 flex pr-7 overflow-x-auto scrollbar-none w-full'>
+        {Array.from({ length: 4 }).map((_) => (
+          <div
+            key={`event-skeleton-${crypto.randomUUID()}`}
+            className='flex flex-col gap-4 min-w-[180px] max-w-[220px] w-full'>
             <div className='aspect-square w-full bg-gray-200 rounded-[15px] animate-pulse' />
             <div className='space-y-2'>
               <div className='h-6 w-3/4 bg-gray-200 rounded animate-pulse' />
@@ -135,11 +151,12 @@ interface ICategoryBlock {
   showLocation?: IEventCardProps['showLocation']
   display?: 'flex' | 'grid'
   homePage?: boolean
+  isLoading?: boolean
 }
 
 interface IEventCardProps {
   id: string
-  image: string
+  image?: string
   event_name: string
   event_location: string
   event_date: string

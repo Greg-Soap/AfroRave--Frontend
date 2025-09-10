@@ -25,7 +25,7 @@ export default function StandalonePage() {
       <StandAloneHeader />
 
       <div className='max-w-[836px] w-full flex flex-wrap justify-center gap-7'>
-        {events ? (
+        {events && events.length > 0 ? (
           <>
             {events.map((item) => (
               <StandAloneEvents key={item.eventId} id={item.eventId} />
@@ -68,33 +68,29 @@ function StandAloneEvents({ id }: { id: string }) {
 
   const event = response?.data
 
-  if (!event) {
-    return
-  }
-
   if (isLoading) {
     return <DashboardCardSkeleton />
+  }
+
+  if (!event) {
+    return
   }
 
   return (
     <DashboardCards
       image={event.eventDetails.desktopMedia?.flyer}
       name={event.eventName}
-      status={status}
+      startDate={event.eventDate.startDate}
+      status={event.isPublished ? undefined : 'DRAFT'}
       cardInfo={[
         <p key='sold_items' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-          Sold:{' '}
-          <span className='text-black font-medium'>
-            {event.eventDetails.eventStat.ticketSold || 0}
-          </span>{' '}
-          / {event.eventDetails.eventStat.totalTicket}
+          Sold: <span className='text-black font-medium'>{event.eventStat.ticketSold || 0}</span> /{' '}
+          {event.eventStat.totalTicket}
         </p>,
 
         <p key='profit' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
           Net Profit:{' '}
-          <span className='text-black font-medium'>
-            {formatNaira(event.eventDetails.eventStat.netProfit)}
-          </span>
+          <span className='text-black font-medium'>{formatNaira(event.eventStat.netProfit)}</span>
         </p>,
       ]}
       cardButtons={event_buttons}

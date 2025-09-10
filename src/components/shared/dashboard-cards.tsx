@@ -17,6 +17,7 @@ export function DashboardCards({
   cardButtons,
   className,
   customButton,
+  startDate,
 }: IDashboardCardProps) {
   return (
     <div className='w-[260px] h-fit flex flex-col shadow-xl'>
@@ -25,7 +26,7 @@ export function DashboardCards({
           event_name={name}
           image={image}
           className={cn(
-            'w-full h-full absolute group-hover:scale-105 transition-all duration-300',
+            'w-full h-full object-cover absolute group-hover:scale-105 transition-all duration-300',
             {
               'grayscale-100': status === 'ended',
             },
@@ -44,10 +45,8 @@ export function DashboardCards({
 
         <div className='absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors duration-300' />
 
-        <p className='capitalize font-sf-pro-text font-medium text-sm z-10 px-1'>
-          blackmarket flea
-        </p>
-        <p className='text-[10px] font-sf-pro-display z-10 px-1 mb-1'>Fri, 6th October, 2025</p>
+        <p className='capitalize font-sf-pro-text font-medium text-sm z-10 px-1'>{name}</p>
+        <p className='text-[10px] font-sf-pro-display z-10 px-1 mb-1'>{startDate}</p>
       </div>
       <div className='flex items-center justify-center gap-6 px-[26px] py-4 bg-white'>
         {cardInfo}
@@ -105,6 +104,7 @@ interface IDashboardCardProps {
   className?: string
   image?: string
   name: string
+  startDate: string
   status?: string
   cardInfo: React.ReactNode[]
   cardButtons: Omit<IEventButtonsProps, 'className'>[]

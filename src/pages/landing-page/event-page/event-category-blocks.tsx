@@ -1,39 +1,36 @@
 import { date_list } from '@/components/constants'
 import { BaseSelect, type ICustomSelectProps } from '@/components/reusable/base-select'
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import { useGetTrendingEvents, useGetAllEvents } from '@/hooks/use-event-mutations'
 import { CategoryBlock } from '@/components/shared/category-block'
-import { CategoryBlockSkeleton } from '@/components/shared/category-block'
 
 export default function EventCategoryBlocks() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
 
-  const trendingEvents = useGetTrendingEvents().data?.data
-  const allEvents = useGetAllEvents().data?.data
+  const { data: trendingEventResponse, isPending: isLoadingTrending } = useGetTrendingEvents()
+  const { data: allEventResponse, isPending: isLoadingAllEvent } = useGetAllEvents()
 
-  if (!trendingEvents || !allEvents) {
-    return
-  }
+  const trendingEvents = trendingEventResponse?.data
+  const allEvents = allEventResponse?.data
 
   return (
     <section className='w-full flex flex-col gap-10 md:gap-20 mt-[120px] md:mt-36 pb-16 px-3 md:px-8 lg:px-0 min-h-[calc(100vh-300px)]'>
       <div className='lg:pl-[60px]'>
-        <Suspense fallback={<CategoryBlockSkeleton />}>
-          <CategoryBlock
-            name='Trending'
-            data={(trendingEvents ?? []).map((event) => ({
-              eventId: event.eventId,
-              eventName: event.eventName,
-              image: event.desktopMedia.flyer,
-              venue: event.venue,
-              startDate: event.startDate,
-              startTime: event.startTime,
-            }))}
-            showLocation={false}
-            layout='middle'
-          />
-        </Suspense>
+        <CategoryBlock
+          name='Trending'
+          data={(trendingEvents ?? []).map((event) => ({
+            eventId: event.eventId,
+            eventName: event.eventName,
+            image: event.desktopMedia.flyer,
+            venue: event.venue,
+            startDate: event.startDate,
+            startTime: event.startTime,
+          }))}
+          showLocation={false}
+          isLoading={isLoadingTrending}
+          layout='middle'
+        />
       </div>
 
       <div className='flex flex-col gap-[60px] lg:pl-[60px] xl:pl-[120px]'>
@@ -62,19 +59,18 @@ export default function EventCategoryBlocks() {
           />
         </div>
 
-        <Suspense fallback={<CategoryBlockSkeleton />}>
-          <CategoryBlock
-            data={(allEvents ?? []).map((event) => ({
-              eventId: event.eventId,
-              eventName: event.eventName,
-              venue: event.venue,
-              startDate: event.startDate,
-              startTime: '',
-            }))}
-            showLocation={true}
-            display='grid'
-          />
-        </Suspense>
+        <CategoryBlock
+          data={(allEvents ?? []).map((event) => ({
+            eventId: event.eventId,
+            eventName: event.eventName,
+            venue: event.venue,
+            startDate: event.startDate,
+            startTime: '', // event.startTime
+          }))}
+          showLocation={true}
+          isLoading={isLoadingAllEvent}
+          display='grid'
+        />
       </div>
     </section>
   )

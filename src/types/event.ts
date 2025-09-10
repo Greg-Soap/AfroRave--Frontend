@@ -82,15 +82,16 @@ export interface EventDetailData {
       tiktok: 'string'
       facebook: 'string'
     }
-    eventStat: {
-      id: number
-      netProfit: number
-      ticketSold: number
-      totalTicket: number
-      activePromoCodes: number
-    }
+
     desktopMedia: { flyer: string; background: string } | null
     theme: { themeName: 'default' | 'standard-carousel' | 'with-flyer' }
+  }
+  eventStat: {
+    id: number
+    netProfit: number
+    ticketSold: number
+    totalTicket: number
+    activePromoCodes: number
   }
 }
 
