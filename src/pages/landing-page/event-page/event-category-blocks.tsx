@@ -64,8 +64,9 @@ export default function EventCategoryBlocks() {
             eventId: event.eventId,
             eventName: event.eventName,
             venue: event.venue,
+            image: event.metadata.desktopMedia.flyer,
             startDate: event.startDate,
-            startTime: '', // event.startTime
+            startTime: event.startTime,
           }))}
           showLocation={true}
           isLoading={isLoadingAllEvent}

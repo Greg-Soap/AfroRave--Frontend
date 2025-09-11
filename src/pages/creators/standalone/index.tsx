@@ -10,6 +10,7 @@ import { BasePopover } from '@/components/reusable'
 import { DashboardCards, DashboardCardSkeleton } from '@/components/shared/dashboard-cards'
 import { useGetOrganizerEvents, useGetEvent } from '@/hooks/use-event-mutations'
 import { LoadingFallback } from '@/components/loading-fallback'
+import type { EventDetailData } from '@/types'
 
 export default function StandalonePage() {
   const { data: response, isPending: isLoading } = useGetOrganizerEvents()
@@ -21,10 +22,10 @@ export default function StandalonePage() {
   }
 
   return (
-    <section className='w-full h-full flex flex-col items-center gap-14 lg:gap-24 mb-[75px]'>
+    <section className='w-full h-full flex flex-col items-center gap-14 mb-[75px]'>
       <StandAloneHeader />
 
-      <div className='max-w-[836px] w-full flex flex-wrap justify-center gap-7'>
+      <div className='max-w-[1099px] w-full flex flex-wrap gap-5 px-10'>
         {events && events.length > 0 ? (
           <>
             {events.map((item) => (
@@ -81,17 +82,18 @@ function StandAloneEvents({ id }: { id: string }) {
       image={event.eventDetails.desktopMedia?.flyer}
       name={event.eventName}
       startDate={event.eventDate.startDate}
-      status={event.isPublished ? undefined : 'DRAFT'}
+      status={event.isPublished ? undefined : 'drafts'}
       cardInfo={[
-        <p key='sold_items' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-          Sold: <span className='text-black font-medium'>{event.eventStat.ticketSold || 0}</span> /{' '}
-          {event.eventStat.totalTicket}
-        </p>,
-
-        <p key='profit' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-          Net Profit:{' '}
-          <span className='text-black font-medium'>{formatNaira(event.eventStat.netProfit)}</span>
-        </p>,
+        <StatParagraph
+          key='sold_tickets'
+          name='Sold'
+          stats={{ value: event.eventStat.ticketSold, totalValue: event.eventStat.totalTicket }}
+        />,
+        <StatParagraph
+          key='profit'
+          name='Net Profit'
+          stats={{ totalValue: formatNaira(event.eventStat.netProfit) }}
+        />,
       ]}
       cardButtons={event_buttons}
       customButton={[
@@ -110,34 +112,66 @@ function StandAloneEvents({ id }: { id: string }) {
               />
             </Button>
           }
-          content={<PopoverContent id={id} />}
+          content={<PopoverContent event={event} />}
         />,
       ]}
     />
   )
 }
 
-function PopoverContent({ id }: { id: string }) {
+function PopoverContent({ event }: { event: EventDetailData }) {
+  const eventLink = getRoutePath('individual_event', { eventId: event.eventId })
+
   return (
     <div className='w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text'>
-      <Link
-        to={getRoutePath('edit_event', { eventId: id })}
-        className='text-white border-b border-white h-[22px] hover:bg-black/80'>
-        Edit Event
-      </Link>
-      <Link
-        to={getRoutePath('individual_event', { eventId: id })}
-        className='border-b border-white text-white h-[22px] hover:bg-black/80'>
-        View Event
-      </Link>
-      <StandAloneModal id={id} />
+      {[
+        { href: getRoutePath('edit_event', { eventId: event.eventId }), name: 'Edit Event' },
+        { href: eventLink, name: 'View Event' },
+      ].map((item) => (
+        <Link
+          key={item.name}
+          to={item.href}
+          className='text-white border-b border-white h-[22px] hover:bg-black/80 px-1'>
+          {item.name}
+        </Link>
+      ))}
+
+      <StandAloneModal event={event} />
+
       <Button
+        onClick={() => copyToClipboard(eventLink)}
         variant='ghost'
-        className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-0 justify-start hover:bg-black/80 hover:text-white'>
+        className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-1 justify-start hover:bg-black/80 hover:text-white'>
         Copy Link
       </Button>
     </div>
   )
+}
+
+function StatParagraph({ key, name, stats }: IStatParagraph) {
+  return (
+    <p key={key} className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
+      {name}: <span className='text-black font-medium'>{stats.value}</span>
+      {typeof stats.value === 'number' ? <span> / </span> : null}
+      {stats.totalValue}
+    </p>
+  )
+}
+
+function copyToClipboard(text: string) {
+  if (navigator?.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(text)
+  } else {
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    textarea.setAttribute('readonly', '')
+    textarea.style.position = 'absolute'
+    textarea.style.left = '-9999px'
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
 }
 
 const event_buttons: { src: string; alt: string }[] = [
@@ -147,3 +181,9 @@ const event_buttons: { src: string; alt: string }[] = [
     alt: 'Group User',
   },
 ]
+
+interface IStatParagraph {
+  key: string
+  name: string
+  stats: { value?: number; totalValue: number | string }
+}

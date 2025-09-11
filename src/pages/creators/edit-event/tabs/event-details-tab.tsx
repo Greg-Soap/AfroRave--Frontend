@@ -8,68 +8,38 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useUpdateEvent } from '@/hooks/use-event-mutations'
 import { OnlyShowIf } from '@/lib/environment'
-import { EditEventDetailsSchema } from '@/schema/edit-event-details'
+import { EditEventDetailsSchema, type EventDetailsSchema } from '@/schema/edit-event-details'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import type { z } from 'zod'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 import { africanTimezones, ageRatings, eventCategories, frequencyOptions } from '../constant'
 import type { EventDetailData } from '@/types'
+import { transformEventToSchema } from '../helper'
+import { SelectField } from '../../add-event/component/select-field'
+import { transformEventDetailsToCreateRequest } from '@/lib/event-transforms'
+import { TabChildrenContainer } from '../component/edit-tab-children-container'
 
 export default function EventDetailsTab({ event, setActiveTab }: IEventDetailsTab) {
-  return (
-    <div className='w-full flex flex-col p-0 md:p-14 gap-2.5'>
-      <div className='flex flex-col gap-4 w-full md:min-w-[560px] max-w-[800px]'>
-        <p className='uppercase font-sf-pro-display font-black text-black text-xl'>Event Details</p>
-
-        <EventDetailsForm event={event} setActiveTab={setActiveTab} />
-      </div>
-    </div>
-  )
-}
-
-function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
-  const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
-
+  const eventDate = event.eventDate
   const eventId = event.eventId
+
+  const [eventType, setEventType] = useState<'standalone' | 'season'>(
+    eventDate.occurance === 0 || eventDate.occurance === null || eventDate.frequency === ''
+      ? 'standalone'
+      : 'season',
+  )
 
   const updateEventMutation = useUpdateEvent()
 
-  const form = useForm<z.infer<typeof EditEventDetailsSchema>>({
+  const { isPending, mutate } = updateEventMutation
+
+  const form = useForm<EventDetailsSchema>({
     resolver: zodResolver(EditEventDetailsSchema),
-    defaultValues: {
-      name: event.eventName,
-      age_rating: event.ageRating,
-      category: event.ageRating,
-      venue: event.venue,
-      description: event.description,
-      event_type: 'standalone',
-      frequency: event.eventDate.frequency as 'Daily' | 'Weekly' | 'Monthly',
-      occurrence: event.eventDate.occurance,
-      start_date: {
-        date: new Date(event.eventDate.startDate),
-        hour: convertTime(event.eventDate.startTime).hour,
-        minute: convertTime(event.eventDate.startTime).minute,
-        period: convertTime(event.eventDate.startTime).period as 'AM' | 'PM',
-      },
-      end_date: {
-        date: new Date(event.eventDate.startDate),
-        hour: convertTime(event.eventDate.endTime).hour,
-        minute: convertTime(event.eventDate.endTime).minute,
-        period: convertTime(event.eventDate.endTime).period as 'AM' | 'PM',
-      },
-      email: event.eventDetails.eventContact.email,
-      website_url: event.eventDetails.eventContact.website,
-      socials: {
-        instagram: event.eventDetails.socials.instagram,
-        tiktok: event.eventDetails.socials.tiktok,
-        x: event.eventDetails.socials.x,
-        facebook: event.eventDetails.socials.facebook,
-      },
-    },
+    defaultValues: transformEventToSchema(event, eventType),
   })
 
-  // Update form values when event type changes
+  const { isDirty } = form.formState
+
   useEffect(() => {
     form.setValue('event_type', eventType)
     if (eventType === 'standalone') {
@@ -81,45 +51,10 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
     }
   }, [eventType, form])
 
-  async function onSubmit(values: z.infer<typeof EditEventDetailsSchema>) {
-    if (!eventId) {
-      console.error('No event ID found')
-      return
-    }
+  async function onSubmit(values: EventDetailsSchema) {
+    const eventData = transformEventDetailsToCreateRequest(values)
 
-    const eventData = {
-      eventName: values.name,
-      ageRating: values.age_rating,
-      category: values.category,
-      venue: values.venue,
-      description: values.description,
-      customUrl: values.custom_url || '',
-      eventId: eventId,
-      eventDate: {
-        timezone: values.time_zone || 'Africa/Lagos',
-        startDate: values.start_date.date.toISOString(),
-        endDate: values.end_date.date.toISOString(),
-        frequency: values.frequency || 'Weekly',
-        startTime: `${values.start_date.hour}:${values.start_date.minute} ${values.start_date.period}`,
-        endTime: `${values.end_date.hour}:${values.end_date.minute} ${values.end_date.period}`,
-        occurance: values.occurrence || 1,
-      },
-      eventDetails: {
-        termsOfRefund: '',
-        eventContact: {
-          email: values.email,
-          website: values.website_url,
-        },
-        socials: {
-          instagram: values.socials.instagram || '',
-          x: values.socials.x || '',
-          tiktok: values.socials.tiktok || '',
-          facebook: '',
-        },
-      },
-    }
-
-    await updateEventMutation.mutateAsync(
+    await mutate(
       { eventId, data: eventData },
       {
         onSuccess: () => {
@@ -130,6 +65,33 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
   }
 
   return (
+    <TabChildrenContainer
+      handleSaveEvent={() => form.handleSubmit(onSubmit)()}
+      isLoading={isPending || !isDirty}
+      currentTab='event-details'>
+      <div className='w-full flex flex-col items-center p-0 md:p-14 gap-2.5'>
+        <div className='flex flex-col gap-4 w-full md:min-w-[560px] max-w-[800px]'>
+          <p className='uppercase font-sf-pro-display font-black text-black text-xl'>
+            Event Details
+          </p>
+
+          <EventDetailsForm
+            form={form}
+            onSubmit={onSubmit}
+            setEventType={setEventType}
+            eventType={eventType}
+          />
+        </div>
+      </div>
+    </TabChildrenContainer>
+  )
+}
+
+function EventDetailsForm({ form, onSubmit, setEventType, eventType }: IEventDetailsForm) {
+  const selectClassname =
+    '!bg-transparent w-full !h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+
+  return (
     <FormBase
       form={form}
       onSubmit={onSubmit}
@@ -138,7 +100,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
         {(field) => (
           <Input
             placeholder='Enter event name.'
-            className='uppercase'
+            className='uppercase bg-transparent'
             {...field}
             value={field.value == null ? '' : String(field.value)}
           />
@@ -146,19 +108,14 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
       </FormFieldWithCounter>
 
       <div className='w-full grid grid-cols-2 gap-5 md:gap-8'>
-        <FormField form={form} name='age_rating' label='Age Rating'>
-          {(field) => (
-            <BaseSelect
-              type='auth'
-              items={ageRatings}
-              defaultValue='PG'
-              placeholder='Select an age rating.'
-              triggerClassName='w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
-              value={field.value as string}
-              onChange={field.onChange}
-            />
-          )}
-        </FormField>
+        <SelectField
+          form={form}
+          name='age_rating'
+          label='Age Rating'
+          data={ageRatings}
+          placeholder='Select an age rating.'
+          triggerClassName={selectClassname}
+        />
 
         <FormField form={form} name='category' label='Event Category'>
           {(field) => (
@@ -166,7 +123,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
               type='auth'
               items={eventCategories}
               placeholder='Select a Category.'
-              triggerClassName='w-full h-10 text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+              triggerClassName={selectClassname}
               value={field.value as string}
               onChange={field.onChange}
             />
@@ -178,7 +135,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
         {(field) => (
           <Input
             placeholder='Enter event venue.'
-            className='uppercase'
+            className='uppercase bg-transparent'
             {...field}
             value={field.value == null ? '' : String(field.value)}
           />
@@ -189,7 +146,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
         {(field) => (
           <Textarea
             placeholder='Enter event description.'
-            className='w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+            className='w-full h-[272px] text-black bg-transparent px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
             {...field}
             value={field.value == null ? '' : String(field.value)}
           />
@@ -240,9 +197,8 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
             <BaseSelect
               type='auth'
               items={africanTimezones}
-              defaultValue='Africa/Lagos'
               placeholder='Select a time zone.'
-              triggerClassName='w-full h-10 text-black px-3 py-[11px] bg-white rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+              triggerClassName={selectClassname}
               value={field.value as string}
               onChange={field.onChange}
             />
@@ -257,7 +213,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
                   type='auth'
                   items={frequencyOptions}
                   placeholder='Select frequency.'
-                  triggerClassName='w-full h-10 text-black px-3 py-[11px] bg-white rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+                  triggerClassName={selectClassname}
                   value={field.value as string}
                   onChange={field.onChange}
                 />
@@ -268,9 +224,8 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
               {(field) => (
                 <Input
                   type='number'
-                  min={1}
-                  max={365}
                   placeholder='Enter number of occurrences.'
+                  className='bg-transparent'
                   {...field}
                   value={field.value == null ? '' : String(field.value)}
                   onChange={(e) => {
@@ -286,10 +241,11 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
         </OnlyShowIf>
       </div>
 
-      <div className='grid grid-cols-2 gap-2 md:flex flex-col md:gap-4'>
+      <div className='grid grid-cols-2 md:gap-4'>
         <DateForm
           form={form}
           name='START DATE'
+          date_label='START DATE'
           input_name='start_date.date'
           hour_name='start_date.hour'
           minute_name='start_date.minute'
@@ -299,6 +255,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
         <DateForm
           form={form}
           name='END DATE'
+          date_label='END DATE'
           input_name='end_date.date'
           hour_name='end_date.hour'
           minute_name='end_date.minute'
@@ -315,6 +272,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
             {(field) => (
               <Input
                 placeholder='Enter email address.'
+                className='bg-transparent'
                 {...field}
                 value={field.value == null ? '' : String(field.value)}
               />
@@ -325,6 +283,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
             {(field) => (
               <Input
                 placeholder='Enter your website URL.'
+                className='bg-transparent'
                 {...field}
                 value={field.value == null ? '' : String(field.value)}
               />
@@ -348,7 +307,7 @@ function EventDetailsForm({ event, setActiveTab }: IEventDetailsTab) {
               {(field) => (
                 <Input
                   placeholder={`Enter your ${item.label} Link.`}
-                  className='text-[#0033A0]'
+                  className='text-[#0033A0] bg-transparent'
                   {...field}
                   value={field.value == null ? '' : String(field.value)}
                 />
@@ -365,21 +324,14 @@ function SectionHeader({ name }: { name: string }) {
   return <p className='text-xl font-medium font-sf-pro-text text-black -mb-3'>{name}</p>
 }
 
-function convertTime(time: string) {
-  const [hourStr, minute] = time.split(':')
-  let hour = Number.parseInt(hourStr, 10)
-
-  const period = hour >= 12 ? 'PM' : 'AM'
-  hour = hour % 12 || 12
-
-  return {
-    hour: hour.toString().padStart(2, '0'),
-    minute,
-    period,
-  }
-}
-
 interface IEventDetailsTab {
   event: EventDetailData
   setActiveTab: (tab: string) => void
+}
+
+interface IEventDetailsForm {
+  form: UseFormReturn<EventDetailsSchema>
+  onSubmit: (data: EventDetailsSchema) => void
+  setEventType: (type: 'season' | 'standalone') => void
+  eventType: 'standalone' | 'season'
 }

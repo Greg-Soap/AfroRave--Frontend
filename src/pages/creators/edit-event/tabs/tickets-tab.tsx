@@ -10,13 +10,11 @@ import { useDeleteTicket, useGetEventTickets } from '@/hooks/use-event-mutations
 import type { TicketData } from '@/types'
 import { EllipsisVertical, Plus, Ticket, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import CreateTicketForm from '../../add-event/ticket-forms/create'
 import PromoCodeForm from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
-import UpgradeForm from '../../add-event/ticket-forms/upgrade-form'
 
-export default function TicketsTab() {
-  const { eventId } = useParams()
+export default function TicketsTab({ eventId }: { eventId: string }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
 
@@ -26,10 +24,8 @@ export default function TicketsTab() {
   useEffect(() => {
     const formParam = searchParams.get('form')
 
-    if (formParam === 'create' || formParam === 'promocode' || formParam === 'upgrades') {
+    if (formParam === 'create' || formParam === 'promocode') {
       setCurrentForm(formParam)
-    } else if (searchParams.get('tab') === 'tickets') {
-      setSearchParams({ tab: 'tickets', form: 'create' })
     }
   }, [searchParams, setSearchParams])
 
@@ -38,24 +34,13 @@ export default function TicketsTab() {
     setCurrentForm(form)
   }
 
-  function renderEventDetailsTab() {
-    setSearchParams({ tab: 'event-details' })
-    searchParams.delete('form')
-  }
-
-  // Check if event ID exists, if not show error message
-  if (!eventId) {
-    return (
-      <div className='w-full flex flex-col items-center justify-center gap-4 py-8'>
-        <div className='text-center'>
-          <h2 className='text-xl font-bold text-black mb-2'>No Event Found</h2>
-          <p className='text-gray-600 mb-4'>Please select an event to edit tickets.</p>
-          <Button onClick={renderEventDetailsTab} className='bg-black text-white hover:bg-gray-800'>
-            Go to Event Details
-          </Button>
-        </div>
-      </div>
-    )
+  function handleBackClick() {
+    setCurrentForm(undefined)
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      next.delete('form')
+      return next
+    })
   }
 
   if (currentForm === 'promocode') {
@@ -64,28 +49,12 @@ export default function TicketsTab() {
         <div className='flex items-center gap-4 mb-6'>
           <Button
             variant='ghost'
-            onClick={() => setCurrentForm(undefined)}
+            onClick={handleBackClick}
             className='text-sm text-gray-600 hover:text-black'>
             ← Back to Tickets
           </Button>
         </div>
         <PromoCodeForm handleFormChange={handleFormChange} />
-      </div>
-    )
-  }
-
-  if (currentForm === 'upgrades') {
-    return (
-      <div className='w-full'>
-        <div className='flex items-center gap-4 mb-6'>
-          <Button
-            variant='ghost'
-            onClick={() => setCurrentForm(undefined)}
-            className='text-sm text-gray-600 hover:text-black'>
-            ← Back to Tickets
-          </Button>
-        </div>
-        <UpgradeForm renderThemeTab={() => setSearchParams({ tab: 'theme' })} />
       </div>
     )
   }
@@ -96,7 +65,7 @@ export default function TicketsTab() {
         <div className='flex items-center gap-4 mb-6'>
           <Button
             variant='ghost'
-            onClick={() => setCurrentForm(undefined)}
+            onClick={handleBackClick}
             className='text-sm text-gray-600 hover:text-black'>
             ← Back to Tickets
           </Button>
@@ -106,33 +75,30 @@ export default function TicketsTab() {
     )
   }
 
-  // Default view - show existing tickets
   return (
     <div className='w-full flex flex-col-reverse md:flex-col gap-14 md:p-14'>
       <div className='flex flex-col pl-2 gap-[13px]'>
         <div className='flex items-center justify-between'>
-          <p className='font-sf-pro-display font-black text-black text-xl'>Ticket Types</p>
-
-          <div className='flex items-center gap-2'>
-            <Button
-              onClick={() => handleFormChange('promocode')}
-              variant='outline'
-              className='rounded-[5px] px-2 py-[13px] font-sf-pro-text font-medium text-[11px]'>
-              PROMO CODES
-            </Button>
-            <Button
-              onClick={() => handleFormChange('upgrades')}
-              variant='outline'
-              className='rounded-[5px] px-2 py-[13px] font-sf-pro-text font-medium text-[11px]'>
-              UPGRADES
-            </Button>
-            <Button
-              onClick={() => handleFormChange('create')}
-              className='hover:bg-black/10 rounded-[5px] bg-white flex items-center gap-1.5 px-2 py-[13px] font-sf-pro-text font-medium text-deep-red text-[11px]'>
-              <Plus size={12} />
-              ADD TICKET
-            </Button>
+          <div className='flex gap-3'>
+            {[
+              { value: 'tickets', name: 'Your Tickets' },
+              { value: 'promocode', name: 'Promo Codes' },
+            ].map((item) => (
+              <Button
+                key={item.value}
+                className='font-sf-pro-display font-black text-black text-xl p-0 bg-transparent hover:bg-transparent shadow-none'>
+                {item.name}
+              </Button>
+            ))}
           </div>
+
+          <Button
+            type='button'
+            onClick={() => handleFormChange('create')}
+            className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
+            <Plus size={12} />
+            ADD TICKET
+          </Button>
         </div>
 
         {isLoading ? (
@@ -187,7 +153,6 @@ function EmptyTicketState({ onAddTicket }: { onAddTicket: () => void }) {
 }
 
 function TicketSales({ tickets }: { tickets: TicketData[] }) {
-  // Transform ticket data for the sales table
   const salesData = tickets.map((ticket) => ({
     ticketName: ticket.ticketName,
     ticketSold: `${ticket.quantity - ticket.availableQuantity}/${ticket.quantity}`,
@@ -196,7 +161,7 @@ function TicketSales({ tickets }: { tickets: TicketData[] }) {
   }))
 
   return (
-    <div className='w-full bg-white p-3 md:p-8 flex flex-col gap-5 rounded-[10px]'>
+    <div className='w-full bg-white p-3 md:p-5 flex flex-col gap-5 rounded-[10px]'>
       <div className='flex items-center gap-1'>
         <img src='/assets/harmburger/ticket.png' alt='Ticket' className='size-5' />
         <p className='text-black font-medium text-xl font-sf-pro-display'>Ticket Sales</p>
@@ -207,24 +172,11 @@ function TicketSales({ tickets }: { tickets: TicketData[] }) {
   )
 }
 
-function TicketCard({
-  ticket,
-  onTicketDeleted,
-  eventId,
-}: {
-  ticket: TicketData
-  onTicketDeleted: () => void
-  eventId: string
-}) {
+function TicketCard({ ticket, onTicketDeleted, eventId }: ITIcketCard) {
   const deleteTicketMutation = useDeleteTicket(eventId)
 
   const handleDeleteTicket = async () => {
-    try {
-      await deleteTicketMutation.mutateAsync(ticket.ticketId)
-      onTicketDeleted()
-    } catch (error) {
-      console.error('Failed to delete ticket:', error)
-    }
+    deleteTicketMutation.mutateAsync(ticket.ticketId, { onSuccess: () => onTicketDeleted() })
   }
 
   return (
@@ -233,12 +185,7 @@ function TicketCard({
         <Button variant='ghost' className='py-0 px-1 w-fit h-fit hover:bg-black/20'>
           <img src='/assets/event/menu.png' alt='Grip' className='size-4' />
         </Button>
-        <div className='flex flex-col'>
-          <p className='text-sm font-sf-pro-display text-black'>{ticket.ticketName}</p>
-          <p className='text-xs text-gray-500'>
-            {ticket.availableQuantity} of {ticket.quantity} available
-          </p>
-        </div>
+        <p className='text-sm font-sf-pro-display text-black'>{ticket.ticketName}</p>
       </div>
 
       <DropdownMenu>
@@ -267,3 +214,9 @@ const columns: { key: string; label: string }[] = [
   { key: 'price', label: 'Price' },
   { key: 'status', label: 'Status' },
 ]
+
+interface ITIcketCard {
+  ticket: TicketData
+  onTicketDeleted: () => void
+  eventId: string
+}

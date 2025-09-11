@@ -5,8 +5,9 @@ import { formatNaira } from '@/lib/format-price'
 import { cn } from '@/lib/utils'
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import type { EventDetailData } from '@/types'
 
-export default function StandAloneModal({ id }: { id: string }) {
+export default function StandAloneModal({ event }: { event: EventDetailData }) {
   return (
     <BaseModal
       removeCancel
@@ -14,14 +15,14 @@ export default function StandAloneModal({ id }: { id: string }) {
       trigger={
         <Button
           variant='ghost'
-          className='flex h-[22px] items-center justify-center bg-transparent rounded-none border-b border-white text-xs text-white font-sf-pro-text px-0 hover:bg-black/80 hover:text-white'>
+          className='flex h-[22px] items-center justify-start bg-transparent rounded-none border-b border-white text-xs text-white font-sf-pro-text px-1 hover:bg-black/80 hover:text-white'>
           <span>Event Summary</span>
         </Button>
       }>
       <div className='flex flex-col gap-3'>
-        <StandAloneModalHeader id={id} />
+        <StandAloneModalHeader event={event} />
         <div className='grid grid-cols-5 gap-2'>
-          <SummarySection />
+          <SummarySection event={event} />
           <VendorSummarySection />
           <AttendeeOverviewSection />
           <EntryManagementSection />
@@ -31,43 +32,47 @@ export default function StandAloneModal({ id }: { id: string }) {
   )
 }
 
-function StandAloneModalHeader({ id }: { id: string }) {
+function StandAloneModalHeader({ event }: { event: EventDetailData }) {
   return (
     <div className='w-full flex items-center justify-between'>
       <div className='h-fit w-[384px] flex flex-col py-1 gap-1 font-sf-pro-display capitalize'>
-        <p className='font-bold text-black'>blackmarket flea</p>
-        <p className='text-[13px] text-black'>Harbour point, Vitoria Island, Lagos</p>
-        <p className='text-[13px] text-black'>Wed Oct 5 at 11am WAT</p>
+        <p className='font-bold text-black'>{event.eventName}</p>
+        <p className='text-[13px] text-black'>{event.venue}</p>
+        <p className='text-[13px] text-black'>
+          {event.eventDate.startDate} at {event.eventDate.startTime}
+        </p>
       </div>
 
       <div className='flex items-center gap-2'>
         <Button
           asChild
           className='w-[132px] h-8 rounded-[4px] bg-secondary-white text-xs font-light text-black font-sf-pro-display hover:bg-black/15'>
-          <Link to={getRoutePath('individual_event', { eventId: id })}>View Event Page</Link>
+          <Link to={getRoutePath('individual_event', { eventId: event.eventId })}>
+            View Event Page
+          </Link>
         </Button>
         <Button
           asChild
           variant='destructive'
           className='w-[132px] h-8 rounded-[4px] text-xs font-light font-sf-pro-display'>
-          <Link to={getRoutePath('edit_event', { eventId: id })}>Edit Event</Link>
+          <Link to={getRoutePath('edit_event', { eventId: event.eventId })}>Edit Event</Link>
         </Button>
       </div>
     </div>
   )
 }
 
-function SummarySection() {
+function SummarySection({ event }: { event: EventDetailData }) {
   return (
     <SectionContainer className='col-span-3 flex flex-col gap-6'>
       <p className='text-2xl font-bold text-black capitalize'>sales summary</p>
 
       <div className='grid grid-cols-2 gap-x-8 gap-y-6'>
         {[
-          { name: 'total tickets sold', figure: '1250' },
-          { name: 'total revenue', figure: formatNaira(20000000) },
-          { name: 'total tickets', figure: 2500 },
-          { name: 'active promo codes', figure: 4 },
+          { name: 'total tickets sold', figure: event.eventStat.ticketSold },
+          { name: 'total revenue', figure: formatNaira(event.eventStat.netProfit) },
+          { name: 'total tickets', figure: event.eventStat.totalTicket },
+          { name: 'active promo codes', figure: event.eventStat.activePromoCodes },
         ].map((item) => (
           <div key={item.name} className='flex flex-col gap-1 text-pure-black'>
             <p className='text-sm capitalize'>{item.name}</p>

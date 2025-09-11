@@ -71,13 +71,17 @@ function EventCard({
     <Link
       to={getRoutePath('individual_event', { eventId: id })}
       className={cn(
-        'flex flex-col gap-1 min-w-[148px] md:min-w-[243px] md:w-fit max-w-[243px]  md:max-w-full lg:min-w-[245px] lg:max-w-[284px]',
+        'flex flex-col gap-1 min-w-[148px] md:min-w-[243px] md:w-fit max-w-[243px] md:max-w-full lg:min-w-[245px] lg:max-w-[284px]',
         {
           'items-start': layout === 'start',
           'items-center': layout === 'middle',
         },
       )}>
-      <RenderEventImage image={image} event_name={event_name} />
+      <RenderEventImage
+        image={image}
+        event_name={event_name}
+        className='rounded-[5px] md:rounded-[15px]'
+      />
 
       <div className='flex flex-col gap-1 md:gap-2 py-2 px-1'>
         <p

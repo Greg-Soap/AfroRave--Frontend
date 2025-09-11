@@ -6,7 +6,7 @@ import { Skeleton } from '../ui/skeleton'
 import { RenderEventImage } from './render-event-flyer'
 
 export function DashboardCardSkeleton() {
-  return <Skeleton className='w-[260px] h-[225px]' />
+  return <Skeleton className='w-[260px] h-[225px] bg-muted/50' />
 }
 
 export function DashboardCards({
@@ -25,12 +25,9 @@ export function DashboardCards({
         <RenderEventImage
           event_name={name}
           image={image}
-          className={cn(
-            'w-full h-full object-cover absolute group-hover:scale-105 transition-all duration-300',
-            {
-              'grayscale-100': status === 'ended',
-            },
-          )}
+          className={cn('w-full h-full group-hover:scale-105 transition-all duration-300', {
+            'grayscale-100': status === 'ended',
+          })}
         />
 
         <img
@@ -45,8 +42,10 @@ export function DashboardCards({
 
         <div className='absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors duration-300' />
 
-        <p className='capitalize font-sf-pro-text font-medium text-sm z-10 px-1'>{name}</p>
-        <p className='text-[10px] font-sf-pro-display z-10 px-1 mb-1'>{startDate}</p>
+        <div className='absolute flex flex-col px-1'>
+          <p className='capitalize font-sf-pro-text font-medium text-sm z-10 px-1'>{name}</p>
+          <p className='text-[10px] font-sf-pro-display z-10 px-1 mb-1'>{startDate}</p>
+        </div>
       </div>
       <div className='flex items-center justify-center gap-6 px-[26px] py-4 bg-white'>
         {cardInfo}
@@ -70,7 +69,7 @@ export function DashboardCards({
   )
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: { status: 'ended' | 'drafts' }) {
   return (
     <Badge
       className={cn(
@@ -105,7 +104,7 @@ interface IDashboardCardProps {
   image?: string
   name: string
   startDate: string
-  status?: string
+  status?: 'ended' | 'drafts'
   cardInfo: React.ReactNode[]
   cardButtons: Omit<IEventButtonsProps, 'className'>[]
   customButton?: React.ReactNode[]

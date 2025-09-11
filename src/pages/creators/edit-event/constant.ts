@@ -94,7 +94,7 @@ export const africanTimezones: { value: string; label: string }[] = [
 ]
 
 export const frequencyOptions: { value: string; label: string }[] = [
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'monthly', label: 'Monthly' },
+  { value: 'Daily', label: 'Daily' },
+  { value: 'Weekly', label: 'Weekly' },
+  { value: 'Monthly', label: 'Monthly' },
 ]

@@ -23,10 +23,10 @@ export interface EventDate {
   timezone: string
   startDate: string
   endDate: string
-  frequency: 'Daily' | 'Weekly' | 'Monthly'
+  frequency: 'Daily' | 'Weekly' | 'Monthly' | undefined
   startTime: string
   endTime: string
-  occurance: number
+  occurance: number | undefined
 }
 
 export interface CreateEventRequest {
@@ -51,6 +51,26 @@ export interface EventData {
   endDate: string
   isPublished: boolean
   customUrl: string
+  metadata: {
+    termsOfRefund: string
+    eventContact: {
+      email: string
+      website: string
+    }
+    socials: {
+      instagram: string
+      x: string
+      tiktok: string
+      facebook: string
+    }
+    desktopMedia: {
+      flyer: string
+      background: string
+    }
+    theme: {
+      themeName: 'default' | 'standard-carousel' | 'with-flyer'
+    }
+  }
 }
 
 export type EventsResponse = ApiResponse<EventData[]>
@@ -63,6 +83,7 @@ export interface EventDetailData {
   description: string
   ageRating: 'PG' | '16+' | '18+'
   customUrl: string
+  category: string
   isPublished: boolean
   eventDate: {
     startDate: string
@@ -87,7 +108,6 @@ export interface EventDetailData {
     theme: { themeName: 'default' | 'standard-carousel' | 'with-flyer' }
   }
   eventStat: {
-    id: number
     netProfit: number
     ticketSold: number
     totalTicket: number
