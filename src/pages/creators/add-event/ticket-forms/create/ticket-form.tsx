@@ -211,18 +211,20 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
       </div>
 
       <div className='flex gap-3'>
-        <Button
-          type='button'
-          onClick={onSubmit}
-          className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
-          {isLoading
-            ? isEditMode
-              ? 'UPDATING...'
-              : 'CREATING...'
-            : isEditMode
-              ? 'UPDATE TICKET'
-              : 'CREATE TICKET'}
-        </Button>
+        {onSubmit && (
+          <Button
+            type='button'
+            onClick={onSubmit}
+            className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
+            {isLoading
+              ? isEditMode
+                ? 'UPDATING...'
+                : 'CREATING...'
+              : isEditMode
+                ? 'UPDATE TICKET'
+                : 'CREATE TICKET'}
+          </Button>
+        )}
 
         {isEditMode && onCancel && (
           <Button
@@ -318,8 +320,8 @@ const whenToStartOptions = [
 interface ITicketFormProps {
   form: UseFormReturn<z.infer<typeof unifiedTicketFormSchema>>
   type: 'single_ticket' | 'group_ticket' | 'multi_day'
-  onSubmit: () => void
-  isLoading: boolean
+  onSubmit?: () => void
+  isLoading?: boolean
   isEditMode?: boolean
   onCancel?: () => void
 }

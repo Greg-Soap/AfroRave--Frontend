@@ -137,7 +137,7 @@ export function transformCreateRequestToEventDetails(
     description: eventData.description,
     custom_url: eventData.customUrl,
     event_type:
-      eventData.eventDate.frequency === 'Weekly' && eventData.eventDate.occurance > 1
+      eventData.eventDate.frequency === 'Weekly' && (eventData.eventDate.occurance || 0) > 1
         ? 'season'
         : 'standalone',
     frequency: eventData.eventDate.frequency,

@@ -6,20 +6,53 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useDeleteTicket, useGetEventTickets } from '@/hooks/use-event-mutations'
+import {
+  useDeleteTicket,
+  useGetEventTickets,
+  useCreatePromoCode,
+  useCreateTicket,
+  useGetEventPromoCodes,
+} from '@/hooks/use-event-mutations'
 import type { TicketData } from '@/types'
 import { EllipsisVertical, Plus, Ticket, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import CreateTicketForm from '../../add-event/ticket-forms/create'
-import PromoCodeForm from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
+import { PromoCodeFormFields } from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
+import { TabChildrenContainer } from '../component/edit-tab-children-container'
+import { TicketForm } from '../../add-event/ticket-forms/create/ticket-form'
+import { TicketModal } from '../../add-event/ticket-forms/create/ticket-modal'
+import type { TicketType } from '../../add-event/ticket-forms/create/helper'
+import {
+  unifiedTicketFormSchema,
+  type UnifiedTicketForm,
+  defaultUnifiedTicketValues,
+} from '../../add-event/schemas/ticket-schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { transformTicketsToCreateRequest } from '@/lib/event-transforms'
+import { FormBase } from '@/components/reusable'
+import {
+  defaultPromoCodeValues,
+  promoCodeSchema,
+  type TPromoCodeSchema,
+} from '../../add-event/schemas/promo-code-schema'
+import { populatePromoCodeJson } from '../../add-event/ticket-forms/promo-code-form/helper'
+import { z } from 'zod'
 
 export default function TicketsTab({ eventId }: { eventId: string }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
+  const [selectedType, setSelectedType] = useState<TicketType>()
+  const [ticketTab, setTicketTab] = useState<'ticket' | 'promocode'>('ticket')
 
   const { data: ticketsResponse, isLoading, error, refetch } = useGetEventTickets(eventId)
+  const { data: promocodeResponse, isLoading: isLoadingPromoCodes } = useGetEventPromoCodes(eventId)
+  const { mutate: createPrmocodeMutation, isPending: isCreatingPromoCode } =
+    useCreatePromoCode(eventId)
+  const { mutate: createTicketMutation, isPending: isCreatingTIcket } = useCreateTicket(eventId)
+
   const tickets = ticketsResponse?.data || []
+  const promocodes = promocodeResponse?.data || []
 
   useEffect(() => {
     const formParam = searchParams.get('form')
@@ -29,6 +62,60 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
     }
   }, [searchParams, setSearchParams])
 
+  const ticketForm = useForm<UnifiedTicketForm>({
+    resolver: zodResolver(unifiedTicketFormSchema),
+    defaultValues: {
+      ...defaultUnifiedTicketValues,
+      whenToStart: 'immediately',
+      scheduledDate: undefined,
+    },
+  })
+
+  const promocodeForm = useForm<{ promoCodes: TPromoCodeSchema }>({
+    resolver: zodResolver(z.object({ promoCodes: promoCodeSchema })),
+    defaultValues: { promoCodes: defaultPromoCodeValues },
+  })
+
+  function handleCreateTicket(values: UnifiedTicketForm) {
+    const ticketReuest = transformTicketsToCreateRequest(
+      {
+        tickets: [values.ticket],
+        whenToStart: values.whenToStart,
+        scheduledDate: values.scheduledDate,
+      },
+      eventId,
+    )
+
+    createTicketMutation(ticketReuest[0], {
+      onSuccess: () => {
+        setSelectedType(undefined)
+        ticketForm.reset()
+        handleBackClick()
+      },
+    })
+  }
+
+  function handleCreatePromoCode() {
+    const promocodeRequest = populatePromoCodeJson(promocodeForm)
+
+    createPrmocodeMutation(
+      { ...promocodeRequest, eventId },
+      {
+        onSuccess: () => {
+          setSelectedType(undefined)
+          promocodeForm.reset()
+          handleBackClick()
+        },
+      },
+    )
+  }
+
+  function handleAddTicket(selectedType: TicketType) {
+    ticketForm.setValue('ticket.ticketType', selectedType)
+    setSelectedType(selectedType)
+    handleFormChange('create')
+  }
+
   function handleFormChange(form: string) {
     setSearchParams({ tab: 'tickets', form: form })
     setCurrentForm(form)
@@ -36,6 +123,7 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
 
   function handleBackClick() {
     setCurrentForm(undefined)
+    setSelectedType(undefined)
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev)
       next.delete('form')
@@ -45,33 +133,29 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
 
   if (currentForm === 'promocode') {
     return (
-      <div className='w-full'>
-        <div className='flex items-center gap-4 mb-6'>
-          <Button
-            variant='ghost'
-            onClick={handleBackClick}
-            className='text-sm text-gray-600 hover:text-black'>
-            ← Back to Tickets
-          </Button>
-        </div>
-        <PromoCodeForm handleFormChange={handleFormChange} />
-      </div>
+      <TabChildrenContainer
+        handleSaveEvent={() => promocodeForm.handleSubmit(handleCreatePromoCode)()}
+        handleBackClick={handleBackClick}
+        currentTab='tickets'
+        isLoading={isCreatingPromoCode}>
+        <FormBase form={promocodeForm} onSubmit={() => {}} className='max-w-[560px] w-full'>
+          <PromoCodeFormFields form={promocodeForm} eventTickets={tickets} />
+        </FormBase>
+      </TabChildrenContainer>
     )
   }
 
   if (currentForm === 'create') {
     return (
-      <div className='w-full'>
-        <div className='flex items-center gap-4 mb-6'>
-          <Button
-            variant='ghost'
-            onClick={handleBackClick}
-            className='text-sm text-gray-600 hover:text-black'>
-            ← Back to Tickets
-          </Button>
-        </div>
-        <CreateTicketForm handleFormChange={handleFormChange} showError={() => {}} />
-      </div>
+      <TabChildrenContainer
+        handleSaveEvent={() => ticketForm.handleSubmit(handleCreateTicket)()}
+        handleBackClick={handleBackClick}
+        currentTab='tickets'
+        isLoading={isCreatingTIcket}>
+        <FormBase form={ticketForm} onSubmit={() => {}} className='max-w-[560px] w-full'>
+          <TicketForm form={ticketForm} type={selectedType || 'single_ticket'} />
+        </FormBase>
+      </TabChildrenContainer>
     )
   }
 
@@ -92,16 +176,16 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
             ))}
           </div>
 
-          <Button
+          {/* <Button
             type='button'
-            onClick={() => handleFormChange('create')}
+            onClick={() => setCurrentForm('promocode')}
             className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
-            <Plus size={12} />
-            ADD TICKET
-          </Button>
+            <Plus /> <span>ADD PROMOCODE</span>
+          </Button> */}
+          <TicketModal onContinue={handleAddTicket} />
         </div>
 
-        {isLoading ? (
+        {isLoading || isLoadingPromoCodes ? (
           <div className='w-full py-8 flex items-center justify-center'>
             <div className='text-center'>
               <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-deep-red mx-auto mb-2' />

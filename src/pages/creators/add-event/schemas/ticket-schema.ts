@@ -44,19 +44,16 @@ const ticketBaseFields = z.object({
     .max(450, { message: 'Description too long.' }),
 })
 
-const singleTicketObject = z.object({
-  ticketBaseFields,
+const singleTicketObject = ticketBaseFields.extend({
   ticketType: z.literal('single_ticket'),
 })
 
-const groupTicketObject = z.object({
-  ticketBaseFields,
+const groupTicketObject = ticketBaseFields.extend({
   ticketType: z.literal('group_ticket'),
   group_size: z.string(),
 })
 
-const multiDayObject = z.object({
-  ticketBaseFields,
+const multiDayObject = ticketBaseFields.extend({
   ticketType: z.literal('multi_day'),
   days_valid: z.string(),
 })

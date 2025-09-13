@@ -43,7 +43,7 @@ function toISODateTime(dateObj: {
   return formattedDate
 }
 
-function populatePromoCodeJson(form: IHelperFunctionProps['form']) {
+export function populatePromoCodeJson(form: IHelperFunctionProps['form']) {
   const formData = form.getValues().promoCodes
 
   const promoCodeJson: CreatePromoCodeRequest = {

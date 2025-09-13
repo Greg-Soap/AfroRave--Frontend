@@ -153,7 +153,7 @@ export default function PromoCodeForm({
   )
 }
 
-function PromoCodeFormFields({
+export function PromoCodeFormFields({
   form,
   onSubmit,
   isEditMode = false,
@@ -343,12 +343,14 @@ function PromoCodeFormFields({
       </OnlyShowIf>
 
       <div className='flex gap-3'>
-        <Button
-          type='button'
-          onClick={onSubmit}
-          className='w-fit h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
-          {isEditMode ? 'UPDATE PROMO CODE' : 'CREATE PROMO CODE'}
-        </Button>
+        {onSubmit && (
+          <Button
+            type='button'
+            onClick={onSubmit}
+            className='w-fit h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
+            {isEditMode ? 'UPDATE PROMO CODE' : 'CREATE PROMO CODE'}
+          </Button>
+        )}
 
         {isEditMode && onCancel && (
           <Button
@@ -449,7 +451,7 @@ const checkboxData: IBaseCheckbox[] = [
 
 interface IPromoCodeFormFields {
   form: ReturnType<typeof useForm<{ promoCodes: TPromoCodeSchema }>>
-  onSubmit: () => void
+  onSubmit?: () => void
   isEditMode?: boolean
   onCancel?: () => void
   eventTickets?: TicketData[]
