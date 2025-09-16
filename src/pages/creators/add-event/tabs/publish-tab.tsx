@@ -1,15 +1,15 @@
 import { BasePopover } from '@/components/reusable'
+import { Button } from '@/components/ui/button'
 import { getRoutePath } from '@/config/get-route-path'
 import { useGetEventPromoCodes, usePublishEvent } from '@/hooks/use-event-mutations'
+import { useGetEvent, useGetEventTickets, useGetEventVendors } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useEventStore } from '@/stores'
+import { Ellipsis } from 'lucide-react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ContinueButton } from '../component/continue-button'
-import { Button } from '@/components/ui/button'
-import { Ellipsis } from 'lucide-react'
-import { useGetEventVendors, useGetEvent, useGetEventTickets } from '@/hooks/use-event-mutations'
 
 export default function PublishTab({
   setStep,
@@ -76,7 +76,7 @@ export default function PublishTab({
           />
         </div>
         <img
-          src={event?.eventDetails.desktopMedia.flyer}
+          src={event?.eventDetails.desktopMedia?.flyer}
           alt={event?.eventName}
           className='rounded-[5px] w-[180px] min-h-[200px] max-h-[234px]'
         />

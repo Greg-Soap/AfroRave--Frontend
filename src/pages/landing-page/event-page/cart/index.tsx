@@ -1,13 +1,13 @@
-import { formatNaira } from '@/lib/format-price'
 import BaseModal from '@/components/reusable/base-modal'
 import { Button } from '@/components/ui/button'
-import CartContainer from './cart-container'
-import { NavLogo } from '@/layouts/root-layout/header/nav-logo'
-import { useState, useEffect } from 'react'
-import CheckoutPage from '../../checkout'
-import { X } from 'lucide-react'
 import { DialogClose } from '@/components/ui/dialog'
+import { NavLogo } from '@/layouts/root-layout/header/nav-logo'
+import { formatNaira } from '@/lib/format-price'
 import type { EventDetailData } from '@/types'
+import { X } from 'lucide-react'
+import { useState } from 'react'
+import CheckoutPage from '../../checkout'
+import CartContainer from './cart-container'
 
 interface CartProps {
   event: EventDetailData

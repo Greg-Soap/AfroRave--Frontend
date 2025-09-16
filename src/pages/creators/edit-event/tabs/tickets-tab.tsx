@@ -1,3 +1,4 @@
+import { FormBase } from '@/components/reusable'
 import BaseTable from '@/components/reusable/base-table'
 import { Button } from '@/components/ui/button'
 import {
@@ -7,52 +8,51 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
-  useDeleteTicket,
-  useGetEventTickets,
   useCreatePromoCode,
   useCreateTicket,
-  useGetEventPromoCodes,
+  useDeleteTicket,
+  // useGetEventPromoCodes,
+  useGetEventTickets,
 } from '@/hooks/use-event-mutations'
-import type { TicketData } from '@/types'
-import { EllipsisVertical, Plus, Ticket, Trash2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { PromoCodeFormFields } from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
-import { TabChildrenContainer } from '../component/edit-tab-children-container'
-import { TicketForm } from '../../add-event/ticket-forms/create/ticket-form'
-import { TicketModal } from '../../add-event/ticket-forms/create/ticket-modal'
-import type { TicketType } from '../../add-event/ticket-forms/create/helper'
-import {
-  unifiedTicketFormSchema,
-  type UnifiedTicketForm,
-  defaultUnifiedTicketValues,
-} from '../../add-event/schemas/ticket-schema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { transformTicketsToCreateRequest } from '@/lib/event-transforms'
-import { FormBase } from '@/components/reusable'
+import type { TicketData } from '@/types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { EllipsisVertical, Ticket, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 import {
+  type TPromoCodeSchema,
   defaultPromoCodeValues,
   promoCodeSchema,
-  type TPromoCodeSchema,
 } from '../../add-event/schemas/promo-code-schema'
+import {
+  type UnifiedTicketForm,
+  defaultUnifiedTicketValues,
+  unifiedTicketFormSchema,
+} from '../../add-event/schemas/ticket-schema'
+import type { TicketType } from '../../add-event/ticket-forms/create/helper'
+import { TicketForm } from '../../add-event/ticket-forms/create/ticket-form'
+import { TicketModal } from '../../add-event/ticket-forms/create/ticket-modal'
 import { populatePromoCodeJson } from '../../add-event/ticket-forms/promo-code-form/helper'
-import { z } from 'zod'
+import { PromoCodeFormFields } from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
+import { TabChildrenContainer } from '../component/edit-tab-children-container'
 
 export default function TicketsTab({ eventId }: { eventId: string }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
   const [selectedType, setSelectedType] = useState<TicketType>()
-  const [ticketTab, setTicketTab] = useState<'ticket' | 'promocode'>('ticket')
+  // const [ticketTab, setTicketTab] = useState<'ticket' | 'promocode'>('ticket')
 
   const { data: ticketsResponse, isLoading, error, refetch } = useGetEventTickets(eventId)
-  const { data: promocodeResponse, isLoading: isLoadingPromoCodes } = useGetEventPromoCodes(eventId)
+  // const { data: promocodeResponse, isLoading: isLoadingPromoCodes } = useGetEventPromoCodes(eventId)
   const { mutate: createPrmocodeMutation, isPending: isCreatingPromoCode } =
     useCreatePromoCode(eventId)
   const { mutate: createTicketMutation, isPending: isCreatingTIcket } = useCreateTicket(eventId)
 
   const tickets = ticketsResponse?.data || []
-  const promocodes = promocodeResponse?.data || []
+  // const promocodes = promocodeResponse?.data || []
 
   useEffect(() => {
     const formParam = searchParams.get('form')
@@ -185,7 +185,8 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
           <TicketModal onContinue={handleAddTicket} />
         </div>
 
-        {isLoading || isLoadingPromoCodes ? (
+        {/* TODO: Add promo codes LOADING */}
+        {isLoading ? (
           <div className='w-full py-8 flex items-center justify-center'>
             <div className='text-center'>
               <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-deep-red mx-auto mb-2' />
