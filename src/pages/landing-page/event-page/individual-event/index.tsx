@@ -1,10 +1,10 @@
-import { useParams } from 'react-router-dom'
-import EventDetails from './event-details'
-import { SEO } from '@/components/seo'
-import { useGetEvent } from '@/hooks/use-event-mutations'
 import { LoadingFallback } from '@/components/loading-fallback'
+import { SEO } from '@/components/seo'
 import { Button } from '@/components/ui/button'
+import { useGetEvent } from '@/hooks/use-event-mutations'
+import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import EventDetails from './event-details'
 
 export default function IndividualEventPage() {
   const { eventId } = useParams()
@@ -34,7 +34,7 @@ export default function IndividualEventPage() {
         title={`${event.eventName} - Afro Revive`}
         description={`Buy tickets for ${event.eventName} - Afro Revive`}
       />
-      <EventDetails event={event} layout={event.eventDetails.theme.themeName} />
+      <EventDetails event={event} layout={event.eventDetails?.theme?.themeName || 'default'} />
     </>
   )
 }
