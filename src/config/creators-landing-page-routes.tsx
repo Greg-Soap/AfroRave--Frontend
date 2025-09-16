@@ -1,16 +1,17 @@
-import { LoadingFallback } from "@/components/loading-fallback";
-import { Suspense, lazy } from "react";
-import type { RouteObject } from "react-router-dom";
-import { getRoutePath } from "./get-route-path";
+import { LoadingFallback } from '@/components/loading-fallback'
+import { Suspense, lazy } from 'react'
+import type { RouteObject } from 'react-router-dom'
+import { getRoutePath } from './get-route-path'
 
-const CreatorsHomePage = lazy(() => import("../pages/creators/home"));
-const AboutUsPage = lazy(() => import("../pages/creators/about-us"));
-const ContactUsPage = lazy(() => import("../pages/creators/contact-us"));
-const CreatorsBlogPage = lazy(() => import("../pages/creators/blog"));
+const CreatorsHomePage = lazy(() => import('../pages/creators/home'))
+const AboutUsPage = lazy(() => import('../pages/creators/about-us'))
+const ContactUsPage = lazy(() => import('../pages/creators/contact-us'))
+const CreatorsBlogPage = lazy(() => import('../pages/creators/blog'))
+const CreatorsWishlistPage = lazy(() => import('../pages/creators/wishlist'))
 
 export const creator_landing_page_routes: RouteObject[] = [
   {
-    path: getRoutePath("creators_home"),
+    path: getRoutePath('creators_home'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <CreatorsHomePage />
@@ -18,7 +19,7 @@ export const creator_landing_page_routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath("creators_about"),
+    path: getRoutePath('creators_about'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <AboutUsPage />
@@ -26,7 +27,7 @@ export const creator_landing_page_routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath("creators_contact"),
+    path: getRoutePath('creators_contact'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <ContactUsPage />
@@ -34,11 +35,19 @@ export const creator_landing_page_routes: RouteObject[] = [
     ),
   },
   {
-    path: getRoutePath("creators_blog"),
+    path: getRoutePath('creators_blog'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <CreatorsBlogPage />
       </Suspense>
     ),
   },
-];
+  {
+    path: getRoutePath('creators_wishlist'),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <CreatorsWishlistPage />
+      </Suspense>
+    ),
+  },
+]
