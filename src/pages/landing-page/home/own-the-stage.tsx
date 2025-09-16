@@ -1,8 +1,8 @@
+import { CategoryBlock } from '@/components/shared/category-block'
 import { getRoutePath } from '@/config/get-route-path'
+import { useGetTrendingEvents } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { Link } from 'react-router-dom'
-import { useGetTrendingEvents } from '@/hooks/use-event-mutations'
-import { CategoryBlock } from '@/components/shared/category-block'
 
 export default function OwnTheStage() {
   const { data: trendingEventResponse, isPending: isLoadingTrending } = useGetTrendingEvents()
@@ -20,14 +20,16 @@ export default function OwnTheStage() {
         <div className='mb-7 md:mb-10 overflow-x-hidden'>
           <CategoryBlock
             name='Trending'
-            data={(trendingEvents ?? []).map((event) => ({
-              eventId: event.eventId,
-              eventName: event.eventName,
-              image: event.desktopMedia.flyer,
-              venue: event.venue,
-              startDate: event.startDate,
-              startTime: event.startTime,
-            }))}
+            data={(trendingEvents ?? [])
+              .filter((event) => event)
+              .map((event) => ({
+                eventId: event.eventId,
+                eventName: event.eventName,
+                image: event.desktopMedia?.flyer,
+                venue: event.venue,
+                startDate: event.startDate,
+                startTime: event.startTime,
+              }))}
             showLocation={true}
             isLoading={isLoadingTrending}
             layout='start'

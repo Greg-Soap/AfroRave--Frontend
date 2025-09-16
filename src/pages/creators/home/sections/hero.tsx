@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 
 export default function HeroSection() {
   return (
-    <section className='container w-full min-h-screen flex flex-col items-center justify-center py-[100px]'>
+    <section className=' w-full min-h-screen flex flex-col items-center justify-center py-[100px]'>
       <div className='max-w-[700px] w-full flex flex-col items-center gap-5 text-white font-sf-pro px-[60px]'>
         <p className='max-w-[514px] text-center text-white text-[40px] font-black uppercase'>
           All-in-One Hub for Fans and Creators

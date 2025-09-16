@@ -126,11 +126,11 @@
   --color-light-silver: #c8c8c8;
   --color-secondary-white: #f8f8f8;
   --font-input-mono: "IBM Plex Mono", "sans-serif";
-  --font-sf-pro-display: "SF Pro Display", "sans-serif";
+  --font-sf-pro-display: "Inter", "sans-serif";
   --font-sf-compact: "SF Compact Text", "sans-serif";
   --font-sf-pro-rounded: "SF Pro Rounded", "sans-serif";
   --font-sf-mono: "SF Mono", "sans-serif";
-  --font-sf-pro-text: "SF Pro Display", "sans-serif";
+  --font-sf-pro-text: "Inter", "sans-serif";
   --font-phosphate: "phosphatesolid", "sans-serif";
   --font-phosphate-inline: "PhosphateInline", "sans-serif";
   --font-bungee-inline: "Bungee Inline", "sans-serif";

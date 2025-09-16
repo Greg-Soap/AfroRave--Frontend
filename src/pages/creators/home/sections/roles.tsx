@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 
 export default function RolesSection() {
   return (
-    <section className='container w-full px-[120px] flex flex-col gap-[100px]'>
+    <section className=' w-full px-[120px] flex flex-col gap-[100px]'>
       <div className='flex flex-col md:flex-row items-center gap-[120px]'>
         <RoleDescription {...roles[0]} />
         <PrototypesContainer />
