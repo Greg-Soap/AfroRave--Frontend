@@ -1,13 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { transformTicketsToCreateRequest } from '@/lib/event-transforms'
-import { defaultUnifiedTicketValues } from '../../schemas/ticket-schema'
+import { defaultUnifiedTicketValues, type UnifiedTicketForm } from '../../schemas/ticket-schema'
+import type { UseFormReturn } from 'react-hook-form'
+import type { useCreateTicket, useUpdateTicket, useDeleteTicket } from '@/hooks/use-event-mutations'
+import type { EventTicketsResponse } from '@/types'
+
+interface ITicketHelper {
+  form: UseFormReturn<UnifiedTicketForm>
+  ticket: UnifiedTicketForm
+  setEditingTicketId: (id: string | null) => void
+  setCurrentTicketType: (type: TicketType | null) => void
+}
 
 export interface SavedTicket {
   ticketId: string
   ticketName: string
   ticketType: string
   invite_only?: boolean
-  price?: number
+  price: number
   quantity?: number
   description?: string
 }
@@ -15,16 +24,17 @@ export interface SavedTicket {
 export type TicketType = 'single_ticket' | 'group_ticket' | 'multi_day'
 
 export function createTicket(
-  ticket: any,
+  ticket: ITicketHelper['ticket'],
   eventId: string | null,
-  form: any,
-  createTicketMutation: any,
-  setEditingTicketId: (id: string | null) => void,
-  setCurrentTicketType: (type: TicketType | null) => void,
+  form: ITicketHelper['form'],
+  createTicketMutation: ReturnType<typeof useCreateTicket>,
+  setEditingTicketId: ITicketHelper['setEditingTicketId'],
+  setCurrentTicketType: ITicketHelper['setCurrentTicketType'],
 ) {
-  if (!ticket || !eventId) return
+  if (!eventId) return
 
-  const ticketRequests = transformTicketsToCreateRequest({ tickets: [ticket] }, eventId)
+  const ticketRequests = transformTicketsToCreateRequest(ticket, eventId)
+
   createTicketMutation.mutateAsync(ticketRequests[0])
 
   form.reset(defaultUnifiedTicketValues)
@@ -33,17 +43,18 @@ export function createTicket(
 }
 
 export function updateTicket(
-  ticket: any,
+  ticket: ITicketHelper['ticket'],
   eventId: string | null,
   editingTicketId: string | null,
-  form: any,
-  updateTicketMutation: any,
-  setEditingTicketId: (id: string | null) => void,
-  setCurrentTicketType: (type: TicketType | null) => void,
+  form: ITicketHelper['form'],
+  updateTicketMutation: ReturnType<typeof useUpdateTicket>,
+  setEditingTicketId: ITicketHelper['setEditingTicketId'],
+  setCurrentTicketType: ITicketHelper['setCurrentTicketType'],
 ) {
-  if (!ticket || !eventId || !editingTicketId) return
+  if (!eventId || !editingTicketId) return
 
-  const ticketRequests = transformTicketsToCreateRequest({ tickets: [ticket] }, eventId)
+  const ticketRequests = transformTicketsToCreateRequest(ticket, eventId)
+
   updateTicketMutation.mutateAsync({
     ticketId: editingTicketId,
     data: ticketRequests[0],
@@ -56,9 +67,9 @@ export function updateTicket(
 
 export function addTicket(
   selectedType: TicketType,
-  form: any,
-  setEditingTicketId: (id: string | null) => void,
-  setCurrentTicketType: (type: TicketType | null) => void,
+  form: ITicketHelper['form'],
+  setEditingTicketId: ITicketHelper['setEditingTicketId'],
+  setCurrentTicketType: ITicketHelper['setCurrentTicketType'],
 ) {
   form.reset(defaultUnifiedTicketValues)
   setEditingTicketId(null)
@@ -99,9 +110,9 @@ export function addTicket(
 
 export function handleEditTicket(
   ticket: SavedTicket,
-  form: any,
-  setEditingTicketId: (id: string | null) => void,
-  setCurrentTicketType: (type: TicketType | null) => void,
+  form: ITicketHelper['form'],
+  setEditingTicketId: ITicketHelper['setEditingTicketId'],
+  setCurrentTicketType: ITicketHelper['setCurrentTicketType'],
 ) {
   const formTicket = {
     ticketType: ticket.ticketType as TicketType,
@@ -139,21 +150,27 @@ export function handleEditTicket(
   setCurrentTicketType(ticket.ticketType as TicketType)
 }
 
-export function handleDeleteTicket(ticketId: string, deleteTicketMutation: any) {
+export function handleDeleteTicket(
+  ticketId: string,
+  deleteTicketMutation: ReturnType<typeof useDeleteTicket>,
+) {
   deleteTicketMutation.mutateAsync(ticketId)
 }
 
 export function handleCancelEdit(
-  form: any,
-  setEditingTicketId: (id: string | null) => void,
-  setCurrentTicketType: (type: TicketType | null) => void,
+  form: ITicketHelper['form'],
+  setEditingTicketId: ITicketHelper['setEditingTicketId'],
+  setCurrentTicketType: ITicketHelper['setCurrentTicketType'],
 ) {
   form.reset(defaultUnifiedTicketValues)
   setEditingTicketId(null)
   setCurrentTicketType(null)
 }
 
-export function fillCurrentFormWithSampleData(currentTicketType: TicketType | null, form: any) {
+export function fillCurrentFormWithSampleData(
+  currentTicketType: TicketType | null,
+  form: ITicketHelper['form'],
+) {
   if (!currentTicketType) return
 
   const sampleTicket = {
@@ -195,8 +212,10 @@ export function onSubmit(eventId: string | null, handleFormChange: (form: string
   handleFormChange('promocode')
 }
 
-export function transformTicketsResponse(ticketsResponse: any): SavedTicket[] {
-  return (ticketsResponse?.data || []).map((ticket: any) => ({
+export function transformTicketsResponse(
+  ticketsResponse: EventTicketsResponse | undefined,
+): SavedTicket[] {
+  return (ticketsResponse?.data || []).map((ticket) => ({
     ticketId: ticket.ticketId,
     ticketName: ticket.ticketName,
     ticketType: 'single_ticket',

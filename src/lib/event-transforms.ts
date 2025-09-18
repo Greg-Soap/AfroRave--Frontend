@@ -87,7 +87,7 @@ export function transformEventDetailsToCreateRequest(
         formData.end_date.minute,
         formData.end_date.period,
       ),
-      occurance: formData.occurrence || 1,
+      occurance: formData.occurrence || 0,
     },
     eventDetails: {
       termsOfRefund: '', // This field is not in the form, can be added later
@@ -211,8 +211,10 @@ export function transformTicketsToCreateRequest(
     return salesType === 'door_sales' ? 'Door' : 'Online'
   }
 
-  // Convert form data to API format for each ticket
-  return formData.tickets.map((ticket: z.infer<typeof unifiedTicketFormSchema>['tickets'][0]) => ({
+  // Convert form data to API format for the single ticket
+  const ticket = formData.ticket
+
+  return [ticket].map((ticket) => ({
     ticketName: ticket.ticketName,
     accessType: mapAccessType(ticket.type, ticket.invite_only),
     salesType: mapSalesType(ticket.salesType),
@@ -223,11 +225,11 @@ export function transformTicketsToCreateRequest(
     groupSize:
       ticket.ticketType === 'group_ticket' && ticket.group_size
         ? Number.parseInt(ticket.group_size, 10)
-        : 1,
+        : 0,
     validDays:
       ticket.ticketType === 'multi_day' && ticket.days_valid
         ? Number.parseInt(ticket.days_valid, 10)
-        : 365,
+        : 0,
     description: ticket.description,
     eventId,
     ticketDetails: {
@@ -258,12 +260,10 @@ export function transformTicketsToCreateRequest(
                 period: 'AM' | 'PM'
               }
             ).period,
-          )}:00`
-        : new Date().toISOString(),
-      allowResell: false, // Default value since it's not in the current form
-      mail: {
-        body: '', // This field is not in the current form
-      },
+          )}`
+        : '',
+      allowResell: false, // Add logic if needed
+      mail: { body: '' }, // Add logic if needed
     },
   }))
 }

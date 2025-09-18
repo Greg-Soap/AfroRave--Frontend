@@ -6,7 +6,7 @@ import { Skeleton } from '../ui/skeleton'
 import { RenderEventImage } from './render-event-flyer'
 
 export function DashboardCardSkeleton() {
-  return <Skeleton className='w-[260px] h-[225px] bg-muted/50' />
+  return <Skeleton className='w-[260px] h-[225px] bg-muted' />
 }
 
 export function DashboardCards({

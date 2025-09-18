@@ -32,7 +32,7 @@ class EventService {
   /**
    * Create a new event
    */
-  async createEvent(data: CreateEventRequest): Promise<ApiResponse<EventData>> {
+  async createEvent(data: CreateEventRequest): Promise<{ message: string; eventId: string }> {
     const response = await api.post('/api/Event', data)
     return response.data
   }

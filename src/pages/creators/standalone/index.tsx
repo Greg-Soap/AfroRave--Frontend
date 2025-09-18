@@ -122,6 +122,8 @@ function StandAloneEvents({ id }: { id: string }) {
 function PopoverContent({ event }: { event: EventDetailData }) {
   const eventLink = getRoutePath('individual_event', { eventId: event.eventId })
 
+  // const deleteEventMutation = useDeleteEvent()
+
   return (
     <div className='w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text'>
       {[
@@ -140,6 +142,7 @@ function PopoverContent({ event }: { event: EventDetailData }) {
 
       <Button
         onClick={() => copyToClipboard(eventLink)}
+        // onClick={() => deleteEventMutation.mutate(event.eventId)}
         variant='ghost'
         className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-1 justify-start hover:bg-black/80 hover:text-white'>
         Copy Link

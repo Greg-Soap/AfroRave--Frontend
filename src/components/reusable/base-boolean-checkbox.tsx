@@ -46,7 +46,9 @@ export function BaseBooleanCheckbox({
             </Label>
           </div>
           {data.items.description && (
-            <p className='text-sm font-light font-sf-pro-display'>{data.items.description}</p>
+            <p className='text-sm font-light font-sf-pro-display text-charcoal'>
+              {data.items.description}
+            </p>
           )}
         </div>
       </div>

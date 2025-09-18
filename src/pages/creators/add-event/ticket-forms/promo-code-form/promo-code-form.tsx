@@ -132,7 +132,11 @@ export default function PromoCodeForm({
             <PromoCodeFormFields
               form={form}
               eventTickets={eventTickets}
-              onSubmit={editingPromoId ? handleUpdatePromoCode : handleCreatePromoCode}
+              onSubmit={
+                editingPromoId
+                  ? form.handleSubmit(handleUpdatePromoCode)
+                  : form.handleSubmit(handleCreatePromoCode)
+              }
               isEditMode={!!editingPromoId}
               onCancel={editingPromoId ? handleCancelEditWrapper : undefined}
             />

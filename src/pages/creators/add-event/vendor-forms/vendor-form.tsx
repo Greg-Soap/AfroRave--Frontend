@@ -105,8 +105,6 @@ export default function VendorForm({
 
       const vendorRequests = transformServiceToCreateRequest(data, eventId)
 
-      console.log('Vendors created successfully:', vendorRequests)
-
       createVendorMutation.mutateAsync(vendorRequests, {
         onSuccess: () => handleFormChange(),
       })

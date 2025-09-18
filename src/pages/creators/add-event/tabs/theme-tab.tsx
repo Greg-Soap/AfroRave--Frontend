@@ -64,11 +64,11 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
 
       const themeRequest = transformThemeToCreateRequest(values, eventId)
 
-      const result = await createThemeMutation.mutateAsync(themeRequest)
-
-      console.log('Theme created successfully:', result)
-
-      renderVendorTab()
+      await createThemeMutation.mutateAsync(themeRequest, {
+        onSuccess: () => {
+          renderVendorTab()
+        },
+      })
     } catch (error) {
       console.error('Failed to create theme:', error)
     }

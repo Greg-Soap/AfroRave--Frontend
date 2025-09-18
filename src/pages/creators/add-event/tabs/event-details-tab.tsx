@@ -20,18 +20,17 @@ import { ContinueButton } from '../component/continue-button'
 import { TabContainer } from '../component/tab-ctn'
 import { cn } from '@/lib/utils'
 
-export default function EventDetailsTab({
-  setStep,
-  setActiveTabState,
-}: {
+interface IEventDetailsTab {
   setStep: (step: number) => void
   setActiveTabState: (tab: string) => void
-}) {
-  useEffect(() => setStep(1), [])
+}
+
+export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDetailsTab) {
+  const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
+
+  const { setEventId, setEventData } = useEventStore()
 
   const createEventMutation = useCreateEvent()
-  const { setEventId, setEventData } = useEventStore()
-  const [eventType, setEventType] = useState<'standalone' | 'season'>('standalone')
 
   const form = useForm<EventDetailsSchema>({
     resolver: zodResolver(EditEventDetailsSchema),
@@ -42,7 +41,6 @@ export default function EventDetailsTab({
       venue: '',
       description: '',
       event_type: 'standalone',
-      frequency: 'Weekly',
       occurrence: 1,
       start_date: {
         date: new Date(),
@@ -68,7 +66,10 @@ export default function EventDetailsTab({
 
   // Update form values when event type changes
   useEffect(() => {
+    setStep(1)
+
     form.setValue('event_type', eventType)
+
     if (eventType === 'standalone') {
       form.setValue('frequency', undefined)
       form.setValue('occurrence', undefined)
@@ -79,31 +80,16 @@ export default function EventDetailsTab({
   }, [eventType, form])
 
   async function onSubmit(values: EventDetailsSchema) {
-    try {
-      // Transform form data to API format
-      const eventData = transformEventDetailsToCreateRequest(values)
-      console.log('eventData', eventData)
+    const eventData = transformEventDetailsToCreateRequest(values)
 
-      // Create the event
-      const result = await createEventMutation.mutateAsync(eventData)
-      console.log('result', result)
+    await createEventMutation.mutateAsync(eventData, {
+      onSuccess: (data) => {
+        setEventId(data.eventId)
+        setActiveTabState('tickets')
+      },
+    })
 
-      // Store the event ID and data for use in subsequent tabs
-      if (result && typeof result === 'object' && 'eventId' in result) {
-        setEventId(result.eventId as string)
-      } else {
-        setEventId(eventData.eventId)
-      }
-      setEventData(eventData)
-
-      console.log('Event created successfully:', result)
-
-      // Navigate to the next tab
-      setActiveTabState('tickets')
-    } catch (error) {
-      console.error('Failed to create event:', error)
-      // Error handling is already done in the mutation
-    }
+    setEventData(eventData)
   }
 
   return (
@@ -246,18 +232,15 @@ export default function EventDetailsTab({
               {(field) => (
                 <Input
                   type='number'
-                  min={1}
                   max={365}
+                  min={1}
                   placeholder='Enter number of occurrences.'
                   className='h-9'
                   {...field}
-                  value={field.value == null ? '' : String(field.value)}
-                  onChange={(e) => {
-                    const value = Number.parseInt(e.target.value, 10)
-                    if (value >= 1 && value <= 365) {
-                      field.onChange(value)
-                    }
-                  }}
+                  value={
+                    field.value === undefined || field.value === null ? '' : String(field.value)
+                  }
+                  onChange={field.onChange}
                 />
               )}
             </FormField>

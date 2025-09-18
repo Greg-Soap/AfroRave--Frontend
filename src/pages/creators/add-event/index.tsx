@@ -126,7 +126,7 @@ export default function AddEventPage() {
       defaultValue={activeTab}
       value={activeTab}
       onValueChange={setActiveTabState}
-      className='w-full min-h-screen flex flex-col items-center bg-black overflow-x-hidden'>
+      className='w-full min-h-screen flex flex-col items-center bg-[#1E1E1E] overflow-x-hidden'>
       <div className='w-full flex flex-col'>
         <div className='w-full h-[72px] flex items-center justify-between py-4 px-8'>
           <img src='/assets/landing-page/AR.png' alt='AR' width={60} height={32} />
@@ -154,7 +154,7 @@ export default function AddEventPage() {
               isPublishing={publishEventMutation.isPending}
             />
 
-            <section className='container w-full flex flex-col gap-10'>
+            <section className='max-w-[1536px] w-full flex flex-col gap-10 px-14'>
               <div className='flex flex-col gap-6 md:py-10'>
                 <div className='flex flex-col gap-2 text-black font-sf-pro-display'>
                   <p className='font-black text-2xl md:text-4xl uppercase'>{heading}</p>
@@ -210,20 +210,12 @@ function TabNav({
   navigate,
   handlePublishEvent,
   isPublishing,
-}: {
-  activeTab: string
-  handleBackClick: () => void
-  themeBtnVisibility: boolean
-  setActiveTabState: (incomingTab: string) => void
-  navigate: (path: string) => void
-  handlePublishEvent: () => void
-  isPublishing: boolean
-}) {
+}: ITabNav) {
   return (
-    <div className='w-full h-fit flex items-center justify-between py-3 px-5 md:px-8'>
+    <div className='w-full h-fit flex items-center justify-between py-3 px-5 md:px-8 md:py-4'>
       <Button
         variant='ghost'
-        className='w-fit h-fit hover:bg-black/10'
+        className='w-fit h-fit hover:bg-black/10 !p-0'
         onClick={handleBackClick}
         disabled={activeTab === 'event-details'}>
         <ChevronLeft color='#000000' className='min-w-1.5 min-h-3' />
@@ -240,7 +232,7 @@ function TabNav({
 
         <Button
           variant='destructive'
-          className='h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px]'
+          className='h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px] bg-[#1E1E1E]'
           onClick={() => navigate(getRoutePath('standalone'))}>
           Save and Exit
         </Button>
@@ -315,6 +307,16 @@ function RenderHeadline(
   setHeading('BUILD YOUR STAGE!')
   setDescription('Your moment starts here! tell us about your event')
   return
+}
+
+interface ITabNav {
+  activeTab: string
+  handleBackClick: () => void
+  themeBtnVisibility: boolean
+  setActiveTabState: (incomingTab: string) => void
+  navigate: (path: string) => void
+  handlePublishEvent: () => void
+  isPublishing: boolean
 }
 
 interface IEditTabProps {

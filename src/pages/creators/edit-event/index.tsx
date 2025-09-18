@@ -1,16 +1,17 @@
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
-import { useDeleteEvent, useGetEvent } from '@/hooks/use-event-mutations'
+import { useGetEvent } from '@/hooks/use-event-mutations'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSearchParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import EventDetailsTab from './tabs/event-details-tab'
-import SettingsTab from './tabs/settings-tab'
+// import SettingsTab from './tabs/settings-tab'
 import ThemeTab from './tabs/theme-tab'
 import TicketsTab from './tabs/tickets-tab'
 import { LoadingFallback } from '@/components/loading-fallback'
+import ConfimationMailTab from './tabs/confimation-mail-tab'
 
 export default function EditEventPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -18,7 +19,7 @@ export default function EditEventPage() {
 
   const { eventId } = useParams()
 
-  const deleteEventMutation = useDeleteEvent()
+  // const deleteEventMutation = useDeleteEvent()
 
   const navigate = useNavigate()
 
@@ -47,16 +48,16 @@ export default function EditEventPage() {
     setSearchParams({ tab: nextTab })
   }
 
-  const handleDeleteEvent = async () => {
-    if (!eventId) {
-      console.error('No event ID found')
-      return
-    }
+  // const handleDeleteEvent = async () => {
+  //   if (!eventId) {
+  //     console.error('No event ID found')
+  //     return
+  //   }
 
-    await deleteEventMutation.mutateAsync(eventId, {
-      onSuccess: () => navigate(getRoutePath('standalone')),
-    })
-  }
+  //   await deleteEventMutation.mutateAsync(eventId, {
+  //     onSuccess: () => navigate(getRoutePath('standalone')),
+  //   })
+  // }
 
   if (!eventId) {
     return (
@@ -93,14 +94,33 @@ export default function EditEventPage() {
       name: 'Event Details',
       element: <EventDetailsTab event={event} setActiveTab={setActiveTabState} />,
     },
-    { value: 'tickets', name: 'Tickets', element: <TicketsTab eventId={event.eventId} /> },
-    { value: 'theme', name: 'Theme', element: <ThemeTab /> },
+    {
+      value: 'tickets',
+      name: 'Tickets',
+      element: (
+        <TicketsTab
+          eventId={event.eventId}
+          setActiveTab={setActiveTabState}
+          eventName={event.eventName}
+        />
+      ),
+    },
+    {
+      value: 'theme',
+      name: 'Theme',
+      element: <ThemeTab event={event} setActiveTab={setActiveTabState} />,
+    },
+    // {
+    //   value: 'settings',
+    //   name: 'Settings',
+    //   element: (
+    //     <SettingsTab onDeleteEvent={handleDeleteEvent} isDeleting={deleteEventMutation.isPending} />
+    //   ),
+    // },
     {
       value: 'settings',
       name: 'Settings',
-      element: (
-        <SettingsTab onDeleteEvent={handleDeleteEvent} isDeleting={deleteEventMutation.isPending} />
-      ),
+      element: <ConfimationMailTab event={event} setActiveTab={setActiveTabState} />,
     },
   ]
 

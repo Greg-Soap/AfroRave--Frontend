@@ -11,10 +11,12 @@ import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useWatch } from 'react-hook-form'
-import type { z } from 'zod'
 import { TabContainer } from '../../component/tab-ctn'
-import { defaultUnifiedTicketValues, unifiedTicketFormSchema } from '../../schemas/ticket-schema'
+import {
+  defaultUnifiedTicketValues,
+  unifiedTicketFormSchema,
+  type UnifiedTicketForm as TForm,
+} from '../../schemas/ticket-schema'
 import { ConfirmationMailForm } from './confirmation-mail-form'
 import {
   type SavedTicket,
@@ -33,8 +35,6 @@ import { TicketForm } from './ticket-form'
 import { TicketModal } from './ticket-modal'
 import { ActionPopover } from '../../component/action-popover'
 import { ContinueButton } from '../../component/continue-button'
-
-type TForm = z.infer<typeof unifiedTicketFormSchema>
 
 export default function CreateTicketForm({
   handleFormChange,
@@ -62,11 +62,9 @@ export default function CreateTicketForm({
     defaultValues: defaultUnifiedTicketValues as TForm,
   })
 
-  const ticket = useWatch({ control: form.control, name: 'ticket' })
-
-  const handleCreateTicket = () =>
+  const handleCreateTicket = (values: TForm) =>
     createTicket(
-      ticket,
+      values,
       eventId,
       form,
       createTicketMutation,
@@ -74,9 +72,9 @@ export default function CreateTicketForm({
       setCurrentTicketType,
     )
 
-  const handleUpdateTicket = () =>
+  const handleUpdateTicket = (value: TForm) =>
     updateTicket(
-      ticket,
+      value,
       eventId,
       editingTicketId,
       form,
@@ -127,16 +125,23 @@ export default function CreateTicketForm({
               </p>
               {isLoadingTickets && <span className='text-xs text-gray-500'>Loading...</span>}
             </div>
-            {savedTickets.map((ticket: SavedTicket, idx: number) => (
-              <CreatedTicketCard
-                key={`created-${ticket.ticketId}-${idx}`}
-                ticket={ticket}
-                onEdit={() => handleEditTicketWrapper(ticket)}
-                onDelete={() => handleDeleteTicketWrapper(ticket.ticketId)}
-                isUpdating={updateTicketMutation.isPending}
-                isDeleting={deleteTicketMutation.isPending}
-              />
-            ))}
+            <div className='w-full flex flex-col'>
+              <div className='flex flex-col gap-5'>
+                {savedTickets.map((ticket: SavedTicket, idx: number) => (
+                  <CreatedTicketCard
+                    key={`created-${ticket.ticketId}-${idx}`}
+                    ticket={ticket}
+                    onEdit={() => handleEditTicketWrapper(ticket)}
+                    onDelete={() => handleDeleteTicketWrapper(ticket.ticketId)}
+                    isUpdating={updateTicketMutation.isPending}
+                    isDeleting={deleteTicketMutation.isPending}
+                  />
+                ))}
+              </div>
+              <p className='p-2.5 text-xs leading-[100%] font-sf-pro-display uppercase text-deep-red/70'>
+                access the invite link in your dashboard
+              </p>
+            </div>
           </div>
         )}
 
@@ -145,7 +150,11 @@ export default function CreateTicketForm({
             <TicketForm
               form={form}
               type={currentTicketType}
-              onSubmit={editingTicketId ? handleUpdateTicket : handleCreateTicket}
+              onSubmit={
+                editingTicketId
+                  ? form.handleSubmit(handleUpdateTicket)
+                  : form.handleSubmit(handleCreateTicket)
+              }
               isLoading={
                 editingTicketId ? updateTicketMutation.isPending : createTicketMutation.isPending
               }
@@ -176,32 +185,23 @@ function CreatedTicketCard({
   isDeleting,
 }: ICreatedTicketCard) {
   return (
-    <div className='w-full flex flex-col'>
-      <div className='w-full flex flex-col gap-5'>
-        <div className='w-full flex items-center justify-between border border-mid-dark-gray/30 px-3 py-[11px] shadow-[0px_2px_10px_2px_#0000001A] rounded-[5px]'>
-          <div className='flex flex-col gap-1'>
-            <p className='uppercase text-sm font-sf-pro-display leading-[100%] text-charcoal'>
-              {ticket.ticketName || ticket.ticketType}
-            </p>
-            {ticket.price && <p className='text-xs text-gray-600'>${ticket.price}</p>}
-            {ticket.quantity && <p className='text-xs text-gray-600'>Qty: {ticket.quantity}</p>}
-          </div>
-          <div className='flex items-center gap-3'>
-            <CustomBadge text={ticket.ticketType.replace('_', ' ')} />
-            {ticket.invite_only && <CustomBadge type='invite-only' />}
-            <ActionPopover
-              isDeleting={isDeleting}
-              isUpdating={isUpdating}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          </div>
+    <div className='w-full flex flex-col gap-5'>
+      <div className='w-full flex items-center justify-between border border-mid-dark-gray/30 px-3 py-[11px] shadow-[0px_2px_10px_2px_#0000001A] rounded-[5px]'>
+        <p className='uppercase text-sm font-sf-pro-display leading-[100%] text-charcoal'>
+          {ticket.ticketName}
+        </p>
+        <div className='flex items-center gap-3'>
+          <CustomBadge text={ticket.price === 0 ? 'free' : 'paid'} />
+          <CustomBadge text={ticket.ticketType.replace('_', ' ')} />
+          {ticket.invite_only && <CustomBadge type='invite-only' />}
+          <ActionPopover
+            isDeleting={isDeleting}
+            isUpdating={isUpdating}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         </div>
       </div>
-
-      <p className='p-2.5 text-xs leading-[100%] font-sf-pro-display uppercase text-deep-red/70'>
-        access the invite link in your dashboard
-      </p>
     </div>
   )
 }

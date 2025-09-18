@@ -67,8 +67,9 @@ export default function EventDetailsTab({ event, setActiveTab }: IEventDetailsTa
   return (
     <TabChildrenContainer
       handleSaveEvent={() => form.handleSubmit(onSubmit)()}
-      isLoading={isPending || !isDirty}
-      currentTab='event-details'>
+      isLoading={isPending || isDirty}
+      currentTab='event-details'
+      onChange={setActiveTab}>
       <div className='w-full flex flex-col items-center p-0 md:p-14 gap-2.5'>
         <div className='flex flex-col gap-4 w-full md:min-w-[560px] max-w-[800px]'>
           <p className='uppercase font-sf-pro-display font-black text-black text-xl'>

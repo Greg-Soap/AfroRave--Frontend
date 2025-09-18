@@ -11,13 +11,14 @@ import {
   useCreatePromoCode,
   useCreateTicket,
   useDeleteTicket,
-  // useGetEventPromoCodes,
+  useGetEventPromoCodes,
   useGetEventTickets,
+  useDeletePromoCode,
 } from '@/hooks/use-event-mutations'
 import { transformTicketsToCreateRequest } from '@/lib/event-transforms'
 import type { TicketData } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { EllipsisVertical, Ticket, Trash2 } from 'lucide-react'
+import { EllipsisVertical, Plus, Ticket, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
@@ -38,21 +39,31 @@ import { TicketModal } from '../../add-event/ticket-forms/create/ticket-modal'
 import { populatePromoCodeJson } from '../../add-event/ticket-forms/promo-code-form/helper'
 import { PromoCodeFormFields } from '../../add-event/ticket-forms/promo-code-form/promo-code-form'
 import { TabChildrenContainer } from '../component/edit-tab-children-container'
+import { cn } from '@/lib/utils'
+import { OnlyShowIf } from '@/lib/environment'
 
-export default function TicketsTab({ eventId }: { eventId: string }) {
+export default function TicketsTab({ eventId, setActiveTab, eventName }: ITicketTab) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
   const [selectedType, setSelectedType] = useState<TicketType>()
-  // const [ticketTab, setTicketTab] = useState<'ticket' | 'promocode'>('ticket')
+  const [ticketTab, setTicketTab] = useState<'ticket' | 'promocode'>('ticket')
 
   const { data: ticketsResponse, isLoading, error, refetch } = useGetEventTickets(eventId)
-  // const { data: promocodeResponse, isLoading: isLoadingPromoCodes } = useGetEventPromoCodes(eventId)
+  const {
+    data: promocodeResponse,
+    isLoading: isLoadingPromoCodes,
+    refetch: refetchPromocodes,
+    error: promocodeError,
+  } = useGetEventPromoCodes(eventId)
   const { mutate: createPrmocodeMutation, isPending: isCreatingPromoCode } =
     useCreatePromoCode(eventId)
   const { mutate: createTicketMutation, isPending: isCreatingTIcket } = useCreateTicket(eventId)
 
+  const deleteTicketMutation = useDeleteTicket(eventId)
+  const deletePromocodeMutation = useDeletePromoCode(eventId)
+
   const tickets = ticketsResponse?.data || []
-  // const promocodes = promocodeResponse?.data || []
+  const promocodes = promocodeResponse?.data || []
 
   useEffect(() => {
     const formParam = searchParams.get('form')
@@ -110,6 +121,14 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
     )
   }
 
+  async function handleDeleteTicket(id: string) {
+    deleteTicketMutation.mutateAsync(id, { onSuccess: () => refetch() })
+  }
+
+  async function handleDeletePromocode(id: string) {
+    deletePromocodeMutation.mutateAsync(id)
+  }
+
   function handleAddTicket(selectedType: TicketType) {
     ticketForm.setValue('ticket.ticketType', selectedType)
     setSelectedType(selectedType)
@@ -137,6 +156,7 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
         handleSaveEvent={() => promocodeForm.handleSubmit(handleCreatePromoCode)()}
         handleBackClick={handleBackClick}
         currentTab='tickets'
+        onChange={setActiveTab}
         isLoading={isCreatingPromoCode}>
         <FormBase form={promocodeForm} onSubmit={() => {}} className='max-w-[560px] w-full'>
           <PromoCodeFormFields form={promocodeForm} eventTickets={tickets} />
@@ -151,6 +171,7 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
         handleSaveEvent={() => ticketForm.handleSubmit(handleCreateTicket)()}
         handleBackClick={handleBackClick}
         currentTab='tickets'
+        onChange={setActiveTab}
         isLoading={isCreatingTIcket}>
         <FormBase form={ticketForm} onSubmit={() => {}} className='max-w-[560px] w-full'>
           <TicketForm form={ticketForm} type={selectedType || 'single_ticket'} />
@@ -160,64 +181,113 @@ export default function TicketsTab({ eventId }: { eventId: string }) {
   }
 
   return (
-    <div className='w-full flex flex-col-reverse md:flex-col gap-14 md:p-14'>
-      <div className='flex flex-col pl-2 gap-[13px]'>
-        <div className='flex items-center justify-between'>
-          <div className='flex gap-3'>
-            {[
-              { value: 'tickets', name: 'Your Tickets' },
-              { value: 'promocode', name: 'Promo Codes' },
-            ].map((item) => (
+    <TabChildrenContainer
+      handleSaveEvent={() => setActiveTab('theme')}
+      handleBackClick={() => setActiveTab('event-details')}
+      currentTab='tickets'
+      onChange={setActiveTab}
+      buttonText={eventName}
+      isLoading={undefined}>
+      <div className='w-full flex flex-col-reverse md:flex-col gap-14 md:p-14'>
+        <div className='flex flex-col pl-2 gap-[13px]'>
+          <div className='flex items-center justify-between'>
+            <div className='flex gap-3'>
+              {[
+                { value: 'ticket', name: 'Your Tickets' },
+                { value: 'promocode', name: 'Promo Codes' },
+              ].map((item) => {
+                const isActive = ticketTab === item.value
+
+                return (
+                  <Button
+                    key={item.value}
+                    onClick={() => setTicketTab(item.value as 'ticket' | 'promocode')}
+                    className={cn(
+                      'font-sf-pro-display p-0 bg-transparent hover:bg-transparent shadow-none',
+                      {
+                        'font-black text-xl text-black': isActive,
+                        'text-lg font-medium text-medium-gray': !isActive,
+                      },
+                    )}>
+                    {item.name}
+                  </Button>
+                )
+              })}
+            </div>
+
+            <OnlyShowIf condition={ticketTab === 'promocode'}>
               <Button
-                key={item.value}
-                className='font-sf-pro-display font-black text-black text-xl p-0 bg-transparent hover:bg-transparent shadow-none'>
-                {item.name}
+                type='button'
+                onClick={() => setCurrentForm('promocode')}
+                className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
+                <Plus /> <span>ADD PROMOCODE</span>
               </Button>
-            ))}
+            </OnlyShowIf>
+
+            <OnlyShowIf condition={ticketTab === 'ticket'}>
+              <TicketModal onContinue={handleAddTicket} />
+            </OnlyShowIf>
           </div>
 
-          {/* <Button
-            type='button'
-            onClick={() => setCurrentForm('promocode')}
-            className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
-            <Plus /> <span>ADD PROMOCODE</span>
-          </Button> */}
-          <TicketModal onContinue={handleAddTicket} />
+          {(() => {
+            if (isLoading || isLoadingPromoCodes) {
+              return <LoadingState activeTab={ticketTab} />
+            }
+
+            if (ticketTab === 'ticket' && error) {
+              return <ErrorState activeTab={ticketTab} onClick={refetch} />
+            }
+
+            if (ticketTab === 'promocode' && promocodeError) {
+              return <ErrorState activeTab={ticketTab} onClick={refetchPromocodes} />
+            }
+
+            if (tickets.length === 0) {
+              return <EmptyTicketState onAddTicket={() => handleFormChange('create')} />
+            }
+
+            if (promocodes.length === 0) {
+              return (
+                <div className='w-full py-12 flex flex-col items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300'>
+                  <Button
+                    type='button'
+                    onClick={() => setCurrentForm('promocode')}
+                    className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
+                    <Plus /> <span>ADD PROMOCODE</span>
+                  </Button>
+
+                  <h3 className='text-lg font-medium text-gray-900 mb-2'>
+                    No promocodes created yet
+                  </h3>
+                </div>
+              )
+            }
+
+            if (ticketTab === 'ticket') {
+              return tickets.map((ticket) => (
+                <TicketCard
+                  key={ticket.ticketId}
+                  name={ticket.ticketName}
+                  onDelete={() => handleDeleteTicket(ticket.ticketId)}
+                  isLoading={deleteTicketMutation.isPending}
+                />
+              ))
+            }
+
+            return promocodes.map((promocode) => (
+              <TicketCard
+                key={promocode.promocodeId}
+                name={promocode.promoCode}
+                onDelete={() => handleDeletePromocode(promocode.promocodeId)}
+                isLoading={deletePromocodeMutation.isPending}
+              />
+            ))
+          })()}
         </div>
 
-        {/* TODO: Add promo codes LOADING */}
-        {isLoading ? (
-          <div className='w-full py-8 flex items-center justify-center'>
-            <div className='text-center'>
-              <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-deep-red mx-auto mb-2' />
-              <p className='text-sm text-gray-600'>Loading tickets...</p>
-            </div>
-          </div>
-        ) : error ? (
-          <div className='w-full py-8 flex items-center justify-center'>
-            <div className='text-center'>
-              <p className='text-sm text-red-600 mb-2'>Failed to load tickets. Please try again.</p>
-              <Button variant='outline' size='sm' onClick={() => refetch()} className='text-xs'>
-                Try Again
-              </Button>
-            </div>
-          </div>
-        ) : tickets.length === 0 ? (
-          <EmptyTicketState onAddTicket={() => handleFormChange('create')} />
-        ) : (
-          tickets.map((ticket) => (
-            <TicketCard
-              key={ticket.ticketId}
-              ticket={ticket}
-              onTicketDeleted={() => refetch()}
-              eventId={eventId}
-            />
-          ))
-        )}
+        {tickets.length > 0 ? <TicketSales tickets={tickets} /> : null}
       </div>
-
-      {tickets.length > 0 ? <TicketSales tickets={tickets} /> : null}
-    </div>
+    </TabChildrenContainer>
   )
 }
 
@@ -233,6 +303,34 @@ function EmptyTicketState({ onAddTicket }: { onAddTicket: () => void }) {
       <Button onClick={onAddTicket} className='mt-4 bg-deep-red text-white hover:bg-red-700'>
         Create First Ticket
       </Button>
+    </div>
+  )
+}
+
+function LoadingState({ activeTab }: { activeTab: TicketTab }) {
+  return (
+    <div className='w-full py-8 flex items-center justify-center'>
+      <div className='text-center'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-deep-red mx-auto mb-2' />
+        <p className='text-sm text-gray-600'>
+          Loading {activeTab === 'ticket' ? 'tickets' : 'promocodes'}...
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function ErrorState({ activeTab, onClick }: { activeTab: TicketTab; onClick: () => void }) {
+  return (
+    <div className='w-full py-8 flex items-center justify-center'>
+      <div className='text-center'>
+        <p className='text-sm text-red-600 mb-2'>
+          Failed to load {activeTab === 'ticket' ? 'tickets' : 'promocodes'}. Please try again.
+        </p>
+        <Button variant='outline' size='sm' onClick={onClick} className='text-xs'>
+          Try Again
+        </Button>
+      </div>
     </div>
   )
 }
@@ -257,20 +355,14 @@ function TicketSales({ tickets }: { tickets: TicketData[] }) {
   )
 }
 
-function TicketCard({ ticket, onTicketDeleted, eventId }: ITIcketCard) {
-  const deleteTicketMutation = useDeleteTicket(eventId)
-
-  const handleDeleteTicket = async () => {
-    deleteTicketMutation.mutateAsync(ticket.ticketId, { onSuccess: () => onTicketDeleted() })
-  }
-
+function TicketCard({ name, onDelete, isLoading = false }: ITIcketCard) {
   return (
     <div className='w-full h-16 bg-white py-4 pl-3 pr-1 rounded-[8px] flex items-center justify-between shadow-sm border border-gray-100'>
       <div className='flex items-center gap-5'>
         <Button variant='ghost' className='py-0 px-1 w-fit h-fit hover:bg-black/20'>
           <img src='/assets/event/menu.png' alt='Grip' className='size-4' />
         </Button>
-        <p className='text-sm font-sf-pro-display text-black'>{ticket.ticketName}</p>
+        <p className='text-sm font-sf-pro-display text-black'>{name}</p>
       </div>
 
       <DropdownMenu>
@@ -281,11 +373,11 @@ function TicketCard({ ticket, onTicketDeleted, eventId }: ITIcketCard) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuItem
-            onClick={handleDeleteTicket}
-            disabled={deleteTicketMutation.isPending}
+            onClick={() => onDelete()}
+            disabled={isLoading}
             className='text-red-600 focus:text-red-600'>
             <Trash2 size={16} className='mr-2' />
-            {deleteTicketMutation.isPending ? 'Deleting...' : 'Delete Ticket'}
+            {isLoading ? 'Deleting...' : 'Delete Ticket'}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -300,8 +392,16 @@ const columns: { key: string; label: string }[] = [
   { key: 'status', label: 'Status' },
 ]
 
-interface ITIcketCard {
-  ticket: TicketData
-  onTicketDeleted: () => void
+type TicketTab = 'ticket' | 'promocode'
+
+interface ITicketTab {
   eventId: string
+  setActiveTab: (tab: string) => void
+  eventName: string
+}
+
+interface ITIcketCard {
+  name: string
+  onDelete: () => void
+  isLoading?: boolean
 }
