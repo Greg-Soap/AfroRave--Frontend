@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ContinueButton } from '../component/continue-button'
+import { RenderEventImage } from '@/components/shared/render-event-flyer'
 
 export default function PublishTab({
   setStep,
@@ -45,13 +46,11 @@ export default function PublishTab({
       return
     }
 
-    try {
-      await publishEventMutation.mutateAsync(eventId)
-
-      navigate(getRoutePath('creators_home'))
-    } catch (error) {
-      console.error('Failed to publish event:', error)
-    }
+    await publishEventMutation.mutateAsync(eventId, {
+      onSuccess: () => {
+        navigate(getRoutePath('standalone'))
+      },
+    })
   }
 
   return (
@@ -75,9 +74,10 @@ export default function PublishTab({
             data={ticketNames.map((item) => ({ tool: item, enabled: false }))}
           />
         </div>
-        <img
-          src={event?.eventDetails.desktopMedia?.flyer}
-          alt={event?.eventName}
+
+        <RenderEventImage
+          image={event?.eventDetails.desktopMedia?.flyer}
+          event_name={event?.eventName || ''}
           className='rounded-[5px] w-[180px] min-h-[200px] max-h-[234px]'
         />
       </div>

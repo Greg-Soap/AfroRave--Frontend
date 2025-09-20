@@ -139,6 +139,8 @@ export default function PromoCodeForm({
               }
               isEditMode={!!editingPromoId}
               onCancel={editingPromoId ? handleCancelEditWrapper : undefined}
+              isCreating={createPromoCodeMutation.isPending}
+              isEditing={updatePromoCodeMutation.isPending}
             />
           </div>
         </OnlyShowIf>
@@ -163,6 +165,8 @@ export function PromoCodeFormFields({
   isEditMode = false,
   onCancel,
   eventTickets,
+  isCreating = false,
+  isEditing = false,
 }: IPromoCodeFormFields) {
   return (
     <>
@@ -351,8 +355,15 @@ export function PromoCodeFormFields({
           <Button
             type='button'
             onClick={onSubmit}
-            className='w-fit h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
-            {isEditMode ? 'UPDATE PROMO CODE' : 'CREATE PROMO CODE'}
+            className='w-fit h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'
+            disabled={isCreating || isEditing}>
+            {isEditMode
+              ? isEditing
+                ? 'UPDATING PROMOCODE...'
+                : 'UPDATE PROMO CODE'
+              : isCreating
+                ? 'CREATING PROMOCODE...'
+                : 'CREATE PROMO CODE'}
           </Button>
         )}
 
@@ -459,6 +470,8 @@ interface IPromoCodeFormFields {
   isEditMode?: boolean
   onCancel?: () => void
   eventTickets?: TicketData[]
+  isCreating?: boolean
+  isEditing?: boolean
 }
 
 interface ICreatedPromoCode {

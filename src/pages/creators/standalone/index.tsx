@@ -11,6 +11,7 @@ import { DashboardCards, DashboardCardSkeleton } from '@/components/shared/dashb
 import { useGetOrganizerEvents, useGetEvent } from '@/hooks/use-event-mutations'
 import { LoadingFallback } from '@/components/loading-fallback'
 import type { EventDetailData } from '@/types'
+// import { useDeleteEvent } from '@/hooks/use-event-mutations'
 
 export default function StandalonePage() {
   const { data: response, isPending: isLoading } = useGetOrganizerEvents()

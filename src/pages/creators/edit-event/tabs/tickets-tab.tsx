@@ -188,7 +188,7 @@ export default function TicketsTab({ eventId, setActiveTab, eventName }: ITicket
       onChange={setActiveTab}
       buttonText={eventName}
       isLoading={undefined}>
-      <div className='w-full flex flex-col-reverse md:flex-col gap-14 md:p-14'>
+      <div className='w-full flex flex-col gap-14 pt-10 md:p-14'>
         <div className='flex flex-col pl-2 gap-[13px]'>
           <div className='flex items-center justify-between'>
             <div className='flex gap-3'>
@@ -242,11 +242,11 @@ export default function TicketsTab({ eventId, setActiveTab, eventName }: ITicket
               return <ErrorState activeTab={ticketTab} onClick={refetchPromocodes} />
             }
 
-            if (tickets.length === 0) {
+            if (tickets.length === 0 && ticketTab === 'ticket') {
               return <EmptyTicketState onAddTicket={() => handleFormChange('create')} />
             }
 
-            if (promocodes.length === 0) {
+            if (promocodes.length === 0 && ticketTab === 'promocode') {
               return (
                 <div className='w-full py-12 flex flex-col items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300'>
                   <Button

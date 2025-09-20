@@ -104,19 +104,18 @@ function FileUploadField({ form, name, type }: IFileUploadField) {
     uploadImage.mutateAsync(file, {
       onSuccess: (data) => {
         form.setValue(name, data)
-        console.log(data)
       },
     })
   }
 
   return (
-    <FormField form={form} name={name} className={type === 'flyer' ? 'w-[162px]' : 'w-full'}>
+    <div className={type === 'flyer' ? 'w-[162px]' : 'w-full'}>
       <FileInputWithPreview
         onChange={handleFileChange}
         type={type}
         value={value === '' || value === undefined ? null : (value as string)}
       />
-    </FormField>
+    </div>
   )
 }
 

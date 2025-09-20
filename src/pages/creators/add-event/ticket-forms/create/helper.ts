@@ -35,11 +35,13 @@ export function createTicket(
 
   const ticketRequests = transformTicketsToCreateRequest(ticket, eventId)
 
-  createTicketMutation.mutateAsync(ticketRequests[0])
-
-  form.reset(defaultUnifiedTicketValues)
-  setEditingTicketId(null)
-  setCurrentTicketType(null)
+  createTicketMutation.mutateAsync(ticketRequests[0], {
+    onSuccess: () => {
+      form.reset(defaultUnifiedTicketValues)
+      setEditingTicketId(null)
+      setCurrentTicketType(null)
+    },
+  })
 }
 
 export function updateTicket(
@@ -55,14 +57,19 @@ export function updateTicket(
 
   const ticketRequests = transformTicketsToCreateRequest(ticket, eventId)
 
-  updateTicketMutation.mutateAsync({
-    ticketId: editingTicketId,
-    data: ticketRequests[0],
-  })
-
-  form.reset(defaultUnifiedTicketValues)
-  setEditingTicketId(null)
-  setCurrentTicketType(null)
+  updateTicketMutation.mutateAsync(
+    {
+      ticketId: editingTicketId,
+      data: ticketRequests[0],
+    },
+    {
+      onSuccess: () => {
+        form.reset(defaultUnifiedTicketValues)
+        setEditingTicketId(null)
+        setCurrentTicketType(null)
+      },
+    },
+  )
 }
 
 export function addTicket(

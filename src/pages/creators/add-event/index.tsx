@@ -17,9 +17,6 @@ import VendorTab from './tabs/vendor-tab'
 import { OnlyShowIf } from '@/lib/environment'
 
 export default function AddEventPage() {
-  const { user } = useAfroStore()
-  const { eventId } = useEventStore()
-  const publishEventMutation = usePublishEvent()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState<string>('event-details')
   const [heading, setHeading] = useState<string>('')
@@ -28,7 +25,12 @@ export default function AddEventPage() {
   const [themeBtnVisibility, setThemeBtnVisibility] = useState<boolean>(false)
   const [showError, setShowError] = useState(false)
 
+  const { user } = useAfroStore()
+  const { eventId } = useEventStore()
+
   const navigate = useNavigate()
+
+  const publishEventMutation = usePublishEvent()
 
   useEffect(() => {
     const tabParam = searchParams.get('tab')
@@ -131,11 +133,11 @@ export default function AddEventPage() {
         <div className='w-full h-[72px] flex items-center justify-between py-4 px-8'>
           <img src='/assets/landing-page/AR.png' alt='AR' width={60} height={32} />
 
-          <CustomTabTriggers tabs={tabs} className='hidden md:flex p-0' />
+          <CustomTabTriggers tabs={tabs} className='hidden lg:flex p-0' />
 
           <CreatorMenuButton user={user} variant='dark' />
-          <CustomTabTriggers tabs={tabs} className='flex md:hidden px-5' />
         </div>
+        <CustomTabTriggers tabs={tabs} className='w-full flex lg:hidden px-5' />
       </div>
       {tabs.map((tab) => (
         <TabsContent
@@ -154,7 +156,7 @@ export default function AddEventPage() {
               isPublishing={publishEventMutation.isPending}
             />
 
-            <section className='max-w-[1536px] w-full flex flex-col gap-10 px-14'>
+            <section className='max-w-[1536px] w-full flex flex-col gap-10 px-5 md:px-14'>
               <div className='flex flex-col gap-6 md:py-10'>
                 <div className='flex flex-col gap-2 text-black font-sf-pro-display'>
                   <p className='font-black text-2xl md:text-4xl uppercase'>{heading}</p>
