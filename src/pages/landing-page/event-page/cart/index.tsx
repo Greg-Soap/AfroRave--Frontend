@@ -8,15 +8,30 @@ import { X } from 'lucide-react'
 import { useState } from 'react'
 import CheckoutPage from '../../checkout'
 import CartContainer from './cart-container'
+import { useGetAllCart } from '@/hooks/use-cart'
+import { LoaderCircle } from 'lucide-react'
+import type { CartData } from '@/types/cart'
 
 interface CartProps {
   event: EventDetailData
 }
 
 export default function Cart({ event }: CartProps) {
-  const [totalPrice, setTotalPrice] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
+
+  const { data, isLoading } = useGetAllCart()
+
+  function getCartTotals(cartItems: CartData[] = []) {
+    return cartItems.reduce(
+      (acc, item) => {
+        acc.totalQuantity += item.quantity || 0
+        acc.totalPrice += (item.price || 0) * (item.quantity || 0)
+        return acc
+      },
+      { totalQuantity: 0, totalPrice: 0 },
+    )
+  }
 
   return (
     <>
@@ -24,7 +39,13 @@ export default function Cart({ event }: CartProps) {
         className='w-full h-14 flex items-center justify-between bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80'
         onClick={() => setIsOpen(true)}>
         <span className='text-sm'>Checkout</span>
-        <span className='text-2xl'>{formatNaira(totalPrice)}</span>
+        <span className='text-2xl'>
+          {isLoading ? (
+            <LoaderCircle color='#ffffff' size={24} className='animate-spin' />
+          ) : (
+            formatNaira(getCartTotals(data?.data).totalPrice)
+          )}
+        </span>
       </Button>
 
       <BaseModal
@@ -36,7 +57,7 @@ export default function Cart({ event }: CartProps) {
         hasFooter
         footerContent={
           <FooterContent
-            totalPrice={totalPrice}
+            totalPrice={getCartTotals(data?.data).totalPrice}
             action={() => {
               setIsOpen(false)
               setCheckoutOpen(true)
@@ -47,7 +68,7 @@ export default function Cart({ event }: CartProps) {
           <NavLogo />
         </div>
         <div className='flex flex-col h-fit w-full justify-center items-center mt-[100px]'>
-          <CartContainer event={event} onTotalPriceChange={setTotalPrice} />
+          <CartContainer event={event} />
         </div>
       </BaseModal>
 
@@ -65,11 +86,7 @@ export default function Cart({ event }: CartProps) {
             <X size={16} color='#000000' strokeWidth={2} />
           </DialogClose>
         </div>
-        <CheckoutPage
-          event_name={event.eventName}
-          event_location={event.venue}
-          tickets={undefined}
-        />
+        <CheckoutPage event_name={event.eventName} event_location={event.venue} />
       </BaseModal>
     </>
   )

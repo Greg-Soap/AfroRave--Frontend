@@ -1,57 +1,13 @@
 import { Button } from '@/components/ui/button'
 import { Plus, Minus } from 'lucide-react'
 import { formatNaira } from '@/lib/format-price'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { EventDetailData } from '@/types'
 import { RenderEventImage } from '@/components/shared/render-event-flyer'
-import { useGetEventTickets } from '@/hooks/use-event-mutations'
+import { useUpdateCartQuantity, useGetAllCart } from '@/hooks/use-cart'
 
-interface CartTicket {
-  name: string
-  price: number
-  quantity: number
-}
-
-interface CartContainerProps {
-  event: EventDetailData
-  onTotalPriceChange: (total: number) => void
-  initialTickets?: CartTicket[]
-}
-
-export default function CartContainer({
-  event,
-  onTotalPriceChange,
-  initialTickets,
-}: CartContainerProps) {
-  const eventTickets = useGetEventTickets(event.eventId).data?.data
-
-  const [tickets, setTickets] = useState<CartTicket[]>(() =>
-    initialTickets
-      ? initialTickets
-      : eventTickets
-        ? eventTickets.map((ticket) => ({
-            name: ticket.ticketName,
-            price: ticket.price,
-            quantity: 0,
-          }))
-        : [],
-  )
-
-  const totalPrice = tickets.reduce((sum, ticket) => sum + ticket.price * ticket.quantity, 0)
-  const totalFees = tickets.reduce((sum, ticket) => sum + 1350 * ticket.quantity, 0)
-  const grandTotal = totalPrice + totalFees
-
-  useEffect(() => {
-    onTotalPriceChange(grandTotal)
-  }, [grandTotal, onTotalPriceChange])
-
-  const updateTicketQuantity = (index: number, newQuantity: number) => {
-    setTickets((prev) => {
-      const updated = [...prev]
-      updated[index] = { ...updated[index], quantity: Math.max(0, newQuantity) }
-      return updated
-    })
-  }
+export default function CartContainer({ event }: CartContainerProps) {
+  const cart = useGetAllCart().data?.data
 
   return (
     <section className='container flex items-center justify-center gap-[192px] z-10 min-h-[calc(100vh-210px)]'>
@@ -69,11 +25,13 @@ export default function CartContainer({
         </div>
 
         <ul className='flex flex-col gap-[72px]'>
-          {tickets.map((item, index) => (
+          {cart?.map((item) => (
             <CartTicketCard
-              key={item.name}
-              {...item}
-              onQuantityChange={(newQuantity) => updateTicketQuantity(index, newQuantity)}
+              key={item.cartId}
+              id={String(item.cartId)}
+              name={item.ticketName}
+              price={item.price}
+              quantity={item.quantity}
             />
           ))}
         </ul>
@@ -82,17 +40,7 @@ export default function CartContainer({
   )
 }
 
-function CartTicketCard({
-  name,
-  price,
-  quantity,
-  onQuantityChange,
-}: {
-  name: string
-  price: number
-  quantity: number
-  onQuantityChange: (quantity: number) => void
-}) {
+function CartTicketCard({ id, name, price, quantity }: ICartTicketCard) {
   return (
     <li className='list-disc flex items-center justify-between'>
       <div className='flex flex-col gap-1'>
@@ -103,39 +51,56 @@ function CartTicketCard({
         </div>
       </div>
 
-      <TicketQuantityControl
-        count={quantity}
-        onIncrement={() => onQuantityChange(quantity + 1)}
-        onDecrement={() => onQuantityChange(quantity - 1)}
-      />
+      <TicketQuantityControl cartId={id} quantity={quantity} />
     </li>
   )
 }
 
-function TicketQuantityControl({
-  count,
-  onIncrement,
-  onDecrement,
-}: {
-  count: number
-  onIncrement: () => void
-  onDecrement: () => void
-}) {
+function TicketQuantityControl({ quantity, cartId }: { quantity: number; cartId: string }) {
+  const [ticketCount, setTicketCount] = useState<number>(quantity)
+
+  const updateQuantityMutation = useUpdateCartQuantity()
+
+  function updateCart(quantity: number) {
+    updateQuantityMutation.mutate(
+      { data: quantity, cartId: cartId },
+      {
+        onSuccess: () => {
+          setTicketCount(quantity)
+        },
+      },
+    )
+  }
+
   return (
     <div className='flex items-center gap-3.5'>
       <Button
         variant='ghost'
         className='hover:bg-white/10'
-        onClick={onDecrement}
-        disabled={count <= 0}>
+        onClick={() => updateCart(ticketCount - 1)}
+        disabled={ticketCount <= 0}>
         <Minus color='var(--foreground)' size={15} />
       </Button>
 
-      <span className='font-input-mono text-xl'>{count}</span>
+      <span className='font-input-mono text-xl'>{ticketCount}</span>
 
-      <Button variant='ghost' className='hover:bg-white/10' onClick={onIncrement}>
+      <Button
+        variant='ghost'
+        className='hover:bg-white/10'
+        onClick={() => updateCart(ticketCount + 1)}>
         <Plus color='var(--foreground)' size={15} />
       </Button>
     </div>
   )
+}
+
+interface CartContainerProps {
+  event: EventDetailData
+}
+
+interface ICartTicketCard {
+  id: string
+  name: string
+  price: number
+  quantity: number
 }

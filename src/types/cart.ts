@@ -1,7 +1,7 @@
 import type { UUID } from 'node:crypto'
 import type { ApiResponse } from './api'
 
-interface CartData {
+export interface CartData {
   cartId: number
   ticketId: number
   ticketName: string
@@ -23,16 +23,46 @@ export interface CreateCartRequest {
   quantity: number
 }
 
-export interface GetAllCartData {
+export interface CreateCartResponse {
   message: string
-  data: CartData[]
-  cursor: string
-  id: UUID
-  status: boolean
-  statusCode: number
+  data: {
+    id: number
+    quantity: number
+    ticketId: string
+    userId: string
+    createdDate: string
+    updatedDate: string
+    reservationExpiry: string // '2025-09-21T10:52:41.2841126'
+    ticket: {
+      ticketId: string
+      ticketName: string
+      accessType: string
+      salesType: string
+      ticketType: string
+      quantity: number
+      price: number
+      purchaseLimit: number
+      groupSize: number
+      validDays: number
+      description: string
+      metadata: string
+      eventId: string
+      createdDate: string
+      updatedDate: null | string
+      usedQuantity: number
+      event: null
+      eventTicketUpgradeFromTicketNavigations: []
+      eventTicketUpgradeToTicketNavigations: []
+      resellTickets: []
+      transferTickets: []
+      userCarts: []
+      userTickets: []
+    }
+    user: null
+  }
 }
 
-export type GetAllCartResponse = ApiResponse<GetAllCartData>
+export type GetAllCartResponse = ApiResponse<CartData[]>
 
 export interface GetCartData {
   message: string

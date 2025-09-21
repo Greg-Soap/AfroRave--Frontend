@@ -5,7 +5,8 @@ import { type LucideIcon, Plus, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useGetEventTickets } from '@/hooks/use-event-mutations'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useCreateCart, useGetAllCart } from '@/hooks/use-cart'
+import { useCreateCart, useUpdateCartQuantity } from '@/hooks/use-cart'
+import { useState } from 'react'
 
 export default function TicketSection({ eventId, layout }: ITicketProps) {
   const { data: ticketResponse, isPending: isLoading } = useGetEventTickets(eventId)
@@ -40,9 +41,7 @@ export default function TicketSection({ eventId, layout }: ITicketProps) {
                 name={item.ticketName}
                 price={item.price}
                 ticketId={item.ticketId}
-                quantity={0}
                 layout={layout}
-                onQuantityChange={(newQuantity) => console.log(newQuantity)}
               />
             ))}
           </div>
@@ -52,11 +51,35 @@ export default function TicketSection({ eventId, layout }: ITicketProps) {
   )
 }
 
-function TicketCard({ name, price, quantity, onQuantityChange, layout, ticketId }: ITicketCard) {
-  const createCartMutation = useCreateCart()
-  const carts = useGetAllCart().data?.data
+function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
+  const [ticketCount, setTicketCount] = useState<number>(0)
+  const [cartId, setCardId] = useState<string>('')
 
-  console.log(carts)
+  const createCartMutation = useCreateCart()
+  const updateQuantityMutation = useUpdateCartQuantity()
+
+  function createCart() {
+    createCartMutation.mutate(
+      { ticketId: ticketId, quantity: 1 },
+      {
+        onSuccess: (data) => {
+          setTicketCount((t) => t + 1)
+          setCardId(String(data.data.id))
+        },
+      },
+    )
+  }
+
+  function updateCart(quantity: number) {
+    updateQuantityMutation.mutate(
+      { data: quantity, cartId: cartId },
+      {
+        onSuccess: () => {
+          setTicketCount(quantity)
+        },
+      },
+    )
+  }
 
   return (
     <div
@@ -73,16 +96,16 @@ function TicketCard({ name, price, quantity, onQuantityChange, layout, ticketId 
       </div>
 
       <div className='flex items-center gap-2 px-3 rounded-full h-12 bg-light-green'>
-        {quantity > 0 && (
+        {ticketCount > 0 && (
           <>
-            <TicketButton action={() => onQuantityChange(quantity - 1)} Icon={Minus} />
+            <TicketButton action={() => updateCart(ticketCount - 1)} Icon={Minus} />
 
-            <span className='font-sf-pro-rounded font-bold text-sm'>{quantity}</span>
+            <span className='font-sf-pro-rounded font-bold text-sm'>{ticketCount}</span>
           </>
         )}
 
         <TicketButton
-          action={() => createCartMutation.mutate({ ticketId: ticketId, quantity: 1 })}
+          action={() => (ticketCount > 0 ? updateCart(ticketCount + 1) : createCart())}
           Icon={Plus}
         />
       </div>
@@ -125,8 +148,6 @@ interface ITicketButton {
 interface ITicketCard {
   name: string
   price: number
-  quantity: number
   ticketId: string
-  onQuantityChange: (quantity: number) => void
   layout: ITicketProps['layout']
 }

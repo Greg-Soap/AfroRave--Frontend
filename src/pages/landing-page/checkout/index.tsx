@@ -4,16 +4,14 @@ import { UserLoginForm } from '@/pages/auth/user-login/user-login-form'
 export default function CheckoutPage({
   event_name,
   event_location,
-  tickets,
 }: {
   event_name: string
   event_location: string
-  tickets: InitialTickets[] | undefined
 }) {
   return (
     <section className='w-full min-h-screen flex'>
       <div className='w-1/2 min-h-full flex items-center justify-end px-14 bg-gradient-to-b from-soft-gray via-cool-gray to-deep-gray backdrop-blur-[3px]'>
-        <CartSummary name={event_name} location={event_location} tickets={tickets} />
+        <CartSummary name={event_name} location={event_location} />
       </div>
 
       <div className='w-1/2 min-h-full z-30 flex flex-col py-14 px-8 bg-[#ECEBEB]'>
@@ -35,10 +33,4 @@ export default function CheckoutPage({
       </div>
     </section>
   )
-}
-
-interface InitialTickets {
-  name: string
-  price: number
-  quantity: number
 }

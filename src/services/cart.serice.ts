@@ -2,6 +2,7 @@ import type {
   CheckoutRequest,
   CheckoutResponse,
   CreateCartRequest,
+  CreateCartResponse,
   GetAllCartResponse,
   GetCartResponse,
   ValidatePromocodeRequest,
@@ -22,7 +23,7 @@ class CartServce {
   /**
    * Create cart
    */
-  async createCart(data: CreateCartRequest): Promise<ApiResponse<unknown>> {
+  async createCart(data: CreateCartRequest): Promise<CreateCartResponse> {
     const response = await api.post('/api/Cart', data)
     return response.data
   }
