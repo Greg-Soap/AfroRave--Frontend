@@ -2,25 +2,66 @@ import { Input } from '@/components/ui/input'
 import { Badge, X } from 'lucide-react'
 import { formatNaira } from '@/lib/format-price'
 import { useGetAllCart } from '@/hooks/use-cart'
-import type { CartData } from '@/types/cart'
+import { getCartTotals } from '@/lib/utils'
+import { useValidatePromocode, useCheckoutCart, useClearCart } from '@/hooks/use-cart'
+import { useState } from 'react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 export default function CartSummary({
   name,
   location,
+  isFanAccount = false,
 }: {
   name: string
   location: string
+  isFanAccount?: boolean
 }) {
+  const [message, setMessage] = useState<string | null>(null)
+  const [isValid, setIsValid] = useState<boolean | null>(null)
+
   const cart = useGetAllCart().data?.data
 
-  function getCartTotals(cartItems: CartData[] = []) {
-    return cartItems.reduce(
-      (acc, item) => {
-        acc.totalQuantity += item.quantity || 0
-        acc.totalPrice += (item.price || 0) * (item.quantity || 0)
-        return acc
+  const validatePromocodeMutation = useValidatePromocode()
+  const checkoutMutation = useCheckoutCart()
+  const clearCartMutation = useClearCart()
+
+  function handleValidatePromocode(promocode: string) {
+    validatePromocodeMutation.mutate(
+      {
+        data: {
+          promoCode: promocode,
+          eventIds: cart?.map((item) => item.eventId) || [],
+          subtotal: getCartTotals(cart).totalPrice,
+          totalTickets: getCartTotals(cart).totalQuantity,
+          ticketIds: cart?.map((item) => item.ticketId) || [],
+        },
       },
-      { totalQuantity: 0, totalPrice: 0 },
+      {
+        onSuccess: (data) => {
+          setMessage(data.data.data.message)
+          setIsValid(data.data.data.isValid)
+        },
+      },
+    )
+  }
+
+  function handleCheckout() {
+    checkoutMutation.mutate(
+      {
+        data: {
+          paymentMethod: '',
+          promoCode: '',
+          promoCodeId: '',
+          transactionReference: '',
+          paymentReference: '',
+        },
+      },
+      {
+        onSuccess: () => {
+          clearCartMutation.mutate()
+        },
+      },
     )
   }
 
@@ -43,12 +84,23 @@ export default function CartSummary({
           />
         ))}
 
-        <div className='max-w-[225px] w-full h-10 flex items-center gap-[5px] pl-2 rounded-[5px] border border-white'>
-          <Badge color='#ffffff' fill='#ffffff' stroke='#ffffff' size={13} />
-          <Input
-            placeholder='ENTER PROMO CODE'
-            className='border-none pl-none rounded-none uppercase text-xs font-input-mono text-white font-light placeholder:text-white'
-          />
+        <div className='flex flex-col gap-2'>
+          <div
+            className={cn(
+              'max-w-[225px] w-full h-10 flex items-center gap-[5px] pl-2 rounded-[5px] border border-white',
+              { 'border-[#FF9500]': !isValid, 'border-white': isValid },
+            )}>
+            <Badge color='#ffffff' fill='#ffffff' stroke='#ffffff' size={13} />
+            <Input
+              placeholder='ENTER PROMO CODE'
+              className='border-none pl-none rounded-none uppercase text-xs font-input-mono text-white font-light placeholder:text-white'
+              onChange={(e) => handleValidatePromocode(e.target.value)}
+            />
+          </div>
+
+          {!isValid && (
+            <p className='text-sm font-sf-pro-display leading-[100%] text-[#FF9500]'>{message}</p>
+          )}
         </div>
 
         <div className='w-full flex items-center justify-between'>
@@ -58,6 +110,14 @@ export default function CartSummary({
             {formatNaira(getCartTotals(cart).totalPrice)}
           </p>
         </div>
+
+        {isFanAccount && (
+          <Button
+            onClick={handleCheckout}
+            className='w-[140px] h-8 rounded-[6px] bg-deep-red uppercase text-sm font-sf-pro-display leading-[100%]'>
+            checkout
+          </Button>
+        )}
       </div>
     </div>
   )

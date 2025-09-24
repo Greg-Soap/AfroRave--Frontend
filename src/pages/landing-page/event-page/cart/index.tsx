@@ -10,7 +10,7 @@ import CheckoutPage from '../../checkout'
 import CartContainer from './cart-container'
 import { useGetAllCart } from '@/hooks/use-cart'
 import { LoaderCircle } from 'lucide-react'
-import type { CartData } from '@/types/cart'
+import { getCartTotals } from '@/lib/utils'
 
 interface CartProps {
   event: EventDetailData
@@ -21,17 +21,6 @@ export default function Cart({ event }: CartProps) {
   const [checkoutOpen, setCheckoutOpen] = useState(false)
 
   const { data, isLoading } = useGetAllCart()
-
-  function getCartTotals(cartItems: CartData[] = []) {
-    return cartItems.reduce(
-      (acc, item) => {
-        acc.totalQuantity += item.quantity || 0
-        acc.totalPrice += (item.price || 0) * (item.quantity || 0)
-        return acc
-      },
-      { totalQuantity: 0, totalPrice: 0 },
-    )
-  }
 
   return (
     <>

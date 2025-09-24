@@ -1,7 +1,7 @@
 import { BlockName } from '../../_components/block-name'
 import { cn } from '@/lib/utils'
 import { formatNaira } from '@/lib/format-price'
-import { type LucideIcon, Plus, Minus } from 'lucide-react'
+import { type LucideIcon, Plus, Minus, LoaderCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useGetEventTickets } from '@/hooks/use-event-mutations'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -98,7 +98,11 @@ function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
       <div className='flex items-center gap-2 px-3 rounded-full h-12 bg-light-green'>
         {ticketCount > 0 && (
           <>
-            <TicketButton action={() => updateCart(ticketCount - 1)} Icon={Minus} />
+            <TicketButton
+              action={() => updateCart(ticketCount - 1)}
+              Icon={Minus}
+              isLoading={updateQuantityMutation.isPending}
+            />
 
             <span className='font-sf-pro-rounded font-bold text-sm'>{ticketCount}</span>
           </>
@@ -107,16 +111,25 @@ function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
         <TicketButton
           action={() => (ticketCount > 0 ? updateCart(ticketCount + 1) : createCart())}
           Icon={Plus}
+          isLoading={createCartMutation.isPending || updateQuantityMutation.isPending}
         />
       </div>
     </div>
   )
 }
 
-function TicketButton({ action, Icon }: ITicketButton) {
+function TicketButton({ action, Icon, isLoading = false }: ITicketButton) {
   return (
-    <Button variant='ghost' className='p-1 w-fit h-fit hover:bg-black/10' onClick={action}>
-      <Icon color='var(--foreground)' size={16} />
+    <Button
+      disabled={isLoading}
+      variant='ghost'
+      className='p-1 w-fit h-fit hover:bg-black/10'
+      onClick={action}>
+      {isLoading ? (
+        <LoaderCircle color='var(--foreground)' size={16} className='animate-spin' />
+      ) : (
+        <Icon color='var(--foreground)' size={16} />
+      )}
     </Button>
   )
 }
@@ -143,6 +156,7 @@ interface ITicketProps {
 interface ITicketButton {
   action: () => void
   Icon: LucideIcon
+  isLoading?: boolean
 }
 
 interface ITicketCard {

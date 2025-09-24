@@ -3,7 +3,7 @@ import type { ApiResponse } from './api'
 
 export interface CartData {
   cartId: number
-  ticketId: number
+  ticketId: string
   ticketName: string
   price: number
   quantity: number
@@ -78,7 +78,7 @@ export type GetCartResponse = ApiResponse<GetCartData>
 export interface CheckoutRequest {
   paymentMethod: string
   promoCode?: string
-  promoCodeId?: UUID
+  promoCodeId?: string
   paymentReference: string
   transactionReference: string
 }
@@ -104,10 +104,10 @@ export type CheckoutResponse = ApiResponse<CheckoutData>
 
 export interface ValidatePromocodeRequest {
   promoCode: string
-  eventIds: UUID[]
+  eventIds: string[]
   subtotal: number
   totalTickets: number
-  ticketIds: UUID[]
+  ticketIds: string[]
 }
 
 export interface ValidatePromocodeData {

@@ -1,6 +1,8 @@
-export function LoadingFallback() {
+import { cn } from '@/lib/utils'
+
+export function LoadingFallback({ className = 'min-h-screen' }: { className?: string }) {
   return (
-    <div className='flex flex-col items-center justify-center gap-4 min-h-screen'>
+    <div className={cn('flex flex-col items-center justify-center gap-4', className)}>
       <div className='relative size-12'>
         <div className='absolute inset-0 rounded-full border-4 border-secondary/20' />
         <div className='absolute inset-0 rounded-full border-4 border-secondary border-t-transparent animate-spin' />

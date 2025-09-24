@@ -40,6 +40,14 @@ export interface UserTicketData {
   eventEndDate: string
   ticketName: string
   price: number
+  quantity: number
+  theme: {
+    themeName: string
+  }
+  desktopMedia: {
+    flyer: string
+    background: string
+  }
 }
 
 export type UserTicketsResponse = ApiResponse<UserTicketData[]>
