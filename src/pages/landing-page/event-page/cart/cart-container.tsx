@@ -4,7 +4,7 @@ import { formatNaira } from '@/lib/format-price'
 import { useState } from 'react'
 import type { EventDetailData } from '@/types'
 import { RenderEventImage } from '@/components/shared/render-event-flyer'
-import { useUpdateCartQuantity, useGetAllCart } from '@/hooks/use-cart'
+import { useUpdateCartQuantity, useGetAllCart, useExtendReservation } from '@/hooks/use-cart'
 
 export default function CartContainer({ event }: CartContainerProps) {
   const cart = useGetAllCart().data?.data
@@ -60,6 +60,7 @@ function TicketQuantityControl({ quantity, cartId }: { quantity: number; cartId:
   const [ticketCount, setTicketCount] = useState<number>(quantity)
 
   const updateQuantityMutation = useUpdateCartQuantity()
+  const extendReservationMutation = useExtendReservation()
 
   function updateCart(quantity: number) {
     updateQuantityMutation.mutate(
@@ -67,6 +68,7 @@ function TicketQuantityControl({ quantity, cartId }: { quantity: number; cartId:
       {
         onSuccess: () => {
           setTicketCount(quantity)
+          extendReservationMutation.mutate({ cartId: cartId })
         },
       },
     )

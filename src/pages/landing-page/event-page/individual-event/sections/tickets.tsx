@@ -5,7 +5,7 @@ import { type LucideIcon, Plus, Minus, LoaderCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useGetEventTickets } from '@/hooks/use-event-mutations'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useCreateCart, useUpdateCartQuantity } from '@/hooks/use-cart'
+import { useCreateCart, useUpdateCartQuantity, useExtendReservation } from '@/hooks/use-cart'
 import { useState } from 'react'
 
 export default function TicketSection({ eventId, layout }: ITicketProps) {
@@ -57,6 +57,7 @@ function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
 
   const createCartMutation = useCreateCart()
   const updateQuantityMutation = useUpdateCartQuantity()
+  const extendReservationMutation = useExtendReservation()
 
   function createCart() {
     createCartMutation.mutate(
@@ -76,6 +77,7 @@ function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
       {
         onSuccess: () => {
           setTicketCount(quantity)
+          extendReservationMutation.mutate({ cartId: cartId })
         },
       },
     )
