@@ -1,6 +1,6 @@
 export default function CTASection() {
   return (
-    <div className=' w-full flex flex-col items-center gap-[63px] max-md:mb-[154px]'>
+    <div className=' w-full flex flex-col items-center gap-[63px] max-md:mb-[154px] lg:py-[100px] py-[50px] px-[20px] lg:px-[120px]'>
       <div className='max-w-[700px] flex flex-col items-center gap-3'>
         <div className='w-fit flex flex-col items-center text-center gap-2 font-sf-pro text-white uppercase'>
           <p className='w-fit text-[32px] font-black'>seamless management</p>

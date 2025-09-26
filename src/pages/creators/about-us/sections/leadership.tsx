@@ -2,7 +2,7 @@ import { TextSectionContainer } from "../../_components/text-section-ctn";
 
 export default function LeadershipSection() {
   return (
-    <section className="container max-w-[1000px] w-full flex flex-col gap-14 items-center">
+    <section className="w-full flex flex-col gap-14 items-center pb-[120px]">
       <TextSectionContainer name="NEXT GEN LEADERSHIP">
         <p>
           our leadership reflects a new generation shaping the future of events,
@@ -49,11 +49,7 @@ const team: ITeam[] = [
     name: "peter osian",
     position: "head developer",
   },
-  {
-    shorthand: "OB",
-    name: "obi nonso",
-    position: "asst. UI/UX designer",
-  },
+  
 ];
 
 interface ITeam {

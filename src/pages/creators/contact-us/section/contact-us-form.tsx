@@ -25,6 +25,8 @@ export default function ContactUsForm() {
   }
 
   return (
+    <div className="w-full flex flex-col items-center">
+
     <FormBase
       form={form}
       onSubmit={onSubmit}
@@ -62,6 +64,7 @@ export default function ContactUsForm() {
         Submit
       </Button>
     </FormBase>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@ import { TextSectionContainer } from "../../_components/text-section-ctn";
 
 export default function StatementsSection() {
   return (
-    <section className="container w-full flex flex-col items-center gap-[240px] py-[227px] pb-[120px]">
+    <section className=" w-full flex flex-col items-center gap-[240px] py-[227px] pb-[120px]">
       <TextSectionContainer name="our story">
         <p>
           Afro Revive was founded to make the event experience simpler, more

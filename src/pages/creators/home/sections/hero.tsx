@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import NewsletterSignup from '@/components/newsletter-signup'
 import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 
@@ -31,10 +32,7 @@ export default function HeroSection({
           </Button>
         </OnlyShowIf>
         <OnlyShowIf condition={wishlistButton}>
-          <Button className='flex items-center gap-2 !py-[18px] h-[56px] w-full md:w-[552px]  text-base font-semibold uppercase'>
-            The Journey just began{' '}
-            <img src='/assets/resell/lighting.svg' className='w-4 h-5' alt='arrow' />
-          </Button>
+          <NewsletterSignup />
         </OnlyShowIf>
       </div>
     </section>
