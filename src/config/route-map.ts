@@ -10,23 +10,23 @@
  * ```
  */
 export const ROUTE_PATHS = {
-  // Landing page routes
-  home: '/',
-  events: '/events',
-  individual_event: '/events/:eventId',
-  resell: '/resell',
-  about_us: '/about-us',
-  blog: '/blog',
-  creators: '/creators',
-  faq: '/support/faq',
-  refund_policy: '/refund-policy',
-  work_with_us: '/work-with-us',
-  support: '/support',
-  resale: '/resale',
-  individual_resale: '/resale/:eventId',
-  sell: '/sell',
-  terms_and_conditions: '/terms-and-conditions',
-  privacy_policy: '/privacy-policy',
+  // fans Landing page routes
+  home: '/fans',
+  events: '/fans/events',
+  individual_event: '/fans/events/:eventId',
+  resell: '/fans/resell',
+  about_us: '/fans/about-us',
+  blog: '/fans/blog',
+  creators: '/fans/creators',
+  faq: '/fans/support/faq',
+  refund_policy: '/fans/refund-policy',
+  work_with_us: '/fans/work-with-us',
+  support: '/fans/support',
+  resale: '/fans/resale',
+  individual_resale: '/fans/resale/:eventId',
+  sell: '/fans/sell',
+  terms_and_conditions: '/fans/terms-and-conditions',
+  privacy_policy: '/fans/privacy-policy',
   not_found: '*',
 
   // User dashboard routes
@@ -36,11 +36,11 @@ export const ROUTE_PATHS = {
   listed_tickets: '/fans/listed-tickets',
 
   // Creator dashboard routes
-  creators_home: '/creators/home',
-  creators_about: '/creators/about-us',
-  creators_contact: '/creators/contact-us',
-  creators_blog: '/creators/blog',
-  creators_wishlist: '/creators/wishlist',
+  creators_home: '/home',
+  creators_about: '/about-us',
+  creators_contact: '/contact-us',
+  creators_blog: '/blog',
+  creators_wishlist: '/',
   standalone: '/creators/standalone',
   season: '/creators/season',
   reports: '/creators/reports',
