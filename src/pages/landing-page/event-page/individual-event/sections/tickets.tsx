@@ -5,11 +5,18 @@ import { type LucideIcon, Plus, Minus, LoaderCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useGetEventTickets } from '@/hooks/use-event-mutations'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useCreateCart, useUpdateCartQuantity, useExtendReservation } from '@/hooks/use-cart'
-import { useState } from 'react'
+import {
+  useCreateCart,
+  useUpdateCartQuantity,
+  useExtendReservation,
+  useGetAllCart,
+} from '@/hooks/use-cart'
+import { useEffect, useState } from 'react'
 
 export default function TicketSection({ eventId, layout }: ITicketProps) {
   const { data: ticketResponse, isPending: isLoading } = useGetEventTickets(eventId)
+
+  const rawCarts = useGetAllCart().data?.data || []
 
   const tickets = ticketResponse?.data
 
@@ -35,15 +42,24 @@ export default function TicketSection({ eventId, layout }: ITicketProps) {
                 layout === 'with-flyer' || layout === 'standard-carousel',
               'grid sm:grid-cols-2 gap-x-5 gap-y-7': layout === 'default',
             })}>
-            {tickets?.map((item) => (
-              <TicketCard
-                key={item.ticketName}
-                name={item.ticketName}
-                price={item.price}
-                ticketId={item.ticketId}
-                layout={layout}
-              />
-            ))}
+            {tickets?.map((item) => {
+              const cartTicket = rawCarts.find((cart) => cart.ticketId === item.ticketId)
+
+              const quantity = cartTicket?.quantity || 0
+              const cartId = cartTicket?.cartId || ''
+
+              return (
+                <TicketCard
+                  key={item.ticketName}
+                  name={item.ticketName}
+                  price={item.price}
+                  ticketId={item.ticketId}
+                  layout={layout}
+                  quantity={quantity}
+                  initialCartId={String(cartId)}
+                />
+              )
+            })}
           </div>
         </>
       )}
@@ -51,9 +67,13 @@ export default function TicketSection({ eventId, layout }: ITicketProps) {
   )
 }
 
-function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
-  const [ticketCount, setTicketCount] = useState<number>(0)
-  const [cartId, setCardId] = useState<string>('')
+function TicketCard({ name, price, layout, ticketId, quantity, initialCartId }: ITicketCard) {
+  const [ticketCount, setTicketCount] = useState<number>(quantity)
+  const [cartId, setCardId] = useState<string>(initialCartId)
+
+  useEffect(() => {
+    setTicketCount(quantity)
+  }, [quantity])
 
   const createCartMutation = useCreateCart()
   const updateQuantityMutation = useUpdateCartQuantity()
@@ -86,7 +106,7 @@ function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
   return (
     <div
       className={cn(
-        'flex items-center justify-between h-[76px] rounded-[8px] bg-gunmetal-gray pl-5 pr-2 py-2.5 text-xl font-sf-pro-display',
+        'flex items-center justify-between rounded-[8px] bg-gunmetal-gray pl-5 pr-2 py-2.5 text-xl font-sf-pro-display',
         {
           'min-w-[480px] last:mr-5': layout === 'with-flyer' || layout === 'standard-carousel',
           'w-full': layout === 'default',
@@ -95,6 +115,9 @@ function TicketCard({ name, price, layout, ticketId }: ITicketCard) {
       <div className='flex flex-col gap-1 font-sf-pro-display text-base font-normal'>
         <p>{name}</p>
         <p>{formatNaira(price)}</p>
+        <p className='text-[10px] font-sf-pro-display leading-[100%] text-[#ACACAC]'>
+          (includes fees)
+        </p>
       </div>
 
       <div className='flex items-center gap-2 px-3 rounded-full h-12 bg-light-green'>
@@ -166,4 +189,6 @@ interface ITicketCard {
   price: number
   ticketId: string
   layout: ITicketProps['layout']
+  quantity: number
+  initialCartId: string
 }

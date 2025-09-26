@@ -111,36 +111,29 @@ export interface ValidatePromocodeRequest {
 }
 
 export interface ValidatePromocodeData {
+  isValid: boolean
   message: string
-  data: {
-    isValid: boolean
-    message: string
-    discountAmount: number
-    discountType: string
-    discountValue: number
-    promoCodeId: UUID
-    promoCodeDetails: {
-      tickets: [
-        {
-          id: UUID
-        },
-      ]
-      isMinimumSpend: boolean
-      minimumSpend: number
-      isMinimumTicket: boolean
-      minimumTicket: number
-      note: string
-      isPrivate: boolean
-      isPartnership: boolean
-      partnerName: string
-      commisionType: string
-      commission: number
-    }
+  discountAmount: number
+  discountType: string
+  discountValue: number
+  promoCodeId: UUID
+  promoCodeDetails: {
+    tickets: [
+      {
+        id: UUID
+      },
+    ]
+    isMinimumSpend: boolean
+    minimumSpend: number
+    isMinimumTicket: boolean
+    minimumTicket: number
+    note: string
+    isPrivate: boolean
+    isPartnership: boolean
+    partnerName: string
+    commisionType: string
+    commission: number
   }
-  cursor: string
-  id: UUID
-  status: boolean
-  statusCode: number
 }
 
 export type ValidatePromocodeResponse = ApiResponse<ValidatePromocodeData>

@@ -83,7 +83,11 @@ function StandAloneEvents({ id }: { id: string }) {
       image={event.eventDetails.desktopMedia?.flyer}
       name={event.eventName}
       startDate={event.eventDate.startDate}
-      status={event.isPublished ? undefined : 'drafts'}
+      status={
+        event.isPublished
+          ? hasEventEnded(event.eventDate.endDate, event.eventDate.endTime)
+          : 'drafts'
+      }
       cardInfo={[
         <StatParagraph
           key='sold_tickets'
@@ -176,6 +180,13 @@ function copyToClipboard(text: string) {
     document.execCommand('copy')
     document.body.removeChild(textarea)
   }
+}
+
+function hasEventEnded(endDate: string, endTime: string) {
+  const now = new Date()
+  const end = new Date(`${endDate}T${endTime}:00`)
+
+  return now >= end ? 'ended' : undefined
 }
 
 const event_buttons: { src: string; alt: string }[] = [

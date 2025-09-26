@@ -22,9 +22,12 @@ export default function Cart({ event }: CartProps) {
 
   const { data, isLoading } = useGetAllCart()
 
+  const disabled = isLoading || (data?.data.length ?? 0) === 0
+
   return (
     <>
       <Button
+        disabled={disabled}
         className='w-full h-14 flex items-center justify-between bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80'
         onClick={() => setIsOpen(true)}>
         <span className='text-sm'>Checkout</span>
@@ -47,6 +50,7 @@ export default function Cart({ event }: CartProps) {
         footerContent={
           <FooterContent
             totalPrice={getCartTotals(data?.data).totalPrice}
+            disabled={disabled}
             action={() => {
               setIsOpen(false)
               setCheckoutOpen(true)
@@ -84,15 +88,20 @@ export default function Cart({ event }: CartProps) {
 function FooterContent({
   totalPrice,
   action,
+  disabled = false,
 }: {
   totalPrice: number
   action: () => void
+  disabled?: boolean
 }) {
   return (
     <footer className='w-[595px] flex flex-col items-center gap-2 pl-[81px] pr-[51px] py-[30px] rounded-t-[20px] self-end ml-auto right-[73px] bg-secondary'>
       <div className='w-full flex items-center justify-between font-sf-pro-display'>
         <span className='font-light text-2xl'>{formatNaira(totalPrice)}</span>
-        <Button onClick={action} className='bg-white text-black hover:bg-white/90'>
+        <Button
+          disabled={disabled}
+          onClick={action}
+          className='bg-white text-black hover:bg-white/90'>
           Continue
         </Button>
       </div>

@@ -78,7 +78,7 @@ export default function PublishTab({
         <RenderEventImage
           image={event?.eventDetails.desktopMedia?.flyer}
           event_name={event?.eventName || ''}
-          className='rounded-[5px] w-[180px] min-h-[200px] max-h-[234px]'
+          className='rounded-[5px] w-[180px] min-h-[200px] max-h-[234px] !bg-black/50'
         />
       </div>
 

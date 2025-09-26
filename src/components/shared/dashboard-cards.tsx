@@ -25,9 +25,12 @@ export function DashboardCards({
         <RenderEventImage
           event_name={name}
           image={image}
-          className={cn('w-full h-full group-hover:scale-105 transition-all duration-300', {
-            'grayscale-100': status === 'ended',
-          })}
+          className={cn(
+            'w-full h-full group-hover:scale-105 transition-all duration-300 bg-black/50',
+            {
+              'grayscale-100': status === 'ended',
+            },
+          )}
         />
 
         <img

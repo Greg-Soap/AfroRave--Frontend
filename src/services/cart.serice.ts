@@ -72,7 +72,7 @@ class CartServce {
    * Validate promo-code
    */
   async validatePromoCode(data: ValidatePromocodeRequest): Promise<ValidatePromocodeResponse> {
-    const response = await api.post('api/Cart/validate-promocode', data)
+    const response = await api.post('/api/Cart/validate-promocode', data)
     return response.data
   }
 

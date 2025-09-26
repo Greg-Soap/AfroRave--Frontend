@@ -39,8 +39,12 @@ export default function CartSummary({
       },
       {
         onSuccess: (data) => {
-          setMessage(data.data.data.message)
-          setIsValid(data.data.data.isValid)
+          setMessage(data.data.message)
+          setIsValid(data.data.isValid)
+        },
+        onError: (error: any) => {
+          setMessage(error.response?.data?.message || 'Something went wrong')
+          setIsValid(false)
         },
       },
     )
@@ -98,7 +102,7 @@ export default function CartSummary({
             />
           </div>
 
-          {!isValid && (
+          {message && (
             <p className='text-sm font-sf-pro-display leading-[100%] text-[#FF9500]'>{message}</p>
           )}
         </div>
@@ -114,7 +118,7 @@ export default function CartSummary({
         {isFanAccount && (
           <Button
             onClick={handleCheckout}
-            className='w-[140px] h-8 rounded-[6px] bg-deep-red uppercase text-sm font-sf-pro-display leading-[100%]'>
+            className='w-[140px] h-8 rounded-[6px] bg-deep-red uppercase text-sm font-sf-pro-display leading-[100%] self-center'>
             checkout
           </Button>
         )}
@@ -128,7 +132,7 @@ function CartTicket({ name, price, quantity }: InitialTickets) {
     <div className='w-full flex items-center justify-between'>
       <div className='flex flex-col gap-1 text-white'>
         <p className='font-sf-pro-display uppercase leading-[100%]'>{name}</p>
-        <div className='flex flex-col gap-0.5'>
+        <div className='flex flex-col gap-1'>
           <p className='text-sm font-sf-pro-text leading-[100%]'>{formatNaira(price)}</p>
           <p className='text-xs font-sf-pro-display leading-[100%] text-[#ACACAC]'>
             +{formatNaira(1500)} fee

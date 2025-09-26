@@ -83,7 +83,7 @@ export function BaseCarousel({
       {showIndicators && (
         <div
           className={cn(
-            'absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 z-[99999]',
+            'absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 z-10',
             indicatorsPosition,
           )}>
           {items.map((item, index) => (

@@ -48,9 +48,9 @@ export function useUpdateCartQuantity() {
   return useMutation({
     mutationFn: ({ cartId, data }: { data: number; cartId: string }) =>
       cartService.updateQuantity(cartId, data),
-    onSuccess: (_, { cartId }) => {
+    onSuccess: () => {
       toast.success('Quantity updated successfully.')
-      queryClient.invalidateQueries({ queryKey: cartKeys.detail(cartId) })
+      queryClient.invalidateQueries({ queryKey: cartKeys.lists() })
     },
     onError: () => toast.error('Failed to update quantity'),
   })
@@ -95,10 +95,9 @@ export function useExtendReservation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ cartId }: { cartId: string }) => cartService.extendReservation(cartId),
-    mutationKey: cartKeys.extendReservation('dynamic-id'), // replaced at runtime
-    onSuccess: (_, cartId) => {
+    onSuccess: () => {
       toast.success('Reservation extended successfully.')
-      queryClient.invalidateQueries({ queryKey: cartKeys.detail(cartId.cartId) })
+      queryClient.invalidateQueries({ queryKey: cartKeys.lists() })
     },
     onError: () => toast.error('Failed to extend reservation.'),
   })
