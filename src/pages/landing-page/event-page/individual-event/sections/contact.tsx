@@ -33,10 +33,22 @@ export default function ContactSection({ event }: { event: EventDetailData }) {
 
 function SocialMediaLinks({ socials }: { socials: ISocials }) {
   const platforms: SocialPlatform[] = [
-    { name: 'yt', link: socials.facebook, alt: 'Facebook' },
-    { name: 'insta', link: socials.instagram, alt: 'Instagram' },
-    { name: 'tiktok', link: socials.tiktok, alt: 'TikTok' },
-    { name: 'X', link: socials.x, alt: 'X' },
+    {
+      name: 'fb',
+      link: `https://web.facebook.com/${socials.facebook}`,
+      alt: 'Facebook',
+    },
+    {
+      name: 'insta',
+      link: `https://www.instagram.com/${socials.instagram}/?hl=en`,
+      alt: 'Instagram',
+    },
+    {
+      name: 'tiktok',
+      link: `https://www.tiktok.com/${socials.tiktok}?lang=en`,
+      alt: 'TikTok',
+    },
+    { name: 'X', link: `https://x.com/${socials.x}`, alt: 'X' },
   ].filter((platform) => platform.link) as SocialPlatform[]
 
   return (

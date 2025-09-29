@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { Socials } from '@/layouts/components/socials'
 import type { ReactNode } from 'react'
 
 interface VideoBackgroundWrapperProps {
@@ -40,6 +41,10 @@ export function VideoBackgroundWrapper({
 
       {/* Content */}
       <div className='relative z-20 w-full h-full'>{children}</div>
+
+      <footer className='relative w-full flex flex-col items-center gap-7 pt-[50px] pb-16 bg-transparent font-input-mono z-20'>
+        <Socials className='justify-end px-[1rem] md:px-[2rem]' />
+      </footer>
     </div>
   )
 }

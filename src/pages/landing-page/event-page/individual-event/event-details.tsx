@@ -3,7 +3,7 @@ import EventDescription from './sections/event-description'
 import EventDetailsSection from './sections/event-details'
 import TicketSection from './sections/tickets'
 import ContactSection from './sections/contact'
-import TermsSection from './sections/terms'
+// import TermsSection from './sections/terms'
 import CartTrigger from './_components/cart-trigger'
 import { SectionContainer } from './_components/section-container'
 import type { EventDetailData } from '@/types'
@@ -25,9 +25,7 @@ export default function EventDetails({ event, layout = 'default' }: IEventDetail
           />
         )}
 
-        {event.eventDetails.desktopMedia?.background !== '' && (
-          <div className='absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/10 to-transparent backdrop-blur-xs' />
-        )}
+        <div className='absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/10 to-transparent backdrop-blur-xs' />
       </div>
 
       <div className='max-w-[1536px] w-full flex flex-col gap-[60px] md:gap-[120px] -mt-[200px] xl:-mt-[475px] z-10'>
@@ -62,7 +60,7 @@ export default function EventDetails({ event, layout = 'default' }: IEventDetail
         {/**Contact */}
         <ContactSection event={event} />
 
-        <TermsSection />
+        {/* <TermsSection /> */}
 
         <CartTrigger event={event} className='md:hidden bg-[#686868] rounded-t-[8px] px-4 py-6' />
       </div>

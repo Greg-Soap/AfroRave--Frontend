@@ -25,7 +25,7 @@ export default function CTASection() {
         </div>
       </div>
 
-      <div className='w-full flex flex-col md:flex-row gap-y-10 items-center justify-between'>
+      <div className='w-full flex flex-col md:flex-row gap-10 max-md:items-center justify-between'>
         {[
           {
             heading: 'scan tickets, manage guests, and stay connected!',

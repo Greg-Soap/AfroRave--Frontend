@@ -11,10 +11,10 @@ export default function Header() {
   const { user, isAuthenticated, isCreator } = useAfroStore()
 
   return (
-    <header className='w-full fixed top-0 flex justify-center z-50 h-20 bg-transparent z-20'>
+    <header className='w-full fixed top-0 flex justify-center z-50 h-20 bg-transparent'>
       <div
         className={`absolute inset-0 transition-all duration-300 ${
-          hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
+          hasScrolled ? 'h-[120px] lg:h-full bg-black/25 backdrop-blur-sm' : 'h-0'
         }`}
       />
 
@@ -56,8 +56,8 @@ function NavigationLinks({
   return (
     <div
       className={cn('items-center', {
-        'hidden md:flex gap-16': type === 'desktop',
-        'w-full flex justify-between md:hidden': type === 'mobile',
+        'hidden lg:flex gap-16': type === 'desktop',
+        'w-full flex justify-between lg:hidden': type === 'mobile',
       })}>
       {links.map((item) => (
         <NavLink
