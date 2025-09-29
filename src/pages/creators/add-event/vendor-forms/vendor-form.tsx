@@ -400,7 +400,7 @@ booth size...'
         </div>
       </div>
 
-      <ContinueButton isLoading={createVendorMutation.isPending}>
+      <ContinueButton isLoading={createVendorMutation.isPending} updatingText='Creating vendor...'>
         <SkipBtn action={handleFormChange} />
       </ContinueButton>
     </TabContainer>

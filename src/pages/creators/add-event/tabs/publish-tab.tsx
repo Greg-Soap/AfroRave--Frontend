@@ -11,6 +11,7 @@ import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ContinueButton } from '../component/continue-button'
 import { RenderEventImage } from '@/components/shared/render-event-flyer'
+import { LoadingFallback } from '@/components/loading-fallback'
 
 export default function PublishTab({
   setStep,
@@ -21,13 +22,20 @@ export default function PublishTab({
 
   const { eventId } = useEventStore()
 
-  const vendors = useGetEventVendors(eventId || '').data?.data
-  const event = useGetEvent(eventId || '').data?.data
-  const tickets = useGetEventTickets(eventId || '').data?.data
-  const promoCodes = useGetEventPromoCodes(eventId || '').data?.data
+  const { data: vendors, isLoading: isLoadingVendors } = useGetEventVendors(eventId || '')
+  const { data: eventData, isLoading: isLoadingEvent } = useGetEvent(eventId || '')
+  const { data: ticket, isLoading: isLoadingTicket } = useGetEventTickets(eventId || '')
+  const { data: promocode, isLoading: isLoadingPromocode } = useGetEventPromoCodes(eventId || '')
+
+  const event = eventData?.data
+  const tickets = ticket?.data
+  const promoCodes = promocode?.data
 
   const publishEventMutation = usePublishEvent()
+
   const navigate = useNavigate()
+
+  const isLoading = isLoadingVendors || isLoadingEvent || isLoadingTicket || isLoadingPromocode
 
   const vendorNames = useMemo(() => {
     if (!vendors || !Array.isArray(vendors)) return []
@@ -51,6 +59,10 @@ export default function PublishTab({
         navigate(getRoutePath('standalone'))
       },
     })
+  }
+
+  if (isLoading) {
+    return <LoadingFallback />
   }
 
   return (
@@ -84,7 +96,7 @@ export default function PublishTab({
 
       <SectionContainer
         name='Vendor Listings'
-        quantity={vendors?.length || 0}
+        quantity={vendors?.data.length || 0}
         href={`${getRoutePath('add_event')}/?tab=vendor`}
         data={vendorNames.map((name) => ({ tool: name, enabled: false }))}
       />
