@@ -18,10 +18,10 @@ export default function CheckoutPage({
     <section className='w-full min-h-screen flex'>
       <div
         className={cn(
-          'min-h-full flex items-center justify-end px-14 bg-gradient-to-b from-soft-gray via-cool-gray to-deep-gray backdrop-blur-[3px]',
+          'min-h-full flex items-center px-14 bg-gradient-to-b from-soft-gray via-cool-gray to-deep-gray backdrop-blur-[3px]',
           {
-            'w-full': isFanAccount,
-            'w-1/2': !isFanAccount,
+            'w-full justify-center': isFanAccount,
+            'w-1/2 justify-end': !isFanAccount,
           },
         )}>
         <CartSummary name={event_name} location={event_location} isFanAccount={isFanAccount} />
