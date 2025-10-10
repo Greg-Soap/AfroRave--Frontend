@@ -5,12 +5,7 @@ export default function RolesSection() {
   return (
     <section className=' w-full lg:px-[120px] px-[20px] flex flex-col gap-[100px]'>
       <div className='flex flex-col md:flex-row items-center gap-[120px]'>
-        <RoleDescription {...roles[0]} />
-        <PrototypesContainer />
-      </div>
-
-      <div className='flex flex-col-reverse md:flex-row items-center gap-[120px]'>
-        <PrototypesContainer />
+        <RoleDescription {...roles[0]} className='md:items-center md:text-center' />
         <RoleDescription {...roles[1]} className='md:items-center md:text-center' />
       </div>
     </section>
@@ -28,16 +23,6 @@ function RoleDescription({ role, description, className }: IRoles & { className?
       <Button className='max-w-[120px] h-10 rounded-[20px] font-sf-pro-text text-sm font-semibold px-[17px] py-[11px] uppercase'>
         Learn More
       </Button>
-    </div>
-  )
-}
-
-function PrototypesContainer() {
-  return (
-    <div className='w-full h-[400px] flex items-center justify-center bg-[#a2a2a2]'>
-      <p className='uppercase text-white text-xl font-semibold font-sf-pro-text'>
-        prototypes will be here!
-      </p>
     </div>
   )
 }
