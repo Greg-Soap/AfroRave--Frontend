@@ -1,16 +1,16 @@
+import { LoadingFallback } from '@/components/loading-fallback'
+import { BasePopover } from '@/components/reusable'
+import { DashboardCardSkeleton, DashboardCards } from '@/components/shared/dashboard-cards'
+import VendorSelect from '@/components/shared/vendor-select'
 import { Button } from '@/components/ui/button'
+import { getRoutePath } from '@/config/get-route-path'
+import { useDeleteEvent, useGetEvent, useGetOrganizerEvents } from '@/hooks/use-event-mutations'
+import { formatNaira } from '@/lib/format-price'
+import type { EventDetailData } from '@/types'
 import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { formatNaira } from '@/lib/format-price'
 import { AddFilterBUtton } from './components/add-filter-btn'
-import { getRoutePath } from '@/config/get-route-path'
 import StandAloneModal from './components/standalone-modal'
-import VendorSelect from '@/components/shared/vendor-select'
-import { BasePopover } from '@/components/reusable'
-import { DashboardCards, DashboardCardSkeleton } from '@/components/shared/dashboard-cards'
-import { useGetOrganizerEvents, useGetEvent } from '@/hooks/use-event-mutations'
-import { LoadingFallback } from '@/components/loading-fallback'
-import type { EventDetailData } from '@/types'
 // import { useDeleteEvent } from '@/hooks/use-event-mutations'
 
 export default function StandalonePage() {
@@ -123,7 +123,7 @@ function StandAloneEvents({ id }: { id: string }) {
 function PopoverContent({ event }: { event: EventDetailData }) {
   const eventLink = getRoutePath('individual_event', { eventId: event.eventId })
 
-  // const deleteEventMutation = useDeleteEvent()
+  const deleteEventMutation = useDeleteEvent()
 
   return (
     <div className='w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text'>
@@ -143,10 +143,15 @@ function PopoverContent({ event }: { event: EventDetailData }) {
 
       <Button
         onClick={() => copyToClipboard(eventLink)}
-        // onClick={() => deleteEventMutation.mutate(event.eventId)}
         variant='ghost'
         className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-1 justify-start hover:bg-black/80 hover:text-white'>
         Copy Link
+      </Button>
+      <Button
+        onClick={() => deleteEventMutation.mutate(event.eventId)}
+        variant='ghost'
+        className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-1 justify-start hover:bg-black/80 hover:text-white'>
+        Delete Event
       </Button>
     </div>
   )

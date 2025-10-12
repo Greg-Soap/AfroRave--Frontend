@@ -38,6 +38,7 @@
     "iconsax-react": "^0.0.8",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.509.0",
+    "motion": "^12.23.24",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18.3.1",

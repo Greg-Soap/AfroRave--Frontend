@@ -1,12 +1,12 @@
+import { BaseAnimatedTab } from '@/components/reusable/base-animated-tab'
 import { Button } from '@/components/ui/button'
-import { BaseTab } from '@/components/reusable/base-tab'
-import { ChevronLeft } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import ActiveTicketsTab from './my-tickets-tabs/active-tab'
-import PastTicketsTab from './my-tickets-tabs/past-tab'
 import { useUserActiveTickets, useUserPastTickets } from '@/hooks/use-profile-mutations'
 import type { UserTicketData } from '@/types'
+import { ChevronLeft } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import ActiveTicketsTab from './my-tickets-tabs/active-tab'
+import PastTicketsTab from './my-tickets-tabs/past-tab'
 
 export default function MyTicketsPage() {
   const [activeTab, setActiveTab] = useState<string>('active')
@@ -53,7 +53,7 @@ export default function MyTicketsPage() {
         <ChevronLeft color='#ffffff' className='w-[14px] h-[30px]' />
       </Button>
 
-      <BaseTab
+      <BaseAnimatedTab
         activeTab={activeTab}
         setActiveTab={setActiveTabState}
         tabs={my_tickets_tabs}
