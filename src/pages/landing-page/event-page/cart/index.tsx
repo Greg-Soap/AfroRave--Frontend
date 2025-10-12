@@ -1,16 +1,16 @@
 import BaseModal from '@/components/reusable/base-modal'
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@/components/ui/dialog'
+import { useGetAllCart } from '@/hooks/use-cart'
 import { NavLogo } from '@/layouts/root-layout/header/nav-logo'
 import { formatNaira } from '@/lib/format-price'
+import { getCartTotals } from '@/lib/utils'
 import type { EventDetailData } from '@/types'
 import { X } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 import CheckoutPage from '../../checkout'
 import CartContainer from './cart-container'
-import { useGetAllCart } from '@/hooks/use-cart'
-import { LoaderCircle } from 'lucide-react'
-import { getCartTotals } from '@/lib/utils'
 
 interface CartProps {
   event: EventDetailData
@@ -25,7 +25,7 @@ export default function Cart({ event }: CartProps) {
   return (
     <>
       <Button
-        className='w-full h-14 flex items-center justify-between bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80'
+        className=' w-full h-14 flex items-center justify-between bg-deep-red px-3 rounded-[8px] gap-[50px] md:gap-[107px] font-sf-pro-display hover:bg-deep-red/80'
         onClick={() => setIsOpen(true)}>
         <span className='text-sm'>Checkout</span>
         <span className='text-2xl'>

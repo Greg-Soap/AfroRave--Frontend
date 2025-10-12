@@ -1,12 +1,14 @@
 import BaseModal from '@/components/reusable/base-modal'
 import { useAuth } from '@/contexts/auth-context'
+import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 import { BusinessSignUp } from '@/pages/auth/sign-up/business-signup-form'
 import { SignupForm } from '@/pages/auth/sign-up/signup-form'
-import { UserLoginForm } from '@/pages/auth/user-login/user-login-form'
+import { CreatorLogo, UserLoginForm } from '@/pages/auth/user-login/user-login-form'
 
 export function AuthModal() {
-  const { isAuthModalOpen, authType, signupType, closeAuthModal, switchAuthType } = useAuth()
+  const { isAuthModalOpen, authType, signupType, closeAuthModal, switchAuthType, loginType } =
+    useAuth()
 
   const renderSignupForm = () => {
     switch (signupType) {
@@ -37,7 +39,16 @@ export function AuthModal() {
           authType === 'signup' && (signupType === 'creator' || signupType === 'vendor'),
       })}
       size={getModalSize()}>
-      {authType === 'login' ? <UserLoginForm /> : renderSignupForm()}
+      <>
+        <OnlyShowIf condition={loginType === 'creator'}>
+          <div className='relative'>
+            <div className='absolute -top-20 left-[20%]'>
+              <CreatorLogo />
+            </div>
+          </div>
+        </OnlyShowIf>
+        {authType === 'login' ? <UserLoginForm /> : renderSignupForm()}
+      </>
     </BaseModal>
   )
 }

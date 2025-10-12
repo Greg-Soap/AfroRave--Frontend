@@ -1,9 +1,9 @@
-import { ShoppingCart, LoaderCircle } from 'lucide-react'
-import Cart from '../../cart'
+import { useGetAllCart } from '@/hooks/use-cart'
 import { cn } from '@/lib/utils'
 import type { EventDetailData } from '@/types'
-import { useGetAllCart } from '@/hooks/use-cart'
 import type { CartData } from '@/types/cart'
+import { LoaderCircle, ShoppingCart } from 'lucide-react'
+import Cart from '../../cart'
 
 export default function CartTrigger({ event, className }: ICartTriggerProps) {
   const { data, isLoading } = useGetAllCart()
@@ -13,7 +13,7 @@ export default function CartTrigger({ event, className }: ICartTriggerProps) {
   }
 
   return (
-    <div className={cn('flex gap-4', className)}>
+    <div className={cn('flex gap-4 ', className)}>
       <div className='flex h-fit gap-[11px] py-4 px-2 rounded-[6px] bg-deep-red'>
         <ShoppingCart size={24} color='#ffffff' />
 

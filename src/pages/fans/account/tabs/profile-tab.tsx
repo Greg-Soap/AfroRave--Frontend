@@ -85,6 +85,7 @@ export default function ProfileTab() {
               form={form}
               name={item.name}
               label={item.label}
+              labelClassName='text-white'
               className='w-full z-20 py-2.5 px-2 bg-transparent focus-visible:border'>
               {(field) => (
                 <BaseSelect
@@ -105,7 +106,11 @@ export default function ProfileTab() {
         ))}
 
         <div className='w-full flex items-start gap-1'>
-          <FormField form={form} name='number.country_code' className='h-10'>
+          <FormField
+            form={form}
+            name='number.country_code'
+            className='h-10'
+            labelClassName='text-white'>
             {(field) => (
               <BaseSelect
                 onChange={(value) => field.onChange(value)}

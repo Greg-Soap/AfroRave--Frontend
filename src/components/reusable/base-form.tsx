@@ -94,6 +94,8 @@ export interface FormFieldProps<T extends FieldValues> {
   form: UseFormReturn<T>
   /** Additional CSS classes for the field container */
   className?: string
+  /** Additional CSS classes for the label */
+  labelClassName?: string
 }
 
 /**
@@ -109,6 +111,7 @@ export function FormField<T extends FieldValues>({
   children,
   form,
   className,
+  labelClassName,
 }: FormFieldProps<T>) {
   return (
     <ShadcnFormField
@@ -133,7 +136,7 @@ export function FormField<T extends FieldValues>({
         return (
           <FormItem className={cn('flex flex-col items-start', className)}>
             {label && (
-              <FormLabel className='text-[#1E1E1E]' htmlFor={name}>
+              <FormLabel className={cn('text-[#1E1E1E]', labelClassName)} htmlFor={name}>
                 {label}
               </FormLabel>
             )}

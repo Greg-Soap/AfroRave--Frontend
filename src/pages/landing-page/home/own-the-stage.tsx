@@ -108,7 +108,7 @@ const details: IDetails[] = [
   },
   {
     title: 'READY TO CONNECT WITH EVENTS?',
-    href: '/?signup=vendor',
+    href: getRoutePath('creators_home'),
     linkName: 'REGISTER AS A VENDOR',
     details:
       "Get notified about open slots, express interest, and let organizers come to you. Whether you're offering food, tech, logistics, or entertainment—we'll help you stay booked and busy!",

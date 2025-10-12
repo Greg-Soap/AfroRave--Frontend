@@ -1,12 +1,12 @@
 import { EventLocation } from '@/pages/landing-page/event-page/event-location'
-import EventDescription from './sections/event-description'
-import EventDetailsSection from './sections/event-details'
-import TicketSection from './sections/tickets'
-import ContactSection from './sections/contact'
-import TermsSection from './sections/terms'
+import type { EventDetailData } from '@/types'
 import CartTrigger from './_components/cart-trigger'
 import { SectionContainer } from './_components/section-container'
-import type { EventDetailData } from '@/types'
+import ContactSection from './sections/contact'
+import EventDescription from './sections/event-description'
+import EventDetailsSection from './sections/event-details'
+import TermsSection from './sections/terms'
+import TicketSection from './sections/tickets'
 
 export default function EventDetails({ event, layout = 'default' }: IEventDetailsProp) {
   return (
@@ -40,7 +40,10 @@ export default function EventDetails({ event, layout = 'default' }: IEventDetail
           )}
 
           {layout !== 'with-flyer' && (
-            <CartTrigger event={event} className='mx-[120px] max-md:hidden' />
+            <CartTrigger
+              event={event}
+              className='ml-[120px] max-md:hidden fixed bottom-6 right-4'
+            />
           )}
         </div>
 

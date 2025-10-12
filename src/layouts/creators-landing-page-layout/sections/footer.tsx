@@ -17,7 +17,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <Socials className='justify-end px-[1rem] md:px-[2rem]' />
+      <Socials className='justify-end px-[1rem] md:px-[2rem]' isCreator />
     </footer>
   )
 }

@@ -84,7 +84,6 @@ const links: ILinks[] = [
   { href: getRoutePath('creators_about'), name: 'About Us' },
   { href: getRoutePath('creators_contact'), name: 'Contact Us' },
   { href: getRoutePath('creators_blog'), name: 'Blog' },
-  { href: getRoutePath('creators_wishlist'), name: 'Wishlist' },
 ]
 
 interface ILinks {

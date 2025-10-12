@@ -17,7 +17,7 @@ function RoleDescription({ role, description, className }: IRoles & { className?
     <div className={cn('w-full md:max-w-1/2 flex flex-col gap-5', className)}>
       <div className={cn('w-fit flex flex-col gap-2 font-sf-pro text-white uppercase', className)}>
         <p className='w-fit text-[32px] font-black'>{role}</p>
-        <p className='font-light'>{description}</p>
+        <p className='font-normal'>{description}</p>
       </div>
 
       <Button className='max-w-[120px] h-10 rounded-[20px] font-sf-pro-text text-sm font-semibold px-[17px] py-[11px] uppercase'>
