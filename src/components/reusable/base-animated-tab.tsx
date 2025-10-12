@@ -21,7 +21,6 @@ export function BaseAnimatedTab({
     <Tabs
       value={activeTab}
       onValueChange={setActiveTab}
-      defaultValue={tabs[0]?.value}
       className={cn('w-full md:w-fit flex', {
         'flex-col md:flex-row justify-center gap-10 md:gap-[100px] xl:gap-[307px]': isAccount,
         'flex-col items-center gap-[132px]': isListed,
