@@ -351,3 +351,42 @@ export interface CreateThemeRequest {
   theme: EventTheme
   eventId: string
 }
+
+// Vendor Available Events
+export interface VendorAvailableEventData {
+  eventId: string
+  eventName: string
+  venue: string
+  category: string
+  vendorType: string
+  startDate: string
+  startTime: string
+  endDate: string
+  isPublished: boolean
+  customUrl: string
+  stage: string
+  totalTicket: number
+  ticketSold: number
+  metadata: {
+    termsOfRefund: string
+    eventContact: {
+      email: string
+      website: string
+    }
+    socials: {
+      instagram: string
+      x: string
+      tiktok: string
+      facebook: string
+    }
+    desktopMedia: {
+      flyer: string
+      background: string
+    }
+    theme: {
+      themeName: string
+    }
+  }
+}
+
+export type VendorAvailableEventsResponse = ApiResponse<VendorAvailableEventData[]>
