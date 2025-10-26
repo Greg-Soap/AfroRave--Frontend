@@ -100,8 +100,8 @@ export function BaseCarousel({
 
       {showNavigation && (
         <>
-          <CarouselPrevious className='text-white z-20 border-none bg-transparent hover:bg-transparent hover:text-white/80 ' />
-          <CarouselNext className='text-white z-20 border-none bg-transparent hover:bg-transparent hover:text-white/80 ' />
+          <CarouselPrevious className='text-white z-20 border-none bg-transparent hover:bg-transparent hover:text-white/80 !left-4 md:!left-12' />
+          <CarouselNext className='text-white z-20 border-none bg-transparent hover:bg-transparent hover:text-white/80 !right-4 md:!right-12' />
         </>
       )}
     </Carousel>

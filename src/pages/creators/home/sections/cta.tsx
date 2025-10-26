@@ -4,7 +4,7 @@ export default function CTASection() {
       <div className='max-w-[700px] flex flex-col items-center gap-3'>
         <div className='w-fit flex flex-col items-center text-center gap-2 font-sf-pro text-white uppercase'>
           <p className='w-fit text-[32px] font-black'>seamless management</p>
-          <p className='font-light'>
+          <p className='font-normal'>
             The Afro Revive mobile app brings the power of events right to your pocket. Designed for
             both fans and event professionals, the app makes attending and managing events smoother
             than eve
@@ -42,7 +42,7 @@ export default function CTASection() {
             key={item.heading}
             className='max-w-[540px] flex flex-col gap-2 font-sf-pro text-white uppercase max-md:text-center'>
             <p className='text-xl font-black'>{item.heading}</p>
-            <p className='font-light'>{item.details}</p>
+            <p className='font-normal'>{item.details}</p>
           </div>
         ))}
       </div>

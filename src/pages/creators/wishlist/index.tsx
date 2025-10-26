@@ -13,7 +13,7 @@ export default function CreatorsWishlistPage() {
         <HeroSection
           wideDescription
           noButton
-          description='Afro Revive brings together organizers, vendors, and fans on one unified platform. Organizers can efficiently create and manage events, vendors can showcase their offerings and secure slots, while fans benefit from seamless ticketing with the flexibility to resell, transfer, or upgrade. A truly comprehensive solution for every event experience'
+          description='Afro Revive brings together organizers, vendors, and fans in one unified platform. Organizers can efficiently create and manage events, vendors can showcase their offerings and secure slots, while fans benefit from seamless ticketing with the flexibility to resell, transfer, or upgrade. A truly comprehensive solution for every event experience'
           wishlistButton
         />
       </div>
