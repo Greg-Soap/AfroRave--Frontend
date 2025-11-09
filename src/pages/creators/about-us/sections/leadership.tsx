@@ -1,8 +1,10 @@
 import { TextSectionContainer } from '../../_components/text-section-ctn'
 
+
+//Hope: increased pb to 240px
 export default function LeadershipSection() {
   return (
-    <section className='w-full flex flex-col gap-14 items-center pb-[120px]'>
+    <section className='w-full flex flex-col gap-14 items-center pb-[240px]'>
       <TextSectionContainer name='NEXT GEN LEADERSHIP'>
         <p>
           our leadership reflects a new generation shaping the future of events, technology, and

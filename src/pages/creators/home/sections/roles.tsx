@@ -12,9 +12,10 @@ export default function RolesSection() {
   )
 }
 
+// Hope added minor fix to match UI
 function RoleDescription({ role, description, className }: IRoles & { className?: string }) {
   return (
-    <div className={cn('w-full md:max-w-1/2 flex flex-col gap-5', className)}>
+    <div className={cn('w-full md:max-w-1/2 flex flex-col gap-5 md:pb-[290px] xs:pb-[10px]', className)}>
       <div className={cn('w-fit flex flex-col gap-2 font-sf-pro text-white uppercase', className)}>
         <p className='w-fit text-[32px] font-black'>{role}</p>
         <p className='font-normal'>{description}</p>
