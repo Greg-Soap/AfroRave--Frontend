@@ -22,8 +22,8 @@ import Hero from './hero'
 import OwnTheStage from './own-the-stage'
 import Socials from './socials'
 import { SEO } from '../../../components/seo'
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+// import { motion, useInView } from 'framer-motion'
+// import { useRef } from 'react'
 
 export default function LandingPage() {
   return (
@@ -33,47 +33,47 @@ export default function LandingPage() {
         description='Buy tickets for the hottest African concerts and events. Secure your spot for live performances by top African artists and experience authentic African entertainment.'
       />
       <Hero />
-      <OwnTheStageSection />
-      <SocialsSection />
+      <OwnTheStage />
+      <Socials />
     </div>
   )
 }
 
-function OwnTheStageSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { 
-    once: false, 
-    margin: '-100px 0px -100px 0px' // Optional: Matches Socials for consistent trigger zone
-  })
+// function OwnTheStageSection() {
+//   const ref = useRef(null)
+//   const isInView = useInView(ref, { 
+//     once: false, 
+//     margin: '-100px 0px -100px 0px' // Optional: Matches Socials for consistent trigger zone
+//   })
 
-  return (
-    <motion.div
-      ref={ref}
-      initial={false} // Skip initial animation on mount
-      animate={{ y: isInView ? 0 : '50%' }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-    >
-      <OwnTheStage />
-    </motion.div>
-  )
-}
+//   return (
+//     <motion.div
+//       ref={ref}
+//       initial={false} // Skip initial animation on mount
+//       animate={{ y: isInView ? 0 : '50%' }}
+//       transition={{ duration: 0.8, ease: 'easeOut' }}
+//     >
+//       <OwnTheStage />
+//     </motion.div>
+//   )
+// }
 
-function SocialsSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { 
-    once: false, 
-    margin: '-100px 0px -100px 0px' // Optional: Fine-tune trigger zone (top/bottom margins for earlier/later detection)
-  })
+// function SocialsSection() {
+//   const ref = useRef(null)
+//   const isInView = useInView(ref, { 
+//     once: false, 
+//     margin: '-100px 0px -100px 0px' // Optional: Fine-tune trigger zone (top/bottom margins for earlier/later detection)
+//   })
 
-  return (
-    <motion.div
-      ref={ref}
-      initial={false} // Skip initial animation on mount
-      animate={{ x: isInView ? 0 : '50%' }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      style={{ overflow: 'hidden' }}
-    >
-      <Socials />
-    </motion.div>
-  )
-}
+//   return (
+//     <motion.div
+//       ref={ref}
+//       initial={false} // Skip initial animation on mount
+//       animate={{ x: isInView ? 0 : '50%' }}
+//       transition={{ duration: 0.8, ease: 'easeOut' }}
+//       style={{ overflow: 'hidden' }}
+//     >
+      
+//     </motion.div>
+//   )
+// }

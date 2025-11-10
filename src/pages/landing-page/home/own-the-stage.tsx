@@ -1,13 +1,30 @@
+//Hope! animation included to the section.
 import { CategoryBlock } from '@/components/shared/category-block'
 import { getRoutePath } from '@/config/get-route-path'
 import { useGetTrendingEvents } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { Link } from 'react-router-dom'
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 
 export default function OwnTheStage() {
   const { data: trendingEventResponse, isPending: isLoadingTrending } = useGetTrendingEvents()
 
   const trendingEvents = trendingEventResponse?.data
+
+  // Ref and inView for the CategoryBlock animation (x-slide)
+  const categoryRef = useRef(null)
+  const isCategoryInView = useInView(categoryRef, { 
+    once: false, 
+    margin: '-100px 0px -100px 0px'
+  })
+
+  // Ref and inView for the DetailsBlocks rows animation (y-slide)
+  const detailsRef = useRef(null)
+  const isDetailsInView = useInView(detailsRef, { 
+    once: false, 
+    margin: '-100px 0px -100px 0px'
+  })
 
   return (
     <section className='relative flex flex-col gap-10 md:gap-[100px] py-[75px] pb-8 md:pb-[182px] w-full overflow-hidden'>
@@ -17,7 +34,15 @@ export default function OwnTheStage() {
 
       {/* Content container */}
       <div className='relative px-5 md:px-14'>
-        <div className='mb-7 md:mb-10 overflow-x-hidden'>
+        {/* Animated CategoryBlock (x-slide from right) */}
+        <motion.div
+          ref={categoryRef}
+          initial={false}
+          animate={{ x: isCategoryInView ? 0 : '100%' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          style={{ overflow: 'hidden' }}
+          className='mb-7 md:mb-10 overflow-x-hidden'
+        >
           <CategoryBlock
             name='Trending'
             data={(trendingEvents ?? [])
@@ -35,17 +60,26 @@ export default function OwnTheStage() {
             layout='start'
             homePage={true}
           />
-        </div>
-        {/* First row - blocks 1 and 3 */}
-        <div className='flex max-lg:flex-col items-center lg:items-start justify-center gap-[100px] mb-[100px]'>
-          <DetailsBlock {...details[0]} position='first' />
-          <DetailsBlock {...details[2]} position='third' />
-        </div>
+        </motion.div>
 
-        {/* Second row - block 2 centered */}
-        <div className='flex justify-center'>
-          <DetailsBlock {...details[1]} position='second' />
-        </div>
+        {/* Animated wrapper for both DetailsBlock rows (y-slide from bottom) */}
+        <motion.div
+          ref={detailsRef}
+          initial={false}
+          animate={{ y: isDetailsInView ? 0 : '50%' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
+          {/* First row - blocks 1 and 3 */}
+          <div className='flex max-lg:flex-col items-center lg:items-start justify-center gap-[100px] mb-[100px]'>
+            <DetailsBlock {...details[0]} position='first' />
+            <DetailsBlock {...details[2]} position='third' />
+          </div>
+
+          {/* Second row - block 2 centered */}
+          <div className='flex justify-center'>
+            <DetailsBlock {...details[1]} position='second' />
+          </div>
+        </motion.div>
       </div>
     </section>
   )
