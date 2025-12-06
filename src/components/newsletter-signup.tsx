@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useNewsletterSubscription } from '@/hooks/use-newsletter'
+import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -35,7 +36,7 @@ export default function NewsletterSignup({ className }: NewsletterSignupProps) {
 
   if (isSubscribed) {
     return (
-      <div className={`flex items-center justify-center ${className}`}>
+      <div className={cn('flex items-center justify-center', className)}>
         <Button className='flex items-center gap-2 !py-[18px] h-[56px] w-full md:w-[552px]  text-base font-semibold uppercase'>
           The Journey just began{' '}
           <img src='/assets/resell/lighting.svg' className='w-4 h-5' alt='arrow' />
@@ -47,15 +48,14 @@ export default function NewsletterSignup({ className }: NewsletterSignupProps) {
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className={`flex items-center w-full justify-center ${className}`}>
-      <div className='flex w-full gap-1 md:w-[552px]'>
+      className={cn('flex items-center w-full justify-center px-4 md:px-0', className)}>
+      <div className='flex w-full max-w-full gap-1 md:w-[552px] overflow-hidden'>
         <Input
           {...form.register('email')}
           type='email'
           placeholder='Enter your email address'
-          className='flex-1 h-[56px] border-top-left-radius-[10px] border-bottom-left-radius-[10px] pr-2 pl-2 bg-white shadow-[0px_2px_10px_2px_rgba(0,0,0,0.1)] border-0 rounded-l-[10px] rounded-r-none focus-visible:ring-2 focus-visible:ring-blue-500'
+          className='flex-1 min-w-0 h-[56px] border-top-left-radius-[10px] border-bottom-left-radius-[10px] pr-2 pl-2 bg-white shadow-[0px_2px_10px_2px_rgba(0,0,0,0.1)] border-0 rounded-l-[10px] rounded-r-none focus-visible:ring-2 focus-visible:ring-blue-500 md:w-[447px] md:flex-none'
           style={{
-            width: '447px',
             height: '56px',
             borderTopLeftRadius: '10px',
             borderBottomLeftRadius: '10px',
@@ -69,9 +69,8 @@ export default function NewsletterSignup({ className }: NewsletterSignupProps) {
         <Button
           type='submit'
           disabled={newsletterMutation.isPending}
-          className='h-[56px] bg-white text-black hover:bg-gray-100 border-0 rounded-l-none rounded-r-[10px] font-semibold uppercase disabled:opacity-50'
+          className='h-[56px] bg-white text-black hover:bg-gray-100 border-0 rounded-l-none rounded-r-[10px] font-semibold uppercase disabled:opacity-50 flex-shrink-0 md:w-[101px]'
           style={{
-            width: '101px',
             height: '56px',
             borderTopRightRadius: '10px',
             borderBottomRightRadius: '10px',
