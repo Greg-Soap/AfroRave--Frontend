@@ -22,8 +22,7 @@ import Hero from './hero'
 import OwnTheStage from './own-the-stage'
 import Socials from './socials'
 import { SEO } from '../../../components/seo'
-// import { motion, useInView } from 'framer-motion'
-// import { useRef } from 'react'
+import { VendorRegistrationFlow } from '@/components/vendor/vendor-registration-flow'
 
 export default function LandingPage() {
   return (
@@ -38,6 +37,7 @@ export default function LandingPage() {
     </div>
   )
 }
+// console.log('🚀 LandingPage file loaded')
 
 // function OwnTheStageSection() {
 //   const ref = useRef(null)

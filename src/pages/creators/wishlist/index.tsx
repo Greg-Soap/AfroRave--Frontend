@@ -1,9 +1,11 @@
 import { VideoBackgroundWrapper } from '@/components/shared/video-background-wrapper'
 import HeroSection from '../home/sections/hero'
+import { VendorRegistrationFlow } from '@/components/vendor/vendor-registration-flow'
 
 export default function CreatorsWishlistPage() {
   return (
     <VideoBackgroundWrapper overlayOpacity={0.5} secondColor='#a2a2a2'>
+      <VendorRegistrationFlow />
       <img
         src='/assets/landing-page/blog.png'
         alt='Abstract'
