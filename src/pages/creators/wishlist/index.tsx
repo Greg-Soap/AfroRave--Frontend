@@ -7,8 +7,8 @@ export default function CreatorsWishlistPage() {
     <VideoBackgroundWrapper overlayOpacity={0.5} secondColor='#a2a2a2'>
       <VendorRegistrationFlow />
       <img
-        src='/assets/landing-page/blog.png'
-        alt='Abstract'
+        src='/assets/landing-page/coming-soon-page.png'
+        alt='Background'
         className='fixed inset-0 w-full h-full object-cover z-0 opacity-60'
       />
       <div className='relative z-50 '>
