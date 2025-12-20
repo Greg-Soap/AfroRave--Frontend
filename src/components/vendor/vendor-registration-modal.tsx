@@ -19,6 +19,7 @@ import { VENDOR_CATEGORIES } from '@/types/vendor'
 interface VendorRegistrationModalProps {
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
 export function VendorRegistrationModal({
@@ -129,7 +130,7 @@ export function VendorRegistrationModal({
                         >
                             <div className="flex justify-center mb-6">
                                 <img
-                                    src="/assets/landing-page/logo.png"
+                                    src="/assets/landing-page/form-logo.png"
                                     alt="AFRO REVIVE"
                                     className="h-12 object-contain"
                                 />
@@ -151,7 +152,7 @@ export function VendorRegistrationModal({
                             {/* Logo */}
                             <div className="flex justify-center mb-6">
                                 <img
-                                    src="/assets/landing-page/logo.png"
+                                    src="/assets/landing-page/form-logo.png"
                                     alt="AFRO REVIVE"
                                     className="h-12 md:h-16 object-contain"
                                 />

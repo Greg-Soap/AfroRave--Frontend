@@ -36,6 +36,7 @@ export function VendorRegistrationFlow() {
             <VendorRegistrationModal
                 isOpen={isModalOpen}
                 onClose={handleClose}
+                onSuccess={() => { }}
             />
         </>
     )

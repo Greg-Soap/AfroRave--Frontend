@@ -23,7 +23,6 @@ import OwnTheStage from './own-the-stage'
 import Socials from './socials'
 import { SEO } from '../../../components/seo'
 
-
 export default function LandingPage() {
   return (
     <div style={{ overflow: 'hidden' }}>
