@@ -22,7 +22,7 @@ import Hero from './hero'
 import OwnTheStage from './own-the-stage'
 import Socials from './socials'
 import { SEO } from '../../../components/seo'
-import { VendorRegistrationFlow } from '@/components/vendor/vendor-registration-flow'
+
 
 export default function LandingPage() {
   return (

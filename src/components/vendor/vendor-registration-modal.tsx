@@ -19,13 +19,11 @@ import { VENDOR_CATEGORIES } from '@/types/vendor'
 interface VendorRegistrationModalProps {
     isOpen: boolean
     onClose: () => void
-    onSuccess: () => void
 }
 
 export function VendorRegistrationModal({
     isOpen,
     onClose,
-    onSuccess,
 }: VendorRegistrationModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isShrinking, setIsShrinking] = useState(false)

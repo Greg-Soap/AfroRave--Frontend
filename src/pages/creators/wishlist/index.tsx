@@ -2,14 +2,16 @@ import { VideoBackgroundWrapper } from '@/components/shared/video-background-wra
 import HeroSection from '../home/sections/hero'
 import { VendorRegistrationFlow } from '@/components/vendor/vendor-registration-flow'
 
+import { OptimizedBackground } from '@/components/shared/optimized-background'
+
 export default function CreatorsWishlistPage() {
   return (
-    <VideoBackgroundWrapper overlayOpacity={0.5} secondColor='#a2a2a2'>
+    <VideoBackgroundWrapper overlayOpacity={0.1} secondColor='#a2a2a2'>
       <VendorRegistrationFlow />
-      <img
+      <OptimizedBackground
         src='/assets/landing-page/coming-soon-page.png'
         alt='Background'
-        className='fixed inset-0 w-full h-full object-cover z-0 opacity-60'
+        placeholderColor='#1a1a1a'
       />
       <div className='relative z-50 '>
         <HeroSection
