@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -84,18 +85,18 @@ export function VendorRegistrationModal({
         }
     }
 
-    return (
+    if (!isOpen) return null
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-                    onClick={handleBackdropClick}
-                >
-                    {/* Background overlay */}
-                    <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                    {/* Background overlay - simple div without Framer Motion */}
+                    <div
+                        className="absolute inset-0 bg-black/50"
+                        onClick={handleBackdropClick}
+                        aria-hidden="true"
+                    />
 
                     {/* Modal */}
                     <motion.div
@@ -126,14 +127,14 @@ export function VendorRegistrationModal({
                         {/* EXPANDED clickable area for iOS Safari - entire top portion */}
                         {!isSubmitting && (
                             <>
-                                {/* Large invisible touch target covering entire top third of modal */}
+                                {/* Large invisible touch target covering top header area */}
                                 <div
                                     onClick={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
                                         handleClose()
                                     }}
-                                    className="absolute top-0 left-0 right-0 h-32 z-50 cursor-pointer"
+                                    className="absolute top-0 left-0 right-0 h-24 z-50 cursor-pointer"
                                     style={{
                                         WebkitTapHighlightColor: 'transparent',
                                         touchAction: 'manipulation',
@@ -195,7 +196,7 @@ export function VendorRegistrationModal({
                             </div>
 
                             {/* Form */}
-                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 select-text">
                                 {/* First Name & Last Name */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
@@ -238,7 +239,7 @@ export function VendorRegistrationModal({
                                         <SelectTrigger className="w-full bg-[#1C1C1E] text-white border-0 h-11">
                                             <SelectValue placeholder="CATEGORY" />
                                         </SelectTrigger>
-                                        <SelectContent className="z-[60]">
+                                        <SelectContent className="z-[10005]">
                                             {VENDOR_CATEGORIES.map((cat) => (
                                                 <SelectItem key={cat.value} value={cat.value}>
                                                     {cat.label}
@@ -334,8 +335,9 @@ export function VendorRegistrationModal({
                             </form>
                         </motion.div>
                     </motion.div>
-                </motion.div>
+                </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     )
 }
