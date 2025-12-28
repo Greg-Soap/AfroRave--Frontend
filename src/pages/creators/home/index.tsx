@@ -42,9 +42,9 @@ export default function CreatorsHomePage() {
 
 function RolesSectionWrapper() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { 
-    once: false, 
-    margin: '-100px 0px -100px 0px' // Optional: Adjust trigger zone for earlier/later detection
+  const isInView = useInView(ref, {
+    once: true,
+    margin: '-100px 0px -100px 0px'
   })
 
   return (
@@ -61,9 +61,9 @@ function RolesSectionWrapper() {
 
 function CTASectionWrapper() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { 
-    once: false, 
-    margin: '-100px 0px -100px 0px' // Optional: Matches Roles for consistent timing
+  const isInView = useInView(ref, {
+    once: true,
+    margin: '-100px 0px -100px 0px'
   })
 
   return (

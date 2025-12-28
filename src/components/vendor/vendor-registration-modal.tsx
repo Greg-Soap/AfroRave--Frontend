@@ -114,8 +114,11 @@ export function VendorRegistrationModal({
                         {/* Close button */}
                         {!isSubmitting && (
                             <button
-                                onClick={onClose}
-                                className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors z-20"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onClose()
+                                }}
+                                className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors z-[100]"
                                 aria-label="Close"
                             >
                                 <X className="w-5 h-5 text-gray-600" />
