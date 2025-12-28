@@ -123,26 +123,26 @@ export function VendorRegistrationModal({
                             transform: 'translateZ(0)'
                         }}
                     >
-                        {/* Large clickable area for iOS Safari - top right corner */}
+                        {/* EXPANDED clickable area for iOS Safari - entire top portion */}
                         {!isSubmitting && (
                             <>
-                                {/* Invisible large touch target */}
+                                {/* Large invisible touch target covering entire top third of modal */}
                                 <div
                                     onClick={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
                                         handleClose()
                                     }}
-                                    className="absolute top-0 right-0 w-20 h-20 z-50 cursor-pointer"
+                                    className="absolute top-0 left-0 right-0 h-32 z-50 cursor-pointer"
                                     style={{
                                         WebkitTapHighlightColor: 'transparent',
                                         touchAction: 'manipulation',
                                     }}
                                     aria-label="Close modal area"
                                 />
-                                {/* Visual close button - positioned lower to align with clickable area */}
-                                <div className="absolute top-8 right-4 w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full pointer-events-none z-40">
-                                    <X className="w-5 h-5 text-gray-700" strokeWidth={2.5} />
+                                {/* Visual close button */}
+                                <div className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center bg-gray-100 rounded-full pointer-events-none z-40 shadow-md">
+                                    <X className="w-6 h-6 text-gray-700" strokeWidth={2.5} />
                                 </div>
                             </>
                         )}
@@ -238,7 +238,7 @@ export function VendorRegistrationModal({
                                         <SelectTrigger className="w-full bg-[#1C1C1E] text-white border-0 h-11">
                                             <SelectValue placeholder="CATEGORY" />
                                         </SelectTrigger>
-                                        <SelectContent>
+                                        <SelectContent className="z-[60]">
                                             {VENDOR_CATEGORIES.map((cat) => (
                                                 <SelectItem key={cat.value} value={cat.value}>
                                                     {cat.label}
