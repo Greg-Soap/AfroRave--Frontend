@@ -78,6 +78,12 @@ export function VendorRegistrationModal({
         }
     }
 
+    const handleClose = () => {
+        if (!isSubmitting) {
+            onClose()
+        }
+    }
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -109,30 +115,37 @@ export function VendorRegistrationModal({
                             duration: isShrinking ? 0.8 : 0.3,
                             ease: 'easeInOut',
                         }}
+                        onClick={(e) => e.stopPropagation()}
                         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[480px] max-h-[90vh] overflow-hidden"
+                        style={{
+                            WebkitUserSelect: 'none',
+                            userSelect: 'none',
+                            transform: 'translateZ(0)'
+                        }}
                     >
-                        {/* Close button */}
+                        {/* Large clickable area for iOS Safari - top right corner */}
                         {!isSubmitting && (
-                            <button
-                                type="button"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    onClose()
-                                }}
-                                onTouchEnd={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    onClose()
-                                }}
-                                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-[100] cursor-pointer touch-manipulation"
-                                style={{ position: 'relative', WebkitTapHighlightColor: 'transparent' }}
-                                aria-label="Close"
-                            >
-                                <X className="w-5 h-5 text-gray-600 pointer-events-none" />
-                            </button>
+                            <>
+                                {/* Invisible large touch target */}
+                                <div
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        handleClose()
+                                    }}
+                                    className="absolute top-0 right-0 w-20 h-20 z-50 cursor-pointer"
+                                    style={{
+                                        WebkitTapHighlightColor: 'transparent',
+                                        touchAction: 'manipulation',
+                                    }}
+                                    aria-label="Close modal area"
+                                />
+                                {/* Visual close button - positioned lower to align with clickable area */}
+                                <div className="absolute top-8 right-4 w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full pointer-events-none z-40">
+                                    <X className="w-5 h-5 text-gray-700" strokeWidth={2.5} />
+                                </div>
+                            </>
                         )}
-
                         {/* SUCCESS CONTENT */}
                         <motion.div
                             animate={{ opacity: showSuccess ? 1 : 0 }}
