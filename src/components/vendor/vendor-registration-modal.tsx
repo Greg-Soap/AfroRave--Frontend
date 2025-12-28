@@ -116,7 +116,6 @@ export function VendorRegistrationModal({
                             duration: isShrinking ? 0.8 : 0.3,
                             ease: 'easeInOut',
                         }}
-                        onClick={(e) => e.stopPropagation()}
                         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[480px] max-h-[90vh] overflow-hidden"
                         style={{
                             WebkitUserSelect: 'none',
