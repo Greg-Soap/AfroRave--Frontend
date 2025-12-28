@@ -114,14 +114,22 @@ export function VendorRegistrationModal({
                         {/* Close button */}
                         {!isSubmitting && (
                             <button
+                                type="button"
                                 onClick={(e) => {
+                                    e.preventDefault()
                                     e.stopPropagation()
                                     onClose()
                                 }}
-                                className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors z-[100]"
+                                onTouchEnd={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    onClose()
+                                }}
+                                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-[100] cursor-pointer touch-manipulation"
+                                style={{ position: 'relative', WebkitTapHighlightColor: 'transparent' }}
                                 aria-label="Close"
                             >
-                                <X className="w-5 h-5 text-gray-600" />
+                                <X className="w-5 h-5 text-gray-600 pointer-events-none" />
                             </button>
                         )}
 
@@ -129,7 +137,8 @@ export function VendorRegistrationModal({
                         <motion.div
                             animate={{ opacity: showSuccess ? 1 : 0 }}
                             transition={{ duration: 0.3 }}
-                            className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-center ${showSuccess ? 'pointer-events-auto' : 'pointer-events-none'}`}
+                            className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-10 ${showSuccess ? 'pointer-events-auto' : 'pointer-events-none'}`}
+                            style={{ pointerEvents: showSuccess ? 'auto' : 'none' }}
                         >
                             <div className="flex justify-center mb-6">
                                 <img
@@ -150,7 +159,8 @@ export function VendorRegistrationModal({
                         <motion.div
                             animate={{ opacity: showSuccess || isShrinking ? 0 : 1 }}
                             transition={{ duration: 0.3 }}
-                            className={`p-6 md:p-8 overflow-y-auto max-h-[90vh] ${showSuccess ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                            className={`p-6 md:p-8 overflow-y-auto max-h-[90vh] z-10 ${showSuccess ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                            style={{ pointerEvents: showSuccess ? 'none' : 'auto' }}
                         >
                             {/* Logo */}
                             <div className="flex justify-center mb-6">
