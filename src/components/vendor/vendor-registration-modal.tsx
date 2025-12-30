@@ -15,7 +15,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { vendorRegistrationSchema, type VendorRegistrationFormData } from '@/schema/vendor-registration.schema'
-import { VENDOR_CATEGORIES } from '@/types/vendor'
+import { VENDOR_CATEGORIES, type VendorNewsletterData } from '@/types/vendor'
+import { useVendorNewsletterSubscription } from '@/hooks/use-newsletter'
 
 interface VendorRegistrationModalProps {
     isOpen: boolean
@@ -30,6 +31,8 @@ export function VendorRegistrationModal({
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isShrinking, setIsShrinking] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
+
+    const subscribeMutation = useVendorNewsletterSubscription()
 
     const {
         register,
@@ -53,24 +56,34 @@ export function VendorRegistrationModal({
     const isRegistered = watch('isRegistered')
     const category = watch('category')
 
-    const onSubmit = async (data: VendorRegistrationFormData) => {
+    const onSubmit = (data: VendorRegistrationFormData) => {
         setIsSubmitting(true)
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        const payload: VendorNewsletterData = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            businessName: data.businessName,
+            category: data.category,
+            description: data.description,
+            isRegisteredBusiness: data.isRegistered
+        }
 
-        // Start shrink animation
-        setIsShrinking(true)
+        subscribeMutation.mutate(payload, {
+            onSuccess: () => {
+                // Start shrink animation
+                setIsShrinking(true)
 
-        // Wait for shrink animation to complete before showing success
-        setTimeout(() => {
-            setIsSubmitting(false)
-            setShowSuccess(true)
-            // Optional: notify parent if needed, but don't close this modal
-            // onSuccess && onSuccess() 
-        }, 800)
-
-        console.log('Vendor registration data:', data)
+                // Wait for shrink animation to complete before showing success
+                setTimeout(() => {
+                    setIsSubmitting(false)
+                    setShowSuccess(true)
+                }, 800)
+            },
+            onError: () => {
+                setIsSubmitting(false)
+            }
+        })
     }
 
     const handleBackdropClick = (e: React.MouseEvent) => {

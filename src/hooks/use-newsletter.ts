@@ -18,3 +18,16 @@ export function useNewsletterSubscription() {
     },
   })
 }
+
+export function useVendorNewsletterSubscription() {
+  return useMutation({
+    mutationFn: (data: any) => NewsletterService.subscribeToVendorNewsletter(data),
+    onSuccess: (response) => {
+      toast.success(response.data.message || 'Successfully joined the vendor wishlist!')
+    },
+    onError: (error: any) => {
+      const errorMessage = error.response?.data?.message || 'Failed to join vendor wishlist. Please try again.'
+      toast.error(errorMessage)
+    },
+  })
+}

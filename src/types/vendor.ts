@@ -8,6 +8,16 @@ export interface VendorRegistration {
     description: string
 }
 
+export interface VendorNewsletterData {
+    email: string
+    firstName: string
+    lastName: string
+    businessName: string
+    category: string
+    description: string
+    isRegisteredBusiness: boolean
+}
+
 export interface VendorCategory {
     value: string
     label: string

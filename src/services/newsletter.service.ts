@@ -1,4 +1,5 @@
 import api from './http.service'
+import { VendorNewsletterData } from '@/types/vendor'
 
 interface NewsletterRequest {
   email: string
@@ -14,6 +15,13 @@ class NewsletterService {
    */
   static subscribeToNewsletter(data: NewsletterRequest) {
     return api.post<NewsletterResponse>('/api/newsletter', data)
+  }
+
+  /**
+   * Subscribe to vendor newsletter
+   */
+  static subscribeToVendorNewsletter(data: VendorNewsletterData) {
+    return api.post<NewsletterResponse>('/api/Newsletter/vendors', data)
   }
 }
 
