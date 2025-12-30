@@ -14,9 +14,8 @@ export default function Header() {
   return (
     <header className='w-full fixed top-0 flex justify-center z-50 h-20 bg-transparent '>
       <div
-        className={`absolute inset-0 transition-all duration-300 ${
-          hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
-        }`}
+        className={`absolute inset-0 transition-all duration-300 ${hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
+          }`}
       />
 
       <nav className='relative px-4 md:px-8 w-full flex flex-col gap-y-3 items-center py-4'>
@@ -102,7 +101,9 @@ function CountdownTimer() {
   })
 
   useEffect(() => {
-    const targetDate = new Date(2026, 0, 5, 12, 0, 0).getTime()
+    // Set target date to 31 days from now
+    const now = new Date()
+    const targetDate = new Date(now.getTime() + (31 * 24 * 60 * 60 * 1000)).getTime()
 
     function updateCountdown() {
       const now = new Date().getTime()
