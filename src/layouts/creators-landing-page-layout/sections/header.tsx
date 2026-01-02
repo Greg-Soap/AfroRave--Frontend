@@ -1,11 +1,11 @@
 // import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
-import { getRoutePath } from '@/config/get-route-path'
+// import { getRoutePath } from '@/config/get-route-path'
 // import LoginButton from '@/layouts/components/login-button'
 import { useScroll } from '@/lib/useScroll'
 // import { cn } from '@/lib/utils'
 // import { useAfroStore } from '@/stores'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
@@ -20,7 +20,7 @@ export default function Header() {
 
       <nav className='relative px-4 md:px-8 w-full flex flex-col gap-y-3 items-center py-4'>
         <div className='flex w-full items-center justify-between'>
-          <Link to={getRoutePath('creators_home')}>
+          <div>
             <img
               src='/assets/landing-page/AR.png'
               alt='AR'
@@ -28,7 +28,7 @@ export default function Header() {
               height={40}
               className='self-center'
             />
-          </Link>
+          </div>
 
           {/* <NavigationLinks /> */}
 
@@ -101,9 +101,9 @@ function CountdownTimer() {
   })
 
   useEffect(() => {
-    // Set target date to 31 days from now
-    const now = new Date()
-    const targetDate = new Date(now.getTime() + (31 * 24 * 60 * 60 * 1000)).getTime()
+    // Target date: January 30, 2026 at 00:00:00 Nigerian Time (WAT, UTC+1)
+    // Convert to UTC by subtracting 1 hour
+    const targetDate = new Date('2026-01-30T00:00:00+01:00').getTime()
 
     function updateCountdown() {
       const now = new Date().getTime()
