@@ -42,10 +42,9 @@
 //   )
 // }
 
-
-
 import NewsletterSignup from '@/components/newsletter-signup'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
 import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 
@@ -60,6 +59,8 @@ export default function HeroSection({
   noButton?: boolean
   wishlistButton?: boolean
 }) {
+  const { openAuthModal } = useAuth()
+
   return (
     <section className='w-full min-h-screen flex flex-col items-center justify-center py-10 sm:py-16 md:py-[100px] z-50'>
       <div
@@ -72,11 +73,15 @@ export default function HeroSection({
         )}>
         <p className='w-full max-w-[514px] text-center text-white text-3xl sm:text-4xl md:text-[40px] font-black uppercase leading-tight'>
           All-in-One Hub
-          <br/> for Fans and Creators
+          <br /> for Fans and Creators
         </p>
-        <p className='text-center uppercase text-sm sm:text-base leading-relaxed px-2'>{description}</p>
+        <p className='text-center uppercase text-sm sm:text-base leading-relaxed px-2'>
+          {description}
+        </p>
         <OnlyShowIf condition={!noButton}>
-          <Button className='w-full sm:max-w-[120px] h-10 sm:h-auto rounded-[20px] font-sf-pro-text text-sm font-semibold px-4 sm:px-[17px] py-[11px] uppercase max-w-xs mx-auto'>
+          <Button
+            onClick={() => openAuthModal('login', 'vendor')}
+            className='w-full sm:max-w-[120px] h-10 sm:h-auto rounded-[20px] font-sf-pro-text text-sm font-semibold px-4 sm:px-[17px] py-[11px] uppercase max-w-xs mx-auto'>
             Get Started
           </Button>
         </OnlyShowIf>
