@@ -37,6 +37,8 @@ const formSchema = z.object({
   country_code: z.string().min(1, { message: 'Country code is required.' }),
   business_name: z.string().min(2, { message: 'Business name too short.' }),
   web_url: z.string().optional(),
+  portfolio_url: z.string().optional(),
+  social_links: z.string().optional(),
   gender: z.string().min(1, { message: 'Please select a gender.' }),
   vendor_type: z.string().optional(),
   category: z.string().optional(),
@@ -63,6 +65,8 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
       country_code: '+234',
       business_name: '',
       web_url: '',
+      portfolio_url: '',
+      social_links: '',
       gender: '',
       vendor_type: '',
       category: '',
@@ -84,6 +88,8 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
         vendorType: values.vendor_type || 'service_vendor',
         category: values.category || 'dj_mc',
         website: values.web_url || '',
+        portfolio: values.portfolio_url || '',
+        socialLinks: values.social_links || '',
         password: values.password,
       }
 
@@ -110,11 +116,11 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
   const description = 'tell us about you'
 
   return (
-    <div className='relative flex justify-center'>
+    <div className='relative flex justify-center w-full max-h-[85vh] overflow-y-auto'>
       <FormBase
         form={form}
         onSubmit={onSubmit}
-        className='max-w-[640px]  w-full rounded-[12px] space-y-5 bg-red px-7 py-4 md:px-5 md:py-12 z-10 font-sf-pro-text'>
+        className='max-w-[640px] w-full rounded-[12px] space-y-5 bg-red px-4 py-6 sm:px-7 sm:py-4 md:px-5 md:py-12 z-10 font-sf-pro-text'>
         <div className='flex flex-col gap-2 font-sf-pro-display'>
           <p className='uppercase text-2xl font-black text-white'>{title}</p>
           <p className='uppercase text-xs font-light'>{description}</p>
@@ -151,7 +157,15 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
           name='business_name'
           placeholder={type === 'vendor' ? 'BUSINESS NAME' : 'COMPANY NAME'}
         />
-        <InputField form={form} name='web_url' placeholder='WEB URL (OPTIONAL)' />
+        <InputField form={form} name='web_url' placeholder='WEBSITE URL (OPTIONAL)' />
+
+        {type === 'vendor' && (
+          <>
+            <InputField form={form} name='portfolio_url' placeholder='PORTFOLIO URL (OPTIONAL)' />
+            <InputField form={form} name='social_links' placeholder='SOCIAL MEDIA LINKS (OPTIONAL)' />
+          </>
+        )}
+
         <InputField form={form} name='email' placeholder='EMAIL ADDRESS' />
         <InputField form={form} name='password' placeholder='PASSWORD' type='password' />
 

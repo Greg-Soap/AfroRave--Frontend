@@ -8,8 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
 import type { User } from "@/types";
 import BaseTable from "@/components/reusable/base-table";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 
 export default function VendorProfilePage() {
@@ -118,10 +116,32 @@ function ProfileSection({ user }: { user: User | null }) {
             </span>
           </ProfileSubSections>
           <ProfileSubSections name="Portfolio">
-            <ProfileRadioGroup />
+            {user?.portfolio ? (
+              <a
+                href={user.portfolio.startsWith('http') ? user.portfolio : `https://${user.portfolio}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2 font-semibold text-[#007AFF] hover:underline truncate"
+              >
+                {user.portfolio}
+              </a>
+            ) : (
+              <span className="px-2 text-gray-400 text-xs">No portfolio added</span>
+            )}
           </ProfileSubSections>
           <ProfileSubSections name="Socials">
-            <span className="px-2 font-semibold text-black">???</span>
+            {user?.socialLinks ? (
+              <a
+                href={user.socialLinks.startsWith('http') ? user.socialLinks : `https://${user.socialLinks}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2 font-semibold text-[#007AFF] hover:underline truncate"
+              >
+                {user.socialLinks}
+              </a>
+            ) : (
+              <span className="px-2 text-gray-400 text-xs">No social links added</span>
+            )}
           </ProfileSubSections>
         </div>
       </div>
@@ -195,30 +215,7 @@ function InboxSection({ user }: { user: User | null }) {
   );
 }
 
-function ProfileRadioGroup() {
-  return (
-    <RadioGroup className="grid md:grid-cols-2 gap-6">
-      {[
-        { value: "file", label: "file" },
-        { value: "link", label: "link" },
-      ].map((item) => (
-        <div key={item.value} className="w-full flex items-center gap-1">
-          <RadioGroupItem
-            value={item.value}
-            id={item.value}
-            className="size-3.5 border-green-600"
-          />
-          <Label
-            htmlFor={item.value}
-            className="text-xs font-sf-pro-rounded text-black"
-          >
-            {item.label}
-          </Label>
-        </div>
-      ))}
-    </RadioGroup>
-  );
-}
+// Removed ProfileRadioGroup - no longer needed
 
 function ProfileSubSections({
   name,

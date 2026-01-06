@@ -32,7 +32,6 @@ export function AuthModal() {
       open={isAuthModalOpen}
       onClose={closeAuthModal}
       cancelOnOverlay
-      disableOverlayClick
       floatingCancel
       className={cn({
         'bg-transparent shadow-none':

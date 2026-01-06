@@ -24,7 +24,7 @@ function RoleDescription({ role, description, className, login }: IRoles & { cla
       </div>
 
       <Button
-        onClick={() => openAuthModal('login', login)}
+        onClick={login === 'vendor' ? () => openAuthModal('login', login) : undefined}
         className='w-[120px] h-10 rounded-[20px] font-sf-pro-text text-sm font-semibold px-[17px] py-[11px] uppercase'>
         Learn More
       </Button>

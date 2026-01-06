@@ -21,6 +21,8 @@ export interface VendorRegisterData {
   vendorType: string
   category: string
   website: string
+  portfolio?: string
+  socialLinks?: string
   password: string
 }
 
@@ -60,6 +62,8 @@ export interface User {
   vendorType?: string
   category?: string
   website?: string
+  portfolio?: string
+  socialLinks?: string
   companyName?: string
   isEmailVerified?: boolean
   createdAt?: string

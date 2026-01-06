@@ -101,8 +101,14 @@ export function useRegisterVendor() {
   const { closeAuthModal } = useAuth()
 
   return useMutation({
-    mutationFn: (data: VendorRegisterData) => authService.registerVendor(data),
+    mutationFn: (data: VendorRegisterData) => {
+      console.log('📤 Sending vendor registration data:', data)
+      return authService.registerVendor(data)
+    },
     onSuccess: (data) => {
+      console.log('📥 Received vendor registration response:', data.data)
+      console.log('👤 User data from backend:', data.data.userData)
+
       // Store user data and token in store
       if (data.data.userData && data.data.token) {
         setAuth(data.data.userData, data.data.token)

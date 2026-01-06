@@ -33,8 +33,13 @@ const DialogOverlay = React.forwardRef<
   >
     {cancelOnOverlay && (
       <DialogPrimitive.Close
-        className="absolute top-10 right-10 font-bold opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none cursor-pointer"
+        className="absolute top-10 right-10 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm font-bold opacity-90 transition-all hover:opacity-100 focus:outline-none disabled:pointer-events-none cursor-pointer touch-manipulation"
         onClick={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+        }}
+        style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <X className="h-6 w-6 text-white font-bold" />
         <span className="sr-only">Close</span>
