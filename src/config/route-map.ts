@@ -62,6 +62,9 @@ export const ROUTE_PATHS = {
   vendor_not_found: '/vendor/*',
   vendor_profile: '/vendor/profile',
   vendor_discover: '/vendor/discover',
+  vendor_wishlist: '/vendor/wishlist',
+  vendor_event_details: '/vendor/discover/:eventId',
+  vendor_slot_details: '/vendor/slots/:eventId',
   vendor_slots: '/vendor/slots',
 } as const
 
@@ -137,5 +140,8 @@ export interface RouteParams {
   vendor_not_found: never
   vendor_profile: never
   vendor_discover: never
+  vendor_wishlist: never
+  vendor_event_details: { eventId: string | number }
   vendor_slots: never
+  vendor_slot_details: { eventId: string | number }
 }

@@ -1,55 +1,56 @@
 import { Button } from "@/components/ui/button";
-import { DestructiveAddBtn } from "@/pages/creators/_components/destructive-add-btn";
 import { AddFilterBUtton } from "@/pages/creators/standalone/components/add-filter-btn";
-import { ChevronLeft, Upload } from "lucide-react";
+import { ChevronLeft, Upload, ChevronRight } from "lucide-react";
 import { useAfroStore } from "@/stores";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight } from "lucide-react";
 import type { User } from "@/types";
 import BaseTable from "@/components/reusable/base-table";
 import { Progress } from "@/components/ui/progress";
+import { VendorEditProfileModal } from "./edit-profile-modal";
+import { ViewProfileModal } from "./view-profile-modal";
+
+// ... existing imports ...
 
 export default function VendorProfilePage() {
   const { user } = useAfroStore();
 
   return (
     <section className="w-full h-full flex flex-col justify-start items-start px-[1px]">
-      <div className="w-full h-14 flex items-center justify-between px-8 bg-white">
+      <div className="w-full h-14 flex items-center justify-between px-4 md:px-8 bg-white">
         <AddFilterBUtton />
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-1 md:gap-4">
           <Button
             variant="ghost"
-            className="px-5 py-2.5 rounded-[6px] gap-1 h-8 text-black opacity-50 hover:bg-black/10"
+            className="px-2 md:px-5 py-2.5 rounded-[6px] gap-1 h-8 text-black opacity-50 hover:bg-black/10"
           >
-            <Upload />
-            <span className="font-sf-pro-text text-xs capitalize">
+            <Upload className="w-4 h-4" />
+            <span className="hidden md:inline font-sf-pro-text text-xs capitalize">
               Upload Portfolio
             </span>
           </Button>
-          <Button className="h-8 px-4 bg-secondary-white rounded-[4px] text-xs font-sf-pro-display text-black hover:bg-black/10">
-            View Profile
-          </Button>
-          <DestructiveAddBtn showIcon={false} special name="Edit Profile" />
+          <ViewProfileModal />
+          <VendorEditProfileModal />
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-8 px-5 py-10">
+      <div className="w-full flex flex-col gap-6 md:gap-8 px-4 md:px-5 py-6 md:py-10">
         <div className="w-full flex items-center gap-3 pr-3">
           <img
             src="/assets/dashboard/store.png"
             alt="Store"
             width={42}
             height={42}
+            className="w-8 h-8 md:w-10 md:h-10"
           />
 
-          <p className="text-4xl font-sf-pro-display text-black">
+          <p className="text-xl sm:text-2xl md:text-4xl font-sf-pro-display text-black break-words">
             Welcome! {user?.profile.firstName} {user?.profile.lastName}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-y-3 gap-x-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-y-3 md:gap-x-2">
           <ProfileSection user={user} />
           <div className="w-full flex flex-col gap-2">
             <VendorSummarySection />
@@ -68,9 +69,9 @@ function ProfileSection({ user }: { user: User | null }) {
   return (
     <SectionContainer className="flex flex-col gap-6">
       <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between text-black font-sf-pro-display">
-          <p>You’re almost done! </p>
-          <p className="font-medium text-black underline-offset-4 underline">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-black font-sf-pro-display">
+          <p className="text-xs sm:text-sm md:text-base">You’re almost done! </p>
+          <p className="font-medium text-black underline-offset-4 underline text-xs sm:text-sm md:text-base whitespace-nowrap">
             Complete Your Profile
           </p>
         </div>
@@ -106,12 +107,12 @@ function ProfileSection({ user }: { user: User | null }) {
 
         <div className="h-full flex flex-col gap-2 justify-between">
           <ProfileSubSections name="Phone Number">
-            <span className="px-2 font-semibold text-[#007AFF]">
+            <span className="px-2 font-semibold text-[#007AFF] truncate block max-w-full">
               {user?.telphone}
             </span>
           </ProfileSubSections>
           <ProfileSubSections name="Email Address">
-            <span className="px-2 font-semibold text-[#007AFF]">
+            <span className="px-2 font-semibold text-[#007AFF] truncate block max-w-full break-all">
               {user?.email}
             </span>
           </ProfileSubSections>
@@ -121,7 +122,7 @@ function ProfileSection({ user }: { user: User | null }) {
                 href={user.portfolio.startsWith('http') ? user.portfolio : `https://${user.portfolio}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-2 font-semibold text-[#007AFF] hover:underline truncate"
+                className="px-2 font-semibold text-[#007AFF] hover:underline truncate block max-w-full break-all"
               >
                 {user.portfolio}
               </a>
@@ -135,7 +136,7 @@ function ProfileSection({ user }: { user: User | null }) {
                 href={user.socialLinks.startsWith('http') ? user.socialLinks : `https://${user.socialLinks}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-2 font-semibold text-[#007AFF] hover:underline truncate"
+                className="px-2 font-semibold text-[#007AFF] hover:underline truncate block max-w-full break-all"
               >
                 {user.socialLinks}
               </a>
@@ -163,9 +164,13 @@ function VendorSummarySection() {
 function SlotOverviewSection() {
   return (
     <SectionContainer className="!py-3 flex flex-col gap-3">
-      <p className="text-black font-bold font-sf-pro-display">Slot Overview</p>
+      <p className="text-black font-bold font-sf-pro-display text-sm md:text-base">Slot Overview</p>
 
-      <BaseTable caption="Slot Overview" columns={columns} data={ticketData} />
+      <div className="overflow-x-auto -mx-4 md:mx-0">
+        <div className="min-w-[600px] px-4 md:px-0">
+          <BaseTable caption="Slot Overview" columns={columns} data={ticketData} />
+        </div>
+      </div>
 
       <div className="w-full flex items-center justify-between">
         <div className="flex gap-1">

@@ -32,39 +32,45 @@ export default function VendorDiscoverPage() {
 
   return (
     <section className='w-full h-full flex flex-col justify-start items-start px-[1px]'>
-      <div className='w-full h-14 flex items-center justify-between px-8 bg-white'>
+      <div className="w-full h-14 flex items-center justify-between px-4 md:px-8 bg-white">
         <AddFilterBUtton />
         <WishListBtn />
       </div>
 
-      {events && events.length > 0 ? (
-        <div className='flex flex-wrap gap-7 px-5 md:px-[60px] lg:px-[120px] py-6 md:py-12 lg:py-24'>
-          {events.map((event) => (
-            <DiscoverCard
-              key={event.eventId}
-              eventId={event.eventId}
-              image={event.metadata.desktopMedia.flyer}
-              name={event.eventName}
-              startDate={event.startDate}
-              category={event.category}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className='w-full h-full flex flex-col items-center justify-center'>
-          <div className='w-fit flex items-center gap-1 stroke-medium-gray text-medium-gray'>
-            <CalendarIcon stroke='inherit' className='size-8' />
-            <p className='text-2xl font-bold font-sf-pro-display uppercase'>no available events</p>
+      <div className="w-full px-4 md:px-8 lg:px-16 py-6 md:py-8">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold font-sf-pro-display text-black mb-6 md:mb-8">
+          Discover events near you!
+        </h2>
+
+        {events && events.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            {events.map((event) => (
+              <DiscoverCard
+                key={event.eventId}
+                eventId={event.eventId}
+                image={event.metadata.desktopMedia.flyer}
+                name={event.eventName}
+                startDate={event.startDate}
+                availableSlots={10}
+              />
+            ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="w-full h-[60vh] flex flex-col items-center justify-center">
+            <div className="w-fit flex items-center gap-2 stroke-medium-gray text-medium-gray">
+              <CalendarIcon stroke="inherit" className="size-6 md:size-8" />
+              <p className="text-lg md:text-2xl font-bold font-sf-pro-display uppercase">no available events</p>
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   )
 }
 
-function DiscoverCard({ eventId, image, name, startDate, category }: IDiscoverCardProps) {
+function DiscoverCard({ eventId, image, name, startDate, availableSlots }: IDiscoverCardProps) {
   return (
-    <Link to={getRoutePath('individual_event', { eventId })}>
+    <Link to={getRoutePath('vendor_event_details', { eventId })}>
       <DashboardCards
         image={image}
         name={name}
@@ -74,11 +80,11 @@ function DiscoverCard({ eventId, image, name, startDate, category }: IDiscoverCa
           { src: '/assets/dashboard/creator/ellipses.png', alt: 'Ellipses' },
         ]}
         cardInfo={[
-          <p key='category' className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-            Category: <span className='text-[#34C759] font-medium'>{category}</span>
+          <p key="available_slots" className="font-sf-pro-rounded text-xs text-mid-dark-gray">
+            Available Slots: <span className="text-[#34C759] font-medium">{availableSlots}</span>
           </p>,
         ]}
-        className='grid-cols-2'
+        className="w-full"
       />
     </Link>
   )
@@ -89,5 +95,5 @@ interface IDiscoverCardProps {
   image: string
   name: string
   startDate: string
-  category: string
+  availableSlots: number
 }

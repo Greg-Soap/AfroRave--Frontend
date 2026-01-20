@@ -12,7 +12,7 @@ import {
 } from '@/pages/creators/add-event/constant'
 import type { OrganizerRegisterData, VendorRegisterData } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { HTMLInputTypeAttribute } from 'react'
+import { type HTMLInputTypeAttribute, useState } from 'react'
 import { type FieldValues, type Path, type UseFormReturn, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -52,6 +52,7 @@ interface BusinessSignUpProps {
 export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSignUpProps) {
   const registerVendor = useRegisterVendor()
   const registerOrganizer = useRegisterOrganizer()
+  const [step, setStep] = useState(1)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -111,9 +112,36 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
     }
   }
 
+  const handleContinue = async () => {
+    const isValid = await form.trigger([
+      'first_name',
+      'last_name',
+      'country_code',
+      'phone_number',
+      'gender',
+      'business_name',
+      'web_url',
+      'portfolio_url',
+      'social_links',
+      'email',
+      'password',
+    ])
+
+    if (isValid) {
+      setStep(2)
+    }
+  }
+
   const isPending = type === 'vendor' ? registerVendor.isPending : registerOrganizer.isPending
-  const title = type === 'vendor' ? 'own the spotlight' : 'beyond ticketing'
-  const description = 'tell us about you'
+
+  // Dynamic Title & Description
+  let title = type === 'vendor' ? 'own the spotlight' : 'beyond ticketing'
+  let description = 'tell us about you'
+
+  if (type === 'vendor' && step === 2) {
+    title = 'Business Type'
+    description = 'Select The Applicable Category'
+  }
 
   return (
     <div className='relative flex justify-center w-full max-h-[85vh] overflow-y-auto'>
@@ -123,53 +151,59 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
         className='max-w-[640px] w-full rounded-[12px] space-y-5 bg-red px-4 py-6 sm:px-7 sm:py-4 md:px-5 md:py-12 z-10 font-sf-pro-text'>
         <div className='flex flex-col gap-2 font-sf-pro-display'>
           <p className='uppercase text-2xl font-black text-white'>{title}</p>
-          <p className='uppercase text-xs font-light'>{description}</p>
+          <p className={step === 2 ? 'text-white/80' : 'uppercase text-xs font-light'}>{description}</p>
         </div>
 
-        <div className='grid md:grid-cols-2 gap-x-2 gap-y-6'>
-          <InputField form={form} name='first_name' placeholder='FIRST NAME' />
-          <InputField form={form} name='last_name' placeholder='LAST NAME' />
-        </div>
-
-        <div className='flex gap-2'>
-          <SelectField
-            form={form}
-            name='country_code'
-            items={africanCountryCodes}
-            className='w-24'
-            width={96}
-            placeholder='COUNTRY CODE'
-          />
-
-          <InputField form={form} name='phone_number' placeholder='PHONE NUMBER' />
-        </div>
-
-        <SelectField
-          form={form}
-          name='gender'
-          items={genderOptions}
-          className='w-full'
-          placeholder='GENDER'
-        />
-
-        <InputField
-          form={form}
-          name='business_name'
-          placeholder={type === 'vendor' ? 'BUSINESS NAME' : 'COMPANY NAME'}
-        />
-        <InputField form={form} name='web_url' placeholder='WEBSITE URL (OPTIONAL)' />
-
-        {type === 'vendor' && (
+        {/* STEP 1: Personal & Business Info */}
+        {step === 1 && (
           <>
-            <InputField form={form} name='portfolio_url' placeholder='PORTFOLIO URL (OPTIONAL)' />
-            <InputField form={form} name='social_links' placeholder='SOCIAL MEDIA LINKS (OPTIONAL)' />
+            <div className='grid md:grid-cols-2 gap-x-2 gap-y-6'>
+              <InputField form={form} name='first_name' placeholder='FIRST NAME' />
+              <InputField form={form} name='last_name' placeholder='LAST NAME' />
+            </div>
+
+            <div className='flex gap-2'>
+              <SelectField
+                form={form}
+                name='country_code'
+                items={africanCountryCodes}
+                className='w-24'
+                width={96}
+                placeholder='COUNTRY CODE'
+              />
+
+              <InputField form={form} name='phone_number' placeholder='PHONE NUMBER' />
+            </div>
+
+            <SelectField
+              form={form}
+              name='gender'
+              items={genderOptions}
+              className='w-full'
+              placeholder='GENDER'
+            />
+
+            <InputField
+              form={form}
+              name='business_name'
+              placeholder={type === 'vendor' ? 'BUSINESS NAME' : 'COMPANY NAME'}
+            />
+            <InputField form={form} name='web_url' placeholder='WEBSITE URL (OPTIONAL)' />
+
+            {type === 'vendor' && (
+              <>
+                <InputField form={form} name='portfolio_url' placeholder='PORTFOLIO URL (OPTIONAL)' />
+                <InputField form={form} name='social_links' placeholder='SOCIAL MEDIA LINKS (OPTIONAL)' />
+              </>
+            )}
+
+            <InputField form={form} name='email' placeholder='EMAIL ADDRESS' />
+            <InputField form={form} name='password' placeholder='PASSWORD' type='password' />
           </>
         )}
 
-        <InputField form={form} name='email' placeholder='EMAIL ADDRESS' />
-        <InputField form={form} name='password' placeholder='PASSWORD' type='password' />
-
-        {type === 'vendor' && (
+        {/* STEP 2: Vendor Type & Category (Vendor Only) */}
+        {step === 2 && type === 'vendor' && (
           <>
             <SelectField
               form={form}
@@ -188,13 +222,24 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
           </>
         )}
 
-        <div className='w-full flex justify-end'>
-          <Button
-            type='submit'
-            className='max-w-[239px] w-full h-10 bg-white text-sm font-semibold font-sf-pro-text mx-auto text-black hover:bg-white/90 '
-            disabled={isPending}>
-            {isPending ? 'Signing Up...' : 'Continue'}
-          </Button>
+        {/* Actions */}
+        <div className='w-full flex justify-end pt-4'>
+          {step === 1 && type === 'vendor' ? (
+            <Button
+              type='button'
+              onClick={handleContinue}
+              className='max-w-[239px] w-full h-10 bg-white text-sm font-semibold font-sf-pro-text mx-auto text-black hover:bg-white/90'
+            >
+              Continue
+            </Button>
+          ) : (
+            <Button
+              type='submit'
+              className='max-w-[239px] w-full h-10 bg-white text-sm font-semibold font-sf-pro-text mx-auto text-black hover:bg-white/90 '
+              disabled={isPending}>
+              {isPending ? 'Signing Up...' : 'Sign Up'}
+            </Button>
+          )}
         </div>
 
         <div className='flex items-center justify-center gap-1 text-sm text-white font-sf-pro-text'>

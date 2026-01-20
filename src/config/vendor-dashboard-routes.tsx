@@ -6,7 +6,10 @@ import { getRoutePath } from './get-route-path'
 // Vendor routes
 const ProfilePage = lazy(() => import('../pages/vendor/profile'))
 const DiscoverPage = lazy(() => import('../pages/vendor/discover'))
+const WishlistPage = lazy(() => import('../pages/vendor/wishlist'))
+const VendorEventDetailsPage = lazy(() => import('../pages/vendor/discover/event-details'))
 const SlotsPage = lazy(() => import('../pages/vendor/slots'))
+const SlotDetailsPage = lazy(() => import('../pages/vendor/slots/slot-details'))
 
 export const vendor_dashboard_routes: RouteObject[] = [
   {
@@ -26,6 +29,22 @@ export const vendor_dashboard_routes: RouteObject[] = [
     ),
   },
   {
+    path: getRoutePath('vendor_wishlist'),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <WishlistPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: getRoutePath('vendor_event_details', { eventId: ':eventId' }),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <VendorEventDetailsPage />
+      </Suspense>
+    ),
+  },
+  {
     path: getRoutePath('vendor_slots'),
     element: (
       <Suspense fallback={<LoadingFallback />}>
@@ -33,4 +52,12 @@ export const vendor_dashboard_routes: RouteObject[] = [
       </Suspense>
     ),
   },
+  {
+    path: getRoutePath('vendor_slot_details', { eventId: ':eventId' }),
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <SlotDetailsPage />
+      </Suspense>
+    )
+  }
 ]
