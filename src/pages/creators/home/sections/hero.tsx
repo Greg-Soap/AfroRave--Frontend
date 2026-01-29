@@ -49,7 +49,7 @@ import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 
 export default function HeroSection({
-  description = ' We equip organizers with the tools to create, manage, and sell out their events, And vendors? They discover new opportunities, connect with organizers, and grow their businesses.',
+  description = 'We equip organizers with the tools to create, manage, and sell out their events, and vendors? They discover new opportunities, connect with organizers, and grow their businesses.',
   wideDescription = false,
   noButton = false,
   wishlistButton = false,
@@ -73,14 +73,14 @@ export default function HeroSection({
         )}>
         <p className='w-full max-w-[514px] text-center text-white text-3xl sm:text-4xl md:text-[40px] font-black uppercase leading-tight'>
           All-in-One Hub
-          <br /> for Fans and Creators
+          <br /> for Fans and Organizers
         </p>
         <p className='text-center uppercase text-sm sm:text-base leading-relaxed px-2'>
           {description}
         </p>
         <OnlyShowIf condition={!noButton}>
           <Button
-            onClick={() => openAuthModal('login', 'vendor')}
+            onClick={() => openAuthModal('signup')}
             className='w-full sm:max-w-[120px] h-10 sm:h-auto rounded-[20px] font-sf-pro-text text-sm font-semibold px-4 sm:px-[17px] py-[11px] uppercase max-w-xs mx-auto'>
             Get Started
           </Button>

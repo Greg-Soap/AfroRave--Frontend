@@ -5,12 +5,18 @@ import { cn } from '@/lib/utils'
 import { BusinessSignUp } from '@/pages/auth/sign-up/business-signup-form'
 import { SignupForm } from '@/pages/auth/sign-up/signup-form'
 import { CreatorLogo, UserLoginForm } from '@/pages/auth/user-login/user-login-form'
+import { RoleSelection } from './role-selection'
 
 export function AuthModal() {
-  const { isAuthModalOpen, authType, signupType, closeAuthModal, switchAuthType, loginType } =
+  const { isAuthModalOpen, authType, signupType, closeAuthModal, switchAuthType, loginType, switchToSignup } =
     useAuth()
 
   const renderSignupForm = () => {
+    // Show role selection if signupType is not set (guest) and authType is signup
+    if (signupType === 'guest' && authType === 'signup') {
+      return <RoleSelection onContinue={(role) => switchToSignup(role)} />
+    }
+
     switch (signupType) {
       case 'creator':
         return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='creator' />
@@ -24,7 +30,20 @@ export function AuthModal() {
   const getModalSize = () => {
     if (authType === 'login') return 'small'
     if (signupType === 'creator' || signupType === 'vendor') return 'large'
+    // Role selection modal should be large
+    if (signupType === 'guest' && authType === 'signup') return 'large'
     return 'small'
+  }
+
+  const shouldShowCreatorLogo = () => {
+    // Show logo for creator login, role selection, or creator/vendor signup
+    // Both organizers and vendors are considered "creators"
+    return (
+      loginType === 'creator' ||
+      loginType === 'vendor' ||
+      (authType === 'signup' && signupType === 'guest') || // Role selection
+      (authType === 'signup' && (signupType === 'creator' || signupType === 'vendor'))
+    )
   }
 
   return (
@@ -35,13 +54,13 @@ export function AuthModal() {
       floatingCancel
       className={cn({
         'bg-transparent shadow-none':
-          authType === 'signup' && (signupType === 'creator' || signupType === 'vendor'),
+          authType === 'signup' && (signupType === 'creator' || signupType === 'vendor' || signupType === 'guest'),
       })}
       size={getModalSize()}>
       <>
-        <OnlyShowIf condition={loginType === 'creator'}>
-          <div className='relative'>
-            <div className='absolute -top-20 left-[20%]'>
+        <OnlyShowIf condition={shouldShowCreatorLogo()}>
+          <div className='relative w-full'>
+            <div className='absolute -top-20 left-1/2 -translate-x-1/2'>
               <CreatorLogo />
             </div>
           </div>

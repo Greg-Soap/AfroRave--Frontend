@@ -14,15 +14,15 @@ export default function OwnTheStage() {
 
   // Ref and inView for the CategoryBlock animation (x-slide)
   const categoryRef = useRef(null)
-  const isCategoryInView = useInView(categoryRef, { 
-    once: false, 
+  const isCategoryInView = useInView(categoryRef, {
+    once: true,
     margin: '-100px 0px -100px 0px'
   })
 
   // Ref and inView for the DetailsBlocks rows animation (y-slide)
   const detailsRef = useRef(null)
-  const isDetailsInView = useInView(detailsRef, { 
-    once: false, 
+  const isDetailsInView = useInView(detailsRef, {
+    once: true,
     margin: '-100px 0px -100px 0px'
   })
 

@@ -34,7 +34,7 @@ export default function MobileMenu({ onClose }: MobileMenuProps) {
             key={link.name}
             to={link.href}
             onClick={onClose}
-            className='text-white hover:text-white/80 transition-colors font-input-mono text-xl font-light hover:underline'>
+            className='text-white hover:text-white/80 transition-colors font-input-mono text-xl font-light hover:decoration-[#E31E24] hover:underline'>
             {link.name}
           </Link>
         ))}

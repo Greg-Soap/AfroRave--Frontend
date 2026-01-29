@@ -1,96 +1,125 @@
-// import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
-// import { getRoutePath } from '@/config/get-route-path'
-// import LoginButton from '@/layouts/components/login-button'
+import { getRoutePath } from '@/config/get-route-path'
 import { useScroll } from '@/lib/useScroll'
-// import { cn } from '@/lib/utils'
-// import { useAfroStore } from '@/stores'
+import { cn } from '@/lib/utils'
+import { useAuth } from '@/contexts/auth-context'
 import { useEffect, useState } from 'react'
-// import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { ChevronDown } from 'lucide-react'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
-  // const { user, isAuthenticated, isCreator } = useAfroStore()
+  const { openAuthModal } = useAuth()
+  const [showLoginDropdown, setShowLoginDropdown] = useState(false)
 
   return (
-    <header className='w-full fixed top-0 flex justify-center z-50 h-20 bg-transparent '>
+    <header className='w-full fixed top-0 flex justify-center z-50 h-32 md:h-28 bg-transparent '>
       <div
         className={`absolute inset-0 transition-all duration-300 ${hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
           }`}
       />
 
-      <nav className='relative px-4 md:px-8 w-full flex flex-col gap-y-3 items-center py-4'>
+      <nav className='relative px-4 md:px-8 lg:px-16 w-full max-w-[1400px] flex flex-col gap-y-4 items-center py-4 md:py-6'>
         <div className='flex w-full items-center justify-between'>
           <div>
             <img
               src='/assets/landing-page/AR.png'
               alt='AR'
-              width={80}
-              height={40}
-              className='self-center'
+              className='self-center w-20 h-10 md:w-[120px] md:h-[60px]'
             />
           </div>
 
-          {/* <NavigationLinks /> */}
+          <NavigationLinks />
 
           <div className='flex items-center gap-5'>
-            <CountdownTimer />
-            {/* {isAuthenticated && isCreator && <CreatorMenuButton user={user} variant='dark' />} */}
+            {/* Login Dropdown */}
+            <div className='relative'>
+              <button
+                onClick={() => setShowLoginDropdown(!showLoginDropdown)}
+                className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-4 hover:bg-black/20 shadow-none text-sm font-light font-input-mono transition-colors'
+              >
+                LOG IN
+                <ChevronDown className='w-4 h-4' />
+              </button>
 
-            {/* {!isAuthenticated && (
-              <>
-                <LoginButton className='bg-transparent uppercase text-white h-[35px] w-[75px] hover:bg-black/20 shadow-none text-sm font-light font-input-mono' />
-              </>
-            )} */}
+              {showLoginDropdown && (
+                <div className='absolute top-full right-0 mt-2 bg-black/90 backdrop-blur-sm rounded-lg overflow-hidden min-w-[150px] border border-white/10'>
+                  <button
+                    onClick={() => {
+                      setShowLoginDropdown(false)
+                      openAuthModal('login', 'creator')
+                    }}
+                    className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono border-b border-white/10'
+                  >
+                    ORGANIZER
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowLoginDropdown(false)
+                      openAuthModal('login', 'vendor')
+                    }}
+                    className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono'
+                  >
+                    VENDOR
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        {/* <NavigationLinks type='mobile' /> */}
+
+        {/* Countdown Timer - Centered below navigation */}
+        <div className='w-full flex justify-center mt-2'>
+          <CountdownTimer />
+        </div>
+
+        <NavigationLinks type='mobile' />
       </nav>
     </header>
   )
 }
-// Add back after launch
-// function NavigationLinks({
-//   type = 'desktop',
-// }: {
-//   type?: 'desktop' | 'mobile'
-// }) {
-//   return (
-//     <div
-//       className={cn('items-center', {
-//         'hidden md:flex gap-16': type === 'desktop',
-//         'w-full flex justify-between md:hidden': type === 'mobile',
-//       })}>
-//       {links.map((item) => (
-//         <NavLink
-//           key={item.name}
-//           to={item.href}
-//           className={({ isActive }) =>
-//             cn(
-//               'font-input-mono font-light text-xs md:text-sm uppercase px-3 py-1 border-b text-white',
-//               {
-//                 'border-deep-red': isActive,
-//                 'border-transparent': !isActive,
-//               },
-//             )
-//           }>
-//           {item.name}
-//         </NavLink>
-//       ))}
-//     </div>
-//   )
-// }
 
-// const links: ILinks[] = [
-//   { href: getRoutePath('creators_home'), name: 'Home' },
-//   { href: getRoutePath('creators_about'), name: 'About Us' },
-//   { href: getRoutePath('creators_contact'), name: 'Contact Us' },
-//   { href: getRoutePath('creators_blog'), name: 'Blog' },
-// ]
+function NavigationLinks({
+  type = 'desktop',
+}: {
+  type?: 'desktop' | 'mobile'
+}) {
+  return (
+    <div
+      className={cn('items-center', {
+        'hidden md:flex gap-12 lg:gap-16': type === 'desktop',
+        'w-full flex justify-between md:hidden': type === 'mobile',
+      })}>
+      {links.map((item) => (
+        <NavLink
+          key={item.name}
+          to={item.href}
+          className={({ isActive }) =>
+            cn(
+              'font-input-mono font-light text-xs md:text-base lg:text-lg uppercase px-3 py-1 border-b-2 text-white transition-all hover:border-[#E31E24]',
+              {
+                'border-[#E31E24]': isActive,
+                'border-transparent': !isActive,
+              },
+            )
+          }>
+          {item.name}
+        </NavLink>
+      ))}
+    </div>
+  )
+}
 
-// interface ILinks {
-//   href: string
-//   name: string
-// }
+const links: ILinks[] = [
+  { href: getRoutePath('creators_home'), name: 'Home' },
+  { href: getRoutePath('creators_about'), name: 'About Us' },
+  { href: getRoutePath('creators_contact'), name: 'Contact Us' },
+  { href: getRoutePath('creators_blog'), name: 'Blog' },
+]
+
+interface ILinks {
+  href: string
+  name: string
+}
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({
@@ -129,11 +158,11 @@ function CountdownTimer() {
 
   return (
     <div
-      className='flex items-center gap-2 text-white text-center'
+      className='flex items-center gap-2 md:gap-3 text-white text-center'
       style={{
         fontFamily: 'Inter',
         fontWeight: 700,
-        fontSize: '32px',
+        fontSize: 'clamp(20px, 4vw, 28px)',
         lineHeight: '100%',
         letterSpacing: '0%',
       }}>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { BaseCarousel } from "@/components/reusable/base-carousel";
 import { Link } from "react-router-dom";
+import { getRoutePath } from "@/config/get-route-path";
 
 interface AfroCarouselProps {
   items: {
@@ -15,7 +16,7 @@ interface AfroCarouselProps {
 export function AfroCarousel({
   items,
   buttonText = "Find Tickets",
-  buttonLink = "/events",
+  buttonLink = getRoutePath('events'),
 }: AfroCarouselProps) {
   const carouselItems = items.map((item) => ({
     id: item.id,

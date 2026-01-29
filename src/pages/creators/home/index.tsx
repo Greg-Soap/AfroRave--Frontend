@@ -32,10 +32,14 @@ import { useRef } from 'react'
 
 export default function CreatorsHomePage() {
   return (
-    <VideoBackgroundWrapper overlayOpacity={0.6} secondColor='#a2a2a2'>
-      <HeroSection />
-      <RolesSectionWrapper />
-      <CTASectionWrapper />
+    <VideoBackgroundWrapper
+      overlayOpacity={0.6}
+      secondColor='#a2a2a2'
+      backgroundImage='/assets/landing-page/c1.png'
+      >
+        <HeroSection />
+        <RolesSectionWrapper />
+        <CTASectionWrapper />
     </VideoBackgroundWrapper>
   )
 }

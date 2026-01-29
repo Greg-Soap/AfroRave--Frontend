@@ -23,7 +23,7 @@ export default function LoginButton({ className }: { className?: string }) {
           onClick: () => openAuthModal('login', 'guest'),
         },
         {
-          label: 'Creator',
+          label: 'Organizer',
           onClick: () => openAuthModal('login', 'creator'),
         },
         {

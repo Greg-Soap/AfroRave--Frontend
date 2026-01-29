@@ -135,8 +135,8 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
   const isPending = type === 'vendor' ? registerVendor.isPending : registerOrganizer.isPending
 
   // Dynamic Title & Description
-  let title = type === 'vendor' ? 'own the spotlight' : 'beyond ticketing'
-  let description = 'tell us about you'
+  let title = type === 'vendor' ? 'OWN THE SPOTLIGHT' : 'BEYOND TICKETING'
+  let description = 'TELL US ABOUT YOU'
 
   if (type === 'vendor' && step === 2) {
     title = 'Business Type'
@@ -224,20 +224,20 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
 
         {/* Actions */}
         <div className='w-full flex justify-end pt-4'>
-          {step === 1 && type === 'vendor' ? (
+          {type === 'creator' || step === 2 ? (
+            <Button
+              type='submit'
+              className='max-w-[239px] w-full h-10 bg-white text-sm font-semibold font-sf-pro-text mx-auto text-black hover:bg-white/90 '
+              disabled={isPending}>
+              {isPending ? 'Signing Up...' : 'Sign Up'}
+            </Button>
+          ) : (
             <Button
               type='button'
               onClick={handleContinue}
               className='max-w-[239px] w-full h-10 bg-white text-sm font-semibold font-sf-pro-text mx-auto text-black hover:bg-white/90'
             >
               Continue
-            </Button>
-          ) : (
-            <Button
-              type='submit'
-              className='max-w-[239px] w-full h-10 bg-white text-sm font-semibold font-sf-pro-text mx-auto text-black hover:bg-white/90 '
-              disabled={isPending}>
-              {isPending ? 'Signing Up...' : 'Sign Up'}
             </Button>
           )}
         </div>

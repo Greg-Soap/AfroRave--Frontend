@@ -6,17 +6,17 @@ import Header from './sections/header'
 
 export default function CreatorsLandingPageLayout() {
   return (
-    <div className='w-full h-full bg-mid-gray/60 '>
+    <>
       <AuthProvider>
         <Header />
         <AuthModal />
 
-        <main className='w-full min-h-screen flex flex-col items-center gap-[200px] bg-mid-gray'>
+        <main className='w-full min-h-screen'>
           <Outlet />
         </main>
         {/* TODO: add back after launch */}
         {/* <Footer /> */}
       </AuthProvider>
-    </div>
+    </>
   )
 }

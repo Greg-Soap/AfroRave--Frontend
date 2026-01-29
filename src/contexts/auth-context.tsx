@@ -62,6 +62,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const closeAuthModal = useCallback(() => {
     setIsAuthModalOpen(false)
+    // Reset signupType to 'guest' so role selection shows again next time
+    setSignupType('guest')
     setSearchParams(
       (params) => {
         params.delete('login')

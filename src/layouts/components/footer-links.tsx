@@ -37,7 +37,7 @@ export function FooterLinks({
 
 function IndividualLinks({ to, name }: { to: string; name: string }) {
   return (
-    <Link to={to} className="font-light hover:underline text-sm text-inherit">
+    <Link to={to} className="font-light hover:underline hover:decoration-[#E31E24] text-sm text-inherit">
       {name}
     </Link>
   );
