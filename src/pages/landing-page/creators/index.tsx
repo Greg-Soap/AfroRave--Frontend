@@ -13,7 +13,7 @@ export default function CreatorsPage() {
       />
       <VideoBackgroundWrapper
         videoSrc='/assets/creators-background.mp4'
-        backgroundImage='/assets/landing-page/c1.png'
+        backgroundImage='/assets/landing-page/BG-3.webp'
         secondColor='#a2a2a2'
         overlayOpacity={0.6}
       >

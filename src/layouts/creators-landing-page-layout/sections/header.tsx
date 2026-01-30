@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/auth-context'
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ChevronDown } from 'lucide-react'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
@@ -24,7 +23,7 @@ export default function Header() {
             <img
               src='/assets/landing-page/AR.png'
               alt='AR'
-              className='self-center w-20 h-10 md:w-[120px] md:h-[60px]'
+              className='self-center w-16 h-8 md:w-20 md:h-10'
             />
           </div>
 
@@ -38,7 +37,6 @@ export default function Header() {
                 className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-4 hover:bg-black/20 shadow-none text-sm font-light font-input-mono transition-colors'
               >
                 LOG IN
-                <ChevronDown className='w-4 h-4' />
               </button>
 
               {showLoginDropdown && (
@@ -113,7 +111,7 @@ const links: ILinks[] = [
   { href: getRoutePath('creators_home'), name: 'Home' },
   { href: getRoutePath('creators_about'), name: 'About Us' },
   { href: getRoutePath('creators_contact'), name: 'Contact Us' },
-  { href: getRoutePath('creators_blog'), name: 'Blog' },
+  // { href: getRoutePath('creators_blog'), name: 'Blog' },
 ]
 
 interface ILinks {
@@ -158,13 +156,10 @@ function CountdownTimer() {
 
   return (
     <div
-      className='flex items-center gap-2 md:gap-3 text-white text-center'
+      className='flex items-center gap-2 md:gap-3 text-white text-center font-bold text-xs md:text-base lg:text-lg'
       style={{
         fontFamily: 'Inter',
-        fontWeight: 700,
-        fontSize: 'clamp(20px, 4vw, 28px)',
         lineHeight: '100%',
-        letterSpacing: '0%',
       }}>
       <span>{timeLeft.days}</span>
       <span>:</span>

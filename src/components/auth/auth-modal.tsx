@@ -4,6 +4,7 @@ import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 import { BusinessSignUp } from '@/pages/auth/sign-up/business-signup-form'
 import { SignupForm } from '@/pages/auth/sign-up/signup-form'
+import { VendorSignupForm } from '@/pages/auth/sign-up/vendor-signup-form'
 import { CreatorLogo, UserLoginForm } from '@/pages/auth/user-login/user-login-form'
 import { RoleSelection } from './role-selection'
 
@@ -21,7 +22,7 @@ export function AuthModal() {
       case 'creator':
         return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='creator' />
       case 'vendor':
-        return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='vendor' />
+        return <VendorSignupForm />
       default:
         return <SignupForm onSwitchToLogin={() => switchAuthType('login')} />
     }
@@ -29,20 +30,23 @@ export function AuthModal() {
 
   const getModalSize = () => {
     if (authType === 'login') return 'small'
-    if (signupType === 'creator' || signupType === 'vendor') return 'large'
+    if (signupType === 'creator') return 'large'
     // Role selection modal should be large
     if (signupType === 'guest' && authType === 'signup') return 'large'
     return 'small'
   }
 
   const shouldShowCreatorLogo = () => {
-    // Show logo for creator login, role selection, or creator/vendor signup
-    // Both organizers and vendors are considered "creators"
+    // Show logo for creator login or vendor login, role selection, or creator signup
+    // Vendor signup has its own logo inside the form, so don't show floating logo
+    if (authType === 'signup' && signupType === 'vendor') {
+      return false
+    }
     return (
       loginType === 'creator' ||
       loginType === 'vendor' ||
       (authType === 'signup' && signupType === 'guest') || // Role selection
-      (authType === 'signup' && (signupType === 'creator' || signupType === 'vendor'))
+      (authType === 'signup' && signupType === 'creator')
     )
   }
 

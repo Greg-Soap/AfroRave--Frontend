@@ -22,8 +22,16 @@ import Hero from './hero'
 import OwnTheStage from './own-the-stage'
 import Socials from './socials'
 import { SEO } from '../../../components/seo'
+import { VendorRegistrationCallout } from '@/components/vendor/vendor-registration-callout'
+import { useAuth } from '@/contexts/auth-context'
 
 export default function LandingPage() {
+  const { openAuthModal } = useAuth()
+
+  const handleVendorCalloutClick = () => {
+    openAuthModal('signup', 'vendor')
+  }
+
   return (
     <div style={{ overflow: 'hidden' }}>
       <SEO
@@ -33,6 +41,7 @@ export default function LandingPage() {
       <Hero />
       <OwnTheStage />
       <Socials />
+      <VendorRegistrationCallout onOpen={handleVendorCalloutClick} delay={3000} />
     </div>
   )
 }
