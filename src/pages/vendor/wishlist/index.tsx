@@ -1,4 +1,3 @@
-import { LoadingFallback } from '@/components/loading-fallback'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'

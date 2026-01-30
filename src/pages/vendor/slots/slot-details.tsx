@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ChevronLeft, Download, MoreVertical, Search, Settings2 } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 import { SlotDescriptionModal } from './slot-description-modal'
@@ -18,7 +18,6 @@ const MOCK_SLOTS = [
 
 export default function VendorSlotDetailsPage() {
     const navigate = useNavigate()
-    const { eventId } = useParams()
     const [selectedSlot, setSelectedSlot] = useState<typeof MOCK_SLOTS[0] | null>(null)
     const [viewMode, setViewMode] = useState<'list' | 'map'>('list')
     const eventName = "Blackmarket Flea" // Placeholder

@@ -9,7 +9,7 @@ export default function CreatorsBlogPage() {
         alt='Abstract'
         className='fixed inset-0 w-full h-full object-cover z-0 opacity-60'
       />
-      <EmptyPage withGradient={false} className='bg-transparent' />
+      <EmptyPage />
     </VideoBackgroundWrapper>
   )
 }

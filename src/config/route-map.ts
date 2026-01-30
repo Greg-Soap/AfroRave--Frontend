@@ -17,7 +17,7 @@ export const ROUTE_PATHS = {
   resell: '/fans/resell',
   about_us: '/fans/about-us',
   blog: '/fans/blog',
-  creators: '/creators',
+  creators: '/fans/creators',
   faq: '/fans/support/faq',
   refund_policy: '/fans/refund-policy',
   work_with_us: '/fans/work-with-us',

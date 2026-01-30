@@ -10,8 +10,6 @@ import { Progress } from "@/components/ui/progress";
 import { VendorEditProfileModal } from "./edit-profile-modal";
 import { ViewProfileModal } from "./view-profile-modal";
 
-// ... existing imports ...
-
 export default function VendorProfilePage() {
   const { user } = useAfroStore();
 

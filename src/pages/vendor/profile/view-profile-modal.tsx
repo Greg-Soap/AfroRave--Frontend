@@ -9,11 +9,6 @@ import {
 import { X, Instagram } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-// Mock Icon for X (Twitter) since lucide might not have it or it's named differently
-const XIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-)
-
 export function ViewProfileModal() {
     return (
         <Dialog>
