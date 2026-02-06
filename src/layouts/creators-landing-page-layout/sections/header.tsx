@@ -128,9 +128,9 @@ function CountdownTimer() {
   })
 
   useEffect(() => {
-    // Target date: January 30, 2026 at 00:00:00 Nigerian Time (WAT, UTC+1)
+    // Target date: February 15, 2026 at 00:00:00 Nigerian Time (WAT, UTC+1)
     // Convert to UTC by subtracting 1 hour
-    const targetDate = new Date('2026-01-30T00:00:00+01:00').getTime()
+    const targetDate = new Date('2026-02-15T00:00:00+01:00').getTime()
 
     function updateCountdown() {
       const now = new Date().getTime()
