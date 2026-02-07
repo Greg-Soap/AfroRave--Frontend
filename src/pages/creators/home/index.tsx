@@ -35,11 +35,11 @@ export default function CreatorsHomePage() {
     <VideoBackgroundWrapper
       overlayOpacity={0.6}
       secondColor='#a2a2a2'
-      backgroundImage='/assets/landing-page/c1.png'
-      >
-        <HeroSection />
-        <RolesSectionWrapper />
-        <CTASectionWrapper />
+      backgroundImage='/assets/landing-page/BG-3-new.png?v=1'
+    >
+      <HeroSection />
+      <RolesSectionWrapper />
+      <CTASectionWrapper />
     </VideoBackgroundWrapper>
   )
 }

@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/auth-context'
 import { SEO } from '@/components/seo'
 import { getRoutePath } from '@/config/get-route-path'
 import { VideoBackgroundWrapper } from '@/components/shared/video-background-wrapper'
@@ -15,7 +14,7 @@ export default function CreatorsPage() {
         videoSrc='/assets/creators-background.mp4'
         backgroundImage='/assets/landing-page/BG-3.webp'
         secondColor='#a2a2a2'
-        overlayOpacity={0.6}
+        overlayOpacity={0.2}
       >
         <div className='text-white pt-40 md:pt-36'>
           <HeroSection />
@@ -34,23 +33,27 @@ export default function CreatorsPage() {
 }
 
 function HeroSection() {
-  const { openAuthModal } = useAuth()
-
   return (
     <section className='min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 py-20 text-center'>
-      <div className='max-w-3xl space-y-6 md:space-y-8'>
-        <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight'>
-          All-in-one hub<br />for fans and creators
+      <div className='max-w-4xl space-y-8 md:space-y-10'>
+        <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase leading-tight tracking-tight'>
+          ALL-IN-ONE HUB<br />FOR FANS AND ORGANIZERS
         </h1>
-        <p className='text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed px-4'>
-          We equip organizers with the tools to create, manage, and sell out their events, and vendors? They discover new opportunities, connect with organizers, and grow their businesses.
+        <p className='text-xs sm:text-sm md:text-base text-white max-w-3xl mx-auto leading-relaxed px-4 uppercase tracking-wide'>
+          AFRO REVIVE BRINGS TOGETHER ORGANIZERS, VENDORS, AND FANS IN ONE UNIFIED PLATFORM. ORGANIZERS CAN EFFICIENTLY CREATE AND MANAGE EVENTS, VENDORS CAN SHOWCASE THEIR OFFERINGS AND SECURE SLOTS, WHILE FANS BENEFIT FROM SEAMLESS TICKETING WITH THE FLEXIBILITY TO RESELL, TRANSFER, OR UPGRADE. A TRULY COMPREHENSIVE SOLUTION FOR EVERY EVENT EXPERIENCE
         </p>
-        <Button
-          onClick={() => openAuthModal('signup')}
-          className='bg-white text-black hover:bg-white/90 rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto text-sm sm:text-base font-semibold uppercase mt-4'
-        >
-          Get Started
-        </Button>
+
+        {/* Email input and button */}
+        <div className='flex flex-col sm:flex-row gap-3 max-w-xl mx-auto items-center justify-center'>
+          <input
+            type='email'
+            placeholder='ENTER EMAIL ADDRESS'
+            className='w-full sm:flex-1 h-12 px-6 rounded-md bg-white text-black placeholder:text-gray-500 text-sm uppercase tracking-wide focus:outline-none'
+          />
+          <button className='w-full sm:w-auto h-12 px-8 bg-white text-black font-semibold uppercase text-sm rounded-md hover:bg-gray-100 transition-colors whitespace-nowrap'>
+            STAY TUNED
+          </button>
+        </div>
       </div>
     </section>
   )

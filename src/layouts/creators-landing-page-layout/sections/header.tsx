@@ -3,12 +3,16 @@ import { useScroll } from '@/lib/useScroll'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/auth-context'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
   const { openAuthModal } = useAuth()
   const [showLoginDropdown, setShowLoginDropdown] = useState(false)
+  const location = useLocation()
+
+  // Hide navigation on the waitlist page (/creators) AND the root landing page (/)
+  const isWaitlistPage = location.pathname === '/creators' || location.pathname === '/creators/' || location.pathname === '/'
 
   return (
     <header className='w-full fixed top-0 flex justify-center z-50 h-32 md:h-28 bg-transparent '>
@@ -27,50 +31,54 @@ export default function Header() {
             />
           </div>
 
-          <NavigationLinks />
+          {!isWaitlistPage && <NavigationLinks />}
 
-          <div className='flex items-center gap-5'>
-            {/* Login Dropdown */}
-            <div className='relative'>
-              <button
-                onClick={() => setShowLoginDropdown(!showLoginDropdown)}
-                className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-4 hover:bg-black/20 shadow-none text-sm font-light font-input-mono transition-colors'
-              >
-                LOG IN
-              </button>
+          {!isWaitlistPage && (
+            <div className='flex items-center gap-5'>
+              {/* Login Dropdown */}
+              <div className='relative'>
+                <button
+                  onClick={() => setShowLoginDropdown(!showLoginDropdown)}
+                  className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-4 hover:bg-black/20 shadow-none text-sm font-light font-input-mono transition-colors'>
+                  LOG IN
+                </button>
 
-              {showLoginDropdown && (
-                <div className='absolute top-full right-0 mt-2 bg-black/90 backdrop-blur-sm rounded-lg overflow-hidden min-w-[150px] border border-white/10'>
-                  <button
-                    onClick={() => {
-                      setShowLoginDropdown(false)
-                      openAuthModal('login', 'creator')
-                    }}
-                    className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono border-b border-white/10'
-                  >
-                    ORGANIZER
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowLoginDropdown(false)
-                      openAuthModal('login', 'vendor')
-                    }}
-                    className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono'
-                  >
-                    VENDOR
-                  </button>
-                </div>
-              )}
+                {showLoginDropdown && (
+                  <div className='absolute top-full right-0 mt-2 bg-black/90 backdrop-blur-sm rounded-lg overflow-hidden min-w-[150px] border border-white/10'>
+                    <button
+                      onClick={() => {
+                        setShowLoginDropdown(false)
+                        openAuthModal('login', 'creator')
+                      }}
+                      className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono border-b border-white/10'>
+                      ORGANIZER
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowLoginDropdown(false)
+                        openAuthModal('login', 'vendor')
+                      }}
+                      className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono'>
+                      VENDOR
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
+          )}
+
+          {/* Show countdown timer on waitlist page only */}
+          {isWaitlistPage && <CountdownTimer />}
+        </div>
+
+        {/* Countdown Timer - Centered below navigation on non-waitlist pages */}
+        {!isWaitlistPage && (
+          <div className='w-full flex justify-center mt-2'>
+            <CountdownTimer />
           </div>
-        </div>
+        )}
 
-        {/* Countdown Timer - Centered below navigation */}
-        <div className='w-full flex justify-center mt-2'>
-          <CountdownTimer />
-        </div>
-
-        <NavigationLinks type='mobile' />
+        {!isWaitlistPage && <NavigationLinks type='mobile' />}
       </nav>
     </header>
   )
@@ -156,10 +164,11 @@ function CountdownTimer() {
 
   return (
     <div
-      className='flex items-center gap-2 md:gap-3 text-white text-center font-bold text-xs md:text-base lg:text-lg'
+      className='flex items-center gap-1 text-white text-center font-bold text-2xl md:text-3xl lg:text-4xl'
       style={{
         fontFamily: 'Inter',
         lineHeight: '100%',
+        letterSpacing: '0.02em',
       }}>
       <span>{timeLeft.days}</span>
       <span>:</span>

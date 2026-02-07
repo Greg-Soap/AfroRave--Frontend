@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 interface VideoBackgroundWrapperProps {
   children: ReactNode
@@ -20,22 +20,6 @@ export function VideoBackgroundWrapper({
   secondColor = '#a2a2a2',
 }: VideoBackgroundWrapperProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    console.log('🎥 VideoBackgroundWrapper mounted')
-    console.log('📹 Video source:', videoSrc)
-    console.log('🖼️ Background image:', backgroundImage || 'none')
-    console.log('🎨 Overlay color:', secondColor, 'Opacity:', overlayOpacity)
-
-    const video = videoRef.current
-    if (video) {
-      video.addEventListener('loadstart', () => console.log('▶️ Video loading started'))
-      video.addEventListener('loadeddata', () => console.log('✅ Video data loaded'))
-      video.addEventListener('canplay', () => console.log('🎬 Video can play'))
-      video.addEventListener('playing', () => console.log('🎥 Video is playing'))
-      video.addEventListener('error', (e) => console.error('❌ Video error:', e))
-    }
-  }, [videoSrc, backgroundImage, secondColor, overlayOpacity])
 
   return (
     <div className={cn('relative w-full min-h-screen overflow-hidden', className)}>
@@ -58,19 +42,12 @@ export function VideoBackgroundWrapper({
         muted
         playsInline
         className='absolute inset-0 w-full h-full object-cover'
-        style={{ zIndex: 2, opacity: 0.25 }}>
+        style={{ zIndex: 2, opacity: 0.3 }}>
         <source src={videoSrc} type='video/mp4' />
         Your browser does not support the video tag.
       </video>
 
-      {/* Single color overlay for better content readability */}
-      <div
-        className='absolute inset-0 z-10'
-        style={{
-          backgroundColor: secondColor,
-          opacity: overlayOpacity,
-        }}
-      />
+      {/* ALL OVERLAYS REMOVED FOR TESTING */}
 
       {/* Content */}
       <div className='relative z-20 w-full h-full'>{children}</div>

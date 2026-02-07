@@ -12,27 +12,20 @@ export function VendorRegistrationCallout({ onOpen, delay = 1500 }: VendorRegist
     const [isDismissed, setIsDismissed] = useState(false)
 
     useEffect(() => {
-        console.log('🔵 Callout mounted with delay:', delay)
-
         // Check if callout was previously dismissed in this session
         const dismissed = sessionStorage.getItem('vendorCalloutDismissed')
-        console.log('📦 Session storage dismissed:', dismissed)
 
         if (dismissed === 'true') {
             setIsDismissed(true)
-            console.log('❌ Callout dismissed, not showing')
             return
         }
 
-        console.log('⏰ Setting timer for', delay, 'ms')
         // Show callout after specified delay
         const timer = setTimeout(() => {
-            console.log('✅ Timer fired, showing callout')
             setIsVisible(true)
         }, delay)
 
         return () => {
-            console.log('🧹 Cleaning up timer')
             clearTimeout(timer)
         }
     }, [delay])

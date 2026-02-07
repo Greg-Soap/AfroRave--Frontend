@@ -40,7 +40,7 @@ export function AfroCarousel({
         />
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/50 to-transparent" />
 
       <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col w-fit items-center bottom-24 gap-5 z-[9999]">
         <Button
