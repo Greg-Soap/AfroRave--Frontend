@@ -16,8 +16,6 @@ export function VideoBackgroundWrapper({
   className,
   videoSrc = '/assets/creators-background.mp4',
   backgroundImage,
-  overlayOpacity = 0.7,
-  secondColor = '#a2a2a2',
 }: VideoBackgroundWrapperProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
