@@ -52,13 +52,15 @@ export function VendorRegistrationCallout({ onOpen, delay = 1500 }: VendorRegist
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 100 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="fixed top-20 right-4 md:right-8 z-[9999] cursor-pointer"
-                    onClick={handleClick}
+                    className="fixed top-20 right-4 md:right-8 z-[9999]"
                 >
-                    <div className="bg-white rounded-lg shadow-lg p-4 pr-10 relative w-[300px] md:w-[400px]">
+                    <div
+                        onClick={handleClick}
+                        className="bg-white rounded-lg shadow-lg p-4 pr-10 relative w-[300px] md:w-[400px] cursor-pointer hover:shadow-xl transition-shadow"
+                    >
                         <button
                             onClick={handleDismiss}
-                            className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                            className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
                             aria-label="Close"
                         >
                             <X className="w-4 h-4 text-gray-600" />

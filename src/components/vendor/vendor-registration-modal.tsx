@@ -98,7 +98,15 @@ export function VendorRegistrationModal({
         }
     }
 
+    console.log('🎭 VendorRegistrationModal render:', { isOpen, isSubmitting, showSuccess })
+
     if (!isOpen) return null
+
+    // Safety check for document.body
+    if (typeof document === 'undefined' || !document.body) {
+        console.error('❌ document.body not available')
+        return null
+    }
 
     return createPortal(
         <AnimatePresence>

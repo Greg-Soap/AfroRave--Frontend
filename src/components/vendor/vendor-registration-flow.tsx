@@ -30,7 +30,10 @@ export function VendorRegistrationFlow() {
         <>
             <VendorRegistrationCallout
                 key={calloutKey}
-                onOpen={() => setIsModalOpen(true)}
+                onOpen={() => {
+                    console.log('📢 Callout clicked - opening modal')
+                    setIsModalOpen(true)
+                }}
                 delay={calloutDelay}
             />
             <VendorRegistrationModal
