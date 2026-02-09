@@ -8,32 +8,22 @@ export function VendorRegistrationFlow() {
     const [calloutDelay, setCalloutDelay] = useState(1500)
 
     const handleClose = () => {
-        console.log('🚪 Modal closing...')
         setIsModalOpen(false)
 
         // Clear the dismissal flag so callout can reappear
         sessionStorage.removeItem('vendorCalloutDismissed')
-        console.log('🗑️ Cleared session storage')
 
         // Reset callout with 3s delay after closing modal
         setCalloutDelay(3000)
-        console.log('⏱️ Set delay to 3000ms')
 
-        setCalloutKey(prev => {
-            const newKey = prev + 1
-            console.log('🔑 Incrementing key from', prev, 'to', newKey)
-            return newKey
-        })
+        setCalloutKey(prev => prev + 1)
     }
 
     return (
         <>
             <VendorRegistrationCallout
                 key={calloutKey}
-                onOpen={() => {
-                    console.log('📢 Callout clicked - opening modal')
-                    setIsModalOpen(true)
-                }}
+                onOpen={() => setIsModalOpen(true)}
                 delay={calloutDelay}
             />
             <VendorRegistrationModal

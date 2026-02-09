@@ -52,20 +52,20 @@ export function VendorRegistrationCallout({ onOpen, delay = 1500 }: VendorRegist
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 100 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="fixed top-20 right-4 md:right-8 z-[9999]"
+                    className="fixed top-20 right-2 md:right-8 z-[99999] pointer-events-auto"
                 >
                     <div
                         onClick={handleClick}
-                        className="bg-white rounded-lg shadow-lg p-4 pr-10 relative w-[300px] md:w-[400px] cursor-pointer hover:shadow-xl transition-shadow"
+                        className="bg-white rounded-lg shadow-lg p-3 pr-8 md:p-4 md:pr-10 relative w-[240px] md:w-[400px] cursor-pointer hover:shadow-xl transition-shadow pointer-events-auto"
                     >
                         <button
                             onClick={handleDismiss}
-                            className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
+                            className="absolute top-1.5 right-1.5 md:top-2 md:right-2 p-1 hover:bg-gray-100 rounded-full transition-colors z-10 pointer-events-auto"
                             aria-label="Close"
                         >
-                            <X className="w-4 h-4 text-gray-600" />
+                            <X className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-600" />
                         </button>
-                        <p className="text-sm md:text-base font-bold text-black font-sf-pro-display">
+                        <p className="text-xs md:text-base font-bold text-black font-sf-pro-display leading-tight pointer-events-none">
                             ARE YOU A VENDOR?
                         </p>
                     </div>

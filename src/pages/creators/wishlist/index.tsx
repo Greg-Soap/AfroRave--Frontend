@@ -4,21 +4,23 @@ import { VendorRegistrationFlow } from '@/components/vendor/vendor-registration-
 
 export default function CreatorsWishlistPage() {
   return (
-    <VideoBackgroundWrapper overlayOpacity={0.5} secondColor='#a2a2a2'>
+    <>
       <VendorRegistrationFlow />
-      <img
-        src='/assets/landing-page/coming-soon-page.png'
-        alt='Background'
-        className='fixed inset-0 w-full h-full object-cover z-0 opacity-60'
-      />
-      <div className='relative z-50 '>
-        <HeroSection
-          wideDescription
-          noButton
-          description='Afro Revive brings together organizers, vendors, and fans in one unified platform. Organizers can efficiently create and manage events, vendors can showcase their offerings and secure slots, while fans benefit from seamless ticketing with the flexibility to resell, transfer, or upgrade. A truly comprehensive solution for every event experience'
-          wishlistButton
+      <VideoBackgroundWrapper overlayOpacity={0.5} secondColor='#a2a2a2'>
+        <img
+          src='/assets/landing-page/coming-soon-page.png'
+          alt='Background'
+          className='fixed inset-0 w-full h-full object-cover z-0 opacity-60'
         />
-      </div>
-    </VideoBackgroundWrapper>
+        <div className='relative z-50 '>
+          <HeroSection
+            wideDescription
+            noButton
+            description='Afro Revive brings together organizers, vendors, and fans in one unified platform. Organizers can efficiently create and manage events, vendors can showcase their offerings and secure slots, while fans benefit from seamless ticketing with the flexibility to resell, transfer, or upgrade. A truly comprehensive solution for every event experience'
+            wishlistButton
+          />
+        </div>
+      </VideoBackgroundWrapper>
+    </>
   )
 }
