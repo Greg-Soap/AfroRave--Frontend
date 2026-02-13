@@ -7,6 +7,7 @@ import { SignupForm } from '@/pages/auth/sign-up/signup-form'
 import { VendorSignupForm } from '@/pages/auth/sign-up/vendor-signup-form'
 import { CreatorLogo, UserLoginForm } from '@/pages/auth/user-login/user-login-form'
 import { RoleSelection } from './role-selection'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function AuthModal() {
   const { isAuthModalOpen, authType, signupType, closeAuthModal, switchAuthType, loginType, switchToSignup } =
@@ -22,7 +23,7 @@ export function AuthModal() {
       case 'creator':
         return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='creator' />
       case 'vendor':
-        return <VendorSignupForm />
+        return <VendorSignupForm onSwitchToLogin={() => switchAuthType('login')} />
       default:
         return <SignupForm onSwitchToLogin={() => switchAuthType('login')} />
     }
@@ -50,6 +51,9 @@ export function AuthModal() {
     )
   }
 
+  // Generate unique key for AnimatePresence based on current form state
+  const formKey = `${authType}-${signupType}`
+
   return (
     <BaseModal
       open={isAuthModalOpen}
@@ -62,14 +66,33 @@ export function AuthModal() {
       })}
       size={getModalSize()}>
       <>
-        <OnlyShowIf condition={shouldShowCreatorLogo()}>
-          <div className='relative w-full'>
-            <div className='absolute -top-20 left-1/2 -translate-x-1/2'>
-              <CreatorLogo />
-            </div>
-          </div>
-        </OnlyShowIf>
-        {authType === 'login' ? <UserLoginForm /> : renderSignupForm()}
+        <AnimatePresence mode='wait' initial={false}>
+          <motion.div
+            key={formKey}
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -20 }}
+            transition={{
+              duration: 0.4,
+              ease: [0.25, 0.1, 0.25, 1], // Smoother easing curve
+              layout: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }
+            }}
+            layout>
+            <OnlyShowIf condition={shouldShowCreatorLogo()}>
+              <motion.div
+                className='relative w-full'
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}>
+                <div className='absolute -top-20 left-1/2 -translate-x-1/2'>
+                  <CreatorLogo />
+                </div>
+              </motion.div>
+            </OnlyShowIf>
+            {authType === 'login' ? <UserLoginForm /> : renderSignupForm()}
+          </motion.div>
+        </AnimatePresence>
       </>
     </BaseModal>
   )

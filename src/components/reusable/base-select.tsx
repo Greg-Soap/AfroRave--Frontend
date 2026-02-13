@@ -82,9 +82,9 @@ export function BaseSelect({
 }: ICustomSelectProps) {
   const safeItems = Array.isArray(items)
     ? items.filter(
-        (item) =>
-          item && typeof item === "object" && "value" in item && "label" in item
-      )
+      (item) =>
+        item && typeof item === "object" && "value" in item && "label" in item
+    )
     : [];
 
   if (isLoading) {
@@ -112,7 +112,7 @@ export function BaseSelect({
           {
             "border-charcoal w-full h-[35px] font-sf-pro-text rounded-[4px] text-black":
               type === "auth",
-            "border-white h-10 data-[state=open]:bg-smoky-gray data-[state=open]:border-none font-sf-pro-display rounded-[3px]":
+            "border-white data-[state=open]:bg-smoky-gray data-[state=open]:border-none font-sf-pro-display rounded-[3px]":
               type === "others",
           },
           triggerClassName
@@ -165,23 +165,23 @@ export function BaseSelect({
           {customOptions
             ? customOptions
             : safeItems.map((item) => (
-                <SelectItem
-                  key={item.value}
-                  value={item.value}
-                  className={cn(
-                    "border-b last:border-none rounded-none",
-                    {
-                      "font-input-mono font-light text-white hover:!text-white hover:!bg-white/10 data-[highlighted]:!bg-[#AE2323] data-[highlighted]:!text-white border-white":
-                        type === "others",
-                      "font-sf-pro-text text-black hover:!text-black hover:!bg-black/10 data-[highlighted]:!bg-black/20 data-[highlighted]:!black-white border-black":
-                        type === "auth",
-                    },
-                    itemClassName
-                  )}
-                >
-                  {item.label}
-                </SelectItem>
-              ))}
+              <SelectItem
+                key={item.value}
+                value={item.value}
+                className={cn(
+                  "border-b last:border-none rounded-none",
+                  {
+                    "font-input-mono font-light text-white hover:!text-white hover:!bg-white/10 data-[highlighted]:!bg-[#AE2323] data-[highlighted]:!text-white border-white":
+                      type === "others",
+                    "font-sf-pro-text text-black hover:!text-black hover:!bg-black/10 data-[highlighted]:!bg-black/20 data-[highlighted]:!black-white border-black":
+                      type === "auth",
+                  },
+                  itemClassName
+                )}
+              >
+                {item.label}
+              </SelectItem>
+            ))}
         </SelectGroup>
       </SelectContent>
     </Select>

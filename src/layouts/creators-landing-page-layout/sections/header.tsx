@@ -23,13 +23,13 @@ export default function Header() {
 
       <nav className='relative px-4 md:px-8 lg:px-16 w-full max-w-[1400px] flex flex-col gap-y-4 items-center py-4 md:py-6'>
         <div className='flex w-full items-center justify-between'>
-          <div>
+          <NavLink to={getRoutePath('creators_home')}>
             <img
               src='/assets/landing-page/AR.png'
               alt='AR'
-              className='self-center w-16 h-8 md:w-20 md:h-10'
+              className='self-center w-16 h-8 md:w-20 md:h-10 cursor-pointer'
             />
-          </div>
+          </NavLink>
 
           {!isWaitlistPage && <NavigationLinks />}
 
@@ -71,13 +71,7 @@ export default function Header() {
           {isWaitlistPage && <CountdownTimer />}
         </div>
 
-        {/* Countdown Timer - Centered below navigation on non-waitlist pages */}
-        {!isWaitlistPage && (
-          <div className='w-full flex justify-center mt-2'>
-            <CountdownTimer />
-          </div>
-        )}
-
+        {/* Mobile navigation links - only show on non-waitlist pages */}
         {!isWaitlistPage && <NavigationLinks type='mobile' />}
       </nav>
     </header>
@@ -116,10 +110,9 @@ function NavigationLinks({
 }
 
 const links: ILinks[] = [
-  { href: getRoutePath('creators_home'), name: 'Home' },
   { href: getRoutePath('creators_about'), name: 'About Us' },
   { href: getRoutePath('creators_contact'), name: 'Contact Us' },
-  // { href: getRoutePath('creators_blog'), name: 'Blog' },
+  { href: getRoutePath('creators_blog'), name: 'Blog' },
 ]
 
 interface ILinks {

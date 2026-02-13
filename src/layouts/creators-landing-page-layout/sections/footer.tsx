@@ -6,7 +6,7 @@ import { Socials } from '@/layouts/components/socials'
 
 export default function Footer() {
   return (
-    <footer className='relative w-full flex flex-col items-center gap-7 pt-[50px] pb-16 bg-transparent font-input-mono z-20'>
+    <footer className='relative w-full flex flex-col items-center gap-7 pt-[50px] pb-16 font-input-mono z-20' style={{ background: 'transparent' }}>
       <FooterLinks className='md:h-5 px-[1rem] md:px-[2rem]' />
 
       <Separator orientation='horizontal' className='w-full bg-white max-md:mt-7' />

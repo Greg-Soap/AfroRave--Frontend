@@ -1,0 +1,9 @@
+/* Custom styles for profile dropdown selects to override shadcn/ui defaults */
+.profile-dropdown-white [data-slot="select-value"],
+.profile-dropdown-white [data-placeholder] {
+  color: white !important;
+}
+
+.profile-dropdown-white {
+  color: white !important;
+}

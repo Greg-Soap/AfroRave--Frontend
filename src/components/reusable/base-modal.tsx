@@ -102,6 +102,7 @@ function BaseModal({
       <DialogContent
         className={cn(
           ` ${sizeClasses[size]} p-0 rounded-[8px]  block w-[90%] sm:w-full`,
+          'transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]',
           className,
         )}
         noCancel={removeCancel}
@@ -122,7 +123,7 @@ function BaseModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className='flex flex-col'>{children}</div>
+        <div className='flex flex-col transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]'>{children}</div>
 
         {hasFooter && <div className='mt-auto pt-4 ml-auto'>{footerContent}</div>}
       </DialogContent>

@@ -44,16 +44,22 @@ export default function VendorDiscoverPage() {
 
         {events && events.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {events.map((event) => (
-              <DiscoverCard
-                key={event.eventId}
-                eventId={event.eventId}
-                image={event.metadata.desktopMedia.flyer}
-                name={event.eventName}
-                startDate={event.startDate}
-                availableSlots={10}
-              />
-            ))}
+            {events.map((event) => {
+              const availableSlots = (event.totalTicket || 0) - (event.ticketSold || 0)
+              const isEnded = new Date(event.endDate) < new Date()
+
+              return (
+                <DiscoverCard
+                  key={event.eventId}
+                  eventId={event.eventId}
+                  image={event.metadata.desktopMedia.flyer}
+                  name={event.eventName}
+                  startDate={event.startDate}
+                  availableSlots={availableSlots > 0 ? availableSlots : 0}
+                  status={isEnded ? 'ended' : undefined}
+                />
+              )
+            })}
           </div>
         ) : (
           <div className="w-full h-[60vh] flex flex-col items-center justify-center">
@@ -68,13 +74,14 @@ export default function VendorDiscoverPage() {
   )
 }
 
-function DiscoverCard({ eventId, image, name, startDate, availableSlots }: IDiscoverCardProps) {
+function DiscoverCard({ eventId, image, name, startDate, availableSlots, status }: IDiscoverCardProps) {
   return (
     <Link to={getRoutePath('vendor_event_details', { eventId })}>
       <DashboardCards
         image={image}
         name={name}
         startDate={startDate}
+        status={status}
         cardButtons={[
           { Icon: Bookmark, alt: 'Bookmark' },
           { src: '/assets/dashboard/creator/ellipses.png', alt: 'Ellipses' },
@@ -96,4 +103,5 @@ interface IDiscoverCardProps {
   name: string
   startDate: string
   availableSlots: number
+  status?: 'ended' | 'drafts'
 }

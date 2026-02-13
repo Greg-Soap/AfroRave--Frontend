@@ -9,7 +9,6 @@ const DiscoverPage = lazy(() => import('../pages/vendor/discover'))
 const WishlistPage = lazy(() => import('../pages/vendor/wishlist'))
 const VendorEventDetailsPage = lazy(() => import('../pages/vendor/discover/event-details'))
 const SlotsPage = lazy(() => import('../pages/vendor/slots'))
-const SlotDetailsPage = lazy(() => import('../pages/vendor/slots/slot-details'))
 
 export const vendor_dashboard_routes: RouteObject[] = [
   {
@@ -51,13 +50,5 @@ export const vendor_dashboard_routes: RouteObject[] = [
         <SlotsPage />
       </Suspense>
     ),
-  },
-  {
-    path: getRoutePath('vendor_slot_details', { eventId: ':eventId' }),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <SlotDetailsPage />
-      </Suspense>
-    )
   }
 ]

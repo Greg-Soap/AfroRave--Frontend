@@ -29,17 +29,19 @@ import HeroSection from './sections/hero'
 import RolesSection from './sections/roles'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import Footer from '@/layouts/creators-landing-page-layout/sections/footer'
 
 export default function CreatorsHomePage() {
   return (
     <VideoBackgroundWrapper
-      overlayOpacity={0.6}
+      backgroundImage='/assets/landing-page/BG-3.webp'
+      overlayOpacity={0.2}
       secondColor='#a2a2a2'
-      backgroundImage='/assets/landing-page/BG-3-new.png?v=1'
     >
       <HeroSection />
       <RolesSectionWrapper />
       <CTASectionWrapper />
+      <Footer />
     </VideoBackgroundWrapper>
   )
 }

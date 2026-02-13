@@ -13,12 +13,12 @@ export function VendorRegistrationCallout({ onOpen, delay = 1500 }: VendorRegist
 
     useEffect(() => {
         // Check if callout was previously dismissed in this session
-        const dismissed = sessionStorage.getItem('vendorCalloutDismissed')
+        // const dismissed = sessionStorage.getItem('vendorCalloutDismissed')
 
-        if (dismissed === 'true') {
-            setIsDismissed(true)
-            return
-        }
+        // if (dismissed === 'true') {
+        //     setIsDismissed(true)
+        //     return
+        // }
 
         // Show callout after specified delay
         const timer = setTimeout(() => {

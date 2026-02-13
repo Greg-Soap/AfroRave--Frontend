@@ -25,6 +25,7 @@ import StatementSection from './sections/statements'
 import WorKWithUsSection from './sections/work-with-us'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import Footer from '@/layouts/creators-landing-page-layout/sections/footer'
 
 export default function AboutUsPage() {
   return (
@@ -32,14 +33,15 @@ export default function AboutUsPage() {
       <StatementSection />
       <LeadershipSectionWrapper />
       <WorKWithUsSectionWrapper />
+      <Footer />
     </VideoBackgroundWrapper>
   )
 }
 
 function LeadershipSectionWrapper() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { 
-    once: false, 
+  const isInView = useInView(ref, {
+    once: false,
     margin: '-100px 0px -100px 0px' // Optional: Adjust trigger zone for earlier/later detection
   })
 
@@ -57,8 +59,8 @@ function LeadershipSectionWrapper() {
 
 function WorKWithUsSectionWrapper() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { 
-    once: false, 
+  const isInView = useInView(ref, {
+    once: false,
     margin: '-100px 0px -100px 0px' // Optional: Matches Leadership for consistent timing
   })
 

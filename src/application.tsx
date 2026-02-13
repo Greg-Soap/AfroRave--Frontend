@@ -21,6 +21,7 @@ import { vendor_dashboard_routes } from './config/vendor-dashboard-routes'
 import VendorDashboardLayout from './layouts/vendor-dashboard-layout'
 
 const AddEventPage = lazy(() => import('./pages/creators/add-event'))
+const SlotDetailsPage = lazy(() => import('./pages/vendor/slots/slot-details'))
 
 // Create a client
 const queryClient = new QueryClient({
@@ -66,6 +67,15 @@ function AppRoutes() {
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Route>
+
+      <Route
+        path={getRoutePath('vendor_slot_details', { eventId: ':eventId' })}
+        element={
+          <Suspense fallback={<LoadingFallback />}>
+            <SlotDetailsPage />
+          </Suspense>
+        }
+      />
 
       <Route element={<VendorDashboardLayout />}>
         {vendor_dashboard_routes.map((route) => (

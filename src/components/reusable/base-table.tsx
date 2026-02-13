@@ -33,7 +33,7 @@ export default function BaseTable<T extends Record<string, any>>({
           {columns.map((col) => (
             <TableHead
               key={col.key}
-              className="text-xs font-sf-pro-rounded font-semibold capitalize first:rounded-tl-[5px] last:rounded-tr-[5px]"
+              className="text-xs font-sf-pro-rounded font-medium capitalize first:rounded-tl-[5px] last:rounded-tr-[5px]"
             >
               {col.label}
             </TableHead>

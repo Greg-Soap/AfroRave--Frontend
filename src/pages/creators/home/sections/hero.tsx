@@ -49,7 +49,7 @@ import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 
 export default function HeroSection({
-  description = 'We equip organizers with the tools to create, manage, and sell out their events, and vendors? They discover new opportunities, connect with organizers, and grow their businesses.',
+  description = 'WE EQUIP ORGANIZERS WITH THE TOOLS TO CREATE, MANAGE, AND SELL OUT THEIR EVENTS, AND VENDORS? THEY DISCOVER NEW OPPORTUNITIES, CONNECT WITH ORGANIZERS, AND GROW THEIR BUSINESSES.',
   wideDescription = false,
   noButton = false,
   wishlistButton = false,
@@ -71,11 +71,11 @@ export default function HeroSection({
             'max-w-[900px]': wideDescription,
           },
         )}>
-        <p className='w-full max-w-[514px] text-center text-white text-3xl sm:text-4xl md:text-[40px] font-black uppercase leading-tight'>
-          All-in-One Hub
-          <br /> for Fans and Organizers
+        <p className='w-full max-w-[514px] text-center text-white text-3xl sm:text-4xl md:text-[40px] lg:text-[48px] font-black uppercase leading-tight'>
+          ALL-IN-ONE HUB
+          <br /> FOR FANS AND CREATORS
         </p>
-        <p className='text-center uppercase text-sm sm:text-base leading-relaxed px-2'>
+        <p className='text-center uppercase text-xs sm:text-sm md:text-base leading-relaxed px-2 max-w-[800px]'>
           {description}
         </p>
         <OnlyShowIf condition={!noButton}>

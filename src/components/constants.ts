@@ -24,17 +24,22 @@ export const account_links: { link: string; icon: string; name: string }[] = [
   {
     link: getRoutePath("account"),
     icon: "/assets/harmburger/round-user.png",
-    name: "Account",
+    name: "ACCOUNT",
   },
   {
     link: getRoutePath("my_tickets"),
     icon: "/assets/harmburger/ticket.png",
-    name: "My Tickets",
+    name: "MY TICKETS",
+  },
+  {
+    link: getRoutePath("account") + "?account=wallet",
+    icon: "/assets/harmburger/payout.png",
+    name: "WALLET",
   },
   {
     link: getRoutePath("listed_tickets"),
     icon: "/assets/harmburger/ticket.png",
-    name: "Listed Tickets",
+    name: "LISTED TICKETS",
   },
 ];
 

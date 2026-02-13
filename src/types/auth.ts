@@ -58,12 +58,20 @@ export interface User {
   dateOfBirth?: string
   country?: string
   state?: string
+  description?: string
+  profilePicture?: string
+  gallery?: string[]
   businessName?: string
   vendorType?: string
   category?: string
   website?: string
   portfolio?: string
-  socialLinks?: string
+  socialLinks?: {
+    instagram?: string
+    twitter?: string
+    facebook?: string
+    linkedin?: string
+  }
   companyName?: string
   isEmailVerified?: boolean
   createdAt?: string

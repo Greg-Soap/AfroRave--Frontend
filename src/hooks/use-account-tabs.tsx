@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProfileTab from "@/pages/fans/account/tabs/profile-tab";
-import PayoutTab from "@/pages/fans/account/tabs/payout-tab";
+import WalletTab from "@/pages/fans/account/tabs/wallet-tab";
 import SupportTab from "@/pages/fans/account/tabs/support-tab";
 
 export function useAccountTab() {
@@ -13,7 +13,7 @@ export function useAccountTab() {
 
     if (
       accountParam === "profile" ||
-      accountParam === "payout" ||
+      accountParam === "wallet" ||
       accountParam === "settings" ||
       accountParam === "support"
     ) {
@@ -40,10 +40,10 @@ const account_tabs: IAccountTab[] = [
     element: <ProfileTab />,
   },
   {
-    value: "payout",
+    value: "wallet",
     image: "/assets/harmburger/payout.png",
-    name: "Payout",
-    element: <PayoutTab />,
+    name: "Wallet",
+    element: <WalletTab />,
   },
   {
     value: "support",
@@ -54,7 +54,7 @@ const account_tabs: IAccountTab[] = [
 ];
 
 interface IAccountTab {
-  value: "profile" | "payout" | "settings" | "support";
+  value: "profile" | "wallet" | "settings" | "support";
   image: string;
   name: string;
   element: React.ReactNode;

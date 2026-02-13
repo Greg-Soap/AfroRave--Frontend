@@ -15,7 +15,11 @@ import { vendorRegistrationSchema, type VendorRegistrationFormData } from '@/sch
 import { VENDOR_CATEGORIES, type VendorNewsletterData } from '@/types/vendor'
 import { useVendorNewsletterSubscription } from '@/hooks/use-newsletter'
 
-export function VendorSignupForm() {
+interface VendorSignupFormProps {
+    onSwitchToLogin?: () => void
+}
+
+export function VendorSignupForm({ onSwitchToLogin }: VendorSignupFormProps = {}) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
 
@@ -245,6 +249,19 @@ export function VendorSignupForm() {
                         {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
                     </Button>
                 </div>
+
+                {/* Login Link */}
+                {onSwitchToLogin && (
+                    <div className='flex items-center justify-center gap-1 text-sm text-white font-sf-pro-text mt-4'>
+                        Already have an account?{' '}
+                        <button
+                            type='button'
+                            onClick={onSwitchToLogin}
+                            className='text-base font-bold text-accent hover:underline'>
+                            Log In
+                        </button>
+                    </div>
+                )}
             </form>
         </div>
     )

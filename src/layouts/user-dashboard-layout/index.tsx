@@ -1,21 +1,19 @@
-import { AuthModal } from '@/components/auth/auth-modal'
-import { AuthProvider } from '@/contexts/auth-context'
 import { Outlet } from 'react-router-dom'
-import AccountFooter from './footer'
 import AccountHeader from './header'
+import { AuthProvider } from '@/contexts/auth-context'
+import AccountSidebar from './sidebar'
 
 export default function UserDashboardLayout() {
   return (
     <AuthProvider>
-      <div className='w-full min-h-screen flex flex-col items-center bg-system-black'>
+      <div className='min-h-screen bg-[#1A1A1A] flex flex-col'>
         <AccountHeader />
-        <AuthModal />
-
-        <main className='w-full min-h-[calc(100vh-250px)] flex flex-col items-center'>
-          <Outlet />
-        </main>
-
-        <AccountFooter />
+        <div className="flex flex-1 pt-[70px]">
+          <AccountSidebar />
+          <main className='flex-1 md:ml-[180px] flex justify-center'>
+            <Outlet />
+          </main>
+        </div>
       </div>
     </AuthProvider>
   )

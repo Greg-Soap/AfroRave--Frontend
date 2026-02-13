@@ -18,34 +18,51 @@ export default function SupportTab() {
 
   function onSubmit(values: z.infer<typeof SupportSchema>) {
     console.log(values)
+    // TODO: Implement support form submission
   }
 
   return (
-    <FormBase
-      form={form}
-      onSubmit={onSubmit}
-      className='w-[529px] flex flex-col items-center gap-6 mb-[100px]'>
-      <FormField
+    <div className='w-full max-w-[755px] flex flex-col gap-8 pb-[100px] px-4 md:px-0'>
+      {/* Title */}
+      <h2 className='text-white text-xl md:text-2xl font-sf-pro-display font-semibold text-center'>
+        CONTACT US
+      </h2>
+
+      <FormBase
         form={form}
-        name='email'
-        className='w-full flex flex-col gap-1 border border-white px-3 py-2 rounded-[5px] h-[60px]'
-        label='Email'
-        labelClassName='text-white'>
-        <Input className='bg-transparent border-none' />
-      </FormField>
+        onSubmit={onSubmit}
+        className='w-full flex flex-col items-center gap-6 font-sf-pro-display'>
+        {/* Email Field */}
+        <FormField
+          form={form}
+          name='email'
+          className='w-full flex flex-col gap-2'
+          label='Email'
+          labelClassName='text-white text-sm'>
+          <Input
+            placeholder='Email'
+            className='w-full h-14 bg-transparent border border-white/20 rounded-md px-4 text-white placeholder:text-white/40 focus:border-white/40'
+          />
+        </FormField>
 
-      <FormField name='message' form={form} className='w-full'>
-        <Textarea
-          className='bg-transparent text-lg h-[291px] px-[22px] py-[23px] placeholder:text-white rounded-[4px]'
-          placeholder='How can we help you?'
-        />
-      </FormField>
+        {/* Message Field */}
+        <FormField
+          name='message'
+          form={form}
+          className='w-full flex flex-col gap-2'>
+          <Textarea
+            className='w-full bg-transparent border border-white/20 text-white h-[291px] px-6 py-6 placeholder:text-white/40 rounded-md resize-none focus:border-white/40'
+            placeholder='How can we help?'
+          />
+        </FormField>
 
-      <Button
-        variant='ghost'
-        className='w-[120px] h-10 font-sf-pro-text text-sm font-semibold text-white hover:bg-white/10 hover:text-white'>
-        SUBMIT
-      </Button>
-    </FormBase>
+        {/* Submit Button */}
+        <Button
+          type='submit'
+          className='w-[200px] h-12 bg-white hover:bg-white/90 text-[#E31E24] font-sf-pro-display font-semibold rounded-lg transition-colors'>
+          SUBMIT
+        </Button>
+      </FormBase>
+    </div>
   )
 }

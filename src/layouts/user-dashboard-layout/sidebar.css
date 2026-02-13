@@ -1,0 +1,33 @@
+.account-sidebar-unique {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .account-sidebar-unique {
+        display: flex;
+    }
+}
+
+/* Ensure no conflicting styles */
+.account-sidebar-unique * {
+    box-sizing: border-box;
+}
+
+.account-sidebar-back-btn,
+.account-sidebar-profile-link,
+.account-sidebar-support-link,
+.account-sidebar-logout-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.account-sidebar-back-btn:focus,
+.account-sidebar-profile-link:focus,
+.account-sidebar-support-link:focus,
+.account-sidebar-logout-btn:focus {
+    outline: none;
+}
