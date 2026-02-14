@@ -11,11 +11,14 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { NavLogo } from './nav-logo'
 import { useState, useEffect } from 'react'
 
+import { AnimatedSearchBar } from './animated-search-bar'
+
 export default function Header() {
   const { hasScrolled } = useScroll()
   const { user, isAuthenticated, isCreator, isFan, isVendor } = useAfroStore()
   const location = useLocation()
   const isLandingPage = location.pathname === '/'
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   return (
     <header className='w-full fixed top-0 flex justify-center z-50 h-[120px]'>
@@ -34,12 +37,13 @@ export default function Header() {
             <Search
               size={20}
               color='var(--foreground)'
-              className='max-sm:hidden cursor-pointer min-w-[26px] '
+              className='cursor-pointer min-w-[26px] hover:opacity-80 transition-opacity'
+              onClick={() => setIsSearchOpen(true)}
             />
 
             {isAuthenticated && isFan && (
               <>
-                <NavigationLinks />
+                {location.pathname !== '/fans' && <NavigationLinks />}
                 <UserMenuButton user={user} />
               </>
             )}
@@ -59,6 +63,11 @@ export default function Header() {
           </div>
         )}
       </nav>
+
+      <AnimatedSearchBar
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </header>
   )
 }
