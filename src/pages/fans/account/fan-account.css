@@ -1,0 +1,218 @@
+/* Fan Account Page - Dedicated Styles */
+/* Using unique class names with 'fan-account-' prefix to avoid conflicts */
+
+/* Main Container */
+.fan-account-page-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #1A1A1A;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Content Wrapper */
+.fan-account-content-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 24px 80px;
+}
+
+/* Form Container */
+.fan-account-form-container {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Input Field Styles */
+.fan-account-input-field {
+    width: 100%;
+    height: 52px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    padding: 0 16px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: border-color 0.2s ease;
+}
+
+.fan-account-input-field::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.fan-account-input-field:focus {
+    outline: none;
+    border-color: #C30010;
+}
+
+.fan-account-input-field:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Select/Dropdown Styles */
+.fan-account-select-trigger {
+    width: 100%;
+    height: 52px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    padding: 0 16px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: border-color 0.2s ease;
+}
+
+.fan-account-select-trigger:focus {
+    border-color: #C30010;
+}
+
+/* Birthday Section */
+.fan-account-birthday-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fan-account-birthday-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr;
+    gap: 12px;
+}
+
+.fan-account-birthday-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin-left: 4px;
+}
+
+/* Phone Number Section */
+.fan-account-phone-wrapper {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+}
+
+.fan-account-phone-code {
+    width: 100px;
+    flex-shrink: 0;
+}
+
+.fan-account-phone-number {
+    flex: 1;
+}
+
+/* Save Button */
+.fan-account-save-button {
+    width: 200px;
+    height: 48px;
+    background-color: #FFFFFF;
+    color: #C30010;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin: 32px auto 0;
+}
+
+.fan-account-save-button:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.fan-account-save-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Loading State */
+.fan-account-loading-container {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+}
+
+.fan-account-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(227, 30, 36, 0.2);
+    border-top-color: #E31E24;
+    border-radius: 50%;
+    animation: fan-account-spin 0.8s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes fan-account-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.fan-account-loading-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Dev Tools (hidden in production) */
+.fan-account-dev-tools {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .fan-account-content-wrapper {
+        padding: 40px 16px 60px;
+    }
+
+    .fan-account-birthday-grid {
+        grid-template-columns: 1fr 0.8fr 0.8fr;
+        gap: 8px;
+    }
+
+    .fan-account-phone-code {
+        width: 90px;
+    }
+
+    .fan-account-save-button {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Override browser autofill styles - CRITICAL for removing blue backgrounds */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #1A1A1A inset !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Firefox autofill override */
+input:-moz-autofill,
+input:-moz-autofill-preview {
+    filter: none !important;
+    background-color: transparent !important;
+    color: #FFFFFF !important;
+}

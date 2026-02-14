@@ -111,7 +111,7 @@ export function VendorRegistrationModal({
                 <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                     {/* Background overlay - simple div without Framer Motion */}
                     <div
-                        className="absolute inset-0 bg-black/50"
+                        className="absolute inset-0 bg-gradient-to-b from-[#848484] to-[#1E1E1E]"
                         onClick={handleBackdropClick}
                         aria-hidden="true"
                     />

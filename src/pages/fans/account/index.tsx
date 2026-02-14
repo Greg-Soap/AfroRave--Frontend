@@ -7,7 +7,7 @@ export default function AccountPage() {
   const activeTab = searchParams.get('account') || 'profile'
 
   return (
-    <section className='w-full flex flex-col items-center py-10 px-4'>
+    <section className='w-full flex-1 flex flex-col'>
       {activeTab === 'wallet' ? <WalletTab /> : <ProfileTab />}
     </section>
   )

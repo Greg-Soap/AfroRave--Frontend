@@ -68,6 +68,8 @@ interface CustomModalProps {
   disableOverlayClick?: boolean
   /** Whether to cancel on overlay click */
   cancelOnOverlay?: boolean
+  /** Additional CSS classes for the overlay */
+  overlayClassName?: string
 }
 
 /**
@@ -89,6 +91,7 @@ function BaseModal({
   className,
   disableOverlayClick = false,
   cancelOnOverlay = false,
+  overlayClassName,
 }: CustomModalProps) {
   return (
     <Dialog
@@ -105,6 +108,7 @@ function BaseModal({
           'transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]',
           className,
         )}
+        overlayClassName={overlayClassName}
         noCancel={removeCancel}
         floatingCancel={floatingCancel}
         onClick={(e) => e.stopPropagation()}

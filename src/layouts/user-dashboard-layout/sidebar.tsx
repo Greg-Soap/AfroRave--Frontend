@@ -21,12 +21,12 @@ export default function AccountSidebar() {
     }
 
     return (
-        <aside className='account-sidebar-unique fixed left-0 top-0 h-screen w-[180px] bg-transparent flex flex-col pl-12 pr-4 pt-[100px] pb-8 z-40 pointer-events-none border-r border-white/10'>
-            <div className="pointer-events-auto flex flex-col w-full">
+        <aside className='fan-sidebar-container'>
+            <div className="fan-sidebar-content">
                 {/* Back Button */}
                 <button
                     onClick={() => navigate(-1)}
-                    className='account-sidebar-back-btn flex items-center gap-2 text-white/40 hover:text-white/60 transition-colors mb-20'
+                    className='fan-sidebar-back-btn'
                 >
                     <ChevronLeft className='w-5 h-5' strokeWidth={1.5} />
                 </button>
@@ -37,15 +37,15 @@ export default function AccountSidebar() {
                     <div className='mb-0'>
                         <button
                             onClick={() => navigate('/account')}
-                            className={`account-sidebar-profile-link flex items-center gap-3 text-left transition-all w-full pb-6 ${isProfileActive()
-                                    ? 'text-[#C30010]'
-                                    : 'text-white/40 hover:text-white/60'
+                            className={`fan-sidebar-link ${isProfileActive()
+                                ? 'fan-sidebar-link-active'
+                                : ''
                                 }`}
                         >
                             <div className='w-4 h-4 flex items-center justify-center shrink-0'>
                                 <svg
-                                    width="14"
-                                    height="14"
+                                    width="16"
+                                    height="16"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -57,26 +57,26 @@ export default function AccountSidebar() {
                                     <circle cx="12" cy="7" r="4" />
                                 </svg>
                             </div>
-                            <span className='font-sf-pro-display text-[11px] uppercase tracking-[0.12em] font-normal'>
+                            <span className='fan-sidebar-text'>
                                 PROFILE
                             </span>
                         </button>
-                        <div className='w-full h-[0.5px] bg-white/10 mb-6'></div>
+                        <div className='fan-sidebar-divider'></div>
                     </div>
 
                     {/* SUPPORT */}
                     <div className='mb-0'>
                         <button
                             onClick={() => navigate('/fans/support')}
-                            className={`account-sidebar-support-link flex items-center gap-3 text-left transition-all w-full pb-6 ${isSupportActive()
-                                    ? 'text-[#C30010]'
-                                    : 'text-white/40 hover:text-white/60'
+                            className={`fan-sidebar-link ${isSupportActive()
+                                ? 'fan-sidebar-link-active'
+                                : ''
                                 }`}
                         >
                             <div className='w-4 h-4 flex items-center justify-center shrink-0'>
                                 <svg
-                                    width="14"
-                                    height="14"
+                                    width="16"
+                                    height="16"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -89,11 +89,11 @@ export default function AccountSidebar() {
                                     <line x1="12" y1="17" x2="12.01" y2="17" />
                                 </svg>
                             </div>
-                            <span className='font-sf-pro-display text-[11px] uppercase tracking-[0.12em] font-normal'>
+                            <span className='fan-sidebar-text'>
                                 SUPPORT
                             </span>
                         </button>
-                        <div className='w-full h-[0.5px] bg-white/10 mb-6'></div>
+                        <div className='fan-sidebar-divider'></div>
                     </div>
 
                     {/* LOG OUT */}
@@ -101,12 +101,12 @@ export default function AccountSidebar() {
                         <button
                             onClick={handleLogout}
                             disabled={logoutMutation.isPending}
-                            className='account-sidebar-logout-btn flex items-center gap-3 text-left transition-all w-full pb-6 text-white/40 hover:text-white/60 disabled:opacity-50'
+                            className='fan-sidebar-link'
                         >
                             <div className='w-4 h-4 flex items-center justify-center shrink-0'>
                                 <svg
-                                    width="14"
-                                    height="14"
+                                    width="16"
+                                    height="16"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -119,11 +119,11 @@ export default function AccountSidebar() {
                                     <line x1="21" y1="12" x2="9" y2="12" />
                                 </svg>
                             </div>
-                            <span className='font-sf-pro-display text-[11px] uppercase tracking-[0.12em] font-normal'>
+                            <span className='fan-sidebar-text'>
                                 {logoutMutation.isPending ? 'LOGGING OUT...' : 'LOG OUT'}
                             </span>
                         </button>
-                        <div className='w-full h-[0.5px] bg-white/10'></div>
+                        <div className='fan-sidebar-divider'></div>
                     </div>
                 </nav>
             </div>

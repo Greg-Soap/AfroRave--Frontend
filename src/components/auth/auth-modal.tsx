@@ -64,6 +64,7 @@ export function AuthModal() {
         'bg-transparent shadow-none':
           authType === 'signup' && (signupType === 'creator' || signupType === 'vendor' || signupType === 'guest'),
       })}
+      overlayClassName='bg-gradient-to-b from-[#848484] to-[#1E1E1E] !opacity-100'
       size={getModalSize()}>
       <>
         <AnimatePresence mode='wait' initial={false}>

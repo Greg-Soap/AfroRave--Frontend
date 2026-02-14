@@ -71,7 +71,7 @@ function EventCard({
     <Link
       to={getRoutePath('individual_event', { eventId: id })}
       className={cn(
-        'flex flex-col gap-1 min-w-[148px] md:min-w-[243px] md:w-fit max-w-[243px] md:max-w-full lg:min-w-[245px] lg:max-w-[284px]',
+        'flex flex-col gap-1 min-w-[125px] md:min-w-[195px] md:w-fit max-w-[195px] md:max-w-full lg:min-w-[200px] lg:max-w-[220px]',
         {
           'items-start': layout === 'start',
           'items-center': layout === 'middle',
@@ -134,12 +134,14 @@ export function CategoryBlockSkeleton({ name }: { name?: string }) {
         {Array.from({ length: 4 }).map((_) => (
           <div
             key={`event-skeleton-${crypto.randomUUID()}`}
-            className='flex flex-col gap-4 min-w-[180px] max-w-[220px] w-full'>
-            <div className='aspect-square w-full bg-gray-200 rounded-[15px] animate-pulse' />
-            <div className='space-y-2'>
-              <div className='h-6 w-3/4 bg-gray-200 rounded animate-pulse' />
-              <div className='h-4 w-1/2 bg-gray-200 rounded animate-pulse' />
-              <div className='h-4 w-2/3 bg-gray-200 rounded animate-pulse' />
+            className='flex flex-col gap-1 min-w-[125px] md:min-w-[195px] md:w-fit max-w-[195px] md:max-w-full lg:min-w-[200px] lg:max-w-[220px] w-full'>
+            <div className='w-full h-[160px] md:h-[250px] bg-gray-200 rounded-[5px] md:rounded-[15px] animate-pulse' />
+            <div className='flex flex-col gap-1 md:gap-2 py-2 px-1'>
+              <div className='h-4 md:h-6 w-3/4 bg-gray-200 rounded animate-pulse' />
+              <div className='space-y-1'>
+                <div className='h-3 md:h-4 w-1/2 bg-gray-200 rounded animate-pulse' />
+                <div className='h-3 md:h-4 w-2/3 bg-gray-200 rounded animate-pulse' />
+              </div>
             </div>
           </div>
         ))}

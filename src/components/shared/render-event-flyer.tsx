@@ -10,7 +10,7 @@ export function RenderEventImage({
       {!image || image === '' ? (
         <div
           className={cn(
-            'flex items-center justify-center bg-white/30 px-5 min-h-[190px] h-[190px] md:h-[312px]',
+            'flex items-center justify-center bg-white/30 px-5 min-h-[160px] h-[160px] md:h-[250px]',
             className,
           )}>
           <p className='text-center font-semibold text-white'>{event_name}</p>
@@ -19,7 +19,7 @@ export function RenderEventImage({
         <img
           src={image}
           alt={event_name}
-          className={cn('object-cover h-[190px] md:h-[312px]', className)}
+          className={cn('object-cover h-[160px] md:h-[250px]', className)}
         />
       )}
     </>

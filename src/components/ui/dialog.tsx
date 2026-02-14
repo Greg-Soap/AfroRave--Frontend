@@ -50,6 +50,7 @@ interface DialogContentProps
   noCancel?: boolean;
   floatingCancel?: boolean;
   cancelOnOverlay?: boolean;
+  overlayClassName?: string;
 }
 
 const DialogContent = React.forwardRef<
@@ -59,6 +60,7 @@ const DialogContent = React.forwardRef<
   (
     {
       className,
+      overlayClassName,
       children,
       noCancel,
       floatingCancel,
@@ -68,7 +70,7 @@ const DialogContent = React.forwardRef<
     ref
   ) => (
     <DialogPortal>
-      <DialogOverlay cancelOnOverlay={cancelOnOverlay} />
+      <DialogOverlay className={overlayClassName} cancelOnOverlay={cancelOnOverlay} />
       <DialogPrimitive.Content
         ref={ref}
         className={cn(

@@ -38,8 +38,11 @@ export default function OwnTheStage() {
         <motion.div
           ref={categoryRef}
           initial={false}
-          animate={{ x: isCategoryInView ? 0 : '100%' }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          animate={{
+            x: (isCategoryInView && !isLoadingTrending) ? 0 : '100%',
+            opacity: (isCategoryInView && !isLoadingTrending) ? 1 : 0
+          }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           style={{ overflow: 'hidden' }}
           className='mb-7 md:mb-10 overflow-x-hidden'
         >

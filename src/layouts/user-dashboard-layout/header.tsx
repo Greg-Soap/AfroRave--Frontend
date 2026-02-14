@@ -10,9 +10,9 @@ export default function AccountHeader() {
 
   return (
     <header className="w-full fixed top-0 z-50 bg-[#1A1A1A] border-b border-white/10">
-      <nav className="w-full px-6 md:px-8 h-[70px] flex items-center justify-between">
-        {/* Left: Logo - Hidden on mobile when sidebar shows, visible on desktop */}
-        <div className="md:w-[180px]">
+      <nav className="w-full px-10 h-[80px] flex items-center justify-between">
+        {/* Left: Logo */}
+        <div className="w-[200px]">
           <NavLogo />
         </div>
 
@@ -22,7 +22,7 @@ export default function AccountHeader() {
         </div>
 
         {/* Right: User Menu */}
-        <div className="md:w-[180px] flex justify-end">
+        <div className="w-[200px] flex justify-end">
           <UserMenuButton user={user} />
         </div>
       </nav>
@@ -50,7 +50,7 @@ function NavigationLinks() {
   };
 
   return (
-    <div className="flex items-center gap-6 md:gap-8">
+    <div className="hidden md:flex items-center gap-10">
       {account_links.map((item) => {
         const active = isLinkActive(item.link);
 
@@ -59,23 +59,25 @@ function NavigationLinks() {
             key={item.name}
             to={item.link}
             className={cn(
-              "relative flex items-center gap-2 transition-all pb-1 text-sm",
-              active ? "opacity-100 text-white" : "opacity-50 hover:opacity-75 text-white"
+              "relative flex items-center gap-[14px] transition-all pb-1 group font-input-mono",
+              active ? "opacity-100 text-white" : "opacity-60 hover:opacity-80 text-white"
             )}
           >
             <img
               src={item.icon}
               alt={item.name}
-              className="size-[16px]"
+              className="w-[18px] h-[18px]"
               style={{
                 filter: active
                   ? 'brightness(0) saturate(100%) invert(19%) sepia(98%) saturate(6947%) hue-rotate(356deg) brightness(91%) contrast(113%)'
                   : 'brightness(0) invert(1)'
               }}
             />
-            <span className="font-input-mono text-xs md:text-sm uppercase tracking-wider">{item.name}</span>
+            <span className="text-[14px] uppercase tracking-[0.05em] font-medium">
+              {item.name}
+            </span>
             {active && (
-              <div className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#C30010]" />
+              <div className="absolute -bottom-[2px] left-0 right-0 h-[2.5px] bg-[#C30010] rounded-full" />
             )}
           </Link>
         );
