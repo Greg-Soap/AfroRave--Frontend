@@ -18,7 +18,11 @@ export default function Header() {
   const { user, isAuthenticated, isCreator, isFan, isVendor } = useAfroStore()
   const location = useLocation()
   const isLandingPage = location.pathname === '/'
+  const isFansPage = location.pathname === '/fans'
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+
+  // Show minimal header (no nav links) on home and fans pages
+  const showMinimalHeader = isLandingPage || isFansPage
 
   return (
     <header className='w-full fixed top-0 flex justify-center z-50 h-[120px]'>
@@ -43,7 +47,7 @@ export default function Header() {
 
             {isAuthenticated && isFan && (
               <>
-                {location.pathname !== '/fans' && <NavigationLinks />}
+                {!showMinimalHeader && <NavigationLinks />}
                 <UserMenuButton user={user} />
               </>
             )}

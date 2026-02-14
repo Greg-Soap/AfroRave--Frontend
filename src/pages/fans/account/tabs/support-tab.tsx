@@ -22,9 +22,9 @@ export default function SupportTab() {
   }
 
   return (
-    <div className='w-full max-w-[755px] flex flex-col gap-8 pb-[100px] px-4 md:px-0'>
+    <div className='w-full flex flex-col items-center gap-8 pb-[100px] px-4 md:px-0'>
       {/* Title */}
-      <h2 className='text-white text-xl md:text-2xl font-sf-pro-display font-semibold text-center'>
+      <h2 className='text-white text-xl md:text-2xl font-sf-pro-display font-semibold'>
         CONTACT US
       </h2>
 

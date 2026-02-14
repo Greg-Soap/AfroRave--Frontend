@@ -5,6 +5,7 @@ import { UserAuthGuard } from "@/components/auth/user-auth-guard";
 import { getRoutePath } from "./get-route-path";
 
 const AccountPage = lazy(() => import("../pages/fans/account"));
+const SettingsPage = lazy(() => import("../pages/fans/settings")); // Added import
 const MyTicketsPage = lazy(() => import("../pages/fans/my-tickets"));
 const IndividualActiveTicketsPage = lazy(
   () => import("../pages/fans/my-tickets/individual-active-tickets")
@@ -18,6 +19,16 @@ export const user_dashboard_routes: RouteObject[] = [
       <UserAuthGuard>
         <Suspense fallback={<LoadingFallback />}>
           <AccountPage />
+        </Suspense>
+      </UserAuthGuard>
+    ),
+  },
+  {
+    path: getRoutePath("settings"),
+    element: (
+      <UserAuthGuard>
+        <Suspense fallback={<LoadingFallback />}>
+          <SettingsPage />
         </Suspense>
       </UserAuthGuard>
     ),

@@ -11,7 +11,7 @@ export default function UserDashboardLayout() {
         <AccountHeader />
         <div className="flex flex-1 pt-[80px]">
           <AccountSidebar />
-          <main className='flex-1 md:ml-[200px] flex flex-col'>
+          <main className='flex-1 md:ml-[280px] flex flex-col'>
             <Outlet />
             <AccountFooter />
           </main>

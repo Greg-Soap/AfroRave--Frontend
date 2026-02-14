@@ -51,7 +51,7 @@ export default function WalletTab() {
     }
 
     return (
-        <div className='w-full max-w-[730px] flex flex-col gap-8 pb-[100px]'>
+        <div className='w-full flex flex-col items-center gap-8 pb-[100px] px-4 md:px-0'>
             {/* Title */}
             <h2 className='text-white text-base md:text-lg font-sf-pro-display text-center'>
                 Manage Your Payout Funds

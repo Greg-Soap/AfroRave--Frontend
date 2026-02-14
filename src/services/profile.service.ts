@@ -13,7 +13,7 @@ class ProfileService {
    * Get user profile
    */
   async getUserProfile(): Promise<UserProfileResponse> {
-    const response = await api.get('/api/Profile/user')
+    const response = await api.get('/api/profile/user')
     return response.data
   }
 
@@ -21,7 +21,7 @@ class ProfileService {
    * Update user profile
    */
   async updateUserProfile(data: UpdateUserProfileRequest): Promise<UserProfileResponse> {
-    const response = await api.patch('/api/Profile/user', data)
+    const response = await api.patch('/api/profile/user', data)
     return response.data
   }
 
@@ -29,7 +29,7 @@ class ProfileService {
    * Get user active tickets
    */
   async getUserActiveTickets(): Promise<UserTicketsResponse> {
-    const response = await api.get('/api/Profile/user/ticket/active')
+    const response = await api.get('/api/profile/user/ticket/active')
     return response.data
   }
 
@@ -37,7 +37,7 @@ class ProfileService {
    * Get user past tickets
    */
   async getUserPastTickets(): Promise<UserTicketsResponse> {
-    const response = await api.get('/api/Profile/user/ticket/past')
+    const response = await api.get('/api/profile/user/ticket/past')
     return response.data
   }
 
@@ -45,7 +45,7 @@ class ProfileService {
    * Get vendor profile
    */
   async getVendorProfile(): Promise<VendorProfileResponse> {
-    const response = await api.get('/api/Profile/vendor')
+    const response = await api.get('/api/profile/vendor')
     return response.data
   }
 
@@ -53,7 +53,7 @@ class ProfileService {
    * Get organizer profile
    */
   async getOrganizerProfile(): Promise<OrganizerProfileResponse> {
-    const response = await api.get('/api/Profile/organizer')
+    const response = await api.get('/api/profile/organizer')
     return response.data
   }
 }

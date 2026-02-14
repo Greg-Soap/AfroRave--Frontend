@@ -31,6 +31,7 @@ export const ROUTE_PATHS = {
 
   // User dashboard routes
   account: '/fans/account',
+  settings: '/fans/settings', // Added settings route
   my_tickets: '/fans/my-tickets',
   active_tickets: '/fans/my-tickets/:eventId',
   listed_tickets: '/fans/listed-tickets',
@@ -109,6 +110,7 @@ export interface RouteParams {
 
   // User dashboard routes
   account: never
+  settings: never
   my_tickets: never
   active_tickets: { eventId: string | number }
   listed_tickets: never

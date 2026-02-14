@@ -15,13 +15,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
+import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import '../fan-account.css'
+// import '../fan-account.css'
 
 export default function ProfileTab() {
   const { data: profileData, isLoading: isLoadingProfile } = useUserProfile()
   const updateProfileMutation = useUpdateUserProfile()
-  const [showBanner, setShowBanner] = useState(true)
+  const [showBanner, setShowBanner] = useState(false)
 
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
@@ -39,34 +40,43 @@ export default function ProfileTab() {
     try {
       const updateRequest = transformProfileToUpdateRequest(values)
       await updateProfileMutation.mutateAsync(updateRequest)
+      setShowBanner(true)
     } catch (error) {
       console.error('Failed to update profile:', error)
     }
   }
 
   // Shared input styling - Figma specifications
-  const inputStyle = 'w-full h-[60px] rounded-[8px] border border-white/20 bg-transparent px-4 text-white text-[15px] font-sf-pro-display placeholder:text-white/50 focus:border-white/40 focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors'
-  const labelStyle = 'text-white/80 text-[13px] font-sf-pro-display mb-2 ml-1 block'
+  const inputStyle = 'w-full h-[52px] rounded-[8px] border border-white/10 bg-transparent px-4 text-white text-[14px] font-ibm-plex-mono placeholder:text-white/30 focus:border-white/30 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all uppercase tracking-wider'
+  const labelStyle = 'text-white/60 text-[11px] font-ibm-plex-mono uppercase tracking-widest mb-2 ml-1 block'
 
   return (
-    <div className='w-full flex-1 flex justify-center items-start py-12 px-6'>
-      <div className='w-full max-w-[650px] flex flex-col gap-6'>
+    <div className='w-full flex-1 flex flex-col items-center px-4 md:px-0 pt-8'>
+      <div className='w-full max-w-[550px] flex flex-col gap-6'>
 
         {/* Green Notification Banner */}
-        {showBanner && (
-          <div className='w-full bg-[#D4F4DD] rounded-[8px] px-5 py-[14px] flex items-center justify-between'>
-            <p className='text-[#1F1F1F] text-[14px] font-sf-pro-display font-normal'>
-              Finish setting up your profile to access your tickets
-            </p>
-            <button
-              onClick={() => setShowBanner(false)}
-              className='text-[#1F1F1F] hover:text-[#1F1F1F]/70 transition-colors'
-              aria-label='Close banner'
+        <AnimatePresence>
+          {showBanner && (
+            <motion.div
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className='w-full bg-[#D4F4DD] rounded-[4px] px-5 py-[14px] flex items-center justify-between mb-6'
             >
-              <X className='w-4 h-4' strokeWidth={2} />
-            </button>
-          </div>
-        )}
+              <p className='text-[#1F1F1F] text-[13px] font-ibm-plex-mono font-medium'>
+                User profile has been successfully completed. You can now <span className="underline cursor-pointer">view your tickets</span>
+              </p>
+              <button
+                onClick={() => setShowBanner(false)}
+                className='text-[#1F1F1F] hover:text-[#1F1F1F]/70 transition-colors'
+                aria-label='Close banner'
+              >
+                <X className='w-4 h-4' strokeWidth={2} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Dev helper - hidden in production */}
         {process.env.NODE_ENV === 'development' && (
@@ -84,22 +94,24 @@ export default function ProfileTab() {
         <FormBase
           form={form}
           onSubmit={onSubmit}
-          className='w-full flex flex-col gap-5'>
+          className='w-full flex flex-col gap-6'>
 
           {/* First Name */}
           <FormField
             form={form}
             name="first_name"
             label="First Name"
-            labelClassName="sr-only"
             className="w-full">
             {(field) => (
-              <Input
-                {...field}
-                placeholder="First Name"
-                className={inputStyle}
-                value={field.value as string}
-              />
+              <div className='w-full'>
+                <label className={labelStyle}>First Name</label>
+                <Input
+                  {...field}
+                  placeholder="First Name"
+                  className={inputStyle}
+                  value={field.value as string}
+                />
+              </div>
             )}
           </FormField>
 
@@ -108,15 +120,17 @@ export default function ProfileTab() {
             form={form}
             name="last_name"
             label="Last Name"
-            labelClassName="sr-only"
             className="w-full">
             {(field) => (
-              <Input
-                {...field}
-                placeholder="Last Name"
-                className={inputStyle}
-                value={field.value as string}
-              />
+              <div className='w-full'>
+                <label className={labelStyle}>Last Name</label>
+                <Input
+                  {...field}
+                  placeholder="Last Name"
+                  className={inputStyle}
+                  value={field.value as string}
+                />
+              </div>
             )}
           </FormField>
 
@@ -125,16 +139,18 @@ export default function ProfileTab() {
             form={form}
             name="email"
             label="Email"
-            labelClassName="sr-only"
             className="w-full">
             {(field) => (
-              <Input
-                {...field}
-                type="email"
-                placeholder="Email"
-                className={inputStyle}
-                value={field.value as string}
-              />
+              <div className='w-full'>
+                <label className={labelStyle}>Email</label>
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="Email"
+                  className={inputStyle}
+                  value={field.value as string}
+                />
+              </div>
             )}
           </FormField>
 
@@ -143,25 +159,26 @@ export default function ProfileTab() {
             form={form}
             name="password"
             label="Password"
-            labelClassName="sr-only"
             className="w-full">
             {(field) => (
-              <Input
-                {...field}
-                type="password"
-                placeholder="Password"
-                className={inputStyle}
-                value={field.value as string}
-              />
+              <div className='w-full'>
+                <label className={labelStyle}>Password</label>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="Password"
+                  className={inputStyle}
+                  value={field.value as string}
+                />
+              </div>
             )}
           </FormField>
 
-          {/* Gender - WITH LABEL ABOVE */}
+          {/* Gender */}
           <FormField
             form={form}
             name='gender'
             label='Gender'
-            labelClassName='sr-only'
             className='w-full'>
             {(field) => (
               <div className='w-full'>
@@ -182,10 +199,10 @@ export default function ProfileTab() {
             )}
           </FormField>
 
-          {/* Birthday - WITH LABEL ABOVE */}
+          {/* Birthday */}
           <div className='w-full'>
             <label className={labelStyle}>Birthday</label>
-            <div className='w-full grid grid-cols-3 gap-3'>
+            <div className='w-full grid grid-cols-3 gap-4'>
               {/* Year */}
               <FormField form={form} name="birthday.year" className='w-full' labelClassName='sr-only' label='Year'>
                 {(field) => (
@@ -230,12 +247,11 @@ export default function ProfileTab() {
             </div>
           </div>
 
-          {/* Country - WITH LABEL ABOVE */}
+          {/* Country */}
           <FormField
             form={form}
             name='country'
             label='Country'
-            labelClassName='sr-only'
             className='w-full'>
             {(field) => (
               <div className='w-full'>
@@ -257,12 +273,11 @@ export default function ProfileTab() {
             )}
           </FormField>
 
-          {/* State - WITH LABEL ABOVE */}
+          {/* State */}
           <FormField
             form={form}
             name='state'
             label='State'
-            labelClassName='sr-only'
             className='w-full'>
             {(field) => (
               <div className='w-full'>
@@ -278,49 +293,52 @@ export default function ProfileTab() {
           </FormField>
 
           {/* Phone Number */}
-          <div className='w-full flex items-end gap-3'>
-            <FormField
-              form={form}
-              name='number.country_code'
-              label='Code'
-              className='w-[140px]'
-              labelClassName='sr-only'>
-              {(field) => (
-                <BaseSelect
-                  onChange={(value) => field.onChange(value)}
-                  label='Code'
-                  placeholder='+234'
-                  value={field.value as string}
-                  items={africanCountryCodes}
-                  triggerClassName={inputStyle}
-                />
-              )}
-            </FormField>
+          <div className='w-full'>
+            <label className={labelStyle}>Phone Number</label>
+            <div className='flex items-end gap-3'>
+              <FormField
+                form={form}
+                name='number.country_code'
+                label='Code'
+                className='w-[140px]'
+                labelClassName='sr-only'>
+                {(field) => (
+                  <BaseSelect
+                    onChange={(value) => field.onChange(value)}
+                    label='Code'
+                    placeholder='+234'
+                    value={field.value as string}
+                    items={africanCountryCodes}
+                    triggerClassName={inputStyle}
+                  />
+                )}
+              </FormField>
 
-            <FormField
-              form={form}
-              name='number.digits'
-              label='Phone Number'
-              labelClassName='sr-only'
-              className='flex-1'>
-              {(field) => (
-                <Input
-                  {...field}
-                  type='tel'
-                  placeholder='Phone Number'
-                  className={inputStyle}
-                  value={field.value as string}
-                />
-              )}
-            </FormField>
+              <FormField
+                form={form}
+                name='number.digits'
+                label='Phone Number'
+                labelClassName='sr-only'
+                className='flex-1'>
+                {(field) => (
+                  <Input
+                    {...field}
+                    type='tel'
+                    placeholder='Phone Number'
+                    className={inputStyle}
+                    value={field.value as string}
+                  />
+                )}
+              </FormField>
+            </div>
           </div>
 
-          {/* Save Button - WHITE BG, RED TEXT */}
-          <div className="flex justify-center mt-6 pt-4">
+          {/* Save Button */}
+          <div className="flex justify-center mt-8 pb-12">
             <Button
               type='submit'
               disabled={isLoadingProfile || updateProfileMutation.isPending}
-              className='w-[180px] h-[50px] font-sf-pro-display font-bold uppercase tracking-wide bg-white text-[#C30010] hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-[6px] text-[14px] transition-all'>
+              className='w-[160px] h-[48px] font-ibm-plex-mono font-bold uppercase tracking-widest bg-white text-[#FF3B30] hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-[4px] text-[13px] transition-all border-none'>
               {updateProfileMutation.isPending ? 'SAVING...' : 'SAVE'}
             </Button>
           </div>

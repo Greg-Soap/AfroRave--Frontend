@@ -12,7 +12,7 @@ import { AccountInput } from "../components/account-input";
 
 export default function PayoutTab() {
   return (
-    <div className="max-w-[436px] w-full flex flex-col gap-8 pb-[100px]">
+    <div className="w-full flex flex-col gap-8 pb-[100px]">
       <p className="font-sf-pro-display text-sm text-center px-3">
         Add your payout account details to receive funds from your Ticket sales
       </p>
@@ -174,16 +174,16 @@ const payout_input_fields: {
   label: string;
   name: keyof PayoutFormFields;
 }[] = [
-  {
-    label: "Name",
-    name: "name",
-  },
-  {
-    label: "Card Number",
-    name: "card_number",
-  },
-  {
-    label: "CVC",
-    name: "cvc",
-  },
-];
+    {
+      label: "Name",
+      name: "name",
+    },
+    {
+      label: "Card Number",
+      name: "card_number",
+    },
+    {
+      label: "CVC",
+      name: "cvc",
+    },
+  ];

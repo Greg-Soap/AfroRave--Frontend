@@ -14,15 +14,20 @@
 .fan-account-content-wrapper {
     flex: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Align to start, not center, to be closer to sidebar */
     align-items: flex-start;
-    padding: 60px 24px 80px;
+    padding: 40px 0 0 60px;
+    /* Top padding reduced, left padding added to position it right of sidebar */
+    border: 2px dashed red;
+    /* DEBUG: Visualize layout boundary */
 }
 
 /* Form Container */
 .fan-account-form-container {
     width: 100%;
-    max-width: 520px;
+    max-width: 480px;
+    /* Reduced from 520px to be more compact */
     display: flex;
     flex-direction: column;
     gap: 24px;
