@@ -53,7 +53,7 @@ export function WithdrawFundsModal({ isOpen, onClose, availableBalance }: Withdr
                 <Button
                     onClick={handleConfirm}
                     disabled={!amount || Number(amount) <= 0 || Number(amount) > availableBalance}
-                    className='w-full h-12 bg-[#0066FF] hover:bg-[#0052CC] text-white font-sf-pro-display font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed'>
+                    className='w-full h-12 bg-white hover:bg-white/90 text-[#E31E24] font-sf-pro-display font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed'>
                     Confirm
                 </Button>
             </div>

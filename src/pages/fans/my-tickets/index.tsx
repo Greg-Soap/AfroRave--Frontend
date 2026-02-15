@@ -1,8 +1,6 @@
 import { BaseAnimatedTab } from '@/components/reusable/base-animated-tab'
-import { Button } from '@/components/ui/button'
 import { useUserActiveTickets, useUserPastTickets } from '@/hooks/use-profile-mutations'
 import type { UserTicketData } from '@/types'
-import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ActiveTicketsTab from './my-tickets-tabs/active-tab'
@@ -49,9 +47,6 @@ export default function MyTicketsPage() {
 
   return (
     <section className='w-full flex flex-col items-center justify-center gap-[34px] mt-[124px]'>
-      <Button variant='ghost' className='pl-5 md:ml-[50px] self-start w-fit hover:bg-white/10'>
-        <ChevronLeft color='#ffffff' className='w-[14px] h-[30px]' />
-      </Button>
 
       <BaseAnimatedTab
         activeTab={activeTab}

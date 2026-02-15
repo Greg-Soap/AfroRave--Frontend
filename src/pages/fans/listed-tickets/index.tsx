@@ -1,61 +1,52 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 // import { AddFilterBUtton } from '@/pages/creators/standalone/components/add-filter-btn'
-import { ChevronLeft, Info, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 export default function ListedTicketPage() {
   return (
-    <section className='w-full flex flex-col items-center justify-center gap-8 mt-[124px]'>
-      <Button variant='ghost' className='ml-[50px] self-start w-fit hover:bg-white/10'>
-        <ChevronLeft color='#ffffff' className='w-[14px] h-[30px]' />
-      </Button>
+    <div className='w-full flex-1 flex flex-col items-center pt-8 pb-[100px] px-4 md:px-0'>
 
-      <div className='container w-full flex flex-col px-5 md:px-[60px] lg:px-[120px] py-[62px]'>
-        <div className='w-full flex items-center justify-between py-5 px-8 font-sf-pro-display text-white'>
-          <div className='flex items-center gap-2'>
-            <Search size={14} opacity={70} color='#ffffff' />
-            <Input
-              placeholder='Search'
-              className='p-0 text-white border-none placeholder:text-white/70 text-xs'
-            />
-          </div>
-          {/* 
-          <AddFilterBUtton
-            className="!text-white"
-            img="/assets/dashboard/filter.png"
-          /> */}
+      <div className='w-full max-w-[550px] flex flex-col gap-6'>
+        {/* Search Bar */}
+        <div className='w-full flex items-center gap-3 py-3 px-4 rounded-lg border border-white/10 bg-transparent font-sf-pro-display text-white transition-colors focus-within:border-white/20'>
+          <Search className='w-4 h-4 text-white/40' />
+          <Input
+            placeholder='Search'
+            className='p-0 h-auto bg-transparent border-none placeholder:text-white/40 text-sm focus-visible:ring-0 focus-visible:ring-offset-0'
+          />
         </div>
 
-        {listedTickets.map((item) => (
-          <ListedTickets key={item.name} {...item} />
-        ))}
+        {/* List */}
+        <div className='flex flex-col gap-0'>
+          {listedTickets.map((item) => (
+            <ListedTickets key={item.name} {...item} />
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   )
 }
 
 function ListedTickets({ name, ticket, date, status }: IListedTickets) {
   return (
-    <div className='w-full flex items-center justify-between py-5 px-3 md:px-8 border-t border-mid-dark-gray/30 font-sf-pro-display text-white'>
-      <div className='flex flex-col gap-0.5'>
-        <p>{name}</p>
-        <p className='text-xs'>{ticket}</p>
+    <div className='w-full flex items-center justify-between py-4 border-b border-white/5 font-sf-pro-display text-white hover:bg-white/5 transition-colors cursor-pointer rounded-lg px-2 -mx-2'>
+      <div className='flex flex-col gap-1'>
+        <p className='text-sm font-medium'>{name}</p>
+        <p className='text-xs text-white/40 uppercase tracking-wide'>{ticket}</p>
       </div>
 
-      <div className='flex items-center gap-3 md:gap-8'>
-        <p className='text-sm hidden md:flex'>{date}</p>
+      <div className='flex items-center gap-4'>
+        <p className='text-xs text-white/40 hidden md:block'>{date}</p>
 
         <Badge
-          className={cn('capitalize', {
-            'text-[#34C759]': status === 'sold',
-            'text-[#FF9500]': status === 'active',
+          className={cn('capitalize font-normal px-2 py-0.5 text-[10px] tracking-wide', {
+            'bg-[#34C759]/20 text-[#34C759] hover:bg-[#34C759]/30': status === 'sold',
+            'bg-[#FF9500]/20 text-[#FF9500] hover:bg-[#FF9500]/30': status === 'active',
           })}>
           {status}
         </Badge>
-
-        <Info size={20} />
       </div>
     </div>
   )
