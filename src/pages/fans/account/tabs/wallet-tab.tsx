@@ -51,63 +51,64 @@ export default function WalletTab() {
     }
 
     return (
-        <div className='w-full flex flex-col items-center gap-8 pb-[100px] px-4 md:px-0'>
-            {/* Title */}
-            <h2 className='text-white text-base md:text-lg font-sf-pro-display text-center'>
-                Manage Your Payout Funds
-            </h2>
-
-            {/* Available Balance Card */}
-            <div className='w-full bg-[#2A2A2A] rounded-lg p-6 flex flex-col gap-4'>
-                <div className='flex items-center gap-2 text-white/60'>
-                    <Wallet className='w-5 h-5' />
-                    <span className='text-sm font-sf-pro-display'>Available Balance</span>
+        <div className='w-full flex-1 flex flex-col items-center pt-8 pb-[100px] px-4 md:px-0'>
+            <div className='w-full max-w-[550px] flex flex-col gap-8'>
+                {/* Title */}
+                <h2 className='text-white text-base md:text-lg font-sf-pro-display text-center'>
+                    Manage Your Payout Funds
+                </h2>
+                {/* Available Balance Card */}
+                <div className='w-full bg-[#2A2A2A] border border-white/5 rounded-lg p-6 flex flex-col gap-4'>
+                    <div className='flex items-center gap-2 text-white/60'>
+                        <Wallet className='w-5 h-5' />
+                        <span className='text-sm font-sf-pro-display'>Available Balance</span>
+                    </div>
+                    <p className='text-white text-3xl md:text-4xl font-bold font-sf-pro-display'>
+                        ₦{availableBalance.toLocaleString()}
+                    </p>
+                    <Button
+                        onClick={() => setIsWithdrawModalOpen(true)}
+                        className='w-full h-12 bg-[#0066FF] hover:bg-[#0052CC] text-white font-sf-pro-display font-semibold rounded-lg transition-colors border-none'>
+                        Withdraw Funds
+                    </Button>
                 </div>
-                <p className='text-white text-3xl md:text-4xl font-bold font-sf-pro-display'>
-                    ₦{availableBalance.toLocaleString()}
-                </p>
-                <Button
-                    onClick={() => setIsWithdrawModalOpen(true)}
-                    className='w-full h-12 bg-[#0066FF] hover:bg-[#0052CC] text-white font-sf-pro-display font-semibold rounded-lg transition-colors'>
-                    Withdraw Funds
-                </Button>
-            </div>
 
-            {/* Payout History */}
-            <div className='w-full flex flex-col gap-4'>
-                <h3 className='text-white text-sm font-sf-pro-display font-semibold uppercase tracking-wider'>
-                    PAYOUT HISTORY
-                </h3>
-                <p className='text-white/60 text-sm font-sf-pro-display'>
-                    Funds Are Added To Your Wallet After Successful Resale
-                </p>
+                {/* Payout History */}
+                <div className='w-full flex flex-col gap-4'>
+                    <h3 className='text-white text-sm font-sf-pro-display font-semibold uppercase tracking-wider'>
+                        PAYOUT HISTORY
+                    </h3>
+                    <p className='text-white/60 text-sm font-sf-pro-display'>
+                        Funds Are Added To Your Wallet After Successful Resale
+                    </p>
 
-                {/* Payout Items */}
-                <div className='w-full flex flex-col gap-3'>
-                    {mockPayoutHistory.map((item) => (
-                        <PayoutHistoryItem
-                            key={item.id}
-                            item={item}
-                            onClick={() => handleTransactionClick(item)}
-                        />
-                    ))}
+                    {/* Payout Items */}
+                    <div className='w-full flex flex-col gap-3'>
+                        {mockPayoutHistory.map((item) => (
+                            <PayoutHistoryItem
+                                key={item.id}
+                                item={item}
+                                onClick={() => handleTransactionClick(item)}
+                            />
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            {/* Modals */}
-            <WithdrawFundsModal
-                isOpen={isWithdrawModalOpen}
-                onClose={() => setIsWithdrawModalOpen(false)}
-                availableBalance={availableBalance}
-            />
-
-            {selectedTransaction && (
-                <TransactionDetailsModal
-                    isOpen={!!selectedTransaction}
-                    onClose={() => setSelectedTransaction(null)}
-                    transaction={selectedTransaction}
+                {/* Modals */}
+                <WithdrawFundsModal
+                    isOpen={isWithdrawModalOpen}
+                    onClose={() => setIsWithdrawModalOpen(false)}
+                    availableBalance={availableBalance}
                 />
-            )}
+
+                {selectedTransaction && (
+                    <TransactionDetailsModal
+                        isOpen={!!selectedTransaction}
+                        onClose={() => setSelectedTransaction(null)}
+                        transaction={selectedTransaction}
+                    />
+                )}
+            </div>
         </div>
     )
 }
@@ -121,11 +122,11 @@ function PayoutHistoryItem({ item, onClick }: PayoutHistoryItemProps) {
     const getStatusColor = (status: PayoutItem['status']) => {
         switch (status) {
             case 'paid':
-                return 'bg-green-500/20 text-green-500'
+                return 'bg-[#198155] text-white' // Solid Green
             case 'pending':
-                return 'bg-yellow-500/20 text-yellow-500'
+                return 'bg-[#F2C94C] text-black' // Solid Yellow
             case 'in-review':
-                return 'bg-blue-500/20 text-blue-500'
+                return 'bg-[#0066FF] text-white' // Solid Blue
         }
     }
 
@@ -143,22 +144,22 @@ function PayoutHistoryItem({ item, onClick }: PayoutHistoryItemProps) {
     return (
         <button
             onClick={onClick}
-            className='w-full bg-[#2A2A2A] hover:bg-[#333333] rounded-lg p-4 flex items-center justify-between transition-colors cursor-pointer'>
+            className='w-full bg-transparent border border-white/10 hover:bg-white/5 rounded-[4px] p-4 flex items-center justify-between transition-all cursor-pointer group'>
             <div className='flex flex-col items-start gap-2'>
                 <p className='text-white font-sf-pro-display font-medium text-left'>{item.eventName}</p>
                 <div className='flex items-center gap-2 text-white/60 text-sm'>
                     <Wallet className='w-4 h-4' />
-                    <span className='font-sf-pro-display'>{item.ticketType}</span>
-                    <span className='font-sf-pro-display'>•</span>
-                    <span className='font-sf-pro-display'>{item.date}</span>
+                    <span className='font-sf-pro-display text-[10px] md:text-xs'>{item.ticketType}</span>
+                    <span className='font-sf-pro-display text-[10px] md:text-xs'>•</span>
+                    <span className='font-sf-pro-display text-[10px] md:text-xs'>{item.date}</span>
                 </div>
             </div>
             <div className='flex items-center gap-4'>
-                <p className='text-white font-sf-pro-display font-semibold text-lg'>
+                <p className='text-white font-sf-pro-display font-medium text-sm md:text-base'>
                     ₦{item.amount.toLocaleString()}
                 </p>
                 <span
-                    className={`px-3 py-1 rounded-full text-xs font-sf-pro-display font-medium ${getStatusColor(item.status)}`}>
+                    className={`px-3 py-1 rounded-full text-[10px] font-sf-pro-display font-medium uppercase tracking-wide ${getStatusColor(item.status)}`}>
                     {getStatusText(item.status)}
                 </span>
             </div>
