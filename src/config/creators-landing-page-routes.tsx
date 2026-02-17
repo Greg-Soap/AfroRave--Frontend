@@ -8,17 +8,17 @@ const AboutUsPage = lazy(() => import('../pages/creators/about-us'))
 const ContactUsPage = lazy(() => import('../pages/creators/contact-us'))
 const CreatorsBlogPage = lazy(() => import('../pages/creators/blog'))
 const CreatorsWishlistPage = lazy(() => import('../pages/creators/wishlist'))
-const CreatorsLandingPage = lazy(() => import('../pages/landing-page/creators'))
+// const CreatorsLandingPage = lazy(() => import('../pages/landing-page/creators'))
 
 export const creator_landing_page_routes: RouteObject[] = [
-  {
-    path: getRoutePath('creators'),
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <CreatorsLandingPage />
-      </Suspense>
-    ),
-  },
+  // {
+  //   path: getRoutePath('creators'),
+  //   element: (
+  //     <Suspense fallback={<LoadingFallback />}>
+  //       <CreatorsLandingPage />
+  //     </Suspense>
+  //   ),
+  // },
   {
     path: getRoutePath('creators_home'),
     element: (

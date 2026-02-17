@@ -33,6 +33,7 @@ const formSchema = z.object({
     .max(50, {
       message: 'Password too long.',
     }),
+  confirm_password: z.string(),
   phone_number: z.string().min(1, { message: 'Phone number is required.' }),
   country_code: z.string().min(1, { message: 'Country code is required.' }),
   business_name: z.string().min(2, { message: 'Business name too short.' }),
@@ -42,6 +43,9 @@ const formSchema = z.object({
   gender: z.string().min(1, { message: 'Please select a gender.' }),
   vendor_type: z.string().optional(),
   category: z.string().optional(),
+}).refine((data) => data.password === data.confirm_password, {
+  message: 'Passwords do not match.',
+  path: ['confirm_password'],
 })
 
 interface BusinessSignUpProps {
@@ -62,6 +66,7 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
       country: '',
       email: '',
       password: '',
+      confirm_password: '',
       phone_number: '',
       country_code: '+234',
       business_name: '',
@@ -125,6 +130,7 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
       'social_links',
       'email',
       'password',
+      'confirm_password',
     ])
 
     if (isValid) {
@@ -199,6 +205,7 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
 
             <InputField form={form} name='email' placeholder='EMAIL ADDRESS' />
             <InputField form={form} name='password' placeholder='PASSWORD' type='password' />
+            <InputField form={form} name='confirm_password' placeholder='CONFIRM PASSWORD' type='password' />
           </>
         )}
 

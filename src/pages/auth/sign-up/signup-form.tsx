@@ -27,6 +27,10 @@ const formSchema = z.object({
     .max(20, {
       message: 'Password too long.',
     }),
+  confirm_password: z.string(),
+}).refine((data) => data.password === data.confirm_password, {
+  message: 'Passwords do not match.',
+  path: ['confirm_password'],
 })
 
 interface SignupFormProps {
@@ -44,6 +48,7 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
       country: '',
       email: '',
       password: '',
+      confirm_password: '',
     },
   })
 
@@ -53,11 +58,11 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
       firstName: values.first_name,
       lastName: values.last_name,
       email: values.email,
-      telphone: '0000000000', 
-      gender: 'male', 
-      dateOfBirth: '2000-01-01', 
+      telphone: '0000000000',
+      gender: 'male',
+      dateOfBirth: '2000-01-01',
       country: values.country,
-      state: 'Benin', 
+      state: 'Benin',
       password: values.password,
     }
 
@@ -102,10 +107,20 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
           <Input placeholder='Enter email address.' />
         </FormField>
 
-          <FormField form={form} name='password' className='w-full'>
+        <FormField form={form} name='password' className='w-full'>
           {(field) => (
             <PasswordInput
               placeholder='Enter password.'
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
+            />
+          )}
+        </FormField>
+
+        <FormField form={form} name='confirm_password' className='w-full'>
+          {(field) => (
+            <PasswordInput
+              placeholder='Confirm password.'
               value={field.value}
               onChange={(value) => field.onChange(value)}
             />
