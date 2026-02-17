@@ -4,7 +4,7 @@ import { OnlyShowIf } from '@/lib/environment'
 import { cn } from '@/lib/utils'
 import { BusinessSignUp } from '@/pages/auth/sign-up/business-signup-form'
 import { SignupForm } from '@/pages/auth/sign-up/signup-form'
-import { VendorSignupForm } from '@/pages/auth/sign-up/vendor-signup-form'
+// import { VendorSignupForm } from '@/pages/auth/sign-up/vendor-signup-form'
 import { CreatorLogo, UserLoginForm } from '@/pages/auth/user-login/user-login-form'
 import { RoleSelection } from './role-selection'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -23,7 +23,7 @@ export function AuthModal() {
       case 'creator':
         return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='creator' />
       case 'vendor':
-        return <VendorSignupForm onSwitchToLogin={() => switchAuthType('login')} />
+        return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='vendor' />
       default:
         return <SignupForm onSwitchToLogin={() => switchAuthType('login')} />
     }
@@ -31,7 +31,7 @@ export function AuthModal() {
 
   const getModalSize = () => {
     if (authType === 'login') return 'small'
-    if (signupType === 'creator') return 'large'
+    if (signupType === 'creator' || signupType === 'vendor') return 'large'
     // Role selection modal should be large
     if (signupType === 'guest' && authType === 'signup') return 'large'
     return 'small'

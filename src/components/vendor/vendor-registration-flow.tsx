@@ -1,35 +1,19 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import { VendorRegistrationCallout } from './vendor-registration-callout'
-import { VendorRegistrationModal } from './vendor-registration-modal'
+import { useAuth } from '@/contexts/auth-context'
 
 export function VendorRegistrationFlow() {
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [calloutKey, setCalloutKey] = useState(0)
-    const [calloutDelay, setCalloutDelay] = useState(1500)
+    const { openAuthModal } = useAuth()
 
-    const handleClose = () => {
-        setIsModalOpen(false)
-
-        // Clear the dismissal flag so callout can reappear
-        sessionStorage.removeItem('vendorCalloutDismissed')
-
-        // Reset callout with 3s delay after closing modal
-        setCalloutDelay(3000)
-
-        setCalloutKey(prev => prev + 1)
+    const handleOpen = () => {
+        openAuthModal('signup', 'vendor')
     }
 
     return (
         <>
             <VendorRegistrationCallout
-                key={calloutKey}
-                onOpen={() => setIsModalOpen(true)}
-                delay={calloutDelay}
-            />
-            <VendorRegistrationModal
-                isOpen={isModalOpen}
-                onClose={handleClose}
-                onSuccess={() => { }}
+                onOpen={handleOpen}
+                delay={1500}
             />
         </>
     )
