@@ -4,14 +4,22 @@ import { DashboardCardSkeleton, DashboardCards } from '@/components/shared/dashb
 import VendorSelect from '@/components/shared/vendor-select'
 import { Button } from '@/components/ui/button'
 import { getRoutePath } from '@/config/get-route-path'
-import { useDeleteEvent, useGetEvent, useGetOrganizerEvents } from '@/hooks/use-event-mutations'
+import { useGetEvent, useGetOrganizerEvents } from '@/hooks/use-event-mutations'
 import { formatNaira } from '@/lib/format-price'
 import type { EventDetailData } from '@/types'
 import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AddFilterBUtton } from './components/add-filter-btn'
 import StandAloneModal from './components/standalone-modal'
-// import { useDeleteEvent } from '@/hooks/use-event-mutations'
+
+function formatEventDate(dateStr: string): string {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return dateStr
+  const day = date.getDate()
+  const suffix = day === 1 || day === 21 || day === 31 ? 'st' : day === 2 || day === 22 ? 'nd' : day === 3 || day === 23 ? 'rd' : 'th'
+  return date.toLocaleDateString('en-GB', { weekday: 'short' }) + ', ' + day + suffix + ' ' + date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+}
 
 export default function StandalonePage() {
   const { data: response, isPending: isLoading } = useGetOrganizerEvents()
@@ -23,24 +31,26 @@ export default function StandalonePage() {
   }
 
   return (
-    <section className='w-full h-full flex flex-col items-center gap-14 mb-[75px]'>
+    <section className='w-full h-full flex flex-col items-start mb-[75px]'>
       <StandAloneHeader />
 
-      <div className='max-w-[1099px] w-full flex flex-wrap gap-5 px-10'>
-        {events && events.length > 0 ? (
-          <>
-            {events.map((item) => (
-              <StandAloneEvents key={item.eventId} id={item.eventId} />
-            ))}
-          </>
-        ) : (
-          <div className='w-full h-[300px] flex flex-col gap-2.5 items-center justify-center'>
-            <p className='text-3xl text-charcoal font-semibold'>No event found</p>
-            <Button asChild>
-              <Link to={getRoutePath('add_event')}>Create an event</Link>
-            </Button>
-          </div>
-        )}
+      <div className='w-full px-16 lg:px-20 pt-14'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-w-[1040px]'>
+          {events && events.length > 0 ? (
+            <>
+              {events.map((item) => (
+                <StandAloneEvents key={item.eventId} id={item.eventId} />
+              ))}
+            </>
+          ) : (
+            <div className='col-span-full w-full h-[300px] flex flex-col gap-2.5 items-center justify-center'>
+              <p className='text-3xl text-charcoal font-semibold'>No event found</p>
+              <Button asChild>
+                <Link to={getRoutePath('add_event')}>Create an event</Link>
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )
@@ -54,10 +64,10 @@ function StandAloneHeader() {
       <div className='flex items-center gap-3 md:gap-8'>
         <VendorSelect />
 
-        <Button variant='destructive' className='p-3 h-8 rounded-[6px] gap-2 md:gap-8' asChild>
+        <Button variant='destructive' className='h-9 px-4 rounded-[6px] gap-2' asChild>
           <Link to={getRoutePath('add_event')}>
-            <Plus color='#ffffff' size={12} />
-            <span className='font-sf-pro-text text-xs'>Add Event</span>
+            <Plus color='#ffffff' size={14} />
+            <span className='font-sf-pro-text text-xs font-semibold'>Create Event</span>
           </Link>
         </Button>
       </div>
@@ -82,7 +92,7 @@ function StandAloneEvents({ id }: { id: string }) {
     <DashboardCards
       image={event.eventDetails.desktopMedia?.flyer}
       name={event.eventName}
-      startDate={event.eventDate.startDate}
+      startDate={formatEventDate(event.eventDate.startDate)}
       status={event.isPublished ? undefined : 'drafts'}
       cardInfo={[
         <StatParagraph
@@ -100,16 +110,17 @@ function StandAloneEvents({ id }: { id: string }) {
       customButton={[
         <BasePopover
           key='popover_trigger'
-          className='bg-black/50'
+          className='p-0 bg-transparent shadow-none border-none'
           trigger={
             <Button
               variant='ghost'
-              className='flex items-center justify-center hover:bg-black/10 rounded-none border-l border-semi-light-gray/28'>
+              className='flex items-center justify-center h-10 hover:bg-gray-50 rounded-none border-l border-gray-100'>
               <img
                 src='/assets/dashboard/creator/ellipses.png'
                 alt='Ellipses'
-                width={12}
-                height={10}
+                width={14}
+                height={12}
+                className='opacity-50'
               />
             </Button>
           }
@@ -123,18 +134,16 @@ function StandAloneEvents({ id }: { id: string }) {
 function PopoverContent({ event }: { event: EventDetailData }) {
   const eventLink = getRoutePath('individual_event', { eventId: event.eventId })
 
-  const deleteEventMutation = useDeleteEvent()
-
   return (
-    <div className='w-[117px] flex flex-col bg-black/50 rounded-[5px] p-1 gap-1 text-xs font-sf-pro-text'>
+    <div className='w-[160px] flex flex-col bg-white rounded-[6px] shadow-lg border border-gray-100 overflow-hidden text-xs font-sf-pro-text'>
       {[
         { href: getRoutePath('edit_event', { eventId: event.eventId }), name: 'Edit Event' },
-        { href: eventLink, name: 'View Event' },
+        { href: eventLink, name: 'View Event Page' },
       ].map((item) => (
         <Link
           key={item.name}
           to={item.href}
-          className='text-white border-b border-white h-[22px] hover:bg-black/80 px-1'>
+          className='text-black/80 border-b border-gray-100 h-9 flex items-center px-3 hover:bg-gray-50 transition-colors'>
           {item.name}
         </Link>
       ))}
@@ -144,14 +153,8 @@ function PopoverContent({ event }: { event: EventDetailData }) {
       <Button
         onClick={() => copyToClipboard(eventLink)}
         variant='ghost'
-        className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-1 justify-start hover:bg-black/80 hover:text-white'>
+        className='flex h-9 items-center bg-transparent rounded-none text-xs text-black/80 font-sf-pro-text px-3 justify-start hover:bg-gray-50 border-t border-gray-100'>
         Copy Link
-      </Button>
-      <Button
-        onClick={() => deleteEventMutation.mutate(event.eventId)}
-        variant='ghost'
-        className='flex h-[22px] items-center bg-transparent rounded-none text-xs text-white font-sf-pro-text px-1 justify-start hover:bg-black/80 hover:text-white'>
-        Delete Event
       </Button>
     </div>
   )
@@ -159,10 +162,11 @@ function PopoverContent({ event }: { event: EventDetailData }) {
 
 function StatParagraph({ key, name, stats }: IStatParagraph) {
   return (
-    <p key={key} className='font-sf-pro-rounded text-xs text-mid-dark-gray'>
-      {name}: <span className='text-black font-medium'>{stats.value}</span>
-      {typeof stats.value === 'number' ? <span> / </span> : null}
-      {stats.totalValue}
+    <p key={key} className='font-sf-pro-text text-[10px] text-gray-400 whitespace-nowrap'>
+      {name}:{' '}
+      <span className='text-black font-semibold text-[10px]'>
+        {typeof stats.value === 'number' ? `${stats.value} / ${stats.totalValue}` : stats.totalValue}
+      </span>
     </p>
   )
 }

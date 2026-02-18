@@ -15,7 +15,7 @@ export default function StandAloneModal({ event }: { event: EventDetailData }) {
       trigger={
         <Button
           variant='ghost'
-          className='flex h-[22px] items-center justify-start bg-transparent rounded-none border-b border-white text-xs text-white font-sf-pro-text px-1 hover:bg-black/80 hover:text-white'>
+          className='flex w-full h-9 items-center justify-start bg-transparent rounded-none border-b border-gray-100 text-xs text-black/80 font-sf-pro-text px-3 hover:bg-gray-50'>
           <span>Event Summary</span>
         </Button>
       }>

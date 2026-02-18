@@ -13,8 +13,8 @@ export function AddFilterBUtton({
   return (
     <BaseDropdown
       trigger={
-        <Button variant="ghost" className="gap-2 p-2.5 hover:bg-black/10">
-          <img src={img} alt="Filter" width={20} height={18} />
+        <Button variant="outline" className="gap-2 px-3 h-9 border border-gray-300 bg-white hover:bg-gray-50 rounded-[6px]">
+          <img src={img} alt="Filter" width={16} height={14} />
           <span
             className={cn(
               "font-medium text-xs font-sf-pro-rounded text-black",

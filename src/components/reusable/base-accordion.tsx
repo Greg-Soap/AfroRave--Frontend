@@ -25,22 +25,27 @@ export function BaseAccordion({
       >
         <AccordionTrigger
           className={cn("hover:no-underline", {
-            "items-center justify-between h-[64px] px-6 [&>svg]:hidden":
+            "items-center justify-between h-[50px] px-6 [&>svg]:hidden":
               style === "dashboard",
           })}
         >
-          <div
-            className={cn("flex items-center gap-1", {
-              "opacity-100 stroke-deep-red": isActive && style === "dashboard",
-              "opacity-50 stroke-black": !isActive && style === "dashboard",
-            })}
-          >
-            {icon}
-            <p className="font-sf-pro-display text-sm text-black">{trigger}</p>
+          <div className="flex items-center gap-2.5">
+            {/* Icon — turns red when active, gray when not */}
+            <span className={cn({
+              "text-deep-red": isActive && style === "dashboard",
+              "text-black/40": !isActive && style === "dashboard",
+            })}>
+              {icon}
+            </span>
+            {/* Text — always black, dims slightly when inactive */}
+            <p className={cn("font-sf-pro-display uppercase", {
+              "text-[13px] font-normal tracking-widest text-black": style === "dashboard",
+              "opacity-40": !isActive && style === "dashboard",
+            })}>{trigger}</p>
           </div>
 
-          <div className="flex w-fit h-fit">
-            <Plus color="#000000" className="size-[15px]" />
+          <div className="flex w-fit h-fit text-black/40">
+            <Plus color="currentColor" className="size-[13px]" />
           </div>
         </AccordionTrigger>
         <AccordionContent className="flex flex-col p-0">
