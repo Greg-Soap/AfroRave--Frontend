@@ -3,20 +3,13 @@ import { useAuth } from '@/contexts/auth-context'
 
 export default function RolesSection() {
   return (
-    <section className='w-full px-4 sm:px-8 md:px-12 lg:px-[120px] flex flex-col gap-12 md:gap-20 lg:gap-[100px]'>
-      {/* Organizers Section - Image Left, Text Right */}
-      <div className='flex flex-col lg:flex-row items-center gap-8 md:gap-12 lg:gap-16'>
-        <PlaceholderImage />
+    <section className='w-full min-h-screen flex flex-col justify-center px-6 sm:px-10 md:px-16 lg:px-24 py-20'>
+      <div className='flex flex-col md:flex-row items-start justify-between gap-16 md:gap-12 lg:gap-20'>
         <RoleDescription
           role={roles[0].role}
           description={roles[0].description}
           login={roles[0].login}
         />
-      </div>
-
-      {/* Vendors Section - Text Left, Image Right */}
-      <div className='flex flex-col lg:flex-row-reverse items-center gap-8 md:gap-12 lg:gap-16'>
-        <PlaceholderImage />
         <RoleDescription
           role={roles[1].role}
           description={roles[1].description}
@@ -27,28 +20,22 @@ export default function RolesSection() {
   )
 }
 
-function PlaceholderImage() {
-  return (
-    <div className='w-full lg:w-1/2 aspect-video bg-[#545454] rounded-lg flex items-center justify-center'>
-      <p className='text-white text-xs sm:text-sm font-sf-pro-text uppercase tracking-wide'>
-        PROTOTYPES WILL BE HERE!
-      </p>
-    </div>
-  )
-}
-
 function RoleDescription({ role, description, login }: IRoles) {
   const { openAuthModal } = useAuth()
   return (
-    <div className='w-full lg:w-1/2 flex flex-col gap-4 md:gap-5 items-start'>
-      <div className='flex flex-col gap-2 md:gap-3 font-sf-pro text-white uppercase'>
-        <p className='text-2xl sm:text-3xl md:text-[32px] lg:text-[36px] font-black leading-tight'>{role}</p>
-        <p className='text-xs sm:text-sm md:text-base font-normal leading-relaxed'>{description}</p>
-      </div>
-
+    <div className='w-full md:w-1/2 flex flex-col gap-7 items-center text-center'>
+      {/* Title */}
+      <h2 className='text-[28px] sm:text-[32px] md:text-[36px] font-black uppercase text-white leading-tight font-sf-pro tracking-wide'>
+        {role}
+      </h2>
+      {/* Description */}
+      <p className='text-[13px] sm:text-[14px] font-normal uppercase leading-relaxed text-white/85 max-w-[440px] font-sf-pro'>
+        {description}
+      </p>
       <Button
-        onClick={login === 'vendor' ? () => openAuthModal('login', login) : () => openAuthModal('login', login)}
-        className='w-[120px] sm:w-[140px] h-10 sm:h-11 rounded-[20px] font-sf-pro-text text-xs sm:text-sm font-semibold px-4 sm:px-[17px] py-[11px] uppercase bg-black text-white hover:bg-gray-900 transition-colors'>
+        onClick={() => openAuthModal('login', login)}
+        className='h-11 rounded-full font-sf-pro-text text-[13px] font-semibold px-8 uppercase bg-[#111] text-white hover:bg-white/10 border border-white/25 transition-colors'
+      >
         Learn More
       </Button>
     </div>
@@ -66,7 +53,7 @@ const roles: IRoles[] = [
     role: 'vendors',
     login: 'vendor',
     description:
-      'OUR SMART INTERFACE LETS YOU BROWSE AVAILABLE SERVICE SLOTS, ACCEPT BOOKINGS, AND UPLOAD REQUIRED ASSETS. STAY CONNECTED WITH ORGANIZERS THROUGH IN-APP MESSAGING (AVAILABLE ONLY ON MOBILE), AND MANAGE YOUR EVENT SCHEDULE WITH EASE. EVERYTHING IS STREAMLINED, TRACKABLE, AND BUILT TO HELP YOU STAY READY AND PROFESSIONAL AT EVERY EVENT.',
+      'OUR SMART INTERFACE PUTS EVERY VENDOR, SERVICE OR REVENUE—ONE STEP AHEAD. BOOK SLOTS, SHARE ASSETS, CHAT WITH ORGANIZERS (MOBILE ONLY), AND KEEP YOUR SCHEDULE ON POINT. STREAMLINED, TRACKABLE, AND BUILT FOR YOUR EVENT SUCCESS.',
   },
 ]
 

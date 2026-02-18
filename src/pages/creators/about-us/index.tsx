@@ -29,7 +29,12 @@ import Footer from '@/layouts/creators-landing-page-layout/sections/footer'
 
 export default function AboutUsPage() {
   return (
-    <VideoBackgroundWrapper overlayOpacity={0.6} secondColor='#a2a2a2'>
+    <VideoBackgroundWrapper
+      videoSrc='/assets/creators-background.mp4'
+      backgroundImage='/assets/landing-page/BG-3.webp'
+      overlayOpacity={0.15}
+      secondColor='#1a1a1a'
+    >
       <StatementSection />
       <LeadershipSectionWrapper />
       <WorKWithUsSectionWrapper />

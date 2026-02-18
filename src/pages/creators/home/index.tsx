@@ -34,9 +34,10 @@ import Footer from '@/layouts/creators-landing-page-layout/sections/footer'
 export default function CreatorsHomePage() {
   return (
     <VideoBackgroundWrapper
+      videoSrc='/assets/creators-background.mp4'
       backgroundImage='/assets/landing-page/BG-3.webp'
-      overlayOpacity={0.2}
-      secondColor='#a2a2a2'
+      overlayOpacity={0.15}
+      secondColor='#1a1a1a'
     >
       <HeroSection />
       <RolesSectionWrapper />

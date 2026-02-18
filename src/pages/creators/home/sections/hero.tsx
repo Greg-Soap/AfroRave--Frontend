@@ -1,47 +1,3 @@
-// import NewsletterSignup from '@/components/newsletter-signup'
-// import { Button } from '@/components/ui/button'
-// import { OnlyShowIf } from '@/lib/environment'
-// import { cn } from '@/lib/utils'
-
-// export default function HeroSection({
-//   description = ' We equip organizers with the tools to create, manage, and sell out their events, And vendors? They discover new opportunities, connect with organizers, and grow their businesses.',
-//   wideDescription = false,
-//   noButton = false,
-//   wishlistButton = false,
-// }: {
-//   description?: string
-//   wideDescription?: boolean
-//   noButton?: boolean
-//   wishlistButton?: boolean
-// }) {
-//   return (
-//     <section className=' w-full min-h-screen flex flex-col items-center justify-center py-[100px] z-50'>
-//       <div
-//         className={cn(
-//           'w-full flex flex-col items-center gap-8 md:gap-5 text-white font-sf-pro px-5 md:px-[60px]',
-//           {
-//             'max-w-[700px]': !wideDescription,
-//             'max-w-[900px]': wideDescription,
-//           },
-//         )}>
-//         <p className='max-w-[514px] text-center text-white text-[40px] font-black uppercase'>
-//           All-in-One Hub
-//           <br /> for Fans and Creators
-//         </p>
-//         <p className='text-center uppercase'>{description}</p>
-//         <OnlyShowIf condition={!noButton}>
-//           <Button className='max-w-[120px] h-10 rounded-[20px] font-sf-pro-text text-sm font-semibold px-[17px] py-[11px] uppercase'>
-//             Get Started
-//           </Button>
-//         </OnlyShowIf>
-//         <OnlyShowIf condition={wishlistButton}>
-//           <NewsletterSignup />
-//         </OnlyShowIf>
-//       </div>
-//     </section>
-//   )
-// }
-
 import NewsletterSignup from '@/components/newsletter-signup'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
@@ -62,29 +18,34 @@ export default function HeroSection({
   const { openAuthModal } = useAuth()
 
   return (
-    <section className='w-full min-h-screen flex flex-col items-center justify-center py-10 sm:py-16 md:py-[100px] z-50'>
+    <section className='w-full min-h-screen flex flex-col items-center justify-center z-50'>
       <div
         className={cn(
-          'w-full flex flex-col items-center gap-6 sm:gap-8 md:gap-5 text-white font-sf-pro px-4 sm:px-5 md:px-[60px]',
+          'w-full flex flex-col items-center gap-7 text-white font-sf-pro px-6 md:px-12 text-center',
           {
-            'max-w-[700px]': !wideDescription,
-            'max-w-[900px]': wideDescription,
+            'max-w-[640px]': !wideDescription,
+            'max-w-[960px]': wideDescription,
           },
         )}>
-        <p className='w-full max-w-[514px] text-center text-white text-3xl sm:text-4xl md:text-[40px] lg:text-[48px] font-black uppercase leading-tight'>
-          ALL-IN-ONE HUB
-          <br /> FOR FANS AND CREATORS
-        </p>
-        <p className='text-center uppercase text-xs sm:text-sm md:text-base leading-relaxed px-2 max-w-[800px]'>
+        {/* Title — 2 lines, large bold */}
+        <h1 className='text-[36px] sm:text-[44px] md:text-[52px] font-black uppercase leading-tight tracking-wide'>
+          ALL-IN-ONE HUB<br />FOR FANS AND CREATORS
+        </h1>
+
+        {/* Subtitle */}
+        <p className='text-[13px] sm:text-[14px] font-normal uppercase leading-relaxed max-w-[580px] text-white/85'>
           {description}
         </p>
+
         <OnlyShowIf condition={!noButton}>
           <Button
             onClick={() => openAuthModal('signup')}
-            className='w-full sm:max-w-[120px] h-10 sm:h-auto rounded-[20px] font-sf-pro-text text-sm font-semibold px-4 sm:px-[17px] py-[11px] uppercase max-w-xs mx-auto'>
+            className='h-11 rounded-full font-sf-pro-text text-[13px] font-semibold px-8 uppercase bg-[#111] text-white hover:bg-white/10 border border-white/25 transition-colors'
+          >
             Get Started
           </Button>
         </OnlyShowIf>
+
         <OnlyShowIf condition={wishlistButton}>
           <NewsletterSignup />
         </OnlyShowIf>
