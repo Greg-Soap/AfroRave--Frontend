@@ -7,11 +7,23 @@ import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { EventDetailData } from '@/types'
 
+// Helper to format date like "Wed Oct 5 at 11am WAT"
+function formatEventDateTime(dateStr: string, timeStr: string) {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return `${dateStr} at ${timeStr}`
+
+  // "Wed Oct 5"
+  const dayMonth = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+  // " at 11am WAT" (assuming timeStr is like "11:00 AM", stripping minutes if 00)
+  return `${dayMonth} at ${timeStr} WAT`
+}
+
 export default function StandAloneModal({ event }: { event: EventDetailData }) {
   return (
     <BaseModal
       removeCancel
-      className='min-w-fit py-6 px-7 rounded-[10px] bg-[linear-gradient(180deg,_#F3F3F3_0%,_#D9D9D9_39.42%,_#E6E6E6_86.06%)]'
+      className='min-w-[700px] w-[750px] py-6 px-6 rounded-[12px] bg-white shadow-lg'
       trigger={
         <Button
           variant='ghost'
@@ -19,13 +31,27 @@ export default function StandAloneModal({ event }: { event: EventDetailData }) {
           <span>Event Summary</span>
         </Button>
       }>
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-col gap-6 w-full'>
         <StandAloneModalHeader event={event} />
-        <div className='grid grid-cols-5 gap-2'>
-          <SummarySection event={event} />
-          <VendorSummarySection />
-          <AttendeeOverviewSection />
-          <EntryManagementSection />
+
+        <div className='grid grid-cols-5 gap-4 w-full h-[380px]'>
+          {/* Top Row: Sales Summary (3 cols) & Vendor Summary (2 cols) */}
+          <div className='col-span-3 h-[180px]'>
+            <SummarySection event={event} />
+          </div>
+          <div className='col-span-2 h-[180px]'>
+            <VendorSummarySection />
+          </div>
+
+          {/* Bottom Row: Attendee Overview (2.5 cols -> using 2 or 3) & Entry Management */}
+          {/* Design shows 2 cards at bottom too. Let's make them split fittingly. */}
+          {/* The design grid looks like 2 rows. Top row has Sales (large) and Vendor. Bottom has Attendee and Entry. */}
+          <div className='col-span-2 h-[180px]'>
+            <AttendeeOverviewSection />
+          </div>
+          <div className='col-span-3 h-[180px]'>
+            <EntryManagementSection />
+          </div>
         </div>
       </div>
     </BaseModal>
@@ -34,27 +60,27 @@ export default function StandAloneModal({ event }: { event: EventDetailData }) {
 
 function StandAloneModalHeader({ event }: { event: EventDetailData }) {
   return (
-    <div className='w-full flex items-center justify-between'>
-      <div className='h-fit w-[384px] flex flex-col py-1 gap-1 font-sf-pro-display capitalize'>
-        <p className='font-bold text-black'>{event.eventName}</p>
-        <p className='text-[13px] text-black'>{event.venue}</p>
-        <p className='text-[13px] text-black'>
-          {event.eventDate.startDate} at {event.eventDate.startTime}
+    <div className='w-full flex items-start justify-between border-b border-gray-100 pb-2 mb-2'>
+      <div className='flex flex-col gap-1 font-sf-pro-display max-w-[400px]'>
+        <p className='font-bold text-[18px] text-black leading-tight'>{event.eventName}</p>
+        <p className='text-[13px] text-gray-500 font-medium'>{event.venue}</p>
+        <p className='text-[13px] text-gray-500 font-medium'>
+          {formatEventDateTime(event.eventDate.startDate, event.eventDate.startTime)}
         </p>
       </div>
 
-      <div className='flex items-center gap-2'>
+      <div className='flex items-center gap-3'>
         <Button
           asChild
-          className='w-[132px] h-8 rounded-[4px] bg-secondary-white text-xs font-light text-black font-sf-pro-display hover:bg-black/15'>
+          variant="outline"
+          className='w-[130px] h-9 rounded-[6px] bg-white border border-gray-200 text-xs font-medium text-black font-sf-pro-display hover:bg-gray-50 shadow-sm'>
           <Link to={getRoutePath('individual_event', { eventId: event.eventId })}>
             View Event Page
           </Link>
         </Button>
         <Button
           asChild
-          variant='destructive'
-          className='w-[132px] h-8 rounded-[4px] text-xs font-light font-sf-pro-display'>
+          className='w-[110px] h-9 rounded-[6px] bg-[#B91C1C] hover:bg-red-800 text-xs font-medium text-white font-sf-pro-display shadow-sm'>
           <Link to={getRoutePath('edit_event', { eventId: event.eventId })}>Edit Event</Link>
         </Button>
       </div>
@@ -64,65 +90,72 @@ function StandAloneModalHeader({ event }: { event: EventDetailData }) {
 
 function SummarySection({ event }: { event: EventDetailData }) {
   return (
-    <SectionContainer className='col-span-3 flex flex-col gap-6'>
-      <p className='text-2xl font-bold text-black capitalize'>sales summary</p>
+    <SectionContainer className='w-full h-full flex flex-col justify-between'>
+      <p className='text-[16px] font-bold text-black capitalize font-sf-pro-display'>Sales Summary</p>
 
-      <div className='grid grid-cols-2 gap-x-8 gap-y-6'>
-        {[
-          { name: 'total tickets sold', figure: event.eventStat.ticketSold },
-          { name: 'total revenue', figure: formatNaira(event.eventStat.netProfit) },
-          { name: 'total tickets', figure: event.eventStat.totalTicket },
-          { name: 'active promo codes', figure: event.eventStat.activePromoCodes },
-        ].map((item) => (
-          <div key={item.name} className='flex flex-col gap-1 text-pure-black'>
-            <p className='text-sm capitalize'>{item.name}</p>
-            <p className='font-semibold'>{item.figure}</p>
-          </div>
-        ))}
+      <div className='grid grid-cols-2 gap-x-8 gap-y-6 mt-2'>
+        <StatItem name='Total Tickets Sold' value={event.eventStat.ticketSold.toString()} />
+        <StatItem name='Total Revenue' value={formatNaira(event.eventStat.netProfit)} />
+        <StatItem name='Total Tickets' value={event.eventStat.totalTicket.toString()} />
+        <StatItem name='Promo Codes' value={event.eventStat.activePromoCodes.toString()} />
       </div>
     </SectionContainer>
   )
 }
 
+function StatItem({ name, value }: { name: string, value: string }) {
+  return (
+    <div className='flex flex-col gap-1'>
+      <p className='text-[12px] text-gray-500 font-medium'>{name}</p>
+      <p className='text-[15px] font-bold text-black'>{value}</p>
+    </div>
+  )
+}
+
 function VendorSummarySection() {
   return (
-    <SectionContainer className='w-full col-span-2 flex gap-3 flex-col justify-center'>
-      <p className='font-bold text-pure-black capitalize'>vendor summary</p>
+    <SectionContainer className='w-full h-full flex flex-col'>
+      <p className='text-[15px] font-bold text-black capitalize mb-4 font-sf-pro-display'>Vendor Summary</p>
 
-      <SectionStats name='confirmed vendors' figure={8} />
-      <SectionStats name='pending requests' figure={3} />
+      <div className='flex flex-col flex-1 justify-center gap-0'>
+        <SectionRow name='Confirmed Vendors' figure={8} />
+        <SectionRow name='Pending Requests' figure={3} />
+      </div>
     </SectionContainer>
   )
 }
 
 function AttendeeOverviewSection() {
   return (
-    <SectionContainer className='w-full col-span-2 flex gap-3 flex-col'>
-      <p className='font-bold text-pure-black capitalize'>Attendee Overview</p>
+    <SectionContainer className='w-full h-full flex flex-col'>
+      <p className='text-[15px] font-bold text-black capitalize mb-4 font-sf-pro-display'>Attendee Overview</p>
 
-      <SectionStats name='resale activity' figure={45} />
-      <SectionStats name='checked in ' />
+      <div className='flex flex-col flex-1 justify-center gap-0'>
+        <SectionRow name='Resale Activity' figure={45} />
+        <SectionRow name='Checked In' figure='-' />
+      </div>
     </SectionContainer>
   )
 }
 
 function EntryManagementSection() {
   return (
-    <SectionContainer className='w-full col-span-3 flex gap-3 flex-col'>
-      <p className='font-bold text-pure-black capitalize'>Entry Management</p>
+    <SectionContainer className='w-full h-full flex flex-col'>
+      <p className='text-[15px] font-bold text-black capitalize mb-4 font-sf-pro-display'>Entry Management</p>
 
-      <SectionStats name='entry staff' figure={12} />
-      <Link
-        to='#'
-        className='border-t border-mid-dark-gray/50 pt-4 px-1 flex ite justify-between text-pure-black'>
-        <p className='text-sm font-medium capitalize'>access control </p>
-        <ChevronRight size={12} color='#000000' />
-      </Link>
+      <div className='flex flex-col flex-1 justify-center gap-0'>
+        <SectionRow name='Entry Staff' figure={12} />
+
+        <div className='flex items-center justify-between py-3 border-b border-gray-100 last:border-0 cursor-pointer hover:bg-gray-50 -mx-1 px-1 rounded-sm'>
+          <p className='text-[13px] font-medium text-black capitalize'>Access Control</p>
+          <ChevronRight size={14} className='text-black' />
+        </div>
+      </div>
     </SectionContainer>
   )
 }
 
-function SectionStats({
+function SectionRow({
   name,
   figure,
 }: {
@@ -130,9 +163,9 @@ function SectionStats({
   figure?: string | number
 }) {
   return (
-    <div className='border-t border-mid-dark-gray/50 pt-4 px-1 flex ite justify-between text-pure-black'>
-      <p className='text-sm font-medium capitalize'>{name}</p>
-      <p className='text-xs font-sf-pro-rounded'>{figure ? figure : '-'}</p>
+    <div className='flex items-center justify-between py-3 border-b border-gray-100 last:border-0'>
+      <p className='text-[13px] font-medium text-black capitalize'>{name}</p>
+      <p className='text-[13px] font-bold text-black'>{figure}</p>
     </div>
   )
 }
@@ -147,7 +180,7 @@ function SectionContainer({
   return (
     <div
       className={cn(
-        'flex flex-col h-full min-h-fit py-6 px-3 bg-secondary-white rounded-[10px] font-sf-pro-display',
+        'bg-[#F9F9F9] rounded-[12px] p-5 border border-transparent', // Using specific light gray bg
         className,
       )}>
       {children}

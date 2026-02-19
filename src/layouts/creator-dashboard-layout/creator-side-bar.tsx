@@ -5,12 +5,25 @@ import { ChartIcon } from "@/components/icons/chart";
 import { VendorIcon } from "@/components/icons/vendor";
 import { ToolsIcon } from "@/components/icons/tools";
 
+import { CreatorSettingsModal } from "@/pages/creators/standalone/components/creator-settings-modal";
+import { Settings } from "lucide-react";
+
 export default function CreatorSidebar() {
   return (
     <BaseSideBar
       className="pt-24 sticky top-0"
       sidebar_links={creator_sidebar_links}
       collapsibleOnMobile={true}
+      footerItem={
+        <CreatorSettingsModal
+          customTrigger={
+            <div className="flex items-center gap-2.5 px-6 py-4 cursor-pointer hover:bg-gray-50 bg-white border-t border-gray-100 transition-colors group w-full">
+              <Settings className="size-[18px] text-black group-hover:text-red-600 transition-colors" />
+              <span className="text-[13px] font-normal tracking-widest text-black font-sf-pro-display uppercase">SETTINGS</span>
+            </div>
+          }
+        />
+      }
     />
   );
 }

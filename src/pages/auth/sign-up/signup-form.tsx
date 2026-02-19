@@ -1,6 +1,4 @@
-import { africanCountries } from '@/components/constants'
 import { FormBase, FormField } from '@/components/reusable'
-import { BaseSelect } from '@/components/reusable'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
@@ -9,15 +7,16 @@ import type { UserRegisterData } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { User, Mail, Lock } from 'lucide-react'
 
 const formSchema = z.object({
   first_name: z.string().min(2, { message: 'Name too short.' }),
   last_name: z.string().min(2, { message: 'Name too short.' }),
-  country: z.string({
-    required_error: 'Please select a country.',
-  }),
   email: z.string().email({
-    message: 'Username must be at least 2 characters.',
+    message: 'Please enter a valid email address.',
+  }),
+  confirm_email: z.string().email({
+    message: 'Please enter a valid email address.',
   }),
   password: z
     .string()
@@ -27,17 +26,16 @@ const formSchema = z.object({
     .max(20, {
       message: 'Password too long.',
     }),
-  confirm_password: z.string(),
-}).refine((data) => data.password === data.confirm_password, {
-  message: 'Passwords do not match.',
-  path: ['confirm_password'],
+}).refine((data) => data.email === data.confirm_email, {
+  message: 'Email addresses do not match.',
+  path: ['confirm_email'],
 })
 
 interface SignupFormProps {
   onSwitchToLogin: () => void
 }
 
-export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
+export function SignupForm({ }: SignupFormProps) {
   const registerUser = useRegisterUser()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,15 +43,13 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
     defaultValues: {
       first_name: '',
       last_name: '',
-      country: '',
       email: '',
+      confirm_email: '',
       password: '',
-      confirm_password: '',
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Transform form data to match API structure
     const userData: UserRegisterData = {
       firstName: values.first_name,
       lastName: values.last_name,
@@ -61,8 +57,8 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
       telphone: '0000000000',
       gender: 'male',
       dateOfBirth: '2000-01-01',
-      country: values.country,
-      state: 'Benin',
+      country: 'Nigeria',
+      state: 'Lagos',
       password: values.password,
     }
 
@@ -74,76 +70,63 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
       <FormBase
         form={form}
         onSubmit={onSubmit}
-        className='w-[415px] h-fit rounded-[12px] space-y-5 bg-red px-7 py-4 md:px-5 md:py-12 z-10 font-sf-pro-text'>
-        <div className='flex items-center gap-2'>
-          <img src='/assets/resell/lighting.svg' alt='Bolt' width={22} height={32} />
-          <p className='text-[32px] font-bold text-black font-sf-pro-text'>Sign Up</p>
-        </div>
+        className='w-[415px] h-fit rounded-[12px] space-y-0 bg-white px-7 py-6 md:px-7 md:py-8 z-10 font-sf-pro-text'>
+        <p className='text-[28px] font-bold text-black font-sf-pro-text mb-6'>Sign Up</p>
 
-        <div className='grid md:grid-cols-2 gap-[9px]'>
-          <FormField form={form} name='first_name' >
-            <Input placeholder='Enter your first name.' />
+        <div className='flex flex-col w-full'>
+          <FormField form={form} name='first_name' className='border-b border-gray-200 py-1'>
+            <div className='flex items-center gap-2.5'>
+              <User className='size-4 text-gray-400 shrink-0' />
+              <Input placeholder='First name' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+            </div>
           </FormField>
 
-          <FormField form={form} name='last_name' >
-            <Input placeholder='Enter your last name.' />
+          <FormField form={form} name='last_name' className='border-b border-gray-200 py-1'>
+            <div className='flex items-center gap-2.5'>
+              <User className='size-4 text-gray-400 shrink-0' />
+              <Input placeholder='Last name' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+            </div>
+          </FormField>
+
+          <FormField form={form} name='email' className='border-b border-gray-200 py-1'>
+            <div className='flex items-center gap-2.5'>
+              <Mail className='size-4 text-gray-400 shrink-0' />
+              <Input placeholder='Email Address' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+            </div>
+          </FormField>
+
+          <FormField form={form} name='confirm_email' className='border-b border-gray-200 py-1'>
+            <div className='flex items-center gap-2.5'>
+              <Mail className='size-4 text-gray-400 shrink-0' />
+              <Input placeholder='Confirm Email Address' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+            </div>
+          </FormField>
+
+          <FormField form={form} name='password' className='py-1'>
+            {(field) => (
+              <div className='flex items-center gap-2.5'>
+                <Lock className='size-4 text-gray-400 shrink-0' />
+                <PasswordInput
+                  placeholder='Password'
+                  value={field.value}
+                  onChange={(value) => field.onChange(value)}
+                  className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400'
+                />
+              </div>
+            )}
           </FormField>
         </div>
 
-        <FormField form={form} name='country' className='w-full z-20'>
-          {(field) => (
-            <BaseSelect
-              type='auth'
-              placeholder='Select a country.'
-              width={329}
-              value={field.value}
-              onChange={(value) => field.onChange(value)}
-              items={africanCountries}
-            />
-          )}
-        </FormField>
-
-        <FormField form={form} name='email' >
-          <Input placeholder='Enter email address.' />
-        </FormField>
-
-        <FormField form={form} name='password' className='w-full'>
-          {(field) => (
-            <PasswordInput
-              placeholder='Enter password.'
-              value={field.value}
-              onChange={(value) => field.onChange(value)}
-            />
-          )}
-        </FormField>
-
-        <FormField form={form} name='confirm_password' className='w-full'>
-          {(field) => (
-            <PasswordInput
-              placeholder='Confirm password.'
-              value={field.value}
-              onChange={(value) => field.onChange(value)}
-            />
-          )}
-        </FormField>
-
-        <div className='flex items-center justify-center gap-1 text-sm text-black font-sf-pro-text'>
-          Already have an account?{' '}
-          <button
-            type='button'
-            onClick={onSwitchToLogin}
-            className='text-base font-bold text-accent hover:underline'>
-            Log In
-          </button>
+        <div className='pt-6'>
+          <Button
+            type='submit'
+            className='w-full h-[50px] text-base font-semibold font-sf-pro-text bg-black hover:bg-black/90 text-white rounded-[8px]'
+            disabled={registerUser.isPending}>
+            {registerUser.isPending ? 'Signing Up...' : 'Sign Up'}
+          </Button>
         </div>
-
-        <Button
-          type='submit'
-          className='w-full h-[50px] text-xl font-semibold font-sf-pro-text'
-          disabled={registerUser.isPending}>
-          {registerUser.isPending ? 'Signing Up...' : 'Sign Up'}
-        </Button>
       </FormBase>
     </div>
   )
 }
+

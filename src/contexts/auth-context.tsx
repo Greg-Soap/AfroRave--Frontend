@@ -12,7 +12,7 @@ interface AuthContextType {
   signupType: SignupType
   openAuthModal: (type: AuthType, loginType?: LoginType) => void
   closeAuthModal: () => void
-  switchAuthType: (type: AuthType) => void
+  switchAuthType: (type: AuthType, loginType?: LoginType) => void
   switchToSignup: (signupType: SignupType) => void
 }
 
@@ -76,9 +76,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [setSearchParams])
 
   const switchAuthType = useCallback(
-    (type: AuthType) => {
+    (type: AuthType, loginType?: LoginType) => {
       setAuthType(type)
-      setSearchParams({ [type]: 'true' })
+      if (loginType) {
+        setLoginType(loginType)
+        setSearchParams({ [type]: loginType })
+      } else {
+        setSearchParams({ [type]: 'true' })
+      }
     },
     [setSearchParams],
   )

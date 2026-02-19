@@ -22,6 +22,7 @@ export function BaseSideBar({
   sidebar_links,
   collapsibleOnMobile = false,
   children,
+  footerItem,
 }: IBaseSidebar) {
   const location = useLocation();
   const isMobile = useIsMobile();
@@ -36,8 +37,8 @@ export function BaseSideBar({
       collapsible={effectiveCollapsible}
       className={cn(className, "w-[320px] min-h-screen h-fit bg-white")}
     >
-      <SidebarContent className={cn(contentClassName, "flex flex-col")}>
-        <SidebarGroup className="px-0">
+      <SidebarContent className={cn(contentClassName, "flex flex-col h-full")}>
+        <SidebarGroup className="px-0 flex-1">
           <SidebarGroupLabel className="sr-only">Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -63,6 +64,12 @@ export function BaseSideBar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {footerItem && (
+          <div className="mt-auto w-full">
+            {footerItem}
+          </div>
+        )}
       </SidebarContent>
     </Sidebar>
   );
@@ -123,4 +130,5 @@ interface IBaseSidebar {
   sidebar_links?: ICreatorSidebarLinks[];
   collapsibleOnMobile?: boolean;
   children?: React.ReactNode;
+  footerItem?: React.ReactNode;
 }

@@ -13,17 +13,20 @@ export function AuthModal() {
   const { isAuthModalOpen, authType, signupType, closeAuthModal, switchAuthType, loginType, switchToSignup } =
     useAuth()
 
+  // Check if we are on the fans page — fans get a different signup experience
+  const isFansPage = window.location.pathname === '/fans' || window.location.pathname.startsWith('/fans/')
+
   const renderSignupForm = () => {
-    // Show role selection if signupType is not set (guest) and authType is signup
-    if (signupType === 'guest' && authType === 'signup') {
+    // On /fans, skip role selection and go straight to fan signup form
+    if (signupType === 'guest' && authType === 'signup' && !isFansPage) {
       return <RoleSelection onContinue={(role) => switchToSignup(role)} />
     }
 
     switch (signupType) {
       case 'creator':
-        return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='creator' />
+        return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login', 'creator')} type='creator' />
       case 'vendor':
-        return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login')} type='vendor' />
+        return <BusinessSignUp onSwitchToLogin={() => switchAuthType('login', 'vendor')} type='vendor' />
       default:
         return <SignupForm onSwitchToLogin={() => switchAuthType('login')} />
     }
@@ -32,12 +35,14 @@ export function AuthModal() {
   const getModalSize = () => {
     if (authType === 'login') return 'small'
     if (signupType === 'creator' || signupType === 'vendor') return 'large'
-    // Role selection modal should be large
-    if (signupType === 'guest' && authType === 'signup') return 'large'
+    // Role selection modal should be large, but NOT on fans page (fans get small form)
+    if (signupType === 'guest' && authType === 'signup' && !isFansPage) return 'large'
     return 'small'
   }
 
   const shouldShowCreatorLogo = () => {
+    // Never show creator logo on the fans page
+    if (isFansPage) return false
     // Show logo for creator login or vendor login, role selection, or creator signup
     // Vendor signup has its own logo inside the form, so don't show floating logo
     if (authType === 'signup' && signupType === 'vendor') {
@@ -62,7 +67,7 @@ export function AuthModal() {
       floatingCancel
       className={cn({
         'bg-transparent shadow-none':
-          authType === 'signup' && (signupType === 'creator' || signupType === 'vendor' || signupType === 'guest'),
+          authType === 'signup' && (signupType === 'creator' || signupType === 'vendor' || (signupType === 'guest' && !isFansPage)),
       })}
       overlayClassName='bg-gradient-to-b from-[#848484] to-[#1E1E1E] !opacity-100'
       size={getModalSize()}>

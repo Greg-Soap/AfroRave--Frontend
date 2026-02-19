@@ -28,7 +28,7 @@ export function ConfirmationMailForm() {
       <div className='flex flex-col gap-1 font-sf-pro-display text-black'>
         <div className='flex items-center justify-between'>
           <p className='text-xl font-bold'>Customize your confirmation email</p>
-          <p className='text-xs leading-[100%] font-sf-pro-text text-mid-dark-gray'>(OPTIONAl)</p>
+          <p className='text-xs leading-[100%] font-sf-pro-text text-mid-dark-gray'>(OPTIONAL)</p>
         </div>
         <p className='text-sm font-light text-charcoal leading-[100%]'>
           Add a personal touch to the confirmation email your ticket buyers receive after purchase
