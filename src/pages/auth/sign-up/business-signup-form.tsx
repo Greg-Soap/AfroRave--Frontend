@@ -128,7 +128,7 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
   }
 
   return (
-    <div className='relative flex justify-center w-full max-h-[95vh] overflow-y-auto px-4'>
+    <div className='relative flex justify-center w-full max-h-[82vh] md:max-h-[92vh] overflow-y-auto px-4'>
       <FormBase
         form={form}
         onSubmit={onSubmit}

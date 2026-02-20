@@ -26,22 +26,7 @@ const DialogOverlay = React.forwardRef<
       className
     )}
     {...props}
-  >
-    {cancelOnOverlay && (
-      <DialogPrimitive.Close
-        className="absolute top-10 right-10 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm font-bold opacity-90 transition-all hover:opacity-100 focus:outline-none disabled:pointer-events-none cursor-pointer touch-manipulation"
-        onClick={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-        }}
-        style={{ WebkitTapHighlightColor: 'transparent' }}
-      >
-        <X className="h-6 w-6 text-white font-bold" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    )}
-  </DialogPrimitive.Overlay>
+  />
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
@@ -95,6 +80,16 @@ const DialogContent = React.forwardRef<
         )}
         {children}
       </DialogPrimitive.Content>
+      {cancelOnOverlay && (
+        <DialogPrimitive.Close
+          className="fixed top-4 right-4 md:top-10 md:right-10 z-[1000000] p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm font-bold opacity-90 transition-all hover:opacity-100 focus:outline-none disabled:pointer-events-none cursor-pointer data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          onClick={(e) => e.stopPropagation()}
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+        >
+          <X className="h-5 w-5 md:h-6 md:w-6 text-white font-bold" />
+          <span className="sr-only">Close</span>
+        </DialogPrimitive.Close>
+      )}
     </DialogPortal>
   )
 );

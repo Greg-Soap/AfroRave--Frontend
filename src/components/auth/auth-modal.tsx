@@ -91,7 +91,7 @@ export function AuthModal() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}>
-                <div className='absolute -top-20 left-1/2 -translate-x-1/2'>
+                <div className='absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2 scale-[0.8] md:scale-100 origin-bottom'>
                   <CreatorLogo />
                 </div>
               </motion.div>
