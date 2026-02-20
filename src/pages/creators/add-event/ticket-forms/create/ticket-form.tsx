@@ -36,7 +36,7 @@ export function TicketForm({
           maxLength={65}>
           {(field) => (
             <Input
-              placeholder='Enter ticket name'
+              placeholder='Enter name'
               className='uppercase border-mid-dark-gray/50'
               {...field}
               value={field.value == null ? '' : String(field.value)}
@@ -63,7 +63,7 @@ export function TicketForm({
         <FormField form={form} name='ticket.invite_only'>
           {(field) => (
             <BaseBooleanCheckbox
-              data={{ items: { label: 'Invite only', id: 'invite-only' } }}
+              data={{ items: { label: 'INVITE ONLY', id: 'invite-only' } }}
               showCheckbox={false}
               labelClassName='text-[12px] flex justify-center rounded-[5px] opacity-70 bg-white px-4 py-2 shadow-[0px_2px_10px_2px_#0000001A]'
               checkedClassName='border border-red-800 bg-blue-900'
@@ -149,7 +149,7 @@ export function TicketForm({
       </OnlyShowIf>
 
       <FormFieldWithCounter
-        name='DESCRIPTION'
+        name='Description'
         field_name='ticket.description'
         form={form}
         maxLength={450}>
@@ -195,6 +195,21 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
                 />
               )}
             </FormField>
+
+            <FormField form={form} name='allow_ticket_resell'>
+              {(field) => (
+                <BaseBooleanCheckbox
+                  data={{ items: { label: 'ALLOW TICKET RESELL', id: 'allow-ticket-resell' } }}
+                  showCheckbox={true}
+                  labelClassName='text-base font-bold font-sf-pro-display'
+                  checkedClassName='border border-red-800'
+                  {...field}
+                />
+              )}
+            </FormField>
+            <p className='text-xs text-black font-sf-pro-display -mt-3'>
+              This option allows attendees to resell their tickets to other fans.
+            </p>
           </div>
           <OnlyShowIf condition={form.getValues('whenToStart') === 'at-a-scheduled-date'}>
             <DateForm
@@ -211,11 +226,18 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
       </div>
 
       <div className='flex gap-3'>
+        <Button
+          type='button'
+          onClick={onCancel}
+          className='w-[155px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white bg-deep-red hover:bg-deep-red/90 uppercase'>
+          REMOVE TICKET
+        </Button>
+
         {onSubmit && (
           <Button
             type='button'
             onClick={onSubmit}
-            className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'>
+            className='w-[155px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white bg-black hover:bg-black/90 uppercase'>
             {isLoading
               ? isEditMode
                 ? 'UPDATING...'
@@ -223,16 +245,6 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
               : isEditMode
                 ? 'UPDATE TICKET'
                 : 'CREATE TICKET'}
-          </Button>
-        )}
-
-        {isEditMode && onCancel && (
-          <Button
-            type='button'
-            variant='destructive'
-            onClick={onCancel}
-            className='w-[120px] h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white'>
-            CANCEL
           </Button>
         )}
       </div>
@@ -260,8 +272,7 @@ function TicketType({ type }: { type: ITicketFormProps['type'] }) {
 
 const salesTypeItems: { value: string; label: string }[] = [
   { value: 'online', label: 'Online' },
-  { value: 'offline', label: 'Offline' },
-  { value: 'both', label: 'Both' },
+  { value: 'door', label: 'Door' },
 ]
 
 const availability: { value: string; label: string }[] = [
@@ -309,7 +320,7 @@ const whenToStartOptions = [
         description: 'Tickets go on sale as soon as your event is live',
       },
       {
-        label: 'Schedule Sales Start',
+        label: 'SCHEDULE SALES START',
         id: 'at-a-scheduled-date',
         description: 'Pick a date/time to open sales after your event page is live',
       },

@@ -14,21 +14,25 @@ export function BaseRadioGroup({
     <RadioGroup
       value={value}
       onValueChange={onChange}
-      className='w-full flex flex-row flex-wrap gap-6 lg:gap-10'>
+      className='w-full grid grid-cols-1 md:grid-cols-3 gap-6'>
       {data.map((item) => (
-        <div key={item.value} className='w-[400px] flex items-center'>
+        <div key={item.value} className='w-full flex items-center'>
           <RadioGroupItem value={item.value} id={item.value} className='hidden' />
           <Label
             htmlFor={item.value}
             className={cn(
-              'w-[400px] h-[252px] rounded-[8px] flex flex-col items-start gap-3 transition-colors duration-150 p-5 shadow-[0px_4px_12px_0px_#00000040] bg-medium-gray',
+              'w-full h-auto min-h-[200px] rounded-[16px] flex flex-col items-start gap-4 transition-all duration-200 p-3 shadow-sm bg-[#5c5c5c] hover:bg-[#4a4a4a] cursor-pointer ring-offset-2',
               {
-                'border border-primary hover:border-primary': value === item.value,
-                'border border-border hover:border-primary': value !== item.value,
+                'ring-2 ring-primary border-transparent': value === item.value,
+                'border border-transparent hover:border-gray-500': value !== item.value,
               },
             )}>
-            <p className='text-white font-black font-sf-pro-display leading-[100%]'>{item.label}</p>
-            <img src={item.src} alt={item.alt} className='w-full  max-h-[181px] rounded-[10px]' />
+            <p className='text-white text-xs font-bold font-sf-pro-display uppercase tracking-wide leading-[100%] ml-1'>
+              {item.label}
+            </p>
+            <div className='w-full aspect-[2/1] rounded-[8px] overflow-hidden bg-black/20'>
+              <img src={item.src} alt={item.alt} className='w-full h-full object-cover' />
+            </div>
           </Label>
         </div>
       ))}

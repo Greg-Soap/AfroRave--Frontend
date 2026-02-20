@@ -37,10 +37,11 @@ import {
 import { BaseCheckbox } from '@/components/reusable/base-checkbox'
 import { useCreatePromoCode, useUpdatePromoCode } from '@/hooks/use-event-mutations'
 import { OnlyShowIf } from '@/lib/environment'
+import { AnimatedShowIf } from '../../component/animated-show-if'
 import { ActionPopover } from '../../component/action-popover'
 import { useDeletePromoCode } from '@/hooks/use-event-mutations'
 import { AddButton } from '../../component/add-btn'
-import { ContinueButton } from '../../component/continue-button'
+import { FakeDataGenerator } from '@/lib/fake-data-generator'
 
 export default function PromoCodeForm({
   handleFormChange,
@@ -98,21 +99,36 @@ export default function PromoCodeForm({
 
   const handleSubmit = () => onSubmit(handleFormChange)
 
+  const handleFillSampleData = (data: any) => {
+    if (!data) return
+
+    form.setValue('promoCodes.code', data.code)
+    form.setValue('promoCodes.discount', data.discount)
+    form.setValue('promoCodes.usageLimit', data.usageLimit)
+    form.setValue('promoCodes.onePerCustomer', data.onePerCustomer)
+
+    // Set dates
+    form.setValue('promoCodes.startDate', data.startDate)
+    form.setValue('promoCodes.endDate', data.endDate)
+
+    form.setValue('promoCodes.conditions', data.conditions)
+    form.setValue('promoCodes.tickets', (data.tickets || []) as { id: string }[])
+    form.setValue('promoCodes.notes', data.notes)
+
+    // Partnership data
+    form.setValue('promoCodes.partnership', data.partnership)
+  }
+
   return (
     <div className='w-full flex flex-col gap-8'>
       <TabContainer<{ promoCodes: TPromoCodeSchema }>
-        heading='ENABLE PROMO CODES'
-        description='Code names must be unique per event'
+        heading='CREATE PROMO CODES'
+        description='CODE NAMES MUST BE UNIQUE PER EVENT'
         className='max-w-[560px] w-full flex flex-col'
         form={form}
         onSubmit={handleSubmit}>
         {createdPromoCodes?.data && createdPromoCodes.data.length > 0 && (
           <div className='w-full flex flex-col gap-3'>
-            <div className='flex items-center justify-between'>
-              <p className='text-sm font-medium text-gray-700'>
-                Created Promo Codes ({createdPromoCodes.data.length})
-              </p>
-            </div>
             {createdPromoCodes.data.map((promoCode) => (
               <CreatedPromoCard
                 key={promoCode.promoCode}
@@ -127,8 +143,15 @@ export default function PromoCodeForm({
         )}
 
         {/* Only show form when there's a promo code to create/edit */}
-        <OnlyShowIf condition={currentPromoCode}>
+        <AnimatedShowIf condition={currentPromoCode}>
           <div className='w-full flex flex-col gap-8'>
+            <FakeDataGenerator
+              type='promoCodes'
+              onGenerate={handleFillSampleData}
+              buttonText='🎲 Fill with sample data'
+              variant='outline'
+              className='mb-2 self-end'
+            />
             <PromoCodeFormFields
               form={form}
               eventTickets={eventTickets}
@@ -143,18 +166,29 @@ export default function PromoCodeForm({
               isEditing={updatePromoCodeMutation.isPending}
             />
           </div>
-        </OnlyShowIf>
+        </AnimatedShowIf>
 
         {/* Only show add promo code button when no form is active */}
-        <OnlyShowIf condition={!currentPromoCode}>
+        <AnimatedShowIf condition={!currentPromoCode}>
           <AddButton onClick={handleAddPromoCode} name='ADD PROMO CODE' />
-        </OnlyShowIf>
+        </AnimatedShowIf>
       </TabContainer>
 
-      <ContinueButton
-        disabled={createdPromoCodes?.data.length === 0}
-        onClick={() => handleFormChange('upgrades')}
-      />
+      <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
+        <Button
+          type='button'
+          onClick={() => handleFormChange('upgrades')}
+          className='w-full md:w-[240px] h-10 rounded-[8px] text-xs font-sf-pro-text uppercase bg-black hover:bg-black/90 text-white'>
+          SKIP
+        </Button>
+        <Button
+          type='button'
+          variant='destructive'
+          onClick={() => handleFormChange('upgrades')}
+          className='w-full md:w-[240px] h-10 rounded-[8px] text-xs font-sf-pro-text uppercase'>
+          CONTINUE
+        </Button>
+      </div>
     </div>
   )
 }
@@ -295,11 +329,11 @@ export function PromoCodeFormFields({
         name='NOTES'
         field_name='promoCodes.notes'
         form={form}
-        maxLength={450}
+        maxLength={250}
         description='Optional'>
         {(field) => (
           <Textarea
-            placeholder='Enter promo code description.'
+            placeholder='Add private notes to help you track the purpose or audience for this code (only you can see this)'
             className='w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
             {...field}
             value={field.value == null ? '' : String(field.value)}
@@ -319,7 +353,7 @@ export function PromoCodeFormFields({
           maxLength={20}>
           {(field) => (
             <Input
-              className='w-full'
+              className='w-full uppercase border-mid-dark-gray/50'
               {...field}
               value={field.value == null ? '' : String(field.value)}
             />
@@ -333,13 +367,15 @@ export function PromoCodeFormFields({
 
           <OnlyShowIf condition={form.getValues('promoCodes.partnership.comission') || false}>
             <div className='w-full grid grid-cols-2 gap-3'>
-              <FieldText text='AFTER SALES' />
+              <div className='w-full h-9 flex items-center justify-center bg-[#E6E6E6] rounded-[4px] border border-mid-dark-gray/50 text-xs font-sf-pro-display text-[#686868]'>
+                % AFTER SALES
+              </div>
 
               <FormField form={form} name='promoCodes.partnership.comissionRate'>
                 {(field) => (
                   <Input
                     type='number'
-                    className='w-full h-9'
+                    className='w-full h-9 border-mid-dark-gray/50'
                     {...field}
                     value={field.value == null ? '' : String(field.value)}
                   />
@@ -355,7 +391,7 @@ export function PromoCodeFormFields({
           <Button
             type='button'
             onClick={onSubmit}
-            className='w-fit h-8 rounded-full text-xs font-semibold font-sf-pro-text text-white shadow-[0px_2px_10px_2px_#0000001A]'
+            className='w-fit h-8 px-4 rounded-full text-xs font-semibold font-sf-pro-text text-white bg-black hover:bg-black/90'
             disabled={isCreating || isEditing}>
             {isEditMode
               ? isEditing
@@ -390,28 +426,33 @@ function CreatedPromoCard({
 }: ICreatedPromoCode) {
   return (
     <div className='w-full flex flex-col'>
-      <div className='w-full flex flex-col gap-5'>
-        <div className='w-full flex items-center justify-between border border-mid-dark-gray/30 px-3 py-[11px] shadow-[0px_2px_10px_2px_#0000001A] rounded-[5px]'>
-          <div className='flex flex-col gap-1'>
-            <p className='uppercase text-sm font-sf-pro-display leading-[100%] text-charcoal'>
-              {promoCode.promoCode}
-            </p>
-            <p className='text-xs text-gray-600'>
+      <div className='w-full border border-mid-dark-gray/30 px-4 py-3 shadow-sm rounded-lg bg-white flex items-center justify-between'>
+        <div className='flex flex-col gap-1'>
+          <p className='uppercase text-sm font-bold font-sf-pro-text text-charcoal'>
+            {promoCode.promoCode}
+          </p>
+          <div className='flex items-center gap-2 text-[10px] font-medium text-[#686868] font-sf-pro-display uppercase'>
+            <p>
               {promoCode.discountType === 'percentage'
                 ? `${promoCode.discountValue}% OFF`
                 : `$${promoCode.discountValue} OFF`}
             </p>
-            <p className='text-xs text-gray-600'>Usage: {promoCode.discountUsage}</p>
+            <span className='w-1 h-1 rounded-full bg-[#686868]' />
+            <p>Usage: {promoCode.discountUsage}</p>
           </div>
-          <div className='flex items-center gap-3'>
-            <CustomBadge text={promoCode.discountType} />
-            <ActionPopover
-              onEdit={onEdit}
-              onDelete={onDelete}
-              isDeleting={isDeleting}
-              isUpdating={isUpdating}
-            />
-          </div>
+        </div>
+
+        <div className='flex items-center gap-4'>
+          <CustomBadge
+            type={promoCode.discountType === 'percentage' ? 'percentage' : 'default'}
+            text={promoCode.discountType}
+          />
+          <ActionPopover
+            onEdit={onEdit}
+            onDelete={onDelete}
+            isDeleting={isDeleting}
+            isUpdating={isUpdating}
+          />
         </div>
       </div>
     </div>
@@ -421,9 +462,10 @@ function CreatedPromoCard({
 function CustomBadge({ type = 'default', text = 'default' }: ICustomBadge) {
   return (
     <Badge
-      className={cn('py-1.5 px-2 rounded-[6px] text-xs font-sf-pro-rounded leading-[100%]', {
-        'bg-[#00AD2E4D] text-[#00AD2E]': type === 'default',
-        'bg-deep-red/30 text-deep-red': type === 'private',
+      className={cn('py-1 px-3 rounded text-[10px] font-medium font-sf-pro-text uppercase leading-[100%]', {
+        'bg-[#E6F7EB] text-[#00AD2E]': type === 'percentage' || type === 'default',
+        'bg-[#FFF5CC] text-[#FFB800]': type === 'partnership',
+        'bg-deep-red/10 text-deep-red': type === 'private',
       })}>
       {text}
     </Badge>
@@ -456,7 +498,7 @@ const checkboxData: IBaseCheckbox[] = [
     items: { label: 'private', id: 'private' },
   },
   {
-    description: 'Link THIS code to a partner or influencer for sales tracking.',
+    description: 'Link this code to a partner or influencer for sales tracking.',
     items: { label: 'partnership code?', id: 'partnershipCode' },
   },
   {
@@ -483,6 +525,6 @@ interface ICreatedPromoCode {
 }
 
 interface ICustomBadge {
-  type?: 'default' | 'private'
+  type?: 'default' | 'private' | 'percentage' | 'partnership'
   text?: string
 }

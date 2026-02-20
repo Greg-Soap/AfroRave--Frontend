@@ -27,7 +27,7 @@ export function ConfirmationMailForm() {
       className='max-w-[560px] w-full self-center flex flex-col space-y-0 gap-4'>
       <div className='flex flex-col gap-1 font-sf-pro-display text-black'>
         <div className='flex items-center justify-between'>
-          <p className='text-xl font-bold'>Customize your confirmation email</p>
+          <p className='text-xl font-bold'>CUSTOMIZE YOUR CONFIRMATION EMAIL</p>
           <p className='text-xs leading-[100%] font-sf-pro-text text-mid-dark-gray'>(OPTIONAL)</p>
         </div>
         <p className='text-sm font-light text-charcoal leading-[100%]'>
@@ -37,7 +37,7 @@ export function ConfirmationMailForm() {
 
       <div className='flex flex-col gap-4'>
         <FormFieldWithCounter
-          name='CONFIRMATION EMAIL'
+          name='confirmation email'
           field_name='confirmationEmail'
           form={form}
           maxLength={250}
@@ -53,13 +53,19 @@ export function ConfirmationMailForm() {
         </FormFieldWithCounter>
         <div className='w-full flex flex-col gap-4'>
           <div className='flex items-end gap-2 md:gap-6'>
-            <FormField showError form={form} name='email' label='EMAIL' className='w-full'>
+            <FormField form={form} name='email' label='Email' className='w-full'>
               {(field) => (
-                <Input {...field} value={field.value == null ? '' : String(field.value)} />
+                <Input
+                  {...field}
+                  autoComplete='off'
+                  style={{ backgroundColor: 'white', color: 'black' }}
+                  className='!bg-white !text-black placeholder:text-mid-dark-gray border-mid-dark-gray/50'
+                  value={field.value == null ? '' : String(field.value)}
+                />
               )}
             </FormField>
 
-            <Button className='w-[100px] md:w-[160px] h-10 bg-black rounded-[4px]'>
+            <Button className='w-[100px] md:w-[160px] h-10 bg-black hover:bg-black/90 rounded-[4px]'>
               SEND TEST
             </Button>
           </div>

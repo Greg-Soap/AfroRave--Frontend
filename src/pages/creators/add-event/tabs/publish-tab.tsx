@@ -5,7 +5,7 @@ import { useGetEventPromoCodes, usePublishEvent } from '@/hooks/use-event-mutati
 import { useGetEvent, useGetEventTickets, useGetEventVendors } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
 import { useEventStore } from '@/stores'
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, Pencil, MapPin, Calendar } from 'lucide-react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -54,52 +54,73 @@ export default function PublishTab({
   }
 
   return (
-    <div className='max-w-[640px] w-full flex flex-col self-center rounded-[10px] py-10 px-5 bg-secondary-white mb-[75px]'>
-      <div className='w-full flex gap-3'>
-        <div className='w-full flex flex-col gap-3 '>
-          <div className='flex flex-col gap-2 px-1 font-sf-pro-display text-charcoal'>
-            <div className='flex items-center justify-between'>
-              <p className='text-xl font-bold leading-[100%] uppercase'>{event?.eventName}</p>
+    <div className='w-full flex flex-col items-center gap-6 mb-10'>
+      <div className='max-w-[700px] w-full flex flex-col self-center rounded-[12px] p-6 bg-secondary-white shadow-sm border border-gray-100'>
+        <div className='w-full flex justify-between gap-4 mb-4'>
+          <div className='flex flex-col gap-3 font-sf-pro-display text-charcoal flex-1 pt-1'>
+            <div className='flex flex-col gap-0.5'>
+              <div className='flex items-center gap-2'>
+                <p className='text-2xl font-black leading-[100%] uppercase tracking-tight'>{event?.eventName}</p>
+                <div className='p-1.5 rounded-full hover:bg-black/5 cursor-pointer transition-colors'>
+                  <Pencil size={14} className='text-charcoal/60' />
+                </div>
+              </div>
             </div>
-            <p className='text-sm leading-[100%]'>{event?.venue}</p>
-            <p className='text-sm leading-[100%]'>
-              {event?.eventDate.startDate} at {event?.eventDate.startTime}
-            </p>
+
+            <div className='flex flex-col gap-1.5 mt-1'>
+              <div className='flex items-center gap-2 text-charcoal/70'>
+                <MapPin size={14} />
+                <p className='text-xs font-medium leading-[100%]'>{event?.venue}</p>
+              </div>
+              <div className='flex items-center gap-2 text-charcoal/70'>
+                <Calendar size={14} />
+                <p className='text-xs font-medium leading-[100%]'>
+                  {event?.eventDate.startDate} at {event?.eventDate.startTime}
+                </p>
+              </div>
+            </div>
           </div>
 
+          <RenderEventImage
+            image={event?.eventDetails.desktopMedia?.flyer}
+            event_name={event?.eventName || ''}
+            className='rounded-[6px] w-[120px] h-[160px] object-cover shadow-sm border border-gray-100'
+          />
+        </div>
+
+        <div className='flex flex-col gap-0'>
           <SectionContainer
             name='Tickets'
             quantity={tickets?.length || 0}
             href={`${getRoutePath('add_event')}/?tab=tickets`}
             data={ticketNames.map((item) => ({ tool: item, enabled: false }))}
           />
+
+          <SectionContainer
+            name='Vendor Listings'
+            quantity={vendors?.length || 0}
+            href={`${getRoutePath('add_event')}/?tab=vendor`}
+            data={vendorNames.map((name) => ({ tool: name, enabled: false }))}
+          />
+
+          <SectionContainer
+            name='Advanced Tools'
+            href={`${getRoutePath('add_event')}/?tab=tickets`}
+            data={[
+              { tool: 'Promo Codes', enabled: (promoCodes?.length ?? 0) > 0 },
+              { tool: 'Upgrades', enabled: true },
+              { tool: 'Ticket Resale', enabled: true },
+            ]}
+          />
         </div>
-
-        <RenderEventImage
-          image={event?.eventDetails.desktopMedia?.flyer}
-          event_name={event?.eventName || ''}
-          className='rounded-[5px] w-[180px] min-h-[200px] max-h-[234px]'
-        />
       </div>
-
-      <SectionContainer
-        name='Vendor Listings'
-        quantity={vendors?.length || 0}
-        href={`${getRoutePath('add_event')}/?tab=vendor`}
-        data={vendorNames.map((name) => ({ tool: name, enabled: false }))}
-      />
-
-      <SectionContainer
-        name='Advanced Options'
-        href={`${getRoutePath('add_event')}/?tab=tickets`}
-        data={[{ tool: 'Promo Codes', enabled: (promoCodes?.length ?? 0) > 0 }]}
-      />
 
       <ContinueButton
         isLoading={publishEventMutation.isPending}
         onClick={handlePublishEvent}
         text='Publish'
         updatingText='Publishing'
+        className='bg-[#CB342C] hover:bg-[#A62B24] w-[200px] h-10 text-xs uppercase font-bold tracking-wider rounded-[6px] shadow-sm'
       />
     </div>
   )
@@ -107,15 +128,15 @@ export default function PublishTab({
 
 function SectionContainer({ name, quantity, href, data }: ISectionContainer) {
   return (
-    <div className='w-full flex flex-col p-1'>
-      <div className='w-full flex items-center justify-between border-b border-mid-dark-gray/50 py-4 px-1'>
-        <p className='font-sf-pro-display font-bold leading-[100%] text-charcoal capitalize'>
+    <div className='w-full flex flex-col py-0'>
+      <div className='w-full flex items-center justify-between border-b border-gray-100 py-3 px-1'>
+        <p className='font-sf-pro-display font-bold text-sm leading-[100%] text-charcoal capitalize tracking-tight'>
           {name}
         </p>
 
-        <div className='flex items-center'>
-          {quantity && (
-            <p className='size-6 rounded-full flex items-center justify-center bg-[#CB342C] text-white text-sm font-semibold leading-[100%] font-sf-pro-rounded'>
+        <div className='flex items-center gap-2'>
+          {quantity !== undefined && quantity > 0 && (
+            <p className='size-4 rounded-full flex items-center justify-center bg-[#CB342C] text-white text-[9px] font-bold leading-[100%] font-sf-pro-rounded'>
               {quantity}
             </p>
           )}
@@ -123,24 +144,26 @@ function SectionContainer({ name, quantity, href, data }: ISectionContainer) {
         </div>
       </div>
 
-      {data.map((item) => (
-        <div
-          key={item.tool}
-          className='flex items-center justify-between border-b border-mid-dark-gray/50 py-4 px-1'>
-          <p className='text-sm font-sf-pro-display leading-[100%] capitalize text-charcoal'>
-            {item.tool}
-          </p>
-          {name === 'Advanced Options' && (
-            <p
-              className={cn('text-xs font-sf-pro-rounded leading-[100%] capitalize', {
-                'text-[#34C759]': item.enabled,
-                'text-deep-red': !item.enabled,
-              })}>
-              {item.enabled ? 'Enabled' : 'Disabled'}
+      <div className='flex flex-col'>
+        {data.map((item) => (
+          <div
+            key={item.tool}
+            className='flex items-center justify-between border-b border-gray-50 py-2.5 px-2 hover:bg-gray-50/50 transition-colors'>
+            <p className='text-[13px] font-sf-pro-display leading-[100%] capitalize text-charcoal/80'>
+              {item.tool}
             </p>
-          )}
-        </div>
-      ))}
+            {name === 'Advanced Tools' && (
+              <p
+                className={cn('text-[10px] font-sf-pro-rounded leading-[100%] capitalize font-semibold', {
+                  'text-[#34C759]': item.enabled,
+                  'text-deep-red': !item.enabled,
+                })}>
+                {item.enabled ? 'Enabled' : 'Disabled'}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

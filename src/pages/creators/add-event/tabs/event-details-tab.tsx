@@ -40,6 +40,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
       category: 'festival',
       venue: '',
       description: '',
+      terms_refund_policy: '',
       event_type: 'standalone',
       occurrence: 1,
       start_date: {
@@ -125,8 +126,8 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         <SelectField
           form={form}
           name='age_rating'
-          label='Age Rating'
-          placeholder='Select an age rating.'
+          label='AGE RATING'
+          placeholder="WHAT'S THE AGE RATING OF YOUR EVENT?"
           data={ageRatings}
           triggerClassName='w-full'
         />
@@ -134,9 +135,9 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         <SelectField
           form={form}
           name='category'
-          label='Event Category'
+          label='EVENT CATEGORY'
           data={eventCategories}
-          placeholder='Select a Category.'
+          placeholder='CHOOSE AN APPLICABLE CATEGORY'
           triggerClassName='w-full'
         />
       </div>
@@ -163,10 +164,25 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         )}
       </FormFieldWithCounter>
 
+      <FormFieldWithCounter
+        name='TERMS(REFUND POLICY)'
+        field_name='terms_refund_policy'
+        form={form}
+        maxLength={250}>
+        {(field) => (
+          <Textarea
+            placeholder='Enter your terms and refund policy.'
+            className='w-full h-[272px] text-black bg-white px-3 py-[11px] rounded-[4px] border border-mid-dark-gray/50 text-sm font-sf-pro-display'
+            {...field}
+            value={field.value == null ? '' : String(field.value)}
+          />
+        )}
+      </FormFieldWithCounter>
+
       <FormFieldWithAbsoluteText
         form={form}
         name='custom_url'
-        label='Custom URL'
+        label='CUSTOM URL'
         text='afrorevive/events/'>
         {(field) => (
           <Input
@@ -182,7 +198,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         <div className='flex flex-col gap-3'>
           <p className='text-xl font-bold text-black font-sf-pro-display'>EVENT DATE</p>
           <p className='font-sf-pro-text text-xs font-light text-black'>
-            Select all the dates of your event
+            Select the date of your event
           </p>
           <div className='flex gap-2'>
             {[
@@ -211,7 +227,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         <SelectField
           form={form}
           name='time_zone'
-          label='Timezone'
+          label='SELECT TIME ZONE'
           data={africanTimezones}
           placeholder='Select a time zone.'
           triggerClassName='w-full'
@@ -256,8 +272,8 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
           hour_name='start_date.hour'
           minute_name='start_date.minute'
           period_name='start_date.period'
-          date_label='Start Date'
-          time_label='Start Time'
+          date_label='START DATE'
+          time_label='START TIME'
         />
 
         <DateForm
@@ -267,15 +283,15 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
           hour_name='end_date.hour'
           minute_name='end_date.minute'
           period_name='end_date.period'
-          date_label='End Date'
-          time_label='End Time'
+          date_label='END DATE'
+          time_label='END TIME'
         />
       </div>
 
       <div className='w-full flex flex-col gap-7'>
         <div className='min-w-full flex flex-col gap-5'>
-          <p className='uppercase text-xl text-black font-medium font-sf-pro-text'>
-            Contact Details
+          <p className='uppercase text-xl text-black font-bold font-sf-pro-display'>
+            CONTACT DETAILS
           </p>
 
           <div className='w-full flex flex-col gap-6'>
@@ -302,7 +318,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         </div>
 
         <div className='flex flex-col gap-5'>
-          <p className='uppercase text-xl text-black font-medium font-sf-pro-text'>Socials</p>
+          <p className='uppercase text-xl text-black font-bold font-sf-pro-display'>SOCIALS</p>
 
           <div className='grid md:grid-cols-2 gap-x-8 gap-y-5'>
             {[

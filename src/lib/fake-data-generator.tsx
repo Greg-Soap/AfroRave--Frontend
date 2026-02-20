@@ -4,6 +4,7 @@ import type { VendorSchema } from '@/pages/creators/add-event/schemas/vendor-ser
 import type { slotSchema } from '@/pages/creators/add-event/schemas/vendor-slot-schema'
 import type { EditEventDetailsSchema } from '@/schema/edit-event-details'
 import type { ProfileSchema } from '@/schema/profile-shema'
+import type { TPromoCodeSchema } from '@/pages/creators/add-event/schemas/promo-code-schema'
 import { faker } from '@faker-js/faker'
 import type { UseFormReset } from 'react-hook-form'
 import type { z } from 'zod'
@@ -278,36 +279,36 @@ const fakeDataGenerators = {
       vendor:
         vendorType === 'revenue_vendor'
           ? {
-              baseVendorDetails: baseDetails,
-              type: 'revenue_vendor' as const,
-              number_of_slots: faker.number.int({ min: 1, max: 10 }).toString(),
-              price_per_slot: faker.number.int({ min: 1000, max: 50000 }).toString(),
-              slot_name: faker.helpers.arrayElement([
-                'VIP Booth',
-                'Standard Booth',
-                'Food Stall',
-                'Merchandise Stand',
-                'Photo Booth',
-              ]),
-            }
+            baseVendorDetails: baseDetails,
+            type: 'revenue_vendor' as const,
+            number_of_slots: faker.number.int({ min: 1, max: 10 }).toString(),
+            price_per_slot: faker.number.int({ min: 1000, max: 50000 }).toString(),
+            slot_name: faker.helpers.arrayElement([
+              'VIP Booth',
+              'Standard Booth',
+              'Food Stall',
+              'Merchandise Stand',
+              'Photo Booth',
+            ]),
+          }
           : {
-              baseVendorDetails: baseDetails,
-              type: 'service_vendor' as const,
-              service_name: faker.helpers.arrayElement([
-                'Professional DJ Services',
-                'Event Photography',
-                'Catering Services',
-                'Event Decoration',
-                'Security Services',
-              ]),
-              budget: {
-                range: faker.datatype.boolean(),
-                minBudget: faker.number.int({ min: 5000, max: 50000 }).toString(),
-                maxBudget: faker.number.int({ min: 50000, max: 200000 }).toString(),
-              },
-              startTime: generateTime(),
-              stopTime: generateTime(),
+            baseVendorDetails: baseDetails,
+            type: 'service_vendor' as const,
+            service_name: faker.helpers.arrayElement([
+              'Professional DJ Services',
+              'Event Photography',
+              'Catering Services',
+              'Event Decoration',
+              'Security Services',
+            ]),
+            budget: {
+              range: faker.datatype.boolean(),
+              minBudget: faker.number.int({ min: 5000, max: 50000 }).toString(),
+              maxBudget: faker.number.int({ min: 50000, max: 200000 }).toString(),
             },
+            startTime: generateTime(),
+            stopTime: generateTime(),
+          },
     }
   },
 
@@ -336,6 +337,39 @@ const fakeDataGenerators = {
     number: {
       country_code: faker.helpers.arrayElement(['+234', '+254', '+27', '+20', '+233']),
       digits: faker.number.int({ min: 7000000000, max: 9999999999 }).toString(),
+    },
+  }),
+
+  promoCodes: (): TPromoCodeSchema => ({
+    code: faker.string.alphanumeric({ length: 8, casing: 'upper' }),
+    discount: faker.number.int({ min: 5, max: 50 }).toString(),
+    usageLimit: faker.number.int({ min: 10, max: 1000 }).toString(),
+    onePerCustomer: faker.datatype.boolean(),
+    startDate: {
+      date: new Date(),
+      ...generateTime(),
+    },
+    endDate: {
+      date: generateFutureDate(7),
+      ...generateTime(),
+    },
+    tickets: [],
+    conditions: {
+      spend: {
+        minimum: false,
+        amount: '',
+      },
+      tickets: {
+        minimum: false,
+        quantity: '',
+      },
+    },
+    notes: faker.lorem.sentence(),
+    partnership: {
+      partnershipCode: true,
+      name: faker.person.fullName().toUpperCase(),
+      comission: true,
+      comissionRate: faker.number.int({ min: 5, max: 20 }).toString(),
     },
   }),
 }

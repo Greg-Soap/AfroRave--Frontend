@@ -1,4 +1,5 @@
 import { CustomFormField as FormField, CustomInput as Input } from '@/components/shared/custom-form'
+import { cn } from '@/lib/utils'
 import type { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 
@@ -7,6 +8,7 @@ interface IPriceField<T extends FieldValues> {
   name: Path<T>
   label?: string
   ticketTypeName?: Path<T>
+  className?: string
 }
 
 export function PriceField<T extends FieldValues>({
@@ -14,6 +16,7 @@ export function PriceField<T extends FieldValues>({
   name,
   label = 'PRICE',
   ticketTypeName,
+  className,
 }: IPriceField<T>) {
   const ticketType = useWatch({ control: form.control, name: ticketTypeName || (name as Path<T>) })
   const isFreeTicket = ticketType === 'free'
@@ -40,7 +43,7 @@ export function PriceField<T extends FieldValues>({
           </p>
           <Input
             type='number'
-            className='w-full h-9'
+            className={cn('w-full h-9', className)}
             {...field}
             value={field.value == null ? '' : String(field.value)}
           />

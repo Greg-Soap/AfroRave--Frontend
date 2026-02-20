@@ -36,7 +36,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
 
     if (formParam === 'layout' || formParam === 'banner') {
       setActiveForm(formParam)
-      setStep(formParam === 'layout' ? 3.5 : 3)
+      setStep(3)
     } else if (searchParams.get('tab') === 'theme') {
       setSearchParams({ tab: 'theme', form: 'banner' })
       setStep(3)
@@ -46,7 +46,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
   function handleFormChange() {
     setSearchParams({ tab: 'theme', form: 'layout' })
     setActiveForm('layout')
-    setStep(3.5)
+    setStep(3)
   }
 
   function renderVendorTab() {
@@ -78,11 +78,17 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
     <TabContainer
       form={form}
       onSubmit={onSubmit}
-      className='max-w-[875px] w-full  gap-10 md:gap-[100px]'>
+      className={cn('w-full gap-10 md:gap-[100px]', {
+        'max-w-[875px]': activeForm === 'banner',
+        'max-w-[1240px]': activeForm === 'layout',
+      })}>
       <OnlyShowIf condition={activeForm === 'layout'}>
-        <FormField form={form} name='theme'>
-          {(field) => <BaseRadioGroup {...field} data={data} />}
-        </FormField>
+        <div className='w-full flex flex-col items-center gap-10 md:px-10'>
+          <p className='text-xl font-bold font-sf-pro-display uppercase'>CHOOSE A THEME</p>
+          <FormField form={form} name='theme'>
+            {(field) => <BaseRadioGroup {...field} data={data} />}
+          </FormField>
+        </div>
       </OnlyShowIf>
 
       <OnlyShowIf condition={activeForm === 'banner'}>
@@ -97,6 +103,13 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
         updatingText='Uploading data...'>
         <OnlyShowIf condition={activeForm === 'banner'}>
           <SkipBtn action={handleFormChange} />
+        </OnlyShowIf>
+        <OnlyShowIf condition={activeForm === 'layout'}>
+          <Button
+            type='button'
+            className='w-full md:w-[240px] h-10 rounded-[8px] bg-[#1E1E1E] text-white hover:bg-[#1E1E1E]/90 uppercase font-sf-pro-text text-xs tracking-wider font-bold'>
+            PREVIEW
+          </Button>
         </OnlyShowIf>
       </ContinueButton>
     </TabContainer>
@@ -117,13 +130,13 @@ function BannerForm({ form }: IBannerForm) {
           form={form}
           name='banner.flyer'
           type='flyer'
-          description='Shown on Web page when in Flyer View. Also appears on the Ticket and Confirmation'
+          description='SHOWN ON WEB PAGE WHEN IN FLYER VIEW. ALSO APPEARS ON THE TICKET AND CONFIRMATION'
         />
         <FileUploadField
           form={form}
           name='banner.background'
           type='background'
-          description='Background image'
+          description='BACKGROUND IMAGE'
         />
       </div>
     </div>
@@ -212,8 +225,11 @@ function InnerText({ type }: { type: 'background' | 'flyer' }) {
         Insert {type} image
       </span>
       <span className='text-deep-red text-xs mt-2'>
-        {type === 'background' ? ' 1600 X 500' : '550 x 770'} (PIXELS)
+        {type === 'background' ? '1600 X 500 (PIXELS)' : '550 X 770 (PIXELS)'}
       </span>
+      {type === 'background' && (
+        <span className='text-[10px] text-mid-dark-gray mt-1 uppercase'>(Optional)</span>
+      )}
     </div>
   )
 }
@@ -234,7 +250,7 @@ const data: IRadioGroupProps[] = [
     src: '/assets/event/2.png',
     alt: 'layout',
   },
-  { value: 'with-flyer', label: 'WITH FLYER', src: '/assets/event/3.png', alt: 'layout' },
+  { value: 'with-flyer', label: 'CAROUSEL WITH FLYER', src: '/assets/event/3.png', alt: 'layout' },
 ]
 
 interface IThemeTab {

@@ -14,8 +14,8 @@ export function AddEventModal({ onContinue, type, data }: TAddEventModal) {
       <Button
         type='button'
         onClick={() => setOpen(true)}
-        className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
-        <Plus /> <span>ADD {type === 'ticket' ? 'TICKET' : 'VENDOR SLOT'}</span>
+        className='self-center w-fit flex items-center gap-2 px-6 py-3 bg-[#00AD2E] rounded-full text-white text-xs font-medium font-sf-pro-text hover:bg-[#00AD2E]/90'>
+        <Plus /> <span>{type === 'ticket' ? 'TICKET' : 'VENDOR SLOT'}</span>
       </Button>
 
       <BaseModal
@@ -52,11 +52,11 @@ export function AddEventModal({ onContinue, type, data }: TAddEventModal) {
               }
               setOpen(false)
             }}
-            className='h-10 w-full rounded-[8px] text-xs uppercase font-sf-pro-text font-extrabold'>
+            className='h-10 w-full rounded-[8px] bg-[#232323] text-white hover:bg-[#1E1E1E] text-xs uppercase font-sf-pro-text font-extrabold'>
             Continue
           </Button>
         </div>
-      </BaseModal>
+      </BaseModal >
     </>
   )
 }
@@ -98,7 +98,7 @@ function EventModalCards({ name, caption, action, isSelected, type }: IEventModa
       )}>
       <p className='text-charcoal uppercase text-sm leading-[100%] font-sf-pro-text'>{name}</p>
       <p
-        className={cn('text-xs text-wrap font-light font-sf-pro-display text-charcoal', {
+        className={cn('text-[13px] text-wrap leading-[130%] text-[#8E8E93] font-sf-pro-display', {
           hidden: type === 'ticket' && isSelected,
         })}>
         {caption}
@@ -112,15 +112,15 @@ type VSelectedType = 'revenue_vendor' | 'service_vendor'
 
 type TAddEventModal =
   | {
-      type: 'ticket'
-      onContinue: (selectedType: TSelectedType) => void
-      data: { value: string; name: string; caption: string }[]
-    }
+    type: 'ticket'
+    onContinue: (selectedType: TSelectedType) => void
+    data: { value: string; name: string; caption: string }[]
+  }
   | {
-      type: 'vendor'
-      onContinue: (selectedType: VSelectedType) => void
-      data: { value: string; name: string; caption: string }[]
-    }
+    type: 'vendor'
+    onContinue: (selectedType: VSelectedType) => void
+    data: { value: string; name: string; caption: string }[]
+  }
 
 interface IEventModalCards {
   name: string

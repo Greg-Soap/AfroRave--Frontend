@@ -4,6 +4,7 @@ const scheduledStartSchema = z.object({
   whenToStart: z.enum(['immediately', 'at-a-scheduled-date'], {
     required_error: 'Pick an option.',
   }),
+  allow_ticket_resell: z.boolean().optional().default(false),
   scheduledDate: z
     .object({
       date: z.date({ required_error: 'A start date is required.' }),
@@ -113,6 +114,7 @@ export const defaultUnifiedTicketValues: UnifiedTicketForm = {
     ticketType: 'single_ticket',
   },
   whenToStart: 'at-a-scheduled-date',
+  allow_ticket_resell: false,
   scheduledDate: {
     date: new Date(),
     hour: '12',

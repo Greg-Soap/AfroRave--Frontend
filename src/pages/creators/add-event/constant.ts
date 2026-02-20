@@ -92,7 +92,7 @@ export const vendorCheckboxData = [
       id: 'useDifferentContactDetails',
     },
   },
-  { items: { label: 'SHOW SOCIAL HANDLES', id: 'showSocialHandles' } },
+  { items: { label: 'HIDE SOCIAL HANDLES', id: 'showSocialHandles' } },
 ]
 
 export const frequencyOptions: { value: string; label: string }[] = [

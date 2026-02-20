@@ -2,9 +2,8 @@ import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getRoutePath } from '@/config/get-route-path'
-import { usePublishEvent } from '@/hooks/use-event-mutations'
 import { cn } from '@/lib/utils'
-import { useAfroStore, useEventStore } from '@/stores'
+import { useAfroStore } from '@/stores'
 import { ChevronLeft, Info } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -15,6 +14,7 @@ import ThemeTab from './tabs/theme-tab'
 import TicketsTab from './tabs/tickets-tab'
 import VendorTab from './tabs/vendor-tab'
 import { OnlyShowIf } from '@/lib/environment'
+import { ApplyPromoCodePopover } from './component/apply-promo-popover'
 
 export default function AddEventPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -26,11 +26,10 @@ export default function AddEventPage() {
   const [showError, setShowError] = useState(false)
 
   const { user } = useAfroStore()
-  const { eventId } = useEventStore()
 
   const navigate = useNavigate()
 
-  const publishEventMutation = usePublishEvent()
+
 
   useEffect(() => {
     const tabParam = searchParams.get('tab')
@@ -44,15 +43,15 @@ export default function AddEventPage() {
       tabParam === 'publish'
     ) {
       setActiveTab(tabParam)
-      RenderHeadline(tabParam, setHeading, setDescription)
+      RenderHeadline(tabParam, setHeading, setDescription, formParam)
     } else if (!tabParam) {
       setActiveTab('event-details')
       setSearchParams({ tab: 'event-details' })
-      RenderHeadline('event-details', setHeading, setDescription)
+      RenderHeadline('event-details', setHeading, setDescription, null)
     }
 
     if (tabParam === 'theme' && formParam === 'banner') {
-      setThemeBtnVisibility(true)
+      setThemeBtnVisibility(false)
     } else {
       setThemeBtnVisibility(false)
     }
@@ -74,20 +73,7 @@ export default function AddEventPage() {
     }
   }
 
-  const handlePublishEvent = async () => {
-    if (!eventId) {
-      console.error('No event ID found')
-      return
-    }
 
-    try {
-      await publishEventMutation.mutateAsync(eventId)
-      // Navigate to creator dashboard after successful publish
-      navigate(getRoutePath('creators_home'))
-    } catch (error) {
-      console.error('Failed to publish event:', error)
-    }
-  }
 
   const tabs: IEditTabProps[] = [
     {
@@ -152,8 +138,7 @@ export default function AddEventPage() {
               themeBtnVisibility={themeBtnVisibility}
               setActiveTabState={setActiveTabState}
               navigate={navigate}
-              handlePublishEvent={handlePublishEvent}
-              isPublishing={publishEventMutation.isPending}
+              formParam={searchParams.get('form')}
             />
 
             <section className='max-w-[1536px] w-full flex flex-col gap-10 px-5 md:px-14'>
@@ -168,8 +153,22 @@ export default function AddEventPage() {
                   <MoreTabDetails />
                 </OnlyShowIf>
 
-                <OnlyShowIf condition={activeTab === 'theme'}>
+                <OnlyShowIf condition={activeTab === 'theme' && false}>
                   <MoreTabDetails type='theme' />
+                </OnlyShowIf>
+
+                <OnlyShowIf condition={activeTab === 'vendor'}>
+                  <MoreTabDetails type='theme' />
+                </OnlyShowIf>
+
+                <OnlyShowIf condition={activeTab === 'tickets' && searchParams.get('form') === 'promocode'}>
+                  <div className='flex items-start gap-2 text-charcoal'>
+                    <span className='text-sm'>ⓘ</span>
+                    <div className='flex flex-col'>
+                      <p className='text-sm font-bold font-sf-pro-display'>You can come back to this later</p>
+                      <p className='text-xs font-sf-pro-display text-charcoal/70'>No worries if you're not ready to complete this step now. You can always return to it at anytime from your dashboard.</p>
+                    </div>
+                  </div>
                 </OnlyShowIf>
               </div>
 
@@ -210,8 +209,7 @@ function TabNav({
   themeBtnVisibility,
   setActiveTabState,
   navigate,
-  handlePublishEvent,
-  isPublishing,
+  formParam,
 }: ITabNav) {
   return (
     <div className='w-full h-fit flex items-center justify-between py-3 px-5 md:px-8 md:py-4'>
@@ -223,20 +221,20 @@ function TabNav({
         <ChevronLeft color='#000000' className='min-w-1.5 min-h-3' />
       </Button>
 
-      <div className='flex gap-8'>
+      <div className='flex gap-3'>
+        {activeTab === 'tickets' && formParam === 'promocode' && <ApplyPromoCodePopover />}
+
         {themeBtnVisibility && (
           <NavBtn name={activeTab} action={() => setActiveTabState('vendor')} />
         )}
 
-        {activeTab === 'publish' && (
-          <NavBtn name={isPublishing ? 'PUBLISHING...' : 'PUBLISH'} action={handlePublishEvent} />
-        )}
+
 
         <Button
-          variant='destructive'
-          className='h-10 w-[120px] text-xs font-sf-pro-text font-black rounded-[5px] bg-[#1E1E1E]'
+          variant='ghost'
+          className='h-8 w-fit px-4 text-[10px] uppercase font-sf-pro-text font-bold rounded-[5px] bg-white text-deep-red border border-deep-red hover:bg-white/90'
           onClick={() => navigate(getRoutePath('standalone'))}>
-          Save and Exit
+          SAVE AS DRAFTS
         </Button>
       </div>
     </div>
@@ -279,16 +277,24 @@ function RenderHeadline(
   activeTab: string,
   setHeading: (heading: string) => void,
   setDescription: (description: string) => void,
+  formParam?: string | null,
 ) {
   if (activeTab === 'tickets') {
+    if (formParam === 'promocode' || formParam === 'upgrades') {
+      setHeading('GO BEYOND THE BASICS!')
+      setDescription('Enhance your ticketing power with flexible, fan-friendly features')
+      return
+    }
     setHeading('CREATE YOUR TICKETS!')
-    setDescription('Enhance your ticketing power with flexible, fan-friendly features')
+    setDescription('Create different ticket types, set prices, and start your journey to a sold-out event!')
     return
   }
 
   if (activeTab === 'theme') {
     setHeading('AESTHETICS MATTERS!')
-    setDescription('Match with trusted vendors who bring your vision to life')
+    setDescription(
+      'CHOOSE A THEME FOR YOUR EVENT PAGE.',
+    )
     return
   }
 
@@ -317,8 +323,7 @@ interface ITabNav {
   themeBtnVisibility: boolean
   setActiveTabState: (incomingTab: string) => void
   navigate: (path: string) => void
-  handlePublishEvent: () => void
-  isPublishing: boolean
+  formParam?: string | null
 }
 
 interface IEditTabProps {

@@ -4,7 +4,7 @@ import { BaseBooleanCheckbox } from '@/components/reusable/base-boolean-checkbox
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateVendor } from '@/hooks/use-event-mutations'
 import { transformServiceToCreateRequest } from '@/lib/event-transforms'
-import { FakeDataGenerator } from '@/lib/fake-data-generator'
+
 import { useEventStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
@@ -30,7 +30,8 @@ import { PriceField } from '../component/price-field'
 import { BaseDatePicker } from '@/components/reusable/base-date-picker'
 import { CreateButton } from '../component/create-button'
 import { ContinueButton } from '../component/continue-button'
-import { Plus } from 'lucide-react'
+import { Plus, Check } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { VendorModal } from './vendor-modal'
 import { QuantityDecreaseButton, QuantityIncreaseBtn } from '../component/quantity-buttons'
@@ -46,6 +47,7 @@ export default function VendorForm({
 }) {
   const [phones, setPhones] = useState([{ id: Date.now() + Math.random() }])
   const [currentVendor, setCurrentVendor] = useState<boolean>(false)
+  const [sectionMapAdded, setSectionMapAdded] = useState<boolean>(false)
   const [savedVendors, setSavedVendors] = useState<
     { id: string; vendor: VendorSchema['vendor'] }[]
   >([])
@@ -126,7 +128,7 @@ export default function VendorForm({
       form={form}
       onSubmit={onServiceSubmit}
       heading='ADD VENDORS'
-      description='List your vendor slots and let the right vendors come to you'
+      description='Open your event to marketplace sellers and reach out for professional event services.'
       className='max-w-[560px]'>
       {savedVendors.length > 0 && (
         <div className='flex flex-col gap-3'>
@@ -151,16 +153,18 @@ export default function VendorForm({
         </div>
       )}
 
-      <FakeDataGenerator
+      {/* <FakeDataGenerator
         type='vendorServices'
         onGenerate={form.reset}
         buttonText='🎲 Fill with sample data'
         variant='outline'
         className='mb-4'
-      />
+      /> */}
 
       <OnlyShowIf condition={!currentVendor}>
-        <VendorModal onContinue={handleAddVendor} />
+        <div className='w-full flex justify-center'>
+          <VendorModal onContinue={handleAddVendor} />
+        </div>
       </OnlyShowIf>
 
       {/** Vendor Form Field */}
@@ -168,19 +172,49 @@ export default function VendorForm({
         <div className='w-full flex flex-col gap-8'>
           <Button
             type='button'
-            className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
-            <Plus /> <span>ADD SECTION MAP</span>
+            onClick={() => setSectionMapAdded((prev) => !prev)}
+            className='self-start w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90 overflow-hidden min-w-[150px] justify-center'>
+            <AnimatePresence mode='wait' initial={false}>
+              {sectionMapAdded ? (
+                <motion.div
+                  key='added'
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  className='flex items-center gap-2'>
+                  <Check size={16} /> <span>SECTION MAP ADDED</span>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key='add'
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  className='flex items-center gap-2'>
+                  <Plus size={16} /> <span>ADD SECTION MAP</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Button>
 
           <div className='flex flex-col gap-2 font-sf-pro-text'>
             <p className='uppercase text-sm font-medium leading-[100%] text-charcoal'>
               Vendor Type
             </p>
-            <p className='h-10 w-full text-[10px] text-mid-dark-gray font-light uppercase rounded-[5px] flex items-center justify-center border border-mid-dark-gray/50'>
-              {form.getValues('vendor.type') === 'revenue_vendor'
-                ? 'Revenue Vendor'
-                : 'Service Vendor'}
-            </p>
+            <div className='w-full flex flex-col items-center gap-1 bg-[#FAFAFA] rounded-[5px] px-3 py-4 border border-[#E5E5E5]'>
+              <p className='text-charcoal uppercase text-sm leading-[100%] font-sf-pro-text'>
+                {form.getValues('vendor.type') === 'revenue_vendor'
+                  ? 'Revenue Vendor'
+                  : 'Service Vendor'}
+              </p>
+              <p className='text-[13px] text-center leading-[130%] text-[#8E8E93] font-sf-pro-display max-w-[400px]'>
+                {form.getValues('vendor.type') === 'revenue_vendor'
+                  ? 'Vendors who purchase a slot to sell goods or products at your event. A commission is applied to each confirmed slot.'
+                  : 'Vendors who offer professional services required for event execution. Applications are submitted for your review and approval; no slot fee is charged.'}
+              </p>
+            </div>
           </div>
 
           <SelectField
@@ -188,7 +222,7 @@ export default function VendorForm({
             name='vendor.baseVendorDetails.category'
             label='Category'
             placeholder='choose an applicable category'
-            triggerClassName='w-full uppercase'
+            triggerClassName='w-full uppercase bg-[#FAFAFA] border-[#E5E5E5]'
             data={categoryOptions}
           />
 
@@ -201,13 +235,13 @@ export default function VendorForm({
 
             <OnlyShowIf condition={form.getValues('vendor.type') === 'revenue_vendor'}>
               <FormField form={form} name='vendor.slot_name' label='SLOT NAME'>
-                <Input />
+                <Input className='bg-[#FAFAFA] border-[#E5E5E5] uppercase' />
               </FormField>
             </OnlyShowIf>
 
             <OnlyShowIf condition={form.getValues('vendor.type') === 'service_vendor'}>
               <FormField form={form} name='vendor.service_name' label='SERVICE NAME'>
-                <Input />
+                <Input className='bg-[#FAFAFA] border-[#E5E5E5] uppercase' />
               </FormField>
             </OnlyShowIf>
           </div>
@@ -240,7 +274,12 @@ export default function VendorForm({
               <AmountForm form={form} name='vendor.number_of_slots' />
               <div className='grid grid-cols-2 gap-7'>
                 <div className='flex flex-col gap-2'>
-                  <PriceField form={form} name='vendor.price_per_slot' label='PRICE PER SLOT' />
+                  <PriceField
+                    form={form}
+                    name='vendor.price_per_slot'
+                    label='PRICE PER SLOT'
+                    className='bg-[#FAFAFA] border-[#E5E5E5]'
+                  />
                   <p className='text-[10px] font-sf-pro-text leading-[100%] text-medium-gray'>
                     There will be a 10% fee added to your slot price
                   </p>
@@ -273,7 +312,7 @@ export default function VendorForm({
                 <Textarea
                   placeholder='e.g, Power supply included
 booth size...'
-                  className='uppercase h-[240px] p-3'
+                  className='uppercase h-[240px] p-3 bg-[#FAFAFA] border-[#E5E5E5]'
                   {...field}
                   value={field.value == null ? '' : String(field.value)}
                 />
@@ -296,6 +335,7 @@ booth size...'
                       minute_name='vendor.startTime.minute'
                       period_name='vendor.startTime.period'
                       label='START TIME'
+                      className='bg-[#FAFAFA] border-[#E5E5E5]'
                     />
 
                     <TimeForm
@@ -304,6 +344,7 @@ booth size...'
                       minute_name='vendor.stopTime.minute'
                       period_name='vendor.stopTime.period'
                       label='STOP TIME'
+                      className='bg-[#FAFAFA] border-[#E5E5E5]'
                     />
                   </div>
 
@@ -383,11 +424,11 @@ booth size...'
             <div className='flex flex-col gap-4'>
               <Button
                 onClick={addPhone}
-                className='w-fit shadow-none flex items-center gap-2 text-deep-red text-xs font-sf-pro-text bg-transparent leading-[100%]'>
-                <Plus /> PHONE NUMBER
+                className='w-fit h-auto p-0 shadow-none flex items-center gap-1 text-deep-red text-xs font-sf-pro-text bg-transparent hover:bg-transparent hover:underline leading-[100%]'>
+                <Plus size={14} /> phone number
               </Button>
 
-              <p className='text-xs font-light leading-[100%] text-medium-gray'>
+              <p className='text-[13px] leading-[130%] text-[#8E8E93] mt-2'>
                 Your contact details will remain hidden until a revenue vendor successfully pays for
                 a slot. This ensures privacy and secure vendor interactions.
               </p>

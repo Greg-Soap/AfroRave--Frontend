@@ -12,6 +12,7 @@ export function TimeForm<T extends FieldValues>({
   minute_name,
   period_name,
   label,
+  className,
 }: ITimeFormProps<T>) {
   const togglePeriod = () => {
     const currentPeriod = form.getValues(period_name)
@@ -27,7 +28,7 @@ export function TimeForm<T extends FieldValues>({
         </p>
       )}
       <div className='relative h-10 flex flex-row gap-1 items-center'>
-        <div className='h-10 flex items-center bg-white justify-between border border-mid-dark-gray/50 w-full rounded-l-[4px] px-3 py-2'>
+        <div className={cn('h-10 flex items-center bg-white justify-between border border-mid-dark-gray/50 w-full rounded-l-[4px] px-3 py-2', className)}>
           <Clock className='h-[18px] min-w-4 mr-2 text-muted-foreground' />
 
           <TimeInput form={form} name={hour_name} />
@@ -96,4 +97,5 @@ interface ITimeFormProps<T extends FieldValues> {
   minute_name: Path<T>
   period_name: Path<T>
   label?: string
+  className?: string
 }

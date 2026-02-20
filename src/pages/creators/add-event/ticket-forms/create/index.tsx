@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TabContainer } from '../../component/tab-ctn'
+import { AnimatedShowIf } from '../../component/animated-show-if'
 import {
   defaultUnifiedTicketValues,
   unifiedTicketFormSchema,
@@ -51,7 +52,7 @@ export default function CreateTicketForm({
   const createTicketMutation = useCreateTicket(eventId || '')
   const updateTicketMutation = useUpdateTicket(eventId || '')
   const deleteTicketMutation = useDeleteTicket(eventId || '')
-  const { data: ticketsResponse, isLoading: isLoadingTickets } = useGetEventTickets(
+  const { data: ticketsResponse } = useGetEventTickets(
     eventId || undefined,
   )
 
@@ -117,54 +118,47 @@ export default function CreateTicketForm({
           />
         )}
 
-        {savedTickets.length > 0 && (
+        <AnimatedShowIf condition={savedTickets.length > 0}>
           <div className='w-full flex flex-col gap-3'>
-            <div className='flex items-center justify-between'>
-              <p className='text-sm font-medium text-gray-700'>
-                Created Tickets ({savedTickets.length})
-              </p>
-              {isLoadingTickets && <span className='text-xs text-gray-500'>Loading...</span>}
-            </div>
-            <div className='w-full flex flex-col'>
-              <div className='flex flex-col gap-5'>
-                {savedTickets.map((ticket: SavedTicket, idx: number) => (
-                  <CreatedTicketCard
-                    key={`created-${ticket.ticketId}-${idx}`}
-                    ticket={ticket}
-                    onEdit={() => handleEditTicketWrapper(ticket)}
-                    onDelete={() => handleDeleteTicketWrapper(ticket.ticketId)}
-                    isUpdating={updateTicketMutation.isPending}
-                    isDeleting={deleteTicketMutation.isPending}
-                  />
-                ))}
-              </div>
-              <p className='p-2.5 text-xs leading-[100%] font-sf-pro-display uppercase text-deep-red/70'>
-                access the invite link in your dashboard
-              </p>
-            </div>
+            {savedTickets.map((ticket: SavedTicket, idx: number) => (
+              <CreatedTicketCard
+                key={`created-${ticket.ticketId}-${idx}`}
+                ticket={ticket}
+                onEdit={() => handleEditTicketWrapper(ticket)}
+                onDelete={() => handleDeleteTicketWrapper(ticket.ticketId)}
+                isUpdating={updateTicketMutation.isPending}
+                isDeleting={deleteTicketMutation.isPending}
+              />
+            ))}
           </div>
-        )}
+        </AnimatedShowIf>
 
-        {currentTicketType && (
+        <AnimatedShowIf condition={!!currentTicketType}>
           <div className='w-full flex flex-col gap-8'>
-            <TicketForm
-              form={form}
-              type={currentTicketType}
-              onSubmit={
-                editingTicketId
-                  ? form.handleSubmit(handleUpdateTicket)
-                  : form.handleSubmit(handleCreateTicket)
-              }
-              isLoading={
-                editingTicketId ? updateTicketMutation.isPending : createTicketMutation.isPending
-              }
-              isEditMode={!!editingTicketId}
-              onCancel={editingTicketId ? handleCancelEditWrapper : undefined}
-            />
+            {currentTicketType && (
+              <TicketForm
+                form={form}
+                type={currentTicketType}
+                onSubmit={
+                  editingTicketId
+                    ? form.handleSubmit(handleUpdateTicket)
+                    : form.handleSubmit(handleCreateTicket)
+                }
+                isLoading={
+                  editingTicketId ? updateTicketMutation.isPending : createTicketMutation.isPending
+                }
+                isEditMode={!!editingTicketId}
+                onCancel={handleCancelEditWrapper}
+              />
+            )}
           </div>
-        )}
+        </AnimatedShowIf>
 
-        {!currentTicketType && <TicketModal onContinue={handleAddTicket} />}
+        <AnimatedShowIf condition={!currentTicketType}>
+          <TicketModal onContinue={handleAddTicket} />
+        </AnimatedShowIf>
+
+
       </TabContainer>
 
       <ConfirmationMailForm />
@@ -185,13 +179,12 @@ function CreatedTicketCard({
   isDeleting,
 }: ICreatedTicketCard) {
   return (
-    <div className='w-full flex flex-col gap-5'>
+    <div className='w-full flex flex-col'>
       <div className='w-full flex items-center justify-between border border-mid-dark-gray/30 px-3 py-[11px] shadow-[0px_2px_10px_2px_#0000001A] rounded-[5px]'>
-        <p className='uppercase text-sm font-sf-pro-display leading-[100%] text-charcoal'>
+        <p className='uppercase text-sm font-normal font-sf-pro-text leading-[100%] text-charcoal'>
           {ticket.ticketName}
         </p>
         <div className='flex items-center gap-3'>
-          <CustomBadge text={ticket.price === 0 ? 'free' : 'paid'} />
           <CustomBadge text={ticket.ticketType.replace('_', ' ')} />
           {ticket.invite_only && <CustomBadge type='invite-only' />}
           <ActionPopover
@@ -202,6 +195,11 @@ function CreatedTicketCard({
           />
         </div>
       </div>
+      {ticket.invite_only && (
+        <p className='p-2.5 text-xs leading-[100%] font-sf-pro-display uppercase text-deep-red/70'>
+          access the invite link in your dashboard
+        </p>
+      )}
     </div>
   )
 }

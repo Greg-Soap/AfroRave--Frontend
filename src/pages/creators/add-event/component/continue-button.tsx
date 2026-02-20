@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface SubmitBtnProps {
   children?: React.ReactNode
@@ -9,6 +10,7 @@ interface SubmitBtnProps {
   onClick?: () => void
   text?: string
   type?: 'submit' | 'button'
+  className?: string
 }
 
 export function ContinueButton({
@@ -19,6 +21,7 @@ export function ContinueButton({
   text = 'Continue',
   type = 'submit',
   onClick,
+  className,
 }: SubmitBtnProps) {
   return (
     <div className='flex flex-col md:flex-row items-center gap-3 md:gap-8 justify-center py-8'>
@@ -29,7 +32,10 @@ export function ContinueButton({
         variant='destructive'
         onClick={onClick}
         disabled={isLoading || disabled}
-        className='w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase'>
+        className={cn(
+          'w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase',
+          className,
+        )}>
         {isLoading ? (
           <>
             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
