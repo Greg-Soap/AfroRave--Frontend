@@ -1,6 +1,6 @@
 import { LoadingFallback } from '@/components/loading-fallback'
 import { Suspense, lazy } from 'react'
-import type { RouteObject } from 'react-router-dom'
+import { Navigate, type RouteObject } from 'react-router-dom'
 import { getRoutePath } from './get-route-path'
 
 const CreatorsHomePage = lazy(() => import('../pages/creators/home'))
@@ -11,14 +11,10 @@ const CreatorsWishlistPage = lazy(() => import('../pages/creators/wishlist'))
 // const CreatorsLandingPage = lazy(() => import('../pages/landing-page/creators'))
 
 export const creator_landing_page_routes: RouteObject[] = [
-  // {
-  //   path: getRoutePath('creators'),
-  //   element: (
-  //     <Suspense fallback={<LoadingFallback />}>
-  //       <CreatorsLandingPage />
-  //     </Suspense>
-  //   ),
-  // },
+  {
+    path: getRoutePath('creators'),
+    element: <Navigate to={getRoutePath('creators_home')} replace />,
+  },
   {
     path: getRoutePath('creators_home'),
     element: (
