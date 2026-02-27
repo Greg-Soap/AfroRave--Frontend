@@ -38,10 +38,14 @@ export default function CreatorsHomePage() {
       backgroundImage='/assets/landing-page/BG-3.webp'
       overlayOpacity={0.15}
       secondColor='#1a1a1a'
+      videoOpacity={0.1}
+      videoBlendMode='color-dodge'
     >
       <HeroSection />
-      <RolesSectionWrapper />
-      <CTASectionWrapper />
+      <div className='flex flex-col gap-[200px]'>
+        <RolesSectionWrapper />
+        <CTASectionWrapper />
+      </div>
       <Footer />
     </VideoBackgroundWrapper>
   )
@@ -51,14 +55,14 @@ function RolesSectionWrapper() {
   const ref = useRef(null)
   const isInView = useInView(ref, {
     once: true,
-    margin: '-100px 0px -100px 0px'
+    margin: '0px 0px -50px 0px',
   })
 
   return (
     <motion.div
       ref={ref}
-      initial={false}
-      animate={{ y: isInView ? 0 : '50%' }}
+      initial={{ y: 60, opacity: 0 }}
+      animate={isInView ? { y: 0, opacity: 1 } : { y: 60, opacity: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <RolesSection />

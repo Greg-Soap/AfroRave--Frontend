@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
+import React from 'react'
 
 interface VideoBackgroundWrapperProps {
   children: ReactNode
@@ -8,6 +9,8 @@ interface VideoBackgroundWrapperProps {
   backgroundImage?: string
   overlayOpacity?: number
   secondColor?: string
+  videoOpacity?: number
+  videoBlendMode?: React.CSSProperties['mixBlendMode']
 }
 
 export function VideoBackgroundWrapper({
@@ -17,6 +20,8 @@ export function VideoBackgroundWrapper({
   backgroundImage,
   overlayOpacity = 0.5,
   secondColor = '#1a1a1a',
+  videoOpacity = 0.25,
+  videoBlendMode,
 }: VideoBackgroundWrapperProps) {
 
   return (
@@ -39,7 +44,7 @@ export function VideoBackgroundWrapper({
       {videoSrc && (
         <video
           className='absolute inset-0 w-full h-full object-cover'
-          style={{ zIndex: 3, opacity: 0.25 }}
+          style={{ zIndex: 3, opacity: videoOpacity, mixBlendMode: videoBlendMode }}
           src={videoSrc}
           autoPlay
           muted

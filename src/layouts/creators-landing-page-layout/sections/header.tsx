@@ -15,13 +15,19 @@ export default function Header() {
   const isWaitlistPage = location.pathname === '/creators' || location.pathname === '/creators/' || location.pathname === '/'
 
   return (
-    <header className='w-full fixed top-0 flex justify-center z-50 h-32 md:h-28 bg-transparent '>
+    <header className={cn(
+      'w-full fixed top-0 flex items-center z-50 bg-transparent',
+      isWaitlistPage ? 'h-32 md:h-28' : 'h-[80px]'
+    )}>
       <div
         className={`absolute inset-0 transition-all duration-300 ${hasScrolled ? 'h-full bg-black/25 backdrop-blur-sm' : 'h-0'
           }`}
       />
 
-      <nav className='relative px-4 md:px-8 lg:px-16 w-full max-w-[1400px] flex flex-col gap-y-4 items-center py-4 md:py-6'>
+      <nav className={cn(
+        'relative w-full flex flex-col gap-y-4 items-center',
+        isWaitlistPage ? 'max-w-[1400px] px-4 md:px-8 lg:px-16 py-4 md:py-6' : 'px-5 md:px-[60px] py-[20px]'
+      )}>
         <div className='flex w-full items-center justify-between'>
           <NavLink to={getRoutePath('creators_home')}>
             <img
@@ -39,7 +45,7 @@ export default function Header() {
               <div className='relative'>
                 <button
                   onClick={() => setShowLoginDropdown(!showLoginDropdown)}
-                  className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-4 hover:bg-black/20 shadow-none text-sm font-light font-input-mono transition-colors'>
+                  className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-[12px] py-[4px] hover:bg-black/20 shadow-none text-[14px] font-light font-input-mono leading-none tracking-[0] transition-colors'>
                   LOG IN
                 </button>
 
@@ -71,8 +77,8 @@ export default function Header() {
           {isWaitlistPage && <CountdownTimer />}
         </div>
 
-        {/* Mobile navigation links - only show on non-waitlist pages */}
-        {!isWaitlistPage && <NavigationLinks type='mobile' />}
+        {/* Mobile navigation links - only show on waitlist page (taller header has room) */}
+        {isWaitlistPage && <NavigationLinks type='mobile' />}
       </nav>
     </header>
   )
@@ -86,7 +92,7 @@ function NavigationLinks({
   return (
     <div
       className={cn('items-center', {
-        'hidden md:flex gap-12 lg:gap-16': type === 'desktop',
+        'hidden md:flex gap-8 lg:gap-10': type === 'desktop',
         'w-full flex justify-between md:hidden': type === 'mobile',
       })}>
       {links.map((item) => (
@@ -95,10 +101,10 @@ function NavigationLinks({
           to={item.href}
           className={({ isActive }) =>
             cn(
-              'font-input-mono font-light text-xs md:text-base lg:text-lg uppercase px-3 py-1 border-b-2 text-white transition-all hover:border-[#E31E24]',
+              'font-input-mono font-light text-[14px] leading-none uppercase tracking-[0] px-[12px] py-[4px] text-white transition-all',
               {
-                'border-[#E31E24]': isActive,
-                'border-transparent': !isActive,
+                'shadow-[0_2px_0_#E31E24]': isActive,
+                'hover:shadow-[0_2px_0_#E31E24]': !isActive,
               },
             )
           }>

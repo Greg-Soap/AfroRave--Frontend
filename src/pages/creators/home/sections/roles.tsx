@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
+import { useEffect, useRef } from 'react'
 
 export default function RolesSection() {
   return (
-    <section className='w-full min-h-screen flex flex-col justify-center px-6 sm:px-10 md:px-16 lg:px-24 py-20'>
-      <div className='flex flex-col md:flex-row items-start justify-between gap-16 md:gap-12 lg:gap-20'>
+    <section className='w-full h-[535px] flex items-center px-[120px] py-[10px]'>
+      <div className='grid grid-cols-2 gap-[120px] w-full'>
         <RoleDescription
           role={roles[0].role}
           description={roles[0].description}
@@ -22,19 +23,32 @@ export default function RolesSection() {
 
 function RoleDescription({ role, description, login }: IRoles) {
   const { openAuthModal } = useAuth()
+  const pRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    if (!pRef.current) return
+    const computed = window.getComputedStyle(pRef.current)
+    console.log(`[RolesSection "${role}" description] computed styles:`, {
+      fontFamily: computed.fontFamily,
+      fontWeight: computed.fontWeight,
+      fontSize: computed.fontSize,
+    })
+  }, [role])
+
   return (
-    <div className='w-full md:w-1/2 flex flex-col gap-7 items-center text-center'>
+    <div className='flex flex-col gap-[20px] items-center text-center max-w-[700px] mx-auto'>
       {/* Title */}
-      <h2 className='text-[28px] sm:text-[32px] md:text-[36px] font-black uppercase text-white leading-tight font-sf-pro tracking-wide'>
+      <h2 className='font-sf-pro-text font-black text-[32px] uppercase text-white leading-none tracking-[0]'>
         {role}
       </h2>
       {/* Description */}
-      <p className='text-[13px] sm:text-[14px] font-normal uppercase leading-relaxed text-white/85 max-w-[440px] font-sf-pro'>
+      <p ref={pRef} className='font-sf-pro-text text-[16px] uppercase leading-[1] tracking-[0] text-white' style={{ fontWeight: 300 }}>
         {description}
       </p>
       <Button
         onClick={() => openAuthModal('login', login)}
-        className='h-11 rounded-full font-sf-pro-text text-[13px] font-semibold px-8 uppercase bg-[#111] text-white hover:bg-white/10 border border-white/25 transition-colors'
+        className='w-[120px] h-[40px] rounded-[20px] bg-[#1E1E1E] text-white uppercase gap-[8px] border-0 hover:bg-[#2a2a2a] transition-colors'
+        style={{ boxShadow: '0px 2px 10px 2px rgba(0,0,0,0.10)' }}
       >
         Learn More
       </Button>

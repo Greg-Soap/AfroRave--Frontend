@@ -1,4 +1,3 @@
-import { Separator } from '@/components/ui/separator'
 import { getRoutePath } from '@/config/get-route-path'
 import { FooterLinks } from '@/layouts/components/footer-links'
 import { FooterLinkBlock, type IFooterLinks } from '@/layouts/components/footer-links-block'
@@ -6,18 +5,23 @@ import { Socials } from '@/layouts/components/socials'
 
 export default function Footer() {
   return (
-    <footer className='relative w-full flex flex-col items-center gap-7 pt-[50px] pb-16 font-input-mono z-20' style={{ background: 'transparent' }}>
-      <FooterLinks className='md:h-5 px-[1rem] md:px-[2rem]' />
+    <footer className='relative w-full flex flex-col font-input-mono z-20' style={{ background: 'transparent' }}>
 
-      <Separator orientation='horizontal' className='w-full bg-white max-md:mt-7' />
-
-      <div className='w-full flex flex-wrap gap-5 md:gap-[120px] px-[1rem] md:px-[2rem] justify-between md:justify-start md:pr-[160px]'>
-        {footer_links.map((footer_link) => (
-          <FooterLinkBlock key={footer_link.title} {...footer_link} />
-        ))}
+      {/* Newsletter Container — border-top 1px, gap 24px, ~165px */}
+      <div className='w-full flex flex-col gap-[24px] border-t border-white/20 px-[60px] py-[24px]'>
+        <FooterLinks className='md:h-5' />
+        <div className='w-full flex gap-[120px] justify-start'>
+          {footer_links.map((footer_link) => (
+            <FooterLinkBlock key={footer_link.title} {...footer_link} />
+          ))}
+        </div>
       </div>
 
-      <Socials className='justify-end px-[1rem] md:px-[2rem]' isCreator />
+      {/* Footer Bottom Container — horizontal, 40px, padding-right 32px, gap 10px */}
+      <div className='w-full flex flex-row h-[40px] items-center pr-[32px] gap-[10px]'>
+        <Socials className='justify-end' isCreator />
+      </div>
+
     </footer>
   )
 }

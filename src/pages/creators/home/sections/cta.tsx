@@ -1,6 +1,6 @@
 export default function CTASection() {
   return (
-    <div className='w-full flex flex-col items-center gap-20 py-20 px-6 sm:px-10 md:px-16 lg:px-24'>
+    <div className='w-full flex flex-col items-center gap-[63px] px-[120px] py-[10px]'>
 
       {/* Seamless Management — centered */}
       <div className='w-full flex flex-col items-center gap-6 text-center'>
@@ -28,7 +28,7 @@ export default function CTASection() {
       </div>
 
       {/* Feature Cards — 2-column, left-aligned */}
-      <div className='w-full flex flex-col md:flex-row gap-12 md:gap-10 lg:gap-20 items-start justify-between'>
+      <div className='w-full flex flex-row gap-[120px] items-start justify-between'>
         {[
           {
             heading: 'SCAN TICKETS, MANAGE GUESTS, AND STAY CONNECTED!',
@@ -43,7 +43,7 @@ export default function CTASection() {
         ].map((item) => (
           <div
             key={item.heading}
-            className='w-full md:w-1/2 flex flex-col gap-3 font-sf-pro text-white uppercase'
+            className='w-1/2 flex flex-col gap-3 font-sf-pro text-white uppercase'
           >
             <h3 className='text-[15px] sm:text-[16px] font-black leading-snug'>
               {item.heading}
