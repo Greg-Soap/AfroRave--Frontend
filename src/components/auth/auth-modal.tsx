@@ -63,11 +63,12 @@ export function AuthModal() {
     <BaseModal
       open={isAuthModalOpen}
       onClose={closeAuthModal}
-      cancelOnOverlay
       floatingCancel
       className={cn({
         'bg-transparent shadow-none':
           authType === 'signup' && (signupType === 'creator' || signupType === 'vendor' || (signupType === 'guest' && !isFansPage)),
+        'bg-[#F5F5F5]':
+          authType === 'signup' && !(signupType === 'creator' || signupType === 'vendor' || (signupType === 'guest' && !isFansPage)),
       })}
       overlayClassName='bg-gradient-to-b from-[#848484] to-[#1E1E1E] !opacity-100'
       size={getModalSize()}>

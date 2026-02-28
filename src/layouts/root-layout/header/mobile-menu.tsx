@@ -100,12 +100,16 @@ function AccountLinks({ onClose }: { onClose: () => void }) {
 }
 
 function LogOutButton() {
-  const { clearAuth } = useAfroStore()
+  const { clearAuth, user } = useAfroStore()
 
   const handleLogout = () => {
+    const accountType = user?.accountType
     clearAuth()
-    // Optionally redirect to home page
-    window.location.href = getRoutePath('home')
+    if (accountType === 'User') {
+      window.location.href = getRoutePath('home')
+    } else {
+      window.location.href = getRoutePath('creators_home')
+    }
   }
 
   return (

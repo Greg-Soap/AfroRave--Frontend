@@ -67,14 +67,14 @@ const DialogContent = React.forwardRef<
         {!noCancel && !cancelOnOverlay && (
           <DialogPrimitive.Close
             className={cn(
-              "z-50 font-bold opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+              "z-50 font-bold opacity-90 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none",
               floatingCancel
-                ? "absolute top-10 right-10"
+                ? "absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm text-white cursor-pointer"
                 : "w-full flex justify-end px-10 pt-6"
             )}
             onClick={(e) => e.stopPropagation()}
           >
-            <X className="h-10 w-10 cursor-pointer" />
+            <X className="h-5 w-5 md:h-6 md:w-6 cursor-pointer" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}

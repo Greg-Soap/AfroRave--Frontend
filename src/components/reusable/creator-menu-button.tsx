@@ -23,9 +23,13 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
   const navigate = useNavigate()
 
   const handleLogout = () => {
+    const accountType = user?.accountType
     clearAuth()
-    // You can add navigation logic here if needed
-    window.location.href = '/'
+    if (accountType === 'User') {
+      navigate(getRoutePath('home'))
+    } else {
+      navigate(getRoutePath('creators_home'))
+    }
   }
 
   const handleDashboardClick = () => {

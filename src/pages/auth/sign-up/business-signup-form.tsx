@@ -1,4 +1,5 @@
 import { FormBase, FormField } from '@/components/reusable'
+import { CreatorLogo } from '@/pages/auth/user-login/user-login-form'
 import { BaseSelect } from '@/components/reusable'
 // import type { ICustomSelectProps } from '@/components/reusable/base-select'
 import { Button } from '@/components/ui/button'
@@ -133,9 +134,15 @@ export function BusinessSignUp({ onSwitchToLogin, type = 'vendor' }: BusinessSig
         form={form}
         onSubmit={onSubmit}
         className='max-w-[900px] w-full rounded-[12px] space-y-3 bg-red px-6 py-6 md:px-12 md:py-8 z-10 font-sf-pro-text'>
+        {type === 'vendor' && (
+          <div className='flex justify-center mb-4'>
+            <CreatorLogo />
+          </div>
+        )}
+
         <div className='flex flex-col gap-0.5 font-sf-pro-display text-center md:text-left mb-2'>
           <p className='uppercase text-2xl md:text-3xl font-black text-white'>{title}</p>
-          <p className='uppercase text-xs font-light text-white/80 tracking-wider'>{description}</p>
+          <p className='uppercase text-sm font-normal text-white tracking-wider'>{description}</p>
         </div>
 
         <div className='flex flex-col gap-3'>

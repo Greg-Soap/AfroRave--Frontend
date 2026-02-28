@@ -15,9 +15,6 @@ const formSchema = z.object({
   email: z.string().email({
     message: 'Please enter a valid email address.',
   }),
-  confirm_email: z.string().email({
-    message: 'Please enter a valid email address.',
-  }),
   password: z
     .string()
     .min(2, {
@@ -26,10 +23,14 @@ const formSchema = z.object({
     .max(20, {
       message: 'Password too long.',
     }),
-}).refine((data) => data.email === data.confirm_email, {
-  message: 'Email addresses do not match.',
-  path: ['confirm_email'],
+  confirm_password: z.string(),
+}).refine((data) => data.password === data.confirm_password, {
+  message: 'Passwords do not match.',
+  path: ['confirm_password'],
 })
+
+const fieldInputClass = 'border-0 shadow-none focus-visible:ring-0 px-0 h-full text-sm text-black placeholder:text-gray-400 bg-transparent'
+const fieldBoxClass = 'w-full flex items-center gap-2.5 bg-white border border-gray-200 rounded-[8px] px-3 h-12'
 
 interface SignupFormProps {
   onSwitchToLogin: () => void
@@ -44,8 +45,8 @@ export function SignupForm({ }: SignupFormProps) {
       first_name: '',
       last_name: '',
       email: '',
-      confirm_email: '',
       password: '',
+      confirm_password: '',
     },
   })
 
@@ -66,67 +67,98 @@ export function SignupForm({ }: SignupFormProps) {
   }
 
   return (
-    <div className='relative flex justify-center'>
-      <FormBase
-        form={form}
-        onSubmit={onSubmit}
-        className='w-[415px] h-fit rounded-[12px] space-y-0 bg-white px-7 py-6 md:px-7 md:py-8 z-10 font-sf-pro-text'>
-        <p className='text-[28px] font-bold text-black font-sf-pro-text mb-6'>Sign Up</p>
+    <FormBase
+      form={form}
+      onSubmit={onSubmit}
+      className='w-full h-fit rounded-[8px] space-y-0 bg-[#F5F5F5] px-7 py-6 md:px-7 md:py-8 font-sf-pro-text'>
+      <p className='text-[28px] font-bold text-black font-sf-pro-text mb-6'>Sign Up</p>
 
-        <div className='flex flex-col w-full'>
-          <FormField form={form} name='first_name' className='border-b border-gray-200 py-1'>
-            <div className='flex items-center gap-2.5'>
+      <div className='flex flex-col w-full gap-3'>
+        <FormField form={form} name='first_name'>
+          {(field) => (
+            <div className={fieldBoxClass}>
               <User className='size-4 text-gray-400 shrink-0' />
-              <Input placeholder='First name' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+              <Input
+                placeholder='First name'
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                className={fieldInputClass}
+              />
             </div>
-          </FormField>
+          )}
+        </FormField>
 
-          <FormField form={form} name='last_name' className='border-b border-gray-200 py-1'>
-            <div className='flex items-center gap-2.5'>
+        <FormField form={form} name='last_name'>
+          {(field) => (
+            <div className={fieldBoxClass}>
               <User className='size-4 text-gray-400 shrink-0' />
-              <Input placeholder='Last name' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+              <Input
+                placeholder='Last name'
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                className={fieldInputClass}
+              />
             </div>
-          </FormField>
+          )}
+        </FormField>
 
-          <FormField form={form} name='email' className='border-b border-gray-200 py-1'>
-            <div className='flex items-center gap-2.5'>
+        <FormField form={form} name='email'>
+          {(field) => (
+            <div className={fieldBoxClass}>
               <Mail className='size-4 text-gray-400 shrink-0' />
-              <Input placeholder='Email Address' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+              <Input
+                placeholder='Email Address'
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                className={fieldInputClass}
+              />
             </div>
-          </FormField>
+          )}
+        </FormField>
 
-          <FormField form={form} name='confirm_email' className='border-b border-gray-200 py-1'>
-            <div className='flex items-center gap-2.5'>
-              <Mail className='size-4 text-gray-400 shrink-0' />
-              <Input placeholder='Confirm Email Address' className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400' />
+        <FormField form={form} name='password' showMessage={true}>
+          {(field) => (
+            <div className={fieldBoxClass}>
+              <Lock className='size-4 text-gray-400 shrink-0' />
+              <PasswordInput
+                placeholder='Password'
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
+                className={fieldInputClass}
+              />
             </div>
-          </FormField>
+          )}
+        </FormField>
 
-          <FormField form={form} name='password' className='py-1'>
-            {(field) => (
-              <div className='flex items-center gap-2.5'>
-                <Lock className='size-4 text-gray-400 shrink-0' />
-                <PasswordInput
-                  placeholder='Password'
-                  value={field.value}
-                  onChange={(value) => field.onChange(value)}
-                  className='border-0 shadow-none focus-visible:ring-0 px-0 h-10 text-sm placeholder:text-gray-400'
-                />
-              </div>
-            )}
-          </FormField>
-        </div>
+        <FormField form={form} name='confirm_password' showMessage={true}>
+          {(field) => (
+            <div className={fieldBoxClass}>
+              <Lock className='size-4 text-gray-400 shrink-0' />
+              <PasswordInput
+                placeholder='Confirm Password'
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
+                className={fieldInputClass}
+              />
+            </div>
+          )}
+        </FormField>
+      </div>
 
-        <div className='pt-6'>
-          <Button
-            type='submit'
-            className='w-full h-[50px] text-base font-semibold font-sf-pro-text bg-black hover:bg-black/90 text-white rounded-[8px]'
-            disabled={registerUser.isPending}>
-            {registerUser.isPending ? 'Signing Up...' : 'Sign Up'}
-          </Button>
-        </div>
-      </FormBase>
-    </div>
+      <div className='pt-6'>
+        <Button
+          type='submit'
+          className='w-full h-[50px] text-base font-semibold font-sf-pro-text bg-black hover:bg-black/90 text-white rounded-[8px]'
+          disabled={registerUser.isPending}>
+          {registerUser.isPending ? 'Signing Up...' : 'Sign Up'}
+        </Button>
+      </div>
+    </FormBase>
   )
 }
-

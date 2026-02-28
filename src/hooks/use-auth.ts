@@ -209,20 +209,26 @@ export function useLogin() {
 export function useLogout() {
   const queryClient = useQueryClient()
   const clearAuth = useAfroStore((state) => state.clearAuth)
+  const user = useAfroStore((state) => state.user)
   const navigate = useNavigate()
 
   return useMutation({
     mutationFn: () => authService.logout(),
     onSuccess: () => {
-      // Clear auth store
-      clearAuth()
+      // Capture account type before clearing auth
+      const accountType = user?.accountType
 
-      // Clear all auth-related queries
+      // Clear auth store and queries
+      clearAuth()
       queryClient.removeQueries({ queryKey: authKeys.all })
       authToasts.logoutSuccess()
 
-      // Redirect to home page after logout
-      navigate(getRoutePath('home'))
+      // Fans → /fans, Organizers/Vendors → /home
+      if (accountType === 'User') {
+        navigate(getRoutePath('home'))
+      } else {
+        navigate(getRoutePath('creators_home'))
+      }
     },
     onError: (error: unknown) => {
       const errorMessage = extractErrorMessage(error)
