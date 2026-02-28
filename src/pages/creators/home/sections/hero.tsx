@@ -24,16 +24,25 @@ export default function HeroSection({
           'w-full flex flex-col items-center gap-[20px] text-white text-center',
           {
             'max-w-[700px]': !wideDescription,
-            'max-w-[960px]': wideDescription,
+            'max-w-[900px]': wideDescription,
           },
         )}>
         {/* Title — 2 lines, large bold */}
-        <h1 className='font-sf-pro-text font-black text-[40px] uppercase leading-none tracking-[0] text-white'>
+        <h1
+          className={cn('uppercase leading-none tracking-[0] text-white', {
+            'font-black text-[36px]': wishlistButton,
+            'font-sf-pro-text font-black text-[40px]': !wishlistButton,
+          })}
+          style={wishlistButton ? { fontFamily: 'Inter' } : undefined}
+        >
           ALL-IN-ONE HUB<br />FOR FANS AND CREATORS
         </h1>
 
         {/* Subtitle */}
-        <p className='font-sf-pro-text text-[16px] uppercase leading-none tracking-[0] text-white' style={{ fontWeight: 300 }}>
+        <p
+          className='text-[16px] uppercase leading-none tracking-[0] text-white'
+          style={wishlistButton ? { fontFamily: 'Inter', fontWeight: 400 } : { fontFamily: undefined, fontWeight: 300 }}
+        >
           {description}
         </p>
 
