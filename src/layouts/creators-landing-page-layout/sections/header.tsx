@@ -26,7 +26,7 @@ export default function Header() {
 
       <nav className={cn(
         'relative w-full flex flex-col gap-y-4 items-center',
-        isWaitlistPage ? 'max-w-[1400px] px-4 md:px-8 lg:px-16 py-4 md:py-6' : 'px-5 md:px-[60px] py-[20px]'
+        isWaitlistPage ? 'px-8 md:px-[60px] py-4 md:py-6' : 'px-5 md:px-[60px] py-[20px]'
       )}>
         <div className='flex w-full items-center justify-between'>
           <NavLink to={getRoutePath('creators_home')}>
@@ -135,9 +135,8 @@ function CountdownTimer() {
   })
 
   useEffect(() => {
-    // Target date: February 15, 2026 at 00:00:00 Nigerian Time (WAT, UTC+1)
-    // Convert to UTC by subtracting 1 hour
-    const targetDate = new Date('2026-02-15T00:00:00+01:00').getTime()
+    // Target date: March 29, 2026 (30 days from Feb 27, 2026)
+    const targetDate = new Date(2026, 2, 29, 0, 0, 0, 0).getTime()
 
     function updateCountdown() {
       const now = new Date().getTime()

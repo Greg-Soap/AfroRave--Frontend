@@ -17,8 +17,8 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Footer Bottom Container — horizontal, 40px, padding-right 32px, gap 10px */}
-      <div className='w-full flex flex-row h-[40px] items-center pr-[32px] gap-[10px]'>
+      {/* Footer Bottom Container */}
+      <div className='w-full flex flex-row items-center px-[60px] py-[16px]'>
         <Socials className='justify-end' isCreator />
       </div>
 

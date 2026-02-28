@@ -1,19 +1,20 @@
-// import { useState } from 'react'
+import { useState } from 'react'
 import { VendorRegistrationCallout } from './vendor-registration-callout'
-import { useAuth } from '@/contexts/auth-context'
+import { VendorRegistrationModal } from './vendor-registration-modal'
 
 export function VendorRegistrationFlow() {
-    const { openAuthModal } = useAuth()
-
-    const handleOpen = () => {
-        openAuthModal('signup', 'vendor')
-    }
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     return (
         <>
             <VendorRegistrationCallout
-                onOpen={handleOpen}
+                onOpen={() => setIsModalOpen(true)}
                 delay={1500}
+            />
+            <VendorRegistrationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={() => setIsModalOpen(false)}
             />
         </>
     )

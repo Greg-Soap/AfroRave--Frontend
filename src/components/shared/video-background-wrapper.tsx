@@ -25,17 +25,17 @@ export function VideoBackgroundWrapper({
 }: VideoBackgroundWrapperProps) {
 
   return (
-    <div className={cn('relative w-full min-h-screen overflow-hidden', className)}>
+    <div className={cn('relative w-full min-h-screen overflow-hidden', className)} style={{ backgroundColor: secondColor }}>
       {/* Solid Background Color — base layer */}
       <div
-        className='absolute inset-0 w-full h-full'
+        className='absolute inset-0'
         style={{ backgroundColor: secondColor, zIndex: 1 }}
       />
 
       {/* Background Image — always visible, full opacity */}
       {backgroundImage && (
         <div
-          className='absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat'
+          className='absolute inset-0 bg-cover bg-center bg-no-repeat'
           style={{ backgroundImage: `url(${backgroundImage})`, zIndex: 2 }}
         />
       )}
@@ -55,7 +55,7 @@ export function VideoBackgroundWrapper({
 
       {/* Dark Overlay */}
       <div
-        className='absolute inset-0 w-full h-full'
+        className='absolute inset-0'
         style={{ backgroundColor: 'black', opacity: overlayOpacity, zIndex: 4 }}
       />
 

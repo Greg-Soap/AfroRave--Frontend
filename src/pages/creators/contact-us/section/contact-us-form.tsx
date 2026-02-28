@@ -69,7 +69,7 @@ function InputField<T extends FieldValues>({ form, name, label }: InputField<T>)
       label={label}
       labelClassName='text-white'
       className='w-full border border-white rounded-[5px] py-2 px-3 h-[60px]'>
-      <Input className='w-full px-0 border-none' />
+      <Input className='w-full px-0 border-none text-white placeholder:text-white/60' />
     </FormField>
   )
 }

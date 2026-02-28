@@ -17,7 +17,7 @@ export default function WorKWithUsSection() {
             build something meaningful—together.
           </p>
         </TextSectionContainer>
-        <LinkButton name="Contact Us" href={getRoutePath("creators_about")} />
+        <LinkButton name="Contact Us" href={getRoutePath("creators_contact")} />
       </div>
     </section>
   );
