@@ -71,7 +71,7 @@ export function RoleSelection({ onContinue }: RoleSelectionProps) {
                     whileTap={{ scale: 0.98 }}>
                     <Calendar
                         className='w-12 h-12 transition-colors'
-                        style={{ color: '#E31E24' }}
+                        style={{ color: 'var(--color-deep-red)' }}
                     />
                     <h3 className='text-white text-xl font-bold uppercase'>Organizer</h3>
                     <p className='text-white/70 text-sm text-center'>Create and manage events</p>
@@ -102,7 +102,7 @@ export function RoleSelection({ onContinue }: RoleSelectionProps) {
                     whileTap={{ scale: 0.98 }}>
                     <Store
                         className='w-12 h-12 transition-colors'
-                        style={{ color: '#E31E24' }}
+                        style={{ color: 'var(--color-deep-red)' }}
                     />
                     <h3 className='text-white text-xl font-bold uppercase'>Vendor</h3>
                     <p className='text-white/70 text-sm text-center'>Render services for events</p>

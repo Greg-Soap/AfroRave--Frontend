@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react'
 
 export default function RolesSection() {
   return (
-    <section className='w-full h-[535px] flex items-center px-[120px] py-[10px]'>
-      <div className='grid grid-cols-2 gap-[120px] w-full'>
+    <section className='w-full flex items-center px-6 md:px-[120px] py-16 md:py-[10px]'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-[120px] w-full'>
         <RoleDescription
           role={roles[0].role}
           description={roles[0].description}
@@ -38,11 +38,11 @@ function RoleDescription({ role, description, login }: IRoles) {
   return (
     <div className='flex flex-col gap-[20px] items-center text-center max-w-[700px] mx-auto'>
       {/* Title */}
-      <h2 className='font-sf-pro-text font-black text-[32px] uppercase text-white leading-none tracking-[0]'>
+      <h2 className='font-sf-pro-text font-black text-[24px] md:text-[32px] uppercase text-white leading-none tracking-[0]'>
         {role}
       </h2>
       {/* Description */}
-      <p ref={pRef} className='font-sf-pro-text text-[16px] uppercase leading-[1] tracking-[0] text-white' style={{ fontWeight: 300 }}>
+      <p ref={pRef} className='font-sf-pro-text text-[13px] md:text-[16px] uppercase leading-relaxed md:leading-[1] tracking-[0] text-white' style={{ fontWeight: 300 }}>
         {description}
       </p>
       <Button

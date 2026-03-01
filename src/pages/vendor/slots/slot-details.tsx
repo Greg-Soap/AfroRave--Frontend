@@ -191,7 +191,7 @@ function StatusBadge({ status, className }: { status: string, className?: string
             case 'pending payment': return 'text-[#FF9500]' // Orange
             case 'requested': return 'text-[#007AFF]' // Blue
             case 'secured': return 'text-[#34C759]' // Green
-            case 'rejected': return 'text-[#FF3B30]' // Red
+            case 'rejected': return 'text-deep-red'
             default: return 'text-[#8E8E93]'
         }
     }

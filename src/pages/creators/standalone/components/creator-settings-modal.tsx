@@ -121,7 +121,7 @@ export function CreatorSettingsModal({ customTrigger }: { customTrigger?: React.
                                 )}
                             </div>
 
-                            <Button className="w-full bg-[#B91C1C] hover:bg-red-800 text-white h-[44px] rounded-[6px] font-medium text-[14px] shadow-sm mt-2 uppercase tracking-wide">
+                            <Button className="w-full bg-deep-red hover:bg-deep-red/80 text-white h-[44px] rounded-[6px] font-medium text-[14px] shadow-sm mt-2 uppercase tracking-wide">
                                 SAVE
                             </Button>
                         </div>
@@ -136,8 +136,8 @@ export function CreatorSettingsModal({ customTrigger }: { customTrigger?: React.
                                 <p className="text-[13px] text-gray-600 font-sf-pro-display">Theme</p>
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-1.5 cursor-pointer">
-                                        <div className="size-4 rounded-full border border-red-600 flex items-center justify-center">
-                                            <div className="size-2 bg-red-600 rounded-full" />
+                                        <div className="size-4 rounded-full border border-deep-red flex items-center justify-center">
+                                            <div className="size-2 bg-deep-red rounded-full" />
                                         </div>
                                         <span className="text-[13px] text-black">Light</span>
                                     </div>
@@ -148,7 +148,7 @@ export function CreatorSettingsModal({ customTrigger }: { customTrigger?: React.
                                 </div>
                             </div>
 
-                            <div onClick={handleLogout} className="flex items-center gap-2 py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 -mx-2 px-2 transition-colors mt-2 text-[#B91C1C]">
+                            <div onClick={handleLogout} className="flex items-center gap-2 py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 -mx-2 px-2 transition-colors mt-2 text-deep-red">
                                 <LogOut className="size-4" />
                                 <span className="text-[13px] font-medium font-sf-pro-display">Log Out</span>
                             </div>

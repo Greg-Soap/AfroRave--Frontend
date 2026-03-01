@@ -51,7 +51,7 @@ export function TransactionDetailsModal({
                     {/* Event & Date Group */}
                     <div className='flex flex-col gap-4 border-b border-white/5 pb-4'>
                         <div className='flex items-start gap-3'>
-                            <span className='text-[#E31E24] mt-0.5'>
+                            <span className='text-deep-red mt-0.5'>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6zm2-2V2h2v2h10V2h2v2h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h2z" /></svg>
                             </span>
                             {/* Using SVG directly for Ticket/Event icon to match specific red outline look if needed, or stick to lucide */}
@@ -62,7 +62,7 @@ export function TransactionDetailsModal({
                         </div>
 
                         <div className='flex items-start gap-3'>
-                            <span className='text-[#E31E24] mt-0.5'>
+                            <span className='text-deep-red mt-0.5'>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z" /></svg>
                             </span>
                             <div className='flex flex-col'>

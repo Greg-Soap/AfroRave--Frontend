@@ -40,12 +40,12 @@ export default function SettingsPage() {
                             <Label className='text-white'>New Password</Label>
                             <Input type="password" placeholder="Enter new password" className='bg-transparent border-white/10 text-white' />
                         </div>
-                        <Button className='w-full mt-2 bg-[#E31E24] hover:bg-[#C30010] text-white'>Update Password</Button>
+                        <Button className='w-full mt-2 bg-deep-red hover:bg-deep-red/80 text-white'>Update Password</Button>
                     </div>
                 </div>
 
                 <div className='flex flex-col gap-4 p-6 bg-white/5 rounded-lg border border-white/10'>
-                    <h2 className='text-lg font-semibold text-white text-red-500'>Danger Zone</h2>
+                    <h2 className='text-lg font-semibold text-deep-red'>Danger Zone</h2>
                     <Button variant="destructive" className='w-fit'>Delete Account</Button>
                 </div>
 

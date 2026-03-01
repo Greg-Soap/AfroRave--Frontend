@@ -338,7 +338,7 @@ export default function ProfileTab() {
             <Button
               type='submit'
               disabled={isLoadingProfile || updateProfileMutation.isPending}
-              className='w-[160px] h-[48px] font-ibm-plex-mono font-bold uppercase tracking-widest bg-white text-[#FF3B30] hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-[4px] text-[13px] transition-all border-none'>
+              className='w-[160px] h-[48px] font-ibm-plex-mono font-bold uppercase tracking-widest bg-white text-deep-red hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-[4px] text-[13px] transition-all border-none'>
               {updateProfileMutation.isPending ? 'SAVING...' : 'SAVE'}
             </Button>
           </div>

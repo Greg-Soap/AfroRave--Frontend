@@ -76,7 +76,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                                             onClick={onClose}
                                             className={cn(
                                                 'flex items-center gap-4 py-3 group font-input-mono transition-colors',
-                                                active ? 'text-[#E31E24]' : 'text-white/60 hover:text-white'
+                                                active ? 'text-deep-red' : 'text-white/60 hover:text-white'
                                             )}>
                                             <img
                                                 src={item.icon}
@@ -90,7 +90,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                                                 {item.name}
                                             </span>
                                         </Link>
-                                        <div className={cn("h-[1px] w-full bg-white/10 mt-2", active ? "bg-[#E31E24]/20" : "")} />
+                                        <div className={cn("h-[1px] w-full bg-white/10 mt-2", active ? "bg-deep-red/20" : "")} />
                                     </div>
                                 )
                             })}

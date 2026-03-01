@@ -80,7 +80,7 @@ function StandAloneModalHeader({ event }: { event: EventDetailData }) {
         </Button>
         <Button
           asChild
-          className='w-[110px] h-9 rounded-[6px] bg-[#B91C1C] hover:bg-red-800 text-xs font-medium text-white font-sf-pro-display shadow-sm'>
+          className='w-[110px] h-9 rounded-[6px] bg-deep-red hover:bg-deep-red/80 text-xs font-medium text-white font-sf-pro-display shadow-sm'>
           <Link to={getRoutePath('edit_event', { eventId: event.eventId })}>Edit Event</Link>
         </Button>
       </div>

@@ -85,8 +85,8 @@ function NavigationLinks() {
           to={item.link}
           className={({ isActive }) =>
             cn('flex items-center gap-2 border-b-2 transition-all pb-1', {
-              'opacity-100 border-[#E31E24]': isActive,
-              'opacity-60 border-transparent hover:border-[#E31E24]': !isActive,
+              'opacity-100 border-deep-red': isActive,
+              'opacity-60 border-transparent hover:border-deep-red': !isActive,
             })
           }>
           <img src={item.icon} alt={item.name} className='size-[19px]' />

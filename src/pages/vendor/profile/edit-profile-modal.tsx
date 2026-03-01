@@ -52,7 +52,7 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                 ) : (
                     <Button
                         variant="destructive"
-                        className="px-5 py-2.5 rounded-[6px] gap-3 h-8 bg-red-600 hover:bg-red-700 text-white shadow-sm"
+                        className="px-5 py-2.5 rounded-[6px] gap-3 h-8 bg-deep-red hover:bg-deep-red/80 text-white shadow-sm"
                     >
                         <span className="font-sf-pro-text text-xs capitalize">
                             Edit Profile
@@ -213,7 +213,7 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                                 </div>
                             </div>
 
-                            <Button className="w-full bg-[#B91C1C] hover:bg-red-800 text-white h-[44px] rounded-[6px] font-medium text-[14px] shadow-sm mt-2 uppercase tracking-wide">
+                            <Button className="w-full bg-deep-red hover:bg-deep-red/80 text-white h-[44px] rounded-[6px] font-medium text-[14px] shadow-sm mt-2 uppercase tracking-wide">
                                 SAVE
                             </Button>
                         </div>
@@ -227,7 +227,7 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                                         <Button className="h-7 rounded-full bg-black text-white text-xs px-4">All</Button>
                                         <Button variant="ghost" className="h-7 rounded-full text-black hover:bg-gray-100 text-xs px-4 bg-gray-100">Unread (4)</Button>
                                     </div>
-                                    <button className="text-[10px] text-red-500 hover:underline">Mark all as read</button>
+                                    <button className="text-[10px] text-deep-red hover:underline">Mark all as read</button>
                                 </div>
 
                                 <div className="flex flex-col w-full h-full overflow-y-auto mt-2 px-4 md:px-6 py-2 gap-6">
@@ -247,7 +247,7 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                                                         <p className="font-semibold text-sm text-black truncate max-w-[140px] sm:max-w-[200px]">Urban Rise Festival Vol 3</p>
                                                         <div className="flex items-center gap-2">
                                                             <span className="text-gray-400 text-[10px] md:text-xs">June 12</span>
-                                                            <div className="size-2 rounded-full bg-red-600 shrink-0" />
+                                                            <div className="size-2 rounded-full bg-deep-red shrink-0" />
                                                         </div>
                                                     </div>
                                                     <p className="text-xs text-gray-500 truncate w-full">You've Been Accepted As...</p>
@@ -268,7 +268,7 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                                                         <p className="font-semibold text-sm text-black truncate max-w-[140px] sm:max-w-[200px]">Urban Rise Festival Vol 3</p>
                                                         <div className="flex items-center gap-2">
                                                             <span className="text-gray-400 text-[10px] md:text-xs">June 12</span>
-                                                            <div className="size-2 rounded-full bg-red-600 shrink-0" />
+                                                            <div className="size-2 rounded-full bg-deep-red shrink-0" />
                                                         </div>
                                                     </div>
                                                     <p className="text-xs text-gray-500 truncate w-full">You've Been Accepted As...</p>
@@ -307,7 +307,7 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                                             </div>
                                         </div>
 
-                                        <Button className="w-full bg-[#B91C1C] hover:bg-red-800 text-white font-semibold text-xs md:text-sm h-9 md:h-10 mt-3 shadow-sm rounded-md transition-all">
+                                        <Button className="w-full bg-deep-red hover:bg-deep-red/80 text-white font-semibold text-xs md:text-sm h-9 md:h-10 mt-3 shadow-sm rounded-md transition-all">
                                             Secure Slot
                                         </Button>
                                     </div>

@@ -18,10 +18,10 @@ export default function HeroSection({
   const { openAuthModal } = useAuth()
 
   return (
-    <section className='w-full h-[990px] flex flex-col items-center justify-center px-[60px] py-[10px] z-50'>
+    <section className='w-full min-h-screen flex flex-col items-center justify-center px-6 md:px-[60px] py-24 md:py-[10px] z-50'>
       <div
         className={cn(
-          'w-full flex flex-col items-center gap-[20px] text-white text-center',
+          'w-full flex flex-col items-center gap-4 md:gap-[20px] text-white text-center',
           {
             'max-w-[700px]': !wideDescription,
             'max-w-[900px]': wideDescription,
@@ -29,9 +29,9 @@ export default function HeroSection({
         )}>
         {/* Title — 2 lines, large bold */}
         <h1
-          className={cn('uppercase leading-none tracking-[0] text-white', {
-            'font-black text-[36px]': wishlistButton,
-            'font-sf-pro-text font-black text-[40px]': !wishlistButton,
+          className={cn('uppercase leading-tight tracking-[0] text-white', {
+            'font-black text-[26px] md:text-[36px]': wishlistButton,
+            'font-sf-pro-text font-black text-[28px] md:text-[40px]': !wishlistButton,
           })}
           style={wishlistButton ? { fontFamily: 'Inter' } : undefined}
         >
@@ -40,7 +40,7 @@ export default function HeroSection({
 
         {/* Subtitle */}
         <p
-          className='text-[16px] uppercase leading-none tracking-[0] text-white'
+          className='text-[13px] md:text-[16px] uppercase leading-relaxed md:leading-none tracking-[0] text-white'
           style={wishlistButton ? { fontFamily: 'Inter', fontWeight: 400 } : { fontFamily: undefined, fontWeight: 300 }}
         >
           {description}

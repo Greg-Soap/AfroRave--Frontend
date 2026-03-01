@@ -35,7 +35,7 @@ export function BaseSideBar({
       side={side}
       variant={variant}
       collapsible={effectiveCollapsible}
-      className={cn(className, "w-[320px] min-h-screen h-fit bg-white")}
+      className={cn(className, "w-[320px] min-h-screen h-fit bg-white border-r border-r-[0.5px] border-r-gray-200")}
     >
       <SidebarContent className={cn(contentClassName, "flex flex-col h-full")}>
         <SidebarGroup className="px-0 flex-1">

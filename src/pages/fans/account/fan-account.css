@@ -53,7 +53,7 @@
 
 .fan-account-input-field:focus {
     outline: none;
-    border-color: #C30010;
+    border-color: var(--color-deep-red);
 }
 
 .fan-account-input-field:disabled {
@@ -76,7 +76,7 @@
 }
 
 .fan-account-select-trigger:focus {
-    border-color: #C30010;
+    border-color: var(--color-deep-red);
 }
 
 /* Birthday Section */
@@ -121,7 +121,7 @@
     width: 200px;
     height: 48px;
     background-color: #FFFFFF;
-    color: #C30010;
+    color: var(--color-deep-red);
     border: none;
     border-radius: 6px;
     font-size: 14px;
@@ -157,8 +157,8 @@
 .fan-account-loading-spinner {
     width: 32px;
     height: 32px;
-    border: 2px solid rgba(227, 30, 36, 0.2);
-    border-top-color: #E31E24;
+    border: 2px solid color-mix(in srgb, var(--color-deep-red) 20%, transparent);
+    border-top-color: var(--color-deep-red);
     border-radius: 50%;
     animation: fan-account-spin 0.8s linear infinite;
     margin-bottom: 16px;

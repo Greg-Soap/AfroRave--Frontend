@@ -34,7 +34,7 @@ export default function MobileMenu({ onClose }: MobileMenuProps) {
             key={link.name}
             to={link.href}
             onClick={onClose}
-            className='text-white hover:text-white/80 transition-colors font-input-mono text-xl font-light hover:decoration-[#E31E24] hover:underline'>
+            className='text-white hover:text-white/80 transition-colors font-input-mono text-xl font-light hover:decoration-deep-red hover:underline'>
             {link.name}
           </Link>
         ))}
@@ -104,12 +104,12 @@ function LogOutButton() {
 
   const handleLogout = () => {
     const accountType = user?.accountType
-    clearAuth()
     if (accountType === 'User') {
       window.location.href = getRoutePath('home')
     } else {
       window.location.href = getRoutePath('creators_home')
     }
+    clearAuth()
   }
 
   return (

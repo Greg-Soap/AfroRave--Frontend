@@ -18,7 +18,7 @@ export default function CreatorSidebar() {
         <CreatorSettingsModal
           customTrigger={
             <div className="flex items-center gap-2.5 px-6 py-4 cursor-pointer hover:bg-gray-50 bg-white border-t border-gray-100 transition-colors group w-full">
-              <Settings className="size-[18px] text-black group-hover:text-red-600 transition-colors" />
+              <Settings className="size-[18px] text-black group-hover:text-deep-red transition-colors" />
               <span className="text-[13px] font-normal tracking-widest text-black font-sf-pro-display uppercase">SETTINGS</span>
             </div>
           }

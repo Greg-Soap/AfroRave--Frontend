@@ -42,7 +42,7 @@ export default function CreatorsHomePage() {
       videoBlendMode='color-dodge'
     >
       <HeroSection />
-      <div className='flex flex-col gap-[200px]'>
+      <div className='flex flex-col gap-20 md:gap-[200px]'>
         <RolesSectionWrapper />
         <CTASectionWrapper />
       </div>

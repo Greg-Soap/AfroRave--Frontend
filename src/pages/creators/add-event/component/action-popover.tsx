@@ -19,7 +19,7 @@ export function ActionPopover({ isDeleting, isUpdating, onDelete, onEdit }: IAct
             variant='ghost'
             onClick={onDelete}
             disabled={isUpdating || isDeleting}
-            className='text-red-600 hover:text-red-700'>
+            className='text-deep-red hover:text-deep-red/80'>
             {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>
         </>

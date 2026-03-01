@@ -300,7 +300,7 @@ function EmptyTicketState({ onAddTicket }: { onAddTicket: () => void }) {
         Start by creating your first ticket type. You can add multiple ticket types with different
         pricing and features.
       </p>
-      <Button onClick={onAddTicket} className='mt-4 bg-deep-red text-white hover:bg-red-700'>
+      <Button onClick={onAddTicket} className='mt-4 bg-deep-red text-white hover:bg-deep-red/80'>
         Create First Ticket
       </Button>
     </div>
@@ -375,7 +375,7 @@ function TicketCard({ name, onDelete, isLoading = false }: ITIcketCard) {
           <DropdownMenuItem
             onClick={() => onDelete()}
             disabled={isLoading}
-            className='text-red-600 focus:text-red-600'>
+            className='text-deep-red focus:text-deep-red'>
             <Trash2 size={16} className='mr-2' />
             {isLoading ? 'Deleting...' : 'Delete Ticket'}
           </DropdownMenuItem>

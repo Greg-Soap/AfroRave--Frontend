@@ -59,7 +59,7 @@ export default function SupportTab() {
         {/* Submit Button */}
         <Button
           type='submit'
-          className='w-[200px] h-12 bg-white hover:bg-white/90 text-[#E31E24] font-sf-pro-display font-semibold rounded-lg transition-colors'>
+          className='w-[200px] h-12 bg-white hover:bg-white/90 text-deep-red font-sf-pro-display font-semibold rounded-lg transition-colors'>
           SUBMIT
         </Button>
       </FormBase>

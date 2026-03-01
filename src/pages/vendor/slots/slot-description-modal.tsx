@@ -93,7 +93,7 @@ export function SlotDescriptionModal({ isOpen, onClose, slotName, price, eventNa
                             {/* Secure Slot Button */}
                             <Button
                                 onClick={handleSecureSlot}
-                                className="bg-[#B91C1C] hover:bg-red-800 text-white rounded-lg px-6 h-10 font-bold font-sf-pro-display shadow-sm"
+                                className="bg-deep-red hover:bg-deep-red/80 text-white rounded-lg px-6 h-10 font-bold font-sf-pro-display shadow-sm"
                             >
                                 Secure Slot
                             </Button>
@@ -112,7 +112,7 @@ export function SlotDescriptionModal({ isOpen, onClose, slotName, price, eventNa
                         {/* Footer - Payment View */}
                         <div className="flex justify-center mt-auto pb-2 w-full px-6">
                             <Button
-                                className="bg-[#B91C1C] hover:bg-red-800 text-white rounded-lg h-10 font-medium font-sf-pro-display shadow-sm w-full"
+                                className="bg-deep-red hover:bg-deep-red/80 text-white rounded-lg h-10 font-medium font-sf-pro-display shadow-sm w-full"
                             >
                                 Checkout
                             </Button>

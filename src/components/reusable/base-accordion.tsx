@@ -25,7 +25,7 @@ export function BaseAccordion({
       >
         <AccordionTrigger
           className={cn("hover:no-underline", {
-            "items-center justify-between h-[50px] px-6 [&>svg]:hidden":
+            "items-center justify-between h-[64px] px-6 [&>svg]:hidden":
               style === "dashboard",
           })}
         >
@@ -38,8 +38,8 @@ export function BaseAccordion({
               {icon}
             </span>
             {/* Text — always black, dims slightly when inactive */}
-            <p className={cn("font-sf-pro-display uppercase", {
-              "text-[13px] font-normal tracking-widest text-black": style === "dashboard",
+            <p className={cn("font-['Inter'] uppercase", {
+              "text-[14px] font-normal tracking-normal leading-none text-[#1E1E1E]": style === "dashboard",
               "opacity-40": !isActive && style === "dashboard",
             })}>{trigger}</p>
           </div>

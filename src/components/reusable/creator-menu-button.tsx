@@ -24,12 +24,14 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
 
   const handleLogout = () => {
     const accountType = user?.accountType
-    clearAuth()
+    // Navigate FIRST before clearing auth to prevent the auth guard
+    // from intercepting the cleared state and redirecting to /fans.
     if (accountType === 'User') {
-      navigate(getRoutePath('home'))
+      navigate(getRoutePath('home'), { replace: true })
     } else {
-      navigate(getRoutePath('creators_home'))
+      navigate(getRoutePath('creators_home'), { replace: true })
     }
+    clearAuth()
   }
 
   const handleDashboardClick = () => {

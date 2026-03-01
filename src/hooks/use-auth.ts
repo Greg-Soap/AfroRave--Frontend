@@ -215,20 +215,19 @@ export function useLogout() {
   return useMutation({
     mutationFn: () => authService.logout(),
     onSuccess: () => {
-      // Capture account type before clearing auth
       const accountType = user?.accountType
 
-      // Clear auth store and queries
+      // Navigate FIRST so the auth guard on the current page doesn't
+      // intercept the cleared auth state and redirect to /fans instead.
+      if (accountType === 'User') {
+        navigate(getRoutePath('home'), { replace: true })
+      } else {
+        navigate(getRoutePath('creators_home'), { replace: true })
+      }
+
       clearAuth()
       queryClient.removeQueries({ queryKey: authKeys.all })
       authToasts.logoutSuccess()
-
-      // Fans → /fans, Organizers/Vendors → /home
-      if (accountType === 'User') {
-        navigate(getRoutePath('home'))
-      } else {
-        navigate(getRoutePath('creators_home'))
-      }
     },
     onError: (error: unknown) => {
       const errorMessage = extractErrorMessage(error)

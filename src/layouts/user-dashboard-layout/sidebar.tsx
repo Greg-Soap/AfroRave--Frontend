@@ -42,7 +42,7 @@ export default function AccountSidebar() {
                                 }`}
                         >
                             <div className="flex items-center gap-4"> {/* Icon + Text Row */}
-                                <div className='w-5 h-5 flex items-center justify-center shrink-0 text-[#FF3B30]'>
+                                <div className='w-5 h-5 flex items-center justify-center shrink-0 text-deep-red'>
                                     <Zap className="w-5 h-5" strokeWidth={1.5} />
                                 </div>
                                 <span className='fan-sidebar-text'>
@@ -64,7 +64,7 @@ export default function AccountSidebar() {
                                 }`}
                         >
                             <div className="flex items-center gap-4"> {/* Icon + Text Row */}
-                                <div className='w-5 h-5 flex items-center justify-center shrink-0 text-[#FF3B30]'>
+                                <div className='w-5 h-5 flex items-center justify-center shrink-0 text-deep-red'>
                                     <Settings className="w-5 h-5" strokeWidth={1.5} />
                                 </div>
                                 <span className='fan-sidebar-text'>
@@ -83,7 +83,7 @@ export default function AccountSidebar() {
                             className='fan-sidebar-link group relative flex-col items-start'
                         >
                             <div className="flex items-center gap-4"> {/* Icon + Text Row matching others */}
-                                <div className='w-5 h-5 flex items-center justify-center shrink-0 text-[#FF3B30]'>
+                                <div className='w-5 h-5 flex items-center justify-center shrink-0 text-deep-red'>
                                     <LogOut className="w-5 h-5" strokeWidth={1.5} />
                                 </div>
                                 <span className='fan-sidebar-text'>
