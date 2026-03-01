@@ -1,3 +1,105 @@
+# Frontend Changes Summary - March 1, 2026
+
+---
+
+## 🚨 URGENT — API Response Missing Fields (Ticket Endpoints)
+
+**Date Reported:** March 1, 2026
+**Priority:** HIGH — Blocking frontend ticket display features
+
+### Problem
+
+The following fields are **not being returned** by the ticket API endpoints, even though the frontend sends them during ticket creation. This breaks:
+
+- Ticket type badges (Single Ticket / Group Ticket / Multi Day)
+- Access type badges (Invite Only / Free)
+- Sales type badges (Door Ticket)
+- Resale badge
+- Ticket description in the detail popup
+
+### Affected Endpoints
+
+#### 1. `GET /api/Event/{eventId}/tickets` (List all tickets for an event)
+**Currently returns per ticket:**
+```json
+{
+  "ticketId": "...",
+  "ticketName": "...",
+  "price": 800,
+  "quantity": 234,
+  "availableQuantity": 234,
+  "eventId": "...",
+  "eventName": "..."
+}
+```
+
+**Missing fields that must be added:**
+```json
+{
+  "ticketType": "Single",        // "Single" | "Group" | "MultiDay"
+  "accessType": "Paid",          // "Free" | "Paid" | "Invite"
+  "salesType": "Online",         // "Online" | "Door"
+  "description": "..."           // top-level ticket description
+}
+```
+
+#### 2. `GET /api/Event/ticket/{ticketId}` (Get individual ticket)
+**Currently returns:**
+```json
+{
+  "data": {
+    "ticketId": "...",
+    "ticketName": "...",
+    "price": 800,
+    "quantity": 0,
+    "availableQuantity": 0,
+    "eventId": "...",
+    "eventName": "...",
+    "ticketDetails": {
+      "saleImmediately": true,
+      "saleBegins": null,
+      "allowResell": false,
+      "mail": { "body": "..." }
+    }
+  },
+  "message": "Event ticket retrieved successfully"
+}
+```
+
+**Missing fields that must be added inside `data`:**
+```json
+{
+  "ticketType": "Single",
+  "accessType": "Paid",
+  "salesType": "Online",
+  "description": "..."
+}
+```
+
+### Why It Matters
+
+The frontend **already sends all these fields** when creating a ticket via `POST /api/Event/ticket`:
+```json
+{
+  "ticketName": "...",
+  "ticketType": "Single",
+  "accessType": "Paid",
+  "salesType": "Online",
+  "description": "This is my ticket description",
+  "quantity": 234,
+  "price": 5000,
+  ...
+}
+```
+
+The data is being stored — it just isn't being returned on GET. The frontend has been built expecting these fields and is ready to display them the moment they're included in the response.
+
+### Note on Unlimited Tickets
+
+The frontend and backend currently use `quantity: 0` to represent **unlimited** tickets. This is working correctly. Please do not change this convention.
+
+---
+
 # Frontend Changes Summary - January 29, 2026
 
 ## For Backend Team

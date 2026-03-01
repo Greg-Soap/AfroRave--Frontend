@@ -1,3 +1,4 @@
+import type React from 'react'
 import BaseModal from '@/components/reusable/base-modal'
 import { DialogClose } from '@/components/ui/dialog'
 import { Plus, X, Zap } from 'lucide-react'
@@ -5,18 +6,22 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
-export function AddEventModal({ onContinue, type, data }: TAddEventModal) {
+export function AddEventModal({ onContinue, type, data, trigger }: TAddEventModal) {
   const [selectedType, setSelectedType] = useState<TSelectedType | VSelectedType | null>(null)
   const [open, setOpen] = useState<boolean>(false)
 
   return (
     <>
-      <Button
-        type='button'
-        onClick={() => setOpen(true)}
-        className='self-center w-fit flex items-center gap-2 px-6 py-3 bg-[#00AD2E] rounded-full text-white text-xs font-medium font-sf-pro-text hover:bg-[#00AD2E]/90'>
-        <Plus /> <span>{type === 'ticket' ? 'TICKET' : 'VENDOR SLOT'}</span>
-      </Button>
+      {trigger ? (
+        <span onClick={() => setOpen(true)}>{trigger}</span>
+      ) : (
+        <Button
+          type='button'
+          onClick={() => setOpen(true)}
+          className='self-center w-fit flex items-center gap-2 px-6 py-3 bg-[#00AD2E] rounded-full text-white text-xs font-medium font-sf-pro-text hover:bg-[#00AD2E]/90'>
+          <Plus /> <span>{type === 'ticket' ? 'TICKET' : 'VENDOR SLOT'}</span>
+        </Button>
+      )}
 
       <BaseModal
         open={open}
@@ -97,10 +102,7 @@ function EventModalCards({ name, caption, action, isSelected, type }: IEventModa
         },
       )}>
       <p className='text-charcoal uppercase text-sm leading-[100%] font-sf-pro-text'>{name}</p>
-      <p
-        className={cn('text-[13px] text-wrap leading-[130%] text-[#8E8E93] font-sf-pro-display', {
-          hidden: type === 'ticket' && isSelected,
-        })}>
+      <p className='text-[13px] text-wrap leading-[130%] text-[#8E8E93] font-sf-pro-display'>
         {caption}
       </p>
     </Button>
@@ -115,11 +117,13 @@ type TAddEventModal =
     type: 'ticket'
     onContinue: (selectedType: TSelectedType) => void
     data: { value: string; name: string; caption: string }[]
+    trigger?: React.ReactNode
   }
   | {
     type: 'vendor'
     onContinue: (selectedType: VSelectedType) => void
     data: { value: string; name: string; caption: string }[]
+    trigger?: React.ReactNode
   }
 
 interface IEventModalCards {

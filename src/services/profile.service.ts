@@ -56,6 +56,21 @@ class ProfileService {
     const response = await api.get('/api/profile/organizer')
     return response.data
   }
+
+  /**
+   * Update organizer profile
+   */
+  async updateOrganizerProfile(data: Partial<{
+    firstName: string
+    lastName: string
+    companyName: string
+    telphone: string
+    gender: string
+    website: string
+  }>): Promise<OrganizerProfileResponse> {
+    const response = await api.patch('/api/profile/organizer', data)
+    return response.data
+  }
 }
 
 // Export service instance

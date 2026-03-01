@@ -1,6 +1,6 @@
 import { getRoutePath } from '@/config/get-route-path'
 import { useAuth } from '@/contexts/auth-context'
-import { authToasts } from '@/lib/toast'
+import { authToasts, profileToasts } from '@/lib/toast'
 import authService from '@/services/auth.service'
 import { useAfroStore } from '@/stores'
 import type {
@@ -209,24 +209,27 @@ export function useLogin() {
 export function useLogout() {
   const queryClient = useQueryClient()
   const clearAuth = useAfroStore((state) => state.clearAuth)
-  const user = useAfroStore((state) => state.user)
   const navigate = useNavigate()
 
   return useMutation({
     mutationFn: () => authService.logout(),
     onSuccess: () => {
-      const accountType = user?.accountType
+      // Read accountType directly from store (not from closure) to avoid stale values
+      const accountType = useAfroStore.getState().user?.accountType
 
-      // Navigate FIRST so the auth guard on the current page doesn't
-      // intercept the cleared auth state and redirect to /fans instead.
-      if (accountType === 'User') {
-        navigate(getRoutePath('home'), { replace: true })
-      } else {
-        navigate(getRoutePath('creators_home'), { replace: true })
-      }
+      // Determine destination before clearing auth
+      const destination =
+        accountType === 'User'
+          ? getRoutePath('home')          // /fans — fans landing page
+          : getRoutePath('creators_home') // /home — creators/vendor landing page
 
+      // Clear auth first so the store is clean
       clearAuth()
       queryClient.removeQueries({ queryKey: authKeys.all })
+
+      // Navigate after clearing — auth guard will now redirect to the correct
+      // landing page for the account type (fixed in AuthGuard) so there's no conflict
+      navigate(destination, { replace: true })
       authToasts.logoutSuccess()
     },
     onError: (error: unknown) => {
@@ -239,4 +242,19 @@ export function useLogout() {
 // Legacy registration hook for backward compatibility
 export function useRegister() {
   return useRegisterUser()
+}
+
+// Change Password Hook
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (data: { currentPassword: string; newPassword: string }) =>
+      authService.changePassword(data),
+    onSuccess: () => {
+      profileToasts.passwordChanged()
+    },
+    onError: (error: unknown) => {
+      const errorMessage = extractErrorMessage(error)
+      authToasts.loginError(errorMessage)
+    },
+  })
 }

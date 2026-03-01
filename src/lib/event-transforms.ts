@@ -219,7 +219,7 @@ export function transformTicketsToCreateRequest(
     accessType: mapAccessType(ticket.type, ticket.invite_only),
     salesType: mapSalesType(ticket.salesType),
     ticketType: mapTicketType(ticket.ticketType),
-    quantity: Number.parseInt(ticket.quantity.amount, 10),
+    quantity: ticket.quantity.availability === 'unlimited' ? 0 : Number.parseInt(ticket.quantity.amount || '0', 10),
     price: Number.parseFloat(ticket.price || '0'),
     purchaseLimit: ticket.purchase_limit ? Number.parseInt(ticket.purchase_limit, 10) : 10,
     groupSize:

@@ -95,7 +95,7 @@ export function DashboardCards({
   )
 }
 
-function StatusBadge({ status }: { status: 'ended' | 'drafts' }) {
+function StatusBadge({ status }: { status: 'ended' | 'drafts' | 'ongoing' | 'sold_out' }) {
   return (
     <Badge
       className={cn(
@@ -103,9 +103,11 @@ function StatusBadge({ status }: { status: 'ended' | 'drafts' }) {
         {
           'bg-tech-blue': status === 'drafts',
           'bg-deep-red': status === 'ended',
+          'bg-green-500': status === 'ongoing',
+          'bg-orange-500': status === 'sold_out',
         },
       )}>
-      {status}
+      {status === 'sold_out' ? 'Sold Out' : status}
     </Badge>
   )
 }
@@ -130,7 +132,7 @@ interface IDashboardCardProps {
   image?: string
   name: string
   startDate: string
-  status?: 'ended' | 'drafts'
+  status?: 'ended' | 'drafts' | 'ongoing' | 'sold_out'
   cardInfo: React.ReactNode[]
   cardButtons: Omit<IEventButtonsProps, 'className'>[]
   customButton?: React.ReactNode[]

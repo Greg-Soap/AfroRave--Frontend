@@ -126,10 +126,17 @@ export interface TicketData {
   availableQuantity: number
   eventId: string
   eventName: string
-  ticketDetails: {
-    description: string
-    benefits: string
-    restrictions: string
+  ticketType?: 'Single' | 'Group' | 'MultiDay'
+  accessType?: 'Free' | 'Paid' | 'Invite'
+  salesType?: 'Online' | 'Door'
+  description?: string
+  ticketDetails?: {
+    description?: string
+    benefits?: string
+    restrictions?: string
+    allowResell?: boolean
+    saleImmediately?: boolean
+    saleBegins?: string
   }
 }
 

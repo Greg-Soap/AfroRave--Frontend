@@ -314,6 +314,17 @@ export function useGetEvent(eventId: string) {
   })
 }
 
+export function useGetTicket(ticketId?: string) {
+  return useQuery({
+    queryKey: ['ticket', ticketId],
+    queryFn: () => {
+      if (!ticketId) throw new Error('Ticket ID is required')
+      return eventService.getTicket(ticketId)
+    },
+    enabled: !!ticketId,
+  })
+}
+
 export function useGetEventTickets(eventId?: string) {
   return useQuery({
     queryKey: eventKeys.tickets(eventId || ''),

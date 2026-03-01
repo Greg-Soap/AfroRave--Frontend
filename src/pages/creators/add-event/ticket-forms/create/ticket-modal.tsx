@@ -1,12 +1,14 @@
+import type React from 'react'
 import { AddEventModal } from '../../component/add-event-modal'
 
 type TSelectedType = 'single_ticket' | 'group_ticket' | 'multi_day'
 
-export function TicketModal({ onContinue }: { onContinue: (selectedType: TSelectedType) => void }) {
+export function TicketModal({ onContinue, trigger }: { onContinue: (selectedType: TSelectedType) => void; trigger?: React.ReactNode }) {
   return (
     <AddEventModal
       onContinue={onContinue}
       type='ticket'
+      trigger={trigger}
       data={[
         {
           value: 'single_ticket',

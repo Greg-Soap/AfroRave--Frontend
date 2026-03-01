@@ -72,3 +72,23 @@ export function useOrganizerProfile() {
     queryFn: () => profileService.getOrganizerProfile(),
   })
 }
+
+/**
+ * Hook for updating organizer profile
+ */
+export function useUpdateOrganizerProfile() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data: Parameters<typeof profileService.updateOrganizerProfile>[0]) =>
+      profileService.updateOrganizerProfile(data),
+    onSuccess: () => {
+      toast.success('Profile updated successfully!')
+      queryClient.invalidateQueries({ queryKey: ['organizer-profile'] })
+    },
+    onError: (error) => {
+      toast.error('Failed to update profile. Please try again.')
+      console.error('Organizer profile update error:', error)
+    },
+  })
+}

@@ -24,6 +24,7 @@ export function TicketForm({
   onCancel,
 }: ITicketFormProps) {
   const [openAdvancedOptions, setOpenAdvancedOptions] = useState(false)
+  const availabilityValue = form.watch('ticket.quantity.availability')
 
   return (
     <>
@@ -97,16 +98,18 @@ export function TicketForm({
             placeholder='Select availability.'
           />
 
-          <FormField form={form} name='ticket.quantity.amount' className='mb-2'>
-            {(field) => (
-              <Input
-                className='w-full h-9'
-                type='number'
-                {...field}
-                value={field.value == null ? '' : String(field.value)}
-              />
-            )}
-          </FormField>
+          {availabilityValue === 'limited' && (
+            <FormField form={form} name='ticket.quantity.amount' className='mb-2'>
+              {(field) => (
+                <Input
+                  className='w-full h-9'
+                  type='number'
+                  {...field}
+                  value={field.value == null ? '' : String(field.value)}
+                />
+              )}
+            </FormField>
+          )}
         </div>
 
         <div className='w-full mb-2'>
@@ -190,8 +193,8 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
                   orientation='vertical'
                   data={whenToStartOptions[0]}
                   {...field}
-                  labelClassName='text-base'
-                  descriptionClassName='text-xs text-black'
+                  labelClassName='font-sf-pro-display font-normal text-[14px] uppercase text-[#1E1E1E] leading-none'
+                  descriptionClassName='font-sf-pro-display font-normal text-[13px] lowercase text-[#1E1E1E] leading-snug mt-0.5'
                 />
               )}
             </FormField>
@@ -201,13 +204,13 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
                 <BaseBooleanCheckbox
                   data={{ items: { label: 'ALLOW TICKET RESELL', id: 'allow-ticket-resell' } }}
                   showCheckbox={true}
-                  labelClassName='text-base font-bold font-sf-pro-display'
+                  labelClassName='font-sf-pro-display font-normal text-[14px] uppercase text-[#1E1E1E] leading-none'
                   checkedClassName='border border-red-800'
                   {...field}
                 />
               )}
             </FormField>
-            <p className='text-xs text-black font-sf-pro-display -mt-3'>
+            <p className='font-sf-pro-display font-normal text-[13px] lowercase text-[#1E1E1E] leading-snug -mt-3'>
               This option allows attendees to resell their tickets to other fans.
             </p>
           </div>

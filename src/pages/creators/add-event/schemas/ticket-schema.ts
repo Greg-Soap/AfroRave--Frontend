@@ -35,8 +35,11 @@ const ticketBaseFields = z.object({
   salesType: z.string({ required_error: 'Select a sale type.' }),
   quantity: z.object({
     availability: z.enum(['limited', 'unlimited']),
-    amount: z.string().min(2, { message: 'Provide a valid quantity.' }),
-  }),
+    amount: z.string().optional(),
+  }).refine(
+    (q) => q.availability === 'unlimited' || (q.amount != null && q.amount.length >= 1),
+    { message: 'Provide a valid quantity.', path: ['amount'] },
+  ),
   price: z.string().optional(),
   purchase_limit: z.string(),
   description: z

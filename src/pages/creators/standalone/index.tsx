@@ -8,8 +8,9 @@ import { useGetEvent, useGetOrganizerEvents } from '@/hooks/use-event-mutations'
 import { formatNaira } from '@/lib/format-price'
 import type { EventDetailData } from '@/types'
 import { Plus } from 'lucide-react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AddFilterBUtton } from './components/add-filter-btn'
+import { AddFilterBUtton, type EventFilter } from './components/add-filter-btn'
 import StandAloneModal from './components/standalone-modal'
 
 function formatEventDate(dateStr: string): string {
@@ -23,6 +24,7 @@ function formatEventDate(dateStr: string): string {
 
 export default function StandalonePage() {
   const { data: response, isPending: isLoading } = useGetOrganizerEvents()
+  const [activeFilter, setActiveFilter] = useState<EventFilter>('all')
 
   const events = response?.data
 
@@ -32,14 +34,14 @@ export default function StandalonePage() {
 
   return (
     <section className='w-full h-full flex flex-col items-start mb-[75px]'>
-      <StandAloneHeader />
+      <StandAloneHeader activeFilter={activeFilter} onFilterChange={setActiveFilter} />
 
       <div className='w-full px-16 lg:px-20 pt-14'>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-w-[1040px]'>
           {events && events.length > 0 ? (
             <>
               {events.map((item) => (
-                <StandAloneEvents key={item.eventId} id={item.eventId} />
+                <StandAloneEvents key={item.eventId} id={item.eventId} activeFilter={activeFilter} />
               ))}
             </>
           ) : (
@@ -56,10 +58,16 @@ export default function StandalonePage() {
   )
 }
 
-function StandAloneHeader() {
+function StandAloneHeader({
+  activeFilter,
+  onFilterChange,
+}: {
+  activeFilter: EventFilter
+  onFilterChange: (filter: EventFilter) => void
+}) {
   return (
     <div className='w-full flex items-center justify-between bg-white h-14 px-5 lg:px-8 border-l border-light-gray'>
-      <AddFilterBUtton />
+      <AddFilterBUtton activeFilter={activeFilter} onFilterChange={onFilterChange} />
 
       <div className='flex items-center gap-3 md:gap-8'>
         <VendorSelect />
@@ -75,7 +83,24 @@ function StandAloneHeader() {
   )
 }
 
-function StandAloneEvents({ id }: { id: string }) {
+function getEventStatus(event: EventDetailData): 'drafts' | 'ongoing' | 'sold_out' | 'ended' | undefined {
+  if (!event.isPublished) return 'drafts'
+
+  const now = new Date()
+  const startDate = new Date(event.eventDate.startDate)
+  const endDate = new Date(event.eventDate.endDate)
+
+  if (now > endDate) return 'ended'
+
+  const { ticketSold, totalTicket } = event.eventStat
+  if (totalTicket > 0 && ticketSold >= totalTicket) return 'sold_out'
+
+  if (now >= startDate && now <= endDate) return 'ongoing'
+
+  return undefined
+}
+
+function StandAloneEvents({ id, activeFilter }: { id: string; activeFilter: EventFilter }) {
   const { data: response, isPending: isLoading } = useGetEvent(id)
 
   const event = response?.data
@@ -85,7 +110,13 @@ function StandAloneEvents({ id }: { id: string }) {
   }
 
   if (!event) {
-    return
+    return null
+  }
+
+  const status = getEventStatus(event)
+
+  if (activeFilter !== 'all' && status !== activeFilter) {
+    return null
   }
 
   return (
@@ -93,7 +124,7 @@ function StandAloneEvents({ id }: { id: string }) {
       image={event.eventDetails.desktopMedia?.flyer}
       name={event.eventName}
       startDate={formatEventDate(event.eventDate.startDate)}
-      status={event.isPublished ? undefined : 'drafts'}
+      status={status}
       cardInfo={[
         <StatParagraph
           key='sold_tickets'

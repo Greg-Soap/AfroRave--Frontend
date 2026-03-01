@@ -9,7 +9,7 @@ export default function CreatorDashboardHeader() {
   return (
     <header className='w-full flex justify-center bg-white border-b border-b-light-gray'>
       <nav className='relative px-4 md:px-8 w-full flex items-center justify-between py-4'>
-        <Link to={getRoutePath('home')}>
+        <Link to={getRoutePath('creators_home')}>
           <img src='/assets/dashboard/creator/ar2.png' alt='Logo' width={60} height={32} />
         </Link>
 

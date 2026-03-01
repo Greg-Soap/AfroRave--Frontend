@@ -33,7 +33,7 @@ export function TabChildrenContainer({
 
         <div className='flex items-center gap-8'>
           <Select value={currentTab} onValueChange={onChange}>
-            <SelectTrigger className='w-[122px] h-8 bg-black !text-white rounded-[6px] !px-2 text-sm font-regular'>
+            <SelectTrigger className='w-[122px] h-8 bg-black !text-white rounded-[6px] !px-2 text-sm font-regular [&_svg]:!text-white [&_svg]:!opacity-100'>
               <SelectValue placeholder='Tabs' />
             </SelectTrigger>
             <SelectContent>

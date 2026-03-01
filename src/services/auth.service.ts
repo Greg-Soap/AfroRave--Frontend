@@ -32,6 +32,10 @@ class AuthService {
   static logout() {
     return api.post<{ message: string }>('/auth/logout')
   }
+
+  static changePassword(data: { currentPassword: string; newPassword: string }) {
+    return api.post<{ message: string }>('/api/Auth/change-password', data)
+  }
 }
 
 const authService = AuthService

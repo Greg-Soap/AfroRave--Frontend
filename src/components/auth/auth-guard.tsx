@@ -18,7 +18,13 @@ export function AuthGuard({ children, requiredAccountType }: AuthGuardProps) {
     // Check if user is authenticated
     if (!isAuthenticated || !user) {
       toast.error('Please log in to access this page')
-      navigate(getRoutePath('home'), {
+      // Redirect to the landing page that matches the required account type
+      // so logging out of creators/vendor dashboard lands on /home, not /fans
+      const destination =
+        requiredAccountType === 'Organizer' || requiredAccountType === 'Vendor'
+          ? getRoutePath('creators_home')
+          : getRoutePath('home')
+      navigate(destination, {
         replace: true,
         state: { from: window.location.pathname },
       })

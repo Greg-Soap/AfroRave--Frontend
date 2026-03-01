@@ -69,7 +69,7 @@ export function BaseCheckbox({
                 </Label>
               </div>
               {item.description && (
-                <p className='text-xs font-light font-sf-pro-display text-black'>
+                <p className={cn('text-xs font-light font-sf-pro-display text-black', descriptionClassName)}>
                   {item.description}
                 </p>
               )}
