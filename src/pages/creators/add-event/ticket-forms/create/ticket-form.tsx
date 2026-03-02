@@ -74,7 +74,7 @@ export function TicketForm({
         </FormField>
       </div>
 
-      <div className='grid grid-cols-2 gap-8 '>
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
         <SelectField
           form={form}
           name='ticket.salesType'
@@ -87,7 +87,7 @@ export function TicketForm({
         <TicketType type={type} />
       </div>
 
-      <div className='grid grid-cols-2 gap-8 items-end'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-8 items-end'>
         <div className='flex items-end gap-3'>
           <SelectField
             form={form}
@@ -169,7 +169,7 @@ DESCRIBE WHAT THIS TICKET INCLUDES.`}
         )}
       </FormFieldWithCounter>
 
-      <div className='w-[488px] flex flex-col gap-5'>
+      <div className='w-full flex flex-col gap-5'>
         <Button
           variant='ghost'
           type='button'

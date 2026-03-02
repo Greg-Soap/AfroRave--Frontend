@@ -125,7 +125,7 @@ function BannerForm({ form }: IBannerForm) {
       <p className='font-sf-pro-display text-medium-gray text-sm md:text-base'>
         Upload a png or jpeg file
       </p>
-      <div className='w-full flex gap-3 md:gap-14'>
+      <div className='w-full flex flex-col sm:flex-row gap-3 md:gap-14'>
         <FileUploadField
           form={form}
           name='banner.flyer'

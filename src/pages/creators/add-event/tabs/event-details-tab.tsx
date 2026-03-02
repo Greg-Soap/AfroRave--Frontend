@@ -122,7 +122,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         )}
       </FormFieldWithCounter>
 
-      <div className='grid grid-cols-2 gap-8'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
         <SelectField
           form={form}
           name='age_rating'
@@ -234,7 +234,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         />
 
         <OnlyShowIf condition={eventType === 'season'}>
-          <div className='grid grid-cols-2 gap-4'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
             <SelectField
               form={form}
               name='frequency'
@@ -264,7 +264,7 @@ export default function EventDetailsTab({ setStep, setActiveTabState }: IEventDe
         </OnlyShowIf>
       </div>
 
-      <div className='grid grid-cols-2 gap-2 md:gap-5'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-5'>
         <DateForm
           form={form}
           name='START DATE'

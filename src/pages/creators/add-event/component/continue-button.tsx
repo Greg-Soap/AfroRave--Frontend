@@ -33,7 +33,7 @@ export function ContinueButton({
         onClick={onClick}
         disabled={isLoading || disabled}
         className={cn(
-          'w-full md:w-[240px] h-10 rounded-[8px] pt-[13px] px-[153px] text-xs font-sf-pro-text uppercase',
+          'w-full md:w-[240px] h-10 rounded-[8px] text-xs font-sf-pro-text uppercase',
           className,
         )}>
         {isLoading ? (
