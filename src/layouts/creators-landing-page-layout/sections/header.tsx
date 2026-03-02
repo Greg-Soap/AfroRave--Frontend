@@ -2,13 +2,16 @@ import { getRoutePath } from '@/config/get-route-path'
 import { useScroll } from '@/lib/useScroll'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/auth-context'
+import { useAfroStore } from '@/stores'
+import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
   const { openAuthModal } = useAuth()
+  const { user, isAuthenticated } = useAfroStore()
   const [showLoginDropdown, setShowLoginDropdown] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -71,33 +74,39 @@ export default function Header() {
           {/* Countdown timer — waitlist page only */}
           {isWaitlistPage && <CountdownTimer />}
 
-          {/* Desktop LOG IN dropdown — /home only */}
+          {/* Desktop right action — /home only */}
           {!isWaitlistPage && (
             <div className='relative hidden md:block'>
-              <button
-                onClick={() => setShowLoginDropdown(!showLoginDropdown)}
-                className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-[12px] py-[4px] hover:bg-black/20 text-[14px] font-light font-input-mono leading-none tracking-[0] transition-colors'>
-                LOG IN
-              </button>
-              {showLoginDropdown && (
-                <div className='absolute top-full right-0 mt-2 bg-black/90 backdrop-blur-sm rounded-lg overflow-hidden min-w-[150px] border border-white/10'>
+              {isAuthenticated ? (
+                <CreatorMenuButton user={user} variant='dark' />
+              ) : (
+                <>
                   <button
-                    onClick={() => {
-                      setShowLoginDropdown(false)
-                      openAuthModal('login', 'creator')
-                    }}
-                    className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono border-b border-white/10'>
-                    ORGANIZER
+                    onClick={() => setShowLoginDropdown(!showLoginDropdown)}
+                    className='flex items-center gap-2 bg-transparent uppercase text-white h-[35px] px-[12px] py-[4px] hover:bg-black/20 text-[14px] font-light font-input-mono leading-none tracking-[0] transition-colors'>
+                    LOG IN
                   </button>
-                  <button
-                    onClick={() => {
-                      setShowLoginDropdown(false)
-                      openAuthModal('login', 'vendor')
-                    }}
-                    className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono'>
-                    VENDOR
-                  </button>
-                </div>
+                  {showLoginDropdown && (
+                    <div className='absolute top-full right-0 mt-2 bg-black/90 backdrop-blur-sm rounded-lg overflow-hidden min-w-[150px] border border-white/10'>
+                      <button
+                        onClick={() => {
+                          setShowLoginDropdown(false)
+                          openAuthModal('login', 'creator')
+                        }}
+                        className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono border-b border-white/10'>
+                        ORGANIZER
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowLoginDropdown(false)
+                          openAuthModal('login', 'vendor')
+                        }}
+                        className='w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors uppercase text-sm font-input-mono'>
+                        VENDOR
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -130,26 +139,42 @@ export default function Header() {
             </NavLink>
           ))}
 
-          {/* LOG IN options — only on /home pages */}
+          {/* Auth section — only on /home pages */}
           {!isWaitlistPage && (
             <div className='flex flex-col gap-2 pt-4'>
-              <p className='text-white/50 text-xs font-input-mono uppercase mb-1'>Log In As</p>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  openAuthModal('login', 'creator')
-                }}
-                className='w-full py-3 text-center text-white uppercase text-sm font-input-mono border border-white/20 rounded hover:bg-white/10 transition-colors'>
-                ORGANIZER
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  openAuthModal('login', 'vendor')
-                }}
-                className='w-full py-3 text-center text-white uppercase text-sm font-input-mono border border-white/20 rounded hover:bg-white/10 transition-colors'>
-                VENDOR
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <p className='text-white/50 text-xs font-input-mono uppercase mb-1'>
+                    {user?.profile?.firstName} {user?.profile?.lastName}
+                  </p>
+                  <Link
+                    to={getRoutePath('standalone')}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className='w-full py-3 text-center text-white uppercase text-sm font-input-mono border border-white/20 rounded hover:bg-white/10 transition-colors'>
+                    Dashboard
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <p className='text-white/50 text-xs font-input-mono uppercase mb-1'>Log In As</p>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      openAuthModal('login', 'creator')
+                    }}
+                    className='w-full py-3 text-center text-white uppercase text-sm font-input-mono border border-white/20 rounded hover:bg-white/10 transition-colors'>
+                    ORGANIZER
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      openAuthModal('login', 'vendor')
+                    }}
+                    className='w-full py-3 text-center text-white uppercase text-sm font-input-mono border border-white/20 rounded hover:bg-white/10 transition-colors'>
+                    VENDOR
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
