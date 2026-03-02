@@ -212,7 +212,7 @@ export function useLogout() {
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: () => authService.logout(),
+    mutationFn: () => authService.logout().catch(() => {}),
     onSuccess: () => {
       // Read accountType directly from store (not from closure) to avoid stale values
       const accountType = useAfroStore.getState().user?.accountType

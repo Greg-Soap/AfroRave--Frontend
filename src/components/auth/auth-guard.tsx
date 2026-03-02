@@ -17,7 +17,6 @@ export function AuthGuard({ children, requiredAccountType }: AuthGuardProps) {
   useEffect(() => {
     // Check if user is authenticated
     if (!isAuthenticated || !user) {
-      toast.error('Please log in to access this page')
       // Redirect to the landing page that matches the required account type
       // so logging out of creators/vendor dashboard lands on /home, not /fans
       const destination =
