@@ -11,19 +11,29 @@ import { getRoutePath } from '@/config/get-route-path'
 import { getUserInitials } from '@/lib/utils'
 import { useLogout } from '@/hooks/use-auth'
 import type { User } from '@/types/auth'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { CreatorSettingsModal } from '@/pages/creators/standalone/components/creator-settings-modal'
 
 interface CreatorMenuButtonProps {
   user: User | null
   variant?: 'dark' | 'light'
+  onSettingsClick?: () => void
 }
 
-export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButtonProps) {
+export function CreatorMenuButton({ user, variant = 'light', onSettingsClick }: CreatorMenuButtonProps) {
   const navigate = useNavigate()
+  const location = useLocation()
   const logoutMutation = useLogout()
   const [settingsOpen, setSettingsOpen] = useState(false)
+
+  // Auto-open settings modal when navigated here with { state: { openSettings: true } }
+  useEffect(() => {
+    if (location.state?.openSettings) {
+      setSettingsOpen(true)
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+  }, [location.state?.openSettings])
 
   const handleLogout = () => {
     logoutMutation.mutate()
@@ -75,7 +85,7 @@ export function CreatorMenuButton({ user, variant = 'light' }: CreatorMenuButton
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleDashboardClick}>Dashboard</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setSettingsOpen(true)}>Settings</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onSettingsClick ? onSettingsClick() : setSettingsOpen(true)}>Settings</DropdownMenuItem>
           <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -5,13 +5,14 @@ import { useAuth } from '@/contexts/auth-context'
 import { useAfroStore } from '@/stores'
 import { CreatorMenuButton } from '@/components/reusable/creator-menu-button'
 import { useEffect, useState } from 'react'
-import { NavLink, Link, useLocation } from 'react-router-dom'
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
 export default function Header() {
   const { hasScrolled } = useScroll()
   const { openAuthModal } = useAuth()
   const { user, isAuthenticated } = useAfroStore()
+  const navigate = useNavigate()
   const [showLoginDropdown, setShowLoginDropdown] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -78,7 +79,16 @@ export default function Header() {
           {!isWaitlistPage && (
             <div className='relative hidden md:block'>
               {isAuthenticated ? (
-                <CreatorMenuButton user={user} variant='dark' />
+                <CreatorMenuButton
+                  user={user}
+                  variant='dark'
+                  onSettingsClick={() => {
+                    const dashboardPath = user?.accountType === 'Vendor'
+                      ? getRoutePath('vendor_profile')
+                      : getRoutePath('standalone')
+                    navigate(dashboardPath, { state: { openSettings: true } })
+                  }}
+                />
               ) : (
                 <>
                   <button
