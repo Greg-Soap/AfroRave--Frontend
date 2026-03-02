@@ -40,8 +40,8 @@ export default function HeroSection({
 
         {/* Subtitle */}
         <p
-          className='text-[13px] md:text-[16px] uppercase leading-relaxed md:leading-none tracking-[0] text-white'
-          style={wishlistButton ? { fontFamily: 'Inter', fontWeight: 400 } : { fontFamily: undefined, fontWeight: 300 }}
+          className='font-sf-pro-text text-[15px] md:text-[18px] uppercase leading-relaxed tracking-[0] text-white'
+          style={wishlistButton ? { fontFamily: 'Inter', fontWeight: 400 } : { fontWeight: 300 }}
         >
           {description}
         </p>
