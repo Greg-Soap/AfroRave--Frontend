@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { BaseDropdown } from "@/components/reusable";
 import { cn } from "@/lib/utils";
 
-export type EventFilter = 'all' | 'drafts' | 'ongoing' | 'sold_out' | 'ended'
+export type EventFilter = 'all' | 'drafts' | 'upcoming' | 'ongoing' | 'sold_out' | 'ended'
 
 const FILTER_LABELS: Record<EventFilter, string> = {
   all: 'Add Filter',
   drafts: 'Drafts',
+  upcoming: 'Upcoming',
   ongoing: 'Ongoing',
   sold_out: 'Sold Out',
   ended: 'Ended',
@@ -44,6 +45,7 @@ export function AddFilterBUtton({
       items={[
         { label: "All Events",  onClick: () => onFilterChange?.('all') },
         { label: "Drafts",      onClick: () => onFilterChange?.('drafts') },
+        { label: "Upcoming",    onClick: () => onFilterChange?.('upcoming') },
         { label: "Ongoing",     onClick: () => onFilterChange?.('ongoing') },
         { label: "Sold Out",    onClick: () => onFilterChange?.('sold_out') },
         { label: "Ended",       onClick: () => onFilterChange?.('ended') },

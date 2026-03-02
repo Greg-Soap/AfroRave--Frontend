@@ -83,7 +83,7 @@ function StandAloneHeader({
   )
 }
 
-function getEventStatus(event: EventDetailData): 'drafts' | 'ongoing' | 'sold_out' | 'ended' | undefined {
+function getEventStatus(event: EventDetailData): 'drafts' | 'upcoming' | 'ongoing' | 'sold_out' | 'ended' {
   if (!event.isPublished) return 'drafts'
 
   const now = new Date()
@@ -97,7 +97,7 @@ function getEventStatus(event: EventDetailData): 'drafts' | 'ongoing' | 'sold_ou
 
   if (now >= startDate && now <= endDate) return 'ongoing'
 
-  return undefined
+  return 'upcoming'
 }
 
 function StandAloneEvents({ id, activeFilter }: { id: string; activeFilter: EventFilter }) {
