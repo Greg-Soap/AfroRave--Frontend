@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \":*)",
+      "Bash(xargs grep -l \"mobile\\\\|hamburger\\\\|menu\")",
+      "Bash(npm run build)"
+    ]
+  }
+}
