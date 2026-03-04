@@ -130,7 +130,7 @@ export function VendorRegistrationModal({
 
                     {/* Modal */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
+                        initial={{ opacity: 0, scale: 0.72 }}
                         animate={
                             isShrinking
                                 ? {
@@ -141,10 +141,10 @@ export function VendorRegistrationModal({
                                 }
                                 : { opacity: 1, scale: 1 }
                         }
-                        exit={{ opacity: 0, scale: 0.95 }}
+                        exit={{ opacity: 0, scale: 0.72 }}
                         transition={{
-                            duration: isShrinking ? 0.8 : 0.3,
-                            ease: 'easeInOut',
+                            duration: isShrinking ? 0.8 : 0.45,
+                            ease: isShrinking ? 'easeInOut' : [0.22, 1, 0.36, 1],
                         }}
                         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[480px] max-h-[90vh] overflow-hidden"
                         style={{
