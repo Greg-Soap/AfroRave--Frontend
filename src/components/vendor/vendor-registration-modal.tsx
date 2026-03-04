@@ -143,7 +143,7 @@ export function VendorRegistrationModal({
                         }
                         exit={{ opacity: 0, scale: 0.72 }}
                         transition={{
-                            duration: isShrinking ? 0.8 : 0.45,
+                            duration: isShrinking ? 0.8 : 0.75,
                             ease: isShrinking ? 'easeInOut' : [0.22, 1, 0.36, 1],
                         }}
                         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[480px] max-h-[90vh] overflow-hidden"
