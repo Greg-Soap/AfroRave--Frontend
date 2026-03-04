@@ -10,7 +10,7 @@ export function LandingPageHeader() {
                     <img
                         src="/assets/logo.png"
                         alt="AfroRave"
-                        className="h-8 md:h-10 w-auto"
+                        className="h-12 md:h-16 w-auto"
                     />
                 </Link>
 
