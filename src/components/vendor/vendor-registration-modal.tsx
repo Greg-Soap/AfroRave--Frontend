@@ -121,9 +121,9 @@ export function VendorRegistrationModal({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-                    {/* Background overlay */}
+                    {/* Invisible backdrop to catch outside clicks */}
                     <div
-                        className="absolute inset-0 bg-gradient-to-b from-[#848484] to-[#1E1E1E]"
+                        className="absolute inset-0"
                         onClick={handleBackdropClick}
                         aria-hidden="true"
                     />
