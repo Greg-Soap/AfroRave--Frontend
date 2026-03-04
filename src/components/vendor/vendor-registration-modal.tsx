@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { X } from 'lucide-react'
@@ -56,6 +56,15 @@ export function VendorRegistrationModal({
     const isRegistered = watch('isRegistered')
     const category = watch('category')
 
+    // Reset transient state each time the modal opens
+    useEffect(() => {
+        if (isOpen) {
+            setIsShrinking(false)
+            setShowSuccess(false)
+            setIsSubmitting(false)
+        }
+    }, [isOpen])
+
     const onSubmit = (data: VendorRegistrationFormData) => {
         setIsSubmitting(true)
 
@@ -98,8 +107,6 @@ export function VendorRegistrationModal({
         }
     }
 
-    if (!isOpen) return null
-
     // Safety check for document.body
     if (typeof document === 'undefined' || !document.body) {
         return null
@@ -108,8 +115,13 @@ export function VendorRegistrationModal({
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-                    {/* Background overlay - simple div without Framer Motion */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                    {/* Background overlay */}
                     <div
                         className="absolute inset-0 bg-gradient-to-b from-[#848484] to-[#1E1E1E]"
                         onClick={handleBackdropClick}
@@ -352,7 +364,7 @@ export function VendorRegistrationModal({
                             </form>
                         </motion.div>
                     </motion.div>
-                </div>
+                </motion.div>
             )}
         </AnimatePresence>,
         document.body
