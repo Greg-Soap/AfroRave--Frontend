@@ -7,8 +7,7 @@ export function NavLogo() {
       <img
         src="/assets/landing-page/logo.png"
         alt="Logo"
-        width={121}
-        height={68}
+        className="h-10 md:h-12 w-auto"
       />
     </Link>
   );
