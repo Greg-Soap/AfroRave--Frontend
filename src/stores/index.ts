@@ -98,3 +98,21 @@ export const useEventStore = create<EventState>()((set) => ({
   setEventData: (data: CreateEventRequest) => set({ eventData: data }),
   resetEventData: () => set({ eventId: null, eventData: null }),
 }))
+
+interface GuideState {
+  guideActive: boolean
+  guideStep: number
+  startGuide: () => void
+  nextGuideStep: () => void
+  prevGuideStep: () => void
+  endGuide: () => void
+}
+
+export const useGuideStore = create<GuideState>()((set) => ({
+  guideActive: false,
+  guideStep: 0,
+  startGuide: () => set({ guideActive: true, guideStep: 0 }),
+  nextGuideStep: () => set((s) => ({ guideStep: s.guideStep + 1 })),
+  prevGuideStep: () => set((s) => ({ guideStep: Math.max(0, s.guideStep - 1) })),
+  endGuide: () => set({ guideActive: false, guideStep: 0 }),
+}))

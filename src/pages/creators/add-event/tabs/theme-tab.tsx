@@ -4,7 +4,7 @@ import { FormDescription } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useCreateTheme } from '@/hooks/use-event-mutations'
 import { transformThemeToCreateRequest } from '@/lib/event-transforms'
-import { useEventStore } from '@/stores'
+import { useEventStore, useGuideStore } from '@/stores'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm, type UseFormReturn, type Path } from 'react-hook-form'
@@ -25,6 +25,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
   const [activeForm, setActiveForm] = useState<string>()
 
   const { eventId } = useEventStore()
+  const { guideActive } = useGuideStore()
   const createThemeMutation = useCreateTheme()
 
   const form = useForm<ThemeAndBannerSchema>({
@@ -54,7 +55,7 @@ export default function ThemeTab({ setStep, setActiveTabState }: IThemeTab) {
     searchParams.delete('form')
   }
 
-  if (!eventId) {
+  if (!eventId && !guideActive) {
     return <NoEventId setActiveTabState={setActiveTabState} />
   }
 

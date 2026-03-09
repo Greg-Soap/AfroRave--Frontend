@@ -1,4 +1,4 @@
-import { useEventStore } from '@/stores'
+import { useEventStore, useGuideStore } from '@/stores'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import PromoCodeForm from '../ticket-forms/promo-code-form/promo-code-form'
@@ -10,6 +10,7 @@ export default function TicketsTab({ setStep, setActiveTabState, showError }: IT
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentForm, setCurrentForm] = useState<string>()
   const { eventId } = useEventStore()
+  const { guideActive } = useGuideStore()
 
   useEffect(() => {
     const formParam = searchParams.get('form')
@@ -31,7 +32,7 @@ export default function TicketsTab({ setStep, setActiveTabState, showError }: IT
     searchParams.delete('form')
   }
 
-  if (!eventId) {
+  if (!eventId && !guideActive) {
     return <NoEventId setActiveTabState={setActiveTabState} />
   }
 

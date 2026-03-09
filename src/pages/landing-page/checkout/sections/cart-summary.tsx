@@ -7,6 +7,8 @@ import { useValidatePromocode, useCheckoutCart, useClearCart } from '@/hooks/use
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
+import { getRoutePath } from '@/config/get-route-path'
 
 export default function CartSummary({
   name,
@@ -17,6 +19,7 @@ export default function CartSummary({
   location: string
   isFanAccount?: boolean
 }) {
+  const navigate = useNavigate()
   const [message, setMessage] = useState<string | null>(null)
   const [isValid, setIsValid] = useState<boolean | null>(null)
 
@@ -60,6 +63,7 @@ export default function CartSummary({
       {
         onSuccess: () => {
           clearCartMutation.mutate()
+          navigate(getRoutePath('account'))
         },
       },
     )

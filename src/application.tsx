@@ -11,6 +11,7 @@ import { routes } from './config/routes'
 import { support_routes } from './config/support-routes'
 import { user_dashboard_routes } from './config/user-dashboard-routes'
 import { useScrollToTop } from './hooks/use-scroll-to-top'
+import CreatorGuideOverlay from './components/shared/creator-guide-overlay'
 import CreatorDashboardLayout from './layouts/creator-dashboard-layout'
 import IndexLayout from './layouts/root-layout'
 import SupportLayout from './layouts/support-layout'
@@ -37,6 +38,7 @@ function AppRoutes() {
   useScrollToTop()
 
   return (
+    <>
     <Routes>
       <Route element={<IndexLayout />}>
         {routes.map((route) => (
@@ -94,6 +96,8 @@ function AppRoutes() {
         }
       />
     </Routes>
+    <CreatorGuideOverlay />
+    </>
   )
 }
 

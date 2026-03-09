@@ -69,7 +69,7 @@ export default function AddEventPage() {
       setActiveTab(previousTab)
       setSearchParams({ tab: previousTab })
     } else {
-      navigate(-1)
+      navigate(getRoutePath('standalone'))
     }
   }
 
@@ -216,8 +216,7 @@ function TabNav({
       <Button
         variant='ghost'
         className='w-fit h-fit hover:bg-black/10 !p-0'
-        onClick={handleBackClick}
-        disabled={activeTab === 'event-details'}>
+        onClick={handleBackClick}>
         <ChevronLeft color='#000000' className='min-w-1.5 min-h-3' />
       </Button>
 

@@ -7,11 +7,13 @@ import { getRoutePath } from '@/config/get-route-path'
 import { useGetEvent, useGetOrganizerEvents } from '@/hooks/use-event-mutations'
 import { formatNaira } from '@/lib/format-price'
 import type { EventDetailData } from '@/types'
-import { Plus } from 'lucide-react'
+import { ArrowRight, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import { AddFilterBUtton, type EventFilter } from './components/add-filter-btn'
 import StandAloneModal from './components/standalone-modal'
+import { useGuideStore } from '@/stores'
 
 function formatEventDate(dateStr: string): string {
   if (!dateStr) return ''
@@ -25,6 +27,7 @@ function formatEventDate(dateStr: string): string {
 export default function StandalonePage() {
   const { data: response, isPending: isLoading } = useGetOrganizerEvents()
   const [activeFilter, setActiveFilter] = useState<EventFilter>('all')
+  const { startGuide } = useGuideStore()
 
   const events = response?.data
 
@@ -45,16 +48,34 @@ export default function StandalonePage() {
               ))}
             </>
           ) : (
-            <div className='col-span-full w-full h-[300px] flex flex-col gap-2.5 items-center justify-center'>
-              <p className='text-3xl text-charcoal font-semibold'>No event found</p>
-              <Button asChild>
-                <Link to={getRoutePath('add_event')}>Create an event</Link>
-              </Button>
-            </div>
+            <EmptyState onStartGuide={startGuide} />
           )}
         </div>
       </div>
     </section>
+  )
+}
+
+function EmptyState({ onStartGuide }: { onStartGuide: () => void }) {
+  return (
+    <div className='col-span-full w-full py-20 flex flex-col items-center gap-8'>
+      <div className='flex flex-col items-center gap-3 text-center'>
+        <div className='w-16 h-16 rounded-full bg-deep-red/10 flex items-center justify-center mb-2'>
+          <Plus color='#8B0000' size={28} strokeWidth={1.5} />
+        </div>
+        <p className='text-2xl font-bold text-charcoal font-sf-pro-display'>No events yet</p>
+        <p className='text-sm text-gray-400 max-w-xs font-sf-pro-text leading-relaxed'>
+          Ready to host your first event? We'll walk you through every step.
+        </p>
+      </div>
+
+      <Button
+        onClick={onStartGuide}
+        className='h-10 px-7 rounded-[6px] bg-charcoal hover:bg-charcoal/90 text-white gap-2 font-sf-pro-text text-sm font-semibold'>
+        Show me how
+        <ArrowRight size={15} />
+      </Button>
+    </div>
   )
 }
 

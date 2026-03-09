@@ -6,10 +6,30 @@ import { AddFilterBUtton } from '@/pages/creators/standalone/components/add-filt
 import { Bookmark } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import WishListBtn from '../component/wishlist-button'
+import { useAfroStore } from '@/stores'
 
 const SKELETON_IDS = ['1', '2', '3', '4', '5', '6']
 
+function useProfileCompletion() {
+  const { user } = useAfroStore()
+  if (!user) return 0
+  let score = 0
+  if (user.profile.firstName) score++
+  if (user.businessName || user.companyName) score++
+  if (user.telphone) score++
+  if (user.email) score++
+  if (user.gender) score++
+  if (user.portfolio) score++
+  const hasSocials = user.socialLinks && Object.values(user.socialLinks).some(link => !!link)
+  if (hasSocials) score++
+  if (user.description) score++
+  if (user.profilePicture) score++
+  if (user.gallery && user.gallery.length > 0) score++
+  return (score / 10) * 100
+}
+
 export default function VendorDiscoverPage() {
+  const completionPercentage = useProfileCompletion()
   const { data: response, isPending: isLoading } = useGetVendorAvailableEvents()
 
   const events = response?.data
@@ -25,6 +45,27 @@ export default function VendorDiscoverPage() {
           {SKELETON_IDS.map((id) => (
             <DashboardCardSkeleton key={id} />
           ))}
+        </div>
+      </section>
+    )
+  }
+
+  if (completionPercentage < 100) {
+    return (
+      <section className='w-full h-full flex flex-col justify-start items-start px-[1px]'>
+        <div className='w-full h-14 flex items-center justify-between px-4 md:px-8 bg-white'>
+          <AddFilterBUtton />
+          <WishListBtn />
+        </div>
+        <div className='w-full h-[70vh] flex flex-col items-center justify-center gap-4 px-4 text-center'>
+          <p className='text-xl md:text-2xl font-bold font-sf-pro-display text-black'>Complete your profile to discover events</p>
+          <p className='text-sm text-gray-400 max-w-sm font-sf-pro-text'>You need a complete profile before you can browse and apply for event slots.</p>
+          <Link
+            to={getRoutePath('vendor_profile')}
+            className='mt-2 h-9 px-6 rounded-[6px] bg-deep-red text-white text-xs font-sf-pro-text font-semibold flex items-center justify-center hover:bg-deep-red/90 transition-colors'
+          >
+            Complete Profile
+          </Link>
         </div>
       </section>
     )

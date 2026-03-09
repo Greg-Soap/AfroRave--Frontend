@@ -115,7 +115,9 @@ function ProfileSection({ user }: { user: User | null }) {
           />
         </div>
 
-        <Progress value={completionPercentage} className="h-1.5 bg-gray-100 rounded-full" indicatorClassName="bg-[#00AD2E]" />
+        {completionPercentage < 100 && (
+          <Progress value={completionPercentage} className="h-1.5 bg-gray-100 rounded-full" indicatorClassName="bg-[#00AD2E]" />
+        )}
       </div>
 
       <div className="flex flex-col gap-6 pt-2">

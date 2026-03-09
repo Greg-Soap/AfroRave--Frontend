@@ -182,7 +182,7 @@ export function useLogin() {
         const accountType = data.data.userData.accountType
         switch (accountType) {
           case 'User':
-            navigate(getRoutePath('my_tickets'))
+            navigate(getRoutePath('account'))
             break
           case 'Vendor':
             navigate(getRoutePath('vendor_profile'))
@@ -191,7 +191,7 @@ export function useLogin() {
             navigate(getRoutePath('standalone'))
             break
           default:
-            navigate(getRoutePath('my_tickets'))
+            navigate(getRoutePath('account'))
         }
       }
 

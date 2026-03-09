@@ -1,4 +1,4 @@
-import { useEventStore } from '@/stores'
+import { useEventStore, useGuideStore } from '@/stores'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import VendorForm from '../vendor-forms/vendor-form'
@@ -13,6 +13,7 @@ export default function VendorTab({
 }) {
   const [searchParams] = useSearchParams()
   const { eventId } = useEventStore()
+  const { guideActive } = useGuideStore()
 
   useEffect(() => {
     setStep(4)
@@ -23,7 +24,7 @@ export default function VendorTab({
     searchParams.delete('form')
   }
 
-  if (!eventId) {
+  if (!eventId && !guideActive) {
     return <NoEventId setActiveTabState={setActiveTabState} />
   }
 
