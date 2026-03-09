@@ -6,7 +6,14 @@ export default function CreatorsWishlistPage() {
   return (
     <>
       <VendorRegistrationFlow />
-      <VideoBackgroundWrapper overlayOpacity={0.5} secondColor='#a2a2a2'>
+      <VideoBackgroundWrapper
+        videoSrc='/assets/creators-background.mp4'
+        backgroundImage='/assets/landing-page/BG-3.webp'
+        overlayOpacity={0.15}
+        secondColor='#1a1a1a'
+        videoOpacity={0.5}
+        videoBlendMode='color-dodge'
+      >
         <img
           src='/assets/landing-page/waitlist-background.png'
           alt='Background'
