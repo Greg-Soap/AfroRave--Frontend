@@ -3,7 +3,10 @@
     "allow": [
       "Bash(node -e \":*)",
       "Bash(xargs grep -l \"mobile\\\\|hamburger\\\\|menu\")",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Bash(grep -n \"''home''\\\\|standalone\\\\|fans\\\\b\" src/config/get-route-path.ts)",
+      "Bash(grep -E \"^.*/\\(src/\\(main|index\\)\\).tsx$\")",
+      "Bash(xargs grep -l \"add.event\\\\|add_event\\\\|CreatorDashboardLayout\")"
     ]
   }
 }
