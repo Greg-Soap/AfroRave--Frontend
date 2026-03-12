@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 
 import { AddFilterBUtton, type EventFilter } from './components/add-filter-btn'
 import StandAloneModal from './components/standalone-modal'
-import { useGuideStore } from '@/stores'
+import { useGuideStore, useEventSelectorStore } from '@/stores'
 
 function formatEventDate(dateStr: string): string {
   if (!dateStr) return ''
@@ -28,8 +28,13 @@ export default function StandalonePage() {
   const { data: response, isPending: isLoading } = useGetOrganizerEvents()
   const [activeFilter, setActiveFilter] = useState<EventFilter>('all')
   const { startGuide } = useGuideStore()
+  const { selectedEventId } = useEventSelectorStore()
 
-  const events = response?.data
+  const allEvents = response?.data
+  // If a specific event is selected in the dropdown, show only that one; otherwise show all
+  const events = selectedEventId
+    ? allEvents?.filter((e) => e.eventId === selectedEventId)
+    : allEvents
 
   if (isLoading) {
     return <LoadingFallback />

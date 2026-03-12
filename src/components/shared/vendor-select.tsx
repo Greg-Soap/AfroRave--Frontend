@@ -4,26 +4,62 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+} from '@/components/ui/select'
+import { useGetOrganizerEvents } from '@/hooks/use-event-mutations'
+import { useEventSelectorStore } from '@/stores'
+import { ChevronDown } from 'lucide-react'
+import { useEffect } from 'react'
 
 export default function VendorSelect() {
-  const [value, setValue] = useState("afro-fest");
+  const { data: response, isPending } = useGetOrganizerEvents()
+  const { selectedEventId, setSelectedEventId } = useEventSelectorStore()
+
+  const events = response?.data
+    ? [...response.data].sort(
+        (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+      )
+    : []
+
+  // Auto-select most recent event on first load
+  useEffect(() => {
+    if (events.length > 0 && !selectedEventId) {
+      setSelectedEventId(events[0].eventId)
+    }
+  }, [events.length])
+
+  if (isPending) {
+    return (
+      <div className='w-[180px] h-10 rounded-[6px] bg-black/30 animate-pulse' />
+    )
+  }
 
   return (
-    <Select value={value} onValueChange={setValue}>
-      <SelectTrigger className="flex items-center gap-[9px] !w-[122px] !h-8 text-xs text-white uppercase font-sf-pro-display font-semibold bg-black border-none outline-none shadow-none [&>svg]:hidden [&>span]:text-white [&>span]:opacity-100">
-        <SelectValue />
-        <div>
-          <ChevronDown color="#ffffff" size={12} />
-        </div>
+    <Select
+      value={selectedEventId ?? ''}
+      onValueChange={setSelectedEventId}
+      disabled={events.length === 0}
+    >
+      <SelectTrigger className='flex items-center gap-2 !w-[180px] !h-10 text-xs text-white uppercase font-sf-pro-display font-semibold bg-black border-none outline-none shadow-none rounded-[6px] px-4 [&>svg]:hidden [&>span]:text-white [&>span]:opacity-100'>
+        <SelectValue placeholder={events.length === 0 ? 'No events yet' : 'Select event'} />
+        <ChevronDown color='#ffffff' size={13} className='shrink-0' />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="afro-fest">Afro Fest</SelectItem>
-        <SelectItem value="afro-nation">Afro Nation</SelectItem>
-        <SelectItem value="afro-beats">Afro Beats</SelectItem>
+      <SelectContent className='max-w-[280px]'>
+        {events.length === 0 ? (
+          <div className='px-3 py-4 text-xs text-gray-400 font-sf-pro-text text-center'>
+            No events yet
+          </div>
+        ) : (
+          events.map((event) => (
+            <SelectItem
+              key={event.eventId}
+              value={event.eventId}
+              className='text-xs font-sf-pro-text'
+            >
+              {event.eventName}
+            </SelectItem>
+          ))
+        )}
       </SelectContent>
     </Select>
-  );
+  )
 }

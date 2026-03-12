@@ -5,6 +5,8 @@ import { Download } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import VendorSelect from '@/components/shared/vendor-select'
+import { useEventSelectorStore } from '@/stores'
+import { useGetOrganizerEvents } from '@/hooks/use-event-mutations'
 
 export default function ChartPage() {
   const [activeTab, setActiveTab] = useState<string>('issued-net')
@@ -71,9 +73,20 @@ export default function ChartPage() {
 }
 
 function ChartHeader() {
+  const { selectedEventId } = useEventSelectorStore()
+  const { data: response } = useGetOrganizerEvents()
+  const selectedEvent = response?.data?.find((e) => e.eventId === selectedEventId)
+
   return (
     <div className='w-full flex items-center justify-between bg-white h-14 px-8 border-l border-light-gray'>
-      <AddFilterBUtton />
+      <div className='flex items-center gap-3'>
+        <AddFilterBUtton />
+        {selectedEvent && (
+          <span className='hidden md:block text-xs text-gray-400 font-sf-pro-text truncate max-w-[200px]'>
+            {selectedEvent.eventName}
+          </span>
+        )}
+      </div>
 
       <div className='flex items-center gap-8'>
         <Button variant='ghost' className='gap-1 py-0.5 px-1.5 hover:bg-black/10'>
