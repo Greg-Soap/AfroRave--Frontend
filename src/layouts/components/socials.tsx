@@ -17,8 +17,8 @@ export function Socials({
           <img
             src={item.icon}
             alt={item.alt}
-            className={cn('w-[40px] h-auto', {
-              'w-[40px] h-[40px]': isCreator,
+            className={cn('w-[52px] h-auto', {
+              'w-[52px] h-[52px]': isCreator,
             })}
           />
         </Link>
