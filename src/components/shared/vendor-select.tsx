@@ -7,10 +7,14 @@ import {
 } from '@/components/ui/select'
 import { useGetOrganizerEvents } from '@/hooks/use-event-mutations'
 import { useEventSelectorStore } from '@/stores'
-import { ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { useEffect } from 'react'
 
-export default function VendorSelect() {
+interface VendorSelectProps {
+  className?: string
+}
+
+export default function VendorSelect({ className }: VendorSelectProps) {
   const { data: response, isPending } = useGetOrganizerEvents()
   const { selectedEventId, setSelectedEventId } = useEventSelectorStore()
 
@@ -29,7 +33,7 @@ export default function VendorSelect() {
 
   if (isPending) {
     return (
-      <div className='w-[180px] h-10 rounded-[6px] bg-black/30 animate-pulse' />
+      <div className={cn('w-[180px] h-10 rounded-[6px] bg-black/30 animate-pulse', className)} />
     )
   }
 
@@ -38,9 +42,13 @@ export default function VendorSelect() {
       value={selectedEventId ?? ''}
       onValueChange={setSelectedEventId}
     >
-      <SelectTrigger className='flex items-center gap-2 !w-[180px] !h-10 text-xs text-white uppercase font-sf-pro-display font-semibold bg-black border-none outline-none shadow-none rounded-[6px] px-4 [&>svg]:hidden [&>span]:text-white [&>span]:opacity-100 disabled:opacity-100 disabled:bg-black'>
+      <SelectTrigger
+        className={cn(
+          '!h-10 text-xs text-white uppercase font-sf-pro-display font-semibold bg-black border-none outline-none shadow-none rounded-[6px] px-3 [&>span]:text-white [&>span]:opacity-100 [&_svg]:!text-white [&_svg]:!opacity-100 disabled:opacity-100 disabled:bg-black !w-[180px]',
+          className,
+        )}
+      >
         <SelectValue placeholder={events.length === 0 ? 'No events yet' : 'Select event'} />
-        <ChevronDown color='#ffffff' size={13} className='shrink-0' />
       </SelectTrigger>
       <SelectContent className='max-w-[280px]'>
         {events.length === 0 ? (

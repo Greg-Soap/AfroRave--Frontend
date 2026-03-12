@@ -88,13 +88,13 @@ function StandAloneHeader({
     <div className='w-full flex items-center justify-between bg-white h-14 px-5 lg:px-8 border-l border-light-gray'>
       <AddFilterBUtton activeFilter={activeFilter} onFilterChange={onFilterChange} />
 
-      <div className='flex items-center gap-3 md:gap-8'>
-        <VendorSelect />
+      <div className='flex items-center gap-2 md:gap-4 lg:gap-8'>
+        <VendorSelect className='!w-[130px] sm:!w-[155px] md:!w-[180px]' />
 
-        <Button variant='destructive' className='h-9 px-4 rounded-[6px] gap-2' asChild>
+        <Button variant='destructive' className='h-9 px-3 rounded-[6px] gap-1.5' asChild>
           <Link to={getRoutePath('add_event')}>
-            <Plus color='#ffffff' size={14} />
-            <span className='font-sf-pro-text text-xs font-semibold'>Create Event</span>
+            <Plus color='#ffffff' size={13} />
+            <span className='font-sf-pro-text text-xs font-semibold'>Create</span>
           </Link>
         </Button>
       </div>
