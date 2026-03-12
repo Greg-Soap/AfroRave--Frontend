@@ -65,27 +65,22 @@ export function VendorEditProfileModal({ customTrigger }: { customTrigger?: Reac
                     <DialogTitle>Edit Profile</DialogTitle>
                     <DialogDescription>Make changes to your vendor profile here.</DialogDescription>
                 </div>
-                <div
-                    className="absolute z-[9999]"
-                    style={{ top: '16px', right: '16px' }}
-                >
-                    <DialogClose asChild>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-10 w-10 bg-black/5 hover:bg-black/10 rounded-full transition-colors text-black flex items-center justify-center border-0 shadow-none"
-                        >
-                            <X className="h-5 w-5 stroke-[2.5px]" />
-                        </Button>
-                    </DialogClose>
-                </div>
                 <Tabs defaultValue="profile" className="w-full flex flex-col h-full overflow-hidden">
-                    <div className="flex justify-start w-full pt-4 pb-0 shrink-0 border-b border-gray-100 px-6">
-                        <TabsList className="bg-transparent gap-8 h-10 p-0 justify-start w-full">
+                    <div className="flex items-center justify-between w-full pt-4 pb-0 shrink-0 border-b border-gray-100 px-6">
+                        <TabsList className="bg-transparent gap-6 h-10 p-0 justify-start flex-1">
                             <TabsTrigger value="profile" className="data-[state=active]:text-[#D32F2F] data-[state=active]:shadow-none data-[state=active]:bg-transparent text-gray-500 hover:text-gray-800 text-[14px] font-medium font-sf-pro-display border-b-2 border-transparent data-[state=active]:border-[#D32F2F] rounded-none px-0 pb-2 transition-all">Profile</TabsTrigger>
                             <TabsTrigger value="inbox" className="data-[state=active]:text-[#D32F2F] data-[state=active]:shadow-none data-[state=active]:bg-transparent text-gray-500 hover:text-gray-800 text-[14px] font-medium font-sf-pro-display border-b-2 border-transparent data-[state=active]:border-[#D32F2F] rounded-none px-0 pb-2 transition-all">Inbox</TabsTrigger>
                             <TabsTrigger value="account" className="data-[state=active]:text-[#D32F2F] data-[state=active]:shadow-none data-[state=active]:bg-transparent text-gray-500 hover:text-gray-800 text-[14px] font-medium font-sf-pro-display border-b-2 border-transparent data-[state=active]:border-[#D32F2F] rounded-none px-0 pb-2 transition-all">Account</TabsTrigger>
                         </TabsList>
+                        <DialogClose asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 shrink-0 bg-black/5 hover:bg-black/10 rounded-full transition-colors text-black flex items-center justify-center border-0 shadow-none mb-1"
+                            >
+                                <X className="h-4 w-4 stroke-[2.5px]" />
+                            </Button>
+                        </DialogClose>
                     </div>
 
                     <TabsContent value="profile" className="flex flex-col items-center gap-8 w-full p-6 pt-6 overflow-y-auto flex-1">
