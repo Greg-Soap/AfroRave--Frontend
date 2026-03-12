@@ -301,7 +301,7 @@ function SelectField<T extends FieldValues>({
           onChange={(value) => field.onChange(value)}
           items={items}
           selectedItemRenderer={(value) => value}
-          triggerClassName={cn('!w-full !h-14 py-6 px-3 border border-white rounded-[6px] !text-white placeholder:text-white', className)}
+          triggerClassName={cn('!w-full !h-14 py-6 px-3 border border-white rounded-[6px] !text-white placeholder:text-white [&_svg]:!text-white [&_svg]:!opacity-100', className)}
         />
       )}
     </FormField>

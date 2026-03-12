@@ -37,9 +37,8 @@ export default function VendorSelect() {
     <Select
       value={selectedEventId ?? ''}
       onValueChange={setSelectedEventId}
-      disabled={events.length === 0}
     >
-      <SelectTrigger className='flex items-center gap-2 !w-[180px] !h-10 text-xs text-white uppercase font-sf-pro-display font-semibold bg-black border-none outline-none shadow-none rounded-[6px] px-4 [&>svg]:hidden [&>span]:text-white [&>span]:opacity-100'>
+      <SelectTrigger className='flex items-center gap-2 !w-[180px] !h-10 text-xs text-white uppercase font-sf-pro-display font-semibold bg-black border-none outline-none shadow-none rounded-[6px] px-4 [&>svg]:hidden [&>span]:text-white [&>span]:opacity-100 disabled:opacity-100 disabled:bg-black'>
         <SelectValue placeholder={events.length === 0 ? 'No events yet' : 'Select event'} />
         <ChevronDown color='#ffffff' size={13} className='shrink-0' />
       </SelectTrigger>

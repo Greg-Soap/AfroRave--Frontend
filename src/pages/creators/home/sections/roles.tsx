@@ -42,7 +42,7 @@ function RoleDescription({ role, description, login }: IRoles) {
         {role}
       </h2>
       {/* Description */}
-      <p ref={pRef} className='font-sf-pro-text text-[13px] md:text-[16px] uppercase leading-relaxed md:leading-[1] tracking-[0] text-white' style={{ fontWeight: 300 }}>
+      <p ref={pRef} className='font-sf-pro-text text-[15px] md:text-[18px] uppercase leading-relaxed tracking-[0] text-white' style={{ fontWeight: 300 }}>
         {description}
       </p>
       <Button
