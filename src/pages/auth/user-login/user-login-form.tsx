@@ -1,5 +1,4 @@
 import { FormBase, FormField } from '@/components/reusable'
-import { ForgotPasswordModal } from '@/components/auth/forgot-password-modal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
@@ -8,7 +7,7 @@ import { useLogin } from '@/hooks/use-auth'
 import type { LoginData } from '@/types/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LockKeyhole, type LucideIcon, Mail } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -26,10 +25,9 @@ const formSchema = z.object({
     }),
 })
 
-export function UserLoginForm() {
+export function UserLoginForm({ onForgotPassword }: { onForgotPassword?: () => void }) {
   const { loginType, switchToSignup } = useAuth()
   const login = useLogin()
-  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -118,7 +116,7 @@ export function UserLoginForm() {
 
               <button
                 type='button'
-                onClick={() => setForgotPasswordOpen(true)}
+                onClick={onForgotPassword}
                 className='text-[10px] font-bold text-black hover:underline'>
                 Forgot Password?
               </button>
@@ -134,10 +132,6 @@ export function UserLoginForm() {
         </FormBase>
       </div>
 
-      <ForgotPasswordModal
-        open={forgotPasswordOpen}
-        onClose={() => setForgotPasswordOpen(false)}
-      />
     </>
   )
 }
