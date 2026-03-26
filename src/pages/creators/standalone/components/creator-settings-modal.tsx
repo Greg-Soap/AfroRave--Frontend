@@ -5,6 +5,7 @@ import {
     DialogClose,
     DialogTitle,
     DialogDescription,
+    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -188,7 +189,9 @@ export function CreatorSettingsModal({ open, onOpenChange, customTrigger }: Crea
     return (
         <Dialog open={isControlled ? open : undefined} onOpenChange={isControlled ? onOpenChange : undefined}>
             {!isControlled && customTrigger && (
-                <span onClick={() => {}}>{customTrigger}</span>
+                <DialogTrigger asChild>
+                    {customTrigger}
+                </DialogTrigger>
             )}
             <DialogContent noCancel className="sm:max-w-[500px] w-[95vw] flex flex-col items-center max-h-[85vh] overflow-hidden rounded-[20px] p-0 bg-white gap-0 outline-none data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom duration-500">
                 <div className="sr-only">
