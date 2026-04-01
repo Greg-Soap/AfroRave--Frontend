@@ -54,7 +54,7 @@ function LeadershipSectionWrapper() {
     <motion.div
       ref={ref}
       initial={false}
-      animate={{ y: isInView ? 0 : '50%' }}
+      animate={{ y: isInView ? 0 : 40 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <LeadershipSection />
@@ -73,7 +73,7 @@ function WorKWithUsSectionWrapper() {
     <motion.div
       ref={ref}
       initial={false}
-      animate={{ y: isInView ? 0 : '50%' }}
+      animate={{ y: isInView ? 0 : 40 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <WorKWithUsSection />

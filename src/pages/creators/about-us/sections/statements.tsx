@@ -57,8 +57,8 @@ import { useRef } from 'react'
 
 export default function StatementsSection() {
   return (
-    // HOPE: increaded padding buttom to 240px to match the gap for the next section. (the new Gen) 
-    <section className=" w-full flex flex-col items-center gap-[240px] py-[227px] pb-[240px]"> 
+    // Mobile: 80px top/bottom, 64px between sections. Desktop: original large values
+    <section className="w-full flex flex-col items-center gap-14 md:gap-[240px] py-14 md:py-[227px] pb-12 md:pb-[240px]">
       <TextSectionContainer name="our story">
         <p>
           Afro Revive was founded to make the event experience simpler, more
@@ -66,7 +66,7 @@ export default function StatementsSection() {
           director <span className="font-black">Eseose Atie</span> and{" "}
           <span className="font-black">Cyril Atie</span>, the founder of{" "}
           <span className="font-black">Cytech World Communication</span>,
-          Nigeria’s largest event equipment rental company, Afro Revive brings
+          Nigeria's largest event equipment rental company, Afro Revive brings
           together fresh vision and deep industry experience.
         </p>
 
@@ -94,7 +94,7 @@ function MissionSection() {
     <motion.div
       ref={ref}
       initial={false}
-      animate={{ y: isInView ? 0 : '50%' }}
+      animate={{ y: isInView ? 0 : 40 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <TextSectionContainer name="our mission">

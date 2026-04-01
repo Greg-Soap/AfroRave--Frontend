@@ -4,8 +4,8 @@ import { getRoutePath } from "@/config/get-route-path";
 
 export default function WorKWithUsSection() {
   return (
-    <section className="flex flex-col items-center mb-[238px]">
-      <div className="w-fit flex flex-col gap-5 items-center py-5 px-8">
+    <section className="flex flex-col items-center mb-12 md:mb-[238px] px-5 md:px-0">
+      <div className="w-full max-w-[700px] flex flex-col gap-5 items-center py-4 px-0 md:px-8">
         <TextSectionContainer
           name="work with us"
           className="underline underline-offset-4"
