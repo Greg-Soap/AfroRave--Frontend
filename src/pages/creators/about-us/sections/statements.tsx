@@ -58,7 +58,7 @@ import { useRef } from 'react'
 export default function StatementsSection() {
   return (
     // Mobile: 80px top/bottom, 64px between sections. Desktop: original large values
-    <section className="w-full flex flex-col items-center gap-20 md:gap-[240px] py-16 md:py-[227px] pb-16 md:pb-[240px]">
+    <section className="w-full flex flex-col items-center gap-24 md:gap-[240px] py-20 md:py-[227px] pb-20 md:pb-[240px]">
       <TextSectionContainer name="our story">
         <p>
           Afro Revive was founded to make the event experience simpler, more
