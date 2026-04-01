@@ -17,7 +17,7 @@ export function Socials({
     <div className={cn('w-full flex items-center justify-between', className)}>
       <div className='flex items-center gap-3'>
         {data.map((item) => (
-          <Link key={item.alt} to={item.href} className='cursor-pointer hover:opacity-80'>
+          <Link key={item.alt} to={item.href} target='_blank' rel='noopener noreferrer' className='cursor-pointer hover:opacity-80'>
             <img
               src={item.icon}
               alt={item.alt}
@@ -40,8 +40,8 @@ export function Socials({
 }
 
 const socials: ISocials[] = [
-  { href: '/', icon: '/assets/landing-page/insta.png', alt: 'Instagram' },
-  { href: '/', icon: '/assets/landing-page/X.png', alt: 'X' },
+  { href: 'https://www.instagram.com/afrorevive_?igsh=ZThudm8zODkyZTJv&utm_source=qr', icon: '/assets/landing-page/insta.png', alt: 'Instagram' },
+  { href: 'https://x.com/afrorevive?s=21', icon: '/assets/landing-page/X.png', alt: 'X' },
   { href: '/', icon: '/assets/landing-page/yt.png', alt: 'Youtube' },
 ]
 
