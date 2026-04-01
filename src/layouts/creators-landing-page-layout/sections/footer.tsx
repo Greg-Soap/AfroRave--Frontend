@@ -19,7 +19,7 @@ export default function Footer() {
 
       {/* Footer Bottom Container */}
       <div className='w-full flex flex-row items-center px-[60px] py-[16px]'>
-        <Socials className='justify-end' isCreator />
+        <Socials isCreator showLanguage />
       </div>
 
     </footer>
