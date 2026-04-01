@@ -3,7 +3,7 @@ import { TextSectionContainer } from '../../_components/text-section-ctn'
 
 export default function LeadershipSection() {
   return (
-    <section className='w-full flex flex-col gap-8 md:gap-14 items-center pb-12 md:pb-[240px] px-5 md:px-0'>
+    <section className='w-full flex flex-col gap-8 md:gap-14 items-center pt-6 pb-16 md:pt-0 md:pb-[240px] px-5 md:px-0'>
       <TextSectionContainer name='NEXT GEN LEADERSHIP'>
         <p>
           our leadership reflects a new generation shaping the future of events, technology, and
