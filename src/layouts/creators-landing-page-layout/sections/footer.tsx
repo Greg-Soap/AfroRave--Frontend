@@ -18,8 +18,8 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom Container */}
-      <div className='w-full flex flex-row items-center px-[60px] py-[16px]'>
-        <Socials isCreator showLanguage />
+      <div className='w-full flex flex-row items-center px-[60px] py-[16px] border-t border-white/20'>
+        <Socials isCreator />
       </div>
 
     </footer>
