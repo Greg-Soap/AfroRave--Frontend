@@ -208,9 +208,9 @@ export default function TicketsTab({ eventId, setActiveTab, eventName }: ITicket
           </div>
         </DialogContent>
       </Dialog>
-      <div className='w-full flex flex-col gap-14 pt-10 md:p-14'>
-        <div className='flex flex-col pl-2 gap-[13px]'>
-          <div className='flex items-center justify-between'>
+      <div className='w-full flex flex-col gap-10 md:gap-14 pt-6 px-4 md:p-14'>
+        <div className='flex flex-col gap-[13px]'>
+          <div className='flex items-center justify-between gap-2 flex-wrap'>
             <div className='flex gap-3'>
               {[
                 { value: 'ticket', name: 'Your Tickets' },
@@ -225,8 +225,8 @@ export default function TicketsTab({ eventId, setActiveTab, eventName }: ITicket
                     className={cn(
                       'font-sf-pro-display p-0 bg-transparent hover:bg-transparent shadow-none',
                       {
-                        'font-black text-xl text-black': isActive,
-                        'text-lg font-medium text-medium-gray': !isActive,
+                        'font-black text-base md:text-xl text-black': isActive,
+                        'text-sm md:text-lg font-medium text-medium-gray': !isActive,
                       },
                     )}>
                     {item.name}
@@ -239,8 +239,8 @@ export default function TicketsTab({ eventId, setActiveTab, eventName }: ITicket
               <Button
                 type='button'
                 onClick={() => setCurrentForm('promocode')}
-                className='self-center w-fit flex items-center gap-2 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90'>
-                <Plus /> <span>ADD PROMOCODE</span>
+                className='flex items-center gap-1.5 py-2 px-3 bg-[#00AD2E] rounded-[20px] text-white text-xs font-sf-pro-text hover:bg-[#00AD2E]/90 shrink-0'>
+                <Plus size={14} /> <span className='hidden sm:inline'>ADD PROMOCODE</span><span className='sm:hidden'>Add</span>
               </Button>
             </OnlyShowIf>
 
